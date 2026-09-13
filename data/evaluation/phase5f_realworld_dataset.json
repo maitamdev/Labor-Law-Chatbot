@@ -1,0 +1,362 @@
+[
+  {
+    "id": "RW_01",
+    "question": "tôi đi thực tập 7 tháng rồi mà ko có lương",
+    "category": "A_relationship_ambiguity",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["internship_program_type", "work_subordination", "wage_agreement"],
+    "required_evidence": [],
+    "forbidden_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "46"},
+      {"doc_id": "VBHN_18_2026", "article": "46"}
+    ],
+    "notes": "Must ask clarification regarding school vs company direct recruitment and actual subordination. Strictly forbid Điều 46."
+  },
+  {
+    "id": "RW_02",
+    "question": "công ty bảo em là cộng tác viên nhưng ngày nào cũng bắt chấm công làm 8 tiếng",
+    "category": "A_relationship_ambiguity",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["actual_subordination_evidence", "agreement_type"],
+    "required_evidence": [],
+    "forbidden_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "46"},
+      {"doc_id": "VBHN_18_2026", "article": "46"}
+    ],
+    "notes": "Collaborator label with subordination signs requires clarification on schedule and control."
+  },
+  {
+    "id": "RW_03",
+    "question": "em đi thực tập mà bị giao việc và chấm công như nhân viên chính thức",
+    "category": "A_relationship_ambiguity",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["internship_program_type", "wage_agreement"],
+    "required_evidence": [],
+    "forbidden_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "46"},
+      {"doc_id": "VBHN_18_2026", "article": "46"}
+    ],
+    "notes": "Internship with full employee subordination requires clarification before deciding labor relationship."
+  },
+  {
+    "id": "RW_04",
+    "question": "công ty nhận em vào làm quen việc 2 tháng không trả tiền",
+    "category": "A_relationship_ambiguity",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["job_qualification_level", "agreement_type"],
+    "required_evidence": [],
+    "forbidden_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "46"},
+      {"doc_id": "VBHN_18_2026", "article": "46"}
+    ],
+    "notes": "Colloquial 'làm quen việc' requires clarification on whether this is probation, training, or employment."
+  },
+  {
+    "id": "RW_05",
+    "question": "công ty ký hợp đồng dịch vụ freelance nhưng bắt ngồi văn phòng cố định 8h/ngày",
+    "category": "A_relationship_ambiguity",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["actual_subordination_evidence", "agreement_type"],
+    "required_evidence": [],
+    "forbidden_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "46"}
+    ],
+    "notes": "Freelance label with direct subordination requires clarification on management."
+  },
+  {
+    "id": "RW_06",
+    "question": "cty chậm lương 2 tháng r thì nld dc quyền gì",
+    "category": "B_colloquial_wording",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "35", "clause": "2", "point": "b"}
+    ],
+    "forbidden_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "46"}
+    ],
+    "notes": "Colloquial abbreviations (cty, r, nld, dc). Right to unilateral termination without notice when salary is unpaid."
+  },
+  {
+    "id": "RW_07",
+    "question": "bị cty đuổi ngang ko báo trước thì dc bồi thường thế nào",
+    "category": "B_colloquial_wording",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "41"}
+    ],
+    "forbidden_evidence": [],
+    "notes": "Colloquial 'đuổi ngang' normalized to employer illegal termination. Compensation governed by Điều 41 BLLĐ."
+  },
+  {
+    "id": "RW_08",
+    "question": "làm việc 8 tiếng mỗi ngày thì cty có dc bắt làm thêm k",
+    "category": "B_colloquial_wording",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "107", "clause": "2", "point": "a"}
+    ],
+    "forbidden_evidence": [],
+    "notes": "Colloquial 'k' (không), 'dc' (được). Overtime requires employee consent under Điều 107k2a."
+  },
+  {
+    "id": "RW_09",
+    "question": "cty ép làm thêm ngày lễ tết thì lương tính sao",
+    "category": "B_colloquial_wording",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "98", "clause": "1", "point": "c"}
+    ],
+    "forbidden_evidence": [],
+    "notes": "Holiday overtime wage calculation (at least 300% under Điều 98k1c)."
+  },
+  {
+    "id": "RW_10",
+    "question": "cty giữ bằng gốc và cccd của em có đúng luật k",
+    "category": "B_colloquial_wording",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "17", "clause": "1"}
+    ],
+    "forbidden_evidence": [],
+    "notes": "Prohibition of original diploma and ID card withholding under Điều 17k1."
+  },
+  {
+    "id": "RW_11",
+    "question": "em làm ở công ty 6 tháng mà chưa ký hợp đồng có sao k",
+    "category": "C_missing_contract_facts",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["nature_of_work", "wage_payment_form"],
+    "required_evidence": [],
+    "forbidden_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "46"}
+    ],
+    "notes": "Unsigned employment after 6 months requires clarification on actual agreement and work nature."
+  },
+  {
+    "id": "RW_12",
+    "question": "tôi làm thời vụ mà ko biết hợp đồng của tôi thuộc loại gì",
+    "category": "C_missing_contract_facts",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["contract_duration_type", "written_agreement"],
+    "required_evidence": [],
+    "forbidden_evidence": [],
+    "notes": "Seasonal contract ambiguity requires clarification on agreed duration."
+  },
+  {
+    "id": "RW_13",
+    "question": "em mới vào làm chưa ký giấy tờ gì hết thì quyền lợi ra sao",
+    "category": "C_missing_contract_facts",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["probation_vs_employment", "agreement_details"],
+    "required_evidence": [],
+    "forbidden_evidence": [],
+    "notes": "Working without papers requires establishing whether probation or employment was agreed."
+  },
+  {
+    "id": "RW_14",
+    "question": "tôi muốn xin nghỉ việc thì phải báo trước bao nhiêu ngày",
+    "category": "C_missing_contract_facts",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["contract_duration_type"],
+    "required_evidence": [],
+    "forbidden_evidence": [],
+    "notes": "Resignation notice period strictly requires contract duration type (Điều 35 BLLĐ)."
+  },
+  {
+    "id": "RW_15",
+    "question": "công ty cho tôi nghỉ việc thì phải báo trước mấy ngày",
+    "category": "C_missing_contract_facts",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["contract_duration_type", "termination_reason"],
+    "required_evidence": [],
+    "forbidden_evidence": [],
+    "notes": "Employer unilateral termination notice strictly requires contract type and reason (Điều 36 BLLĐ)."
+  },
+  {
+    "id": "RW_16",
+    "question": "đơn phương chấm dứt hợp đồng thì cần báo trước bao lâu",
+    "category": "D_actor_ambiguity",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["terminating_party", "contract_duration_type"],
+    "required_evidence": [],
+    "forbidden_evidence": [],
+    "notes": "Ambiguous actor (employee vs employer) and contract duration requires clarification."
+  },
+  {
+    "id": "RW_17",
+    "question": "người lao động tự ý nghỉ việc 5 ngày liên tục thì công ty xử lý thế nào",
+    "category": "D_actor_ambiguity",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "125", "clause": "4"}
+    ],
+    "forbidden_evidence": [],
+    "notes": "Specific 5-day continuous job abandonment disciplinary dismissal ground under Điều 125k4."
+  },
+  {
+    "id": "RW_18",
+    "question": "công ty muốn sa thải nhân viên mang thai có được không",
+    "category": "D_actor_ambiguity",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "122", "clause": "4", "point": "d"},
+      {"doc_id": "18/VBHN-VPQH", "article": "137", "clause": "3"}
+    ],
+    "forbidden_evidence": [],
+    "notes": "Prohibition of dismissing or disciplining pregnant employees under Điều 122k4d and Điều 137k3."
+  },
+  {
+    "id": "RW_19",
+    "question": "chấm dứt hợp đồng có phải trả tiền trợ cấp thôi việc không",
+    "category": "D_actor_ambiguity",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["employment_duration", "termination_ground"],
+    "required_evidence": [],
+    "forbidden_evidence": [],
+    "notes": "Severance allowance requires knowing duration of work (at least 12 months) and termination ground (Điều 46)."
+  },
+  {
+    "id": "RW_20",
+    "question": "nghỉ việc do công ty không trả đủ lương có cần báo trước không",
+    "category": "D_actor_ambiguity",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "35", "clause": "2", "point": "b"}
+    ],
+    "forbidden_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "46"}
+    ],
+    "notes": "Employee unilateral termination exception when salary is unpaid (Điều 35k2b)."
+  },
+  {
+    "id": "RW_21",
+    "question": "cty vừa nợ lương 3 tháng vừa giữ bằng đại học của em thì xử lý thế nào",
+    "category": "E_compound_informal",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "17", "clause": "1"},
+      {"doc_id": "18/VBHN-VPQH", "article": "97"}
+    ],
+    "forbidden_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "46"}
+    ],
+    "notes": "Compound issue: diploma withholding (Điều 17k1) and unpaid salary (Điều 97)."
+  },
+  {
+    "id": "RW_22",
+    "question": "công ty ép tăng ca ban đêm và trừ tiền phạt 500k vì đi trễ có đúng không",
+    "category": "E_compound_informal",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "107", "clause": "2", "point": "a"},
+      {"doc_id": "18/VBHN-VPQH", "article": "127", "clause": "2"}
+    ],
+    "forbidden_evidence": [],
+    "notes": "Compound issue: forced overtime (Điều 107k2a) and prohibited fine (Điều 127k2)."
+  },
+  {
+    "id": "RW_23",
+    "question": "sếp đuổi việc ngay không báo trước và từ chối thanh toán lương tháng cuối",
+    "category": "E_compound_informal",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "36", "clause": "2"},
+      {"doc_id": "18/VBHN-VPQH", "article": "48", "clause": "1"}
+    ],
+    "forbidden_evidence": [],
+    "notes": "Compound issue: lack of notice for employer termination (Điều 36k2) and settlement deadline (Điều 48k1)."
+  },
+  {
+    "id": "RW_24",
+    "question": "cty bắt đóng 10 triệu tiền cọc vào làm và giữ cccd gốc",
+    "category": "E_compound_informal",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "17", "clause": "1"},
+      {"doc_id": "18/VBHN-VPQH", "article": "17", "clause": "2"}
+    ],
+    "forbidden_evidence": [],
+    "notes": "Compound issue: identity document withholding (Điều 17k1) and security deposit (Điều 17k2)."
+  },
+  {
+    "id": "RW_25",
+    "question": "lao động nữ nuôi con 7 tháng có phải làm ca đêm không và làm thêm tính lương thế nào",
+    "category": "E_compound_informal",
+    "expected_behavior": "ANSWER",
+    "required_missing_fact_types": [],
+    "required_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "137", "clause": "1", "point": "a"},
+      {"doc_id": "18/VBHN-VPQH", "article": "98"}
+    ],
+    "forbidden_evidence": [],
+    "notes": "Compound issue: female worker raising child under 12m night work restriction (Điều 137k1a) and overtime pay (Điều 98)."
+  },
+  {
+    "id": "RW_26",
+    "question": "tôi học việc 4 tháng không được đồng nào có đúng không",
+    "category": "F_misleading_labels",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["training_contract", "work_performance"],
+    "required_evidence": [],
+    "forbidden_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "46"}
+    ],
+    "notes": "Apprenticeship/training without pay: must clarify whether worker directly produced/worked (Điều 61 BLLĐ)."
+  },
+  {
+    "id": "RW_27",
+    "question": "công ty nhận em vào làm cộng tác viên thử việc 3 tháng",
+    "category": "F_misleading_labels",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["job_qualification_level", "subordination_nature"],
+    "required_evidence": [],
+    "forbidden_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "46"}
+    ],
+    "notes": "Blended label 'cộng tác viên thử việc 3 tháng' requires qualification and relationship clarification."
+  },
+  {
+    "id": "RW_28",
+    "question": "em đi làm ké theo dự án của công ty 2 tháng mà không có tiền",
+    "category": "F_misleading_labels",
+    "expected_behavior": "CLARIFY",
+    "required_missing_fact_types": ["agreement_type", "supervisor_nature"],
+    "required_evidence": [],
+    "forbidden_evidence": [
+      {"doc_id": "18/VBHN-VPQH", "article": "46"}
+    ],
+    "notes": "Colloquial 'đi làm ké' requires clarifying who assigned work and whether agreement existed."
+  },
+  {
+    "id": "RW_29",
+    "question": "tôi muốn ly hôn và chia tài sản nhà đất của vợ chồng thì làm thế nào",
+    "category": "G_out_of_scope",
+    "expected_behavior": "OUT_OF_SCOPE",
+    "required_missing_fact_types": [],
+    "required_evidence": [],
+    "forbidden_evidence": [],
+    "notes": "Marriage and family / property dispute is strictly out of scope for labor law assistant."
+  },
+  {
+    "id": "RW_30",
+    "question": "công ty tranh chấp hợp đồng mua bán hàng hóa với đối tác thì kiện ở đâu",
+    "category": "G_out_of_scope",
+    "expected_behavior": "OUT_OF_SCOPE",
+    "required_missing_fact_types": [],
+    "required_evidence": [],
+    "forbidden_evidence": [],
+    "notes": "Commercial contract dispute between businesses is strictly out of scope."
+  }
+]

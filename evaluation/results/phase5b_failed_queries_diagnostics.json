@@ -1,0 +1,513 @@
+[
+  {
+    "question_id": "IN_04",
+    "question": "Làm ngày lễ thì được trả bao nhiêu tiền lương làm thêm giờ?",
+    "expected_evidence": [
+      {
+        "doc_id": "18/VBHN-VPQH",
+        "article": "98",
+        "clause": "1",
+        "point": "c",
+        "supports_fact": "Ít nhất bằng 300% chưa kể tiền lương ngày lễ, tết, ngày nghỉ có hưởng lương đối với người lao động hưởng lương ngày"
+      }
+    ],
+    "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+    "retrieved_top_k": [
+      {
+        "rank": 1,
+        "chunk_id": "ND_145_2020#d55-k3",
+        "doc_id": "ND_145_2020",
+        "article": "55",
+        "clause": "3",
+        "point": "",
+        "score": 0.03252247488101534
+      },
+      {
+        "rank": 2,
+        "chunk_id": "ND_145_2020#d55-k1-b",
+        "doc_id": "ND_145_2020",
+        "article": "55",
+        "clause": "1",
+        "point": "b",
+        "score": 0.03252247488101534
+      },
+      {
+        "rank": 3,
+        "chunk_id": "ND_145_2020#d57-k1-b3",
+        "doc_id": "ND_145_2020",
+        "article": "57",
+        "clause": "1",
+        "point": "b3",
+        "score": 0.031024531024531024
+      },
+      {
+        "rank": 4,
+        "chunk_id": "VBHN_18_2026#d98-k3",
+        "doc_id": "VBHN_18_2026",
+        "article": "98",
+        "clause": "3",
+        "point": "",
+        "score": 0.029910714285714284
+      },
+      {
+        "rank": 5,
+        "chunk_id": "ND_145_2020#d55-k1-a",
+        "doc_id": "ND_145_2020",
+        "article": "55",
+        "clause": "1",
+        "point": "a",
+        "score": 0.029857397504456328
+      },
+      {
+        "rank": 6,
+        "chunk_id": "ND_145_2020#d55-k2",
+        "doc_id": "ND_145_2020",
+        "article": "55",
+        "clause": "2",
+        "point": "",
+        "score": 0.029850746268656716
+      },
+      {
+        "rank": 7,
+        "chunk_id": "ND_145_2020#d57-k2",
+        "doc_id": "ND_145_2020",
+        "article": "57",
+        "clause": "2",
+        "point": "",
+        "score": 0.02919863597612958
+      },
+      {
+        "rank": 8,
+        "chunk_id": "VBHN_18_2026#d98-k1-c",
+        "doc_id": "VBHN_18_2026",
+        "article": "98",
+        "clause": "1",
+        "point": "c",
+        "score": 0.028782894736842105
+      },
+      {
+        "rank": 9,
+        "chunk_id": "ND_145_2020#d57-k1",
+        "doc_id": "ND_145_2020",
+        "article": "57",
+        "clause": "1",
+        "point": "",
+        "score": 0.028693528693528692
+      },
+      {
+        "rank": 10,
+        "chunk_id": "ND_145_2020#d57-k1-b1",
+        "doc_id": "ND_145_2020",
+        "article": "57",
+        "clause": "1",
+        "point": "b1",
+        "score": 0.02854251012145749
+      }
+    ],
+    "selected_context": [
+      "ND_145_2020#d55-k3",
+      "ND_145_2020#d55-k1-b",
+      "ND_145_2020#d57-k1-b3",
+      "VBHN_18_2026#d98-k3",
+      "ND_145_2020#d55-k1-a",
+      "ND_145_2020#d55-k2",
+      "ND_145_2020#d57-k2",
+      "VBHN_18_2026#d98-k1-c"
+    ],
+    "final_answer": "Khi làm thêm giờ vào ngày lễ, tết, người lao động sẽ được trả tiền lương làm thêm giờ theo mức ít nhất 300% so với đơn giá tiền lương sản phẩm của ngày làm việc bình thường. Nếu làm thêm giờ vào ngày ",
+    "cited_chunk_ids": [
+      "ND_145_2020#d55-k3",
+      "ND_145_2020#d57-k2-c"
+    ],
+    "missing_gold_evidence": [
+      "18/VBHN-VPQH Điều 98 Khoản 1"
+    ],
+    "failure_type": "CONTEXT_DILUTION",
+    "secondary_failure_type": "WRONG_CITATION_SELECTION",
+    "root_cause_analysis": "Both BLLĐ Điều 98 and NĐ 145 Điều 55/57 were retrieved into candidate context. Qwen cited the implementing formula in NĐ 145 Điều 55 Khoản 3 instead of the core statutory provision BLLĐ Điều 98 Khoản 1 Điểm c."
+  },
+  {
+    "question_id": "IN_05",
+    "question": "Công ty giữ bằng đại học gốc của tôi có được không?",
+    "expected_evidence": [
+      {
+        "doc_id": "18/VBHN-VPQH",
+        "article": "17",
+        "clause": "1",
+        "point": "",
+        "supports_fact": "Nghiêm cấm người sử dụng lao động giữ bản chính giấy tờ tùy thân, văn bằng, chứng chỉ của người lao động"
+      }
+    ],
+    "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+    "retrieved_top_k": [
+      {
+        "rank": 1,
+        "chunk_id": "VBHN_18_2026#d30-k1-đ",
+        "doc_id": "VBHN_18_2026",
+        "article": "30",
+        "clause": "1",
+        "point": "đ",
+        "score": 0.02946236559139785
+      },
+      {
+        "rank": 2,
+        "chunk_id": "VBHN_18_2026#d17-k1",
+        "doc_id": "VBHN_18_2026",
+        "article": "17",
+        "clause": "1",
+        "point": "",
+        "score": 0.02878726010616578
+      },
+      {
+        "rank": 3,
+        "chunk_id": "VBHN_18_2026#d14-k1",
+        "doc_id": "VBHN_18_2026",
+        "article": "14",
+        "clause": "1",
+        "point": "",
+        "score": 0.025873015873015874
+      },
+      {
+        "rank": 4,
+        "chunk_id": "ND_145_2020#ph-l-c-vi-danh-m-c-n-i-s-d-ng-lao-ng-kh-ng-c-nh-c-ng-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph",
+        "doc_id": "ND_145_2020",
+        "article": "",
+        "clause": "",
+        "point": "",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 5,
+        "chunk_id": "ND_12_2022#d4-k4",
+        "doc_id": "ND_12_2022",
+        "article": "4",
+        "clause": "4",
+        "point": "",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 6,
+        "chunk_id": "ND_12_2022#d9-k3-d",
+        "doc_id": "ND_12_2022",
+        "article": "9",
+        "clause": "3",
+        "point": "d",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 7,
+        "chunk_id": "ND_145_2020#d5-k1",
+        "doc_id": "ND_145_2020",
+        "article": "5",
+        "clause": "1",
+        "point": "",
+        "score": 0.015625
+      },
+      {
+        "rank": 8,
+        "chunk_id": "ND_145_2020#d27-k2-b",
+        "doc_id": "ND_145_2020",
+        "article": "27",
+        "clause": "2",
+        "point": "b",
+        "score": 0.015625
+      },
+      {
+        "rank": 9,
+        "chunk_id": "ND_145_2020#ph-l-c-iii-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph-9",
+        "doc_id": "ND_145_2020",
+        "article": "",
+        "clause": "",
+        "point": "",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 10,
+        "chunk_id": "ND_12_2022#d9-k2-a",
+        "doc_id": "ND_12_2022",
+        "article": "9",
+        "clause": "2",
+        "point": "a",
+        "score": 0.015384615384615385
+      }
+    ],
+    "selected_context": [
+      "VBHN_18_2026#d30-k1-đ",
+      "VBHN_18_2026#d17-k1",
+      "VBHN_18_2026#d14-k1",
+      "ND_145_2020#ph-l-c-vi-danh-m-c-n-i-s-d-ng-lao-ng-kh-ng-c-nh-c-ng-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph",
+      "ND_12_2022#d4-k4",
+      "ND_12_2022#d9-k3-d",
+      "ND_145_2020#d5-k1",
+      "ND_145_2020#d27-k2-b"
+    ],
+    "final_answer": "Theo quy định tại khoản 1 Điều 162 của Bộ luật Lao động, bằng đại học gốc của bạn không được giữ bởi công ty. Theo quy định này, công ty chỉ được giữ bản sao y hoặc bản sao điện tử của bằng cấp, chứng",
+    "cited_chunk_ids": [],
+    "missing_gold_evidence": [
+      "18/VBHN-VPQH Điều 17 Khoản 1"
+    ],
+    "failure_type": "CONTEXT_DILUTION",
+    "secondary_failure_type": "WRONG_CITATION_SELECTION",
+    "root_cause_analysis": "VBHN_18_2026#d17-k1 was retrieved at Rank 2 in Hybrid retrieval. However, context also contained ND_12_2022#d12-k4-b (penalties for domestic helpers), which diluted the context and confused Qwen into hallucinating BL_2019#d162-k1 (rejected by validator, leaving 0 citations)."
+  },
+  {
+    "question_id": "IN_14",
+    "question": "Thời giờ làm việc bình thường của người lao động không quá bao nhiêu giờ một ngày?",
+    "expected_evidence": [
+      {
+        "doc_id": "18/VBHN-VPQH",
+        "article": "105",
+        "clause": "1",
+        "point": "",
+        "supports_fact": "Thời giờ làm việc bình thường không quá 08 giờ trong 01 ngày và không quá 48 giờ trong 01 tuần"
+      }
+    ],
+    "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+    "retrieved_top_k": [
+      {
+        "rank": 1,
+        "chunk_id": "VBHN_18_2026#d105-k1",
+        "doc_id": "VBHN_18_2026",
+        "article": "105",
+        "clause": "1",
+        "point": "",
+        "score": 0.03252247488101534
+      },
+      {
+        "rank": 2,
+        "chunk_id": "VBHN_18_2026#d105-k2",
+        "doc_id": "VBHN_18_2026",
+        "article": "105",
+        "clause": "2",
+        "point": "",
+        "score": 0.03200204813108039
+      },
+      {
+        "rank": 3,
+        "chunk_id": "ND_145_2020#d61-k3",
+        "doc_id": "ND_145_2020",
+        "article": "61",
+        "clause": "3",
+        "point": "",
+        "score": 0.030798389007344232
+      },
+      {
+        "rank": 4,
+        "chunk_id": "ND_145_2020#d60-k2",
+        "doc_id": "ND_145_2020",
+        "article": "60",
+        "clause": "2",
+        "point": "",
+        "score": 0.03055037313432836
+      },
+      {
+        "rank": 5,
+        "chunk_id": "VBHN_18_2026#d107-k2-b",
+        "doc_id": "VBHN_18_2026",
+        "article": "107",
+        "clause": "2",
+        "point": "b",
+        "score": 0.03047794966520434
+      },
+      {
+        "rank": 6,
+        "chunk_id": "ND_145_2020#d60-k3",
+        "doc_id": "ND_145_2020",
+        "article": "60",
+        "clause": "3",
+        "point": "",
+        "score": 0.030303030303030304
+      },
+      {
+        "rank": 7,
+        "chunk_id": "VBHN_18_2026#d146-k1",
+        "doc_id": "VBHN_18_2026",
+        "article": "146",
+        "clause": "1",
+        "point": "",
+        "score": 0.030117753623188408
+      },
+      {
+        "rank": 8,
+        "chunk_id": "ND_145_2020#d60-k1",
+        "doc_id": "ND_145_2020",
+        "article": "60",
+        "clause": "1",
+        "point": "",
+        "score": 0.029273504273504274
+      },
+      {
+        "rank": 9,
+        "chunk_id": "ND_145_2020#d60-k4",
+        "doc_id": "ND_145_2020",
+        "article": "60",
+        "clause": "4",
+        "point": "",
+        "score": 0.028991596638655463
+      },
+      {
+        "rank": 10,
+        "chunk_id": "VBHN_18_2026#d146-k2",
+        "doc_id": "VBHN_18_2026",
+        "article": "146",
+        "clause": "2",
+        "point": "",
+        "score": 0.02728937728937729
+      }
+    ],
+    "selected_context": [
+      "VBHN_18_2026#d105-k1",
+      "VBHN_18_2026#d105-k2",
+      "ND_145_2020#d61-k3",
+      "ND_145_2020#d60-k2",
+      "VBHN_18_2026#d107-k2-b",
+      "ND_145_2020#d60-k3",
+      "VBHN_18_2026#d146-k1",
+      "ND_145_2020#d60-k1"
+    ],
+    "final_answer": "Theo quy định tại Điều 107 của Bộ luật Lao động và Điều 60 của Nghị định 145/2020/NĐ-CP, thời giờ làm việc bình thường của người lao động không được quá 8 giờ trong một ngày và không quá 40 giờ trong ",
+    "cited_chunk_ids": [
+      "ND_145_2020#d60-k1",
+      "ND_145_2020#d60-k2",
+      "ND_145_2020#d60-k3",
+      "ND_145_2020#d60-k4",
+      "ND_145_2020#d60-k5",
+      "VBHN_18_2026#d107-k2",
+      "VBHN_18_2026#d107-k2-a",
+      "VBHN_18_2026#d107-k2-b",
+      "VBHN_18_2026#d107-k2-c"
+    ],
+    "missing_gold_evidence": [
+      "18/VBHN-VPQH Điều 105 Khoản 1"
+    ],
+    "failure_type": "CONTEXT_DILUTION",
+    "secondary_failure_type": "GENERATION_REASONING",
+    "root_cause_analysis": "VBHN_18_2026#d105-k1 was at Rank 1 in Hybrid retrieval. However, the context was diluted with overtime provisions (Điều 107 BLLĐ, Điều 60 NĐ 145), leading Qwen to cite overtime limits rather than normal working hours."
+  },
+  {
+    "question_id": "IN_15",
+    "question": "Theo Nghị định 12/2022/NĐ-CP, phạt tiền bao nhiêu đối với hành vi giữ văn bằng gốc của người lao động?",
+    "expected_evidence": [
+      {
+        "doc_id": "12/2022/NĐ-CP",
+        "article": "9",
+        "clause": "2",
+        "point": "a",
+        "supports_fact": "Phạt tiền từ 20.000.000 đồng đến 25.000.000 đồng đối với người sử dụng lao động có hành vi giữ bản chính giấy tờ tùy thân, văn bằng, chứng chỉ của người lao động"
+      }
+    ],
+    "retrieval_method": "BM25 Lexical (Exact Reference)",
+    "retrieved_top_k": [
+      {
+        "rank": 1,
+        "chunk_id": "ND_12_2022#d42-k1",
+        "doc_id": "ND_12_2022",
+        "article": "42",
+        "clause": "1",
+        "point": "",
+        "score": 0.026547116736990152
+      },
+      {
+        "rank": 2,
+        "chunk_id": "ND_12_2022#d45-k6",
+        "doc_id": "ND_12_2022",
+        "article": "45",
+        "clause": "6",
+        "point": "",
+        "score": 0.025816993464052286
+      },
+      {
+        "rank": 3,
+        "chunk_id": "ND_12_2022#d42-k9",
+        "doc_id": "ND_12_2022",
+        "article": "42",
+        "clause": "9",
+        "point": "",
+        "score": 0.023709315375982042
+      },
+      {
+        "rank": 4,
+        "chunk_id": "ND_12_2022#d42-k10",
+        "doc_id": "ND_12_2022",
+        "article": "42",
+        "clause": "10",
+        "point": "",
+        "score": 0.02361111111111111
+      },
+      {
+        "rank": 5,
+        "chunk_id": "ND_12_2022#d46-k2",
+        "doc_id": "ND_12_2022",
+        "article": "46",
+        "clause": "2",
+        "point": "",
+        "score": 0.023513513513513516
+      },
+      {
+        "rank": 6,
+        "chunk_id": "ND_12_2022#d42-k8",
+        "doc_id": "ND_12_2022",
+        "article": "42",
+        "clause": "8",
+        "point": "",
+        "score": 0.023431077007399288
+      },
+      {
+        "rank": 7,
+        "chunk_id": "ND_12_2022#d42-k5",
+        "doc_id": "ND_12_2022",
+        "article": "42",
+        "clause": "5",
+        "point": "",
+        "score": 0.022149202872094438
+      },
+      {
+        "rank": 8,
+        "chunk_id": "ND_12_2022#d9-k2-a",
+        "doc_id": "ND_12_2022",
+        "article": "9",
+        "clause": "2",
+        "point": "a",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 9,
+        "chunk_id": "ND_12_2022#d53-k4-a",
+        "doc_id": "ND_12_2022",
+        "article": "53",
+        "clause": "4",
+        "point": "a",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 10,
+        "chunk_id": "ND_12_2022#d9-k3-d",
+        "doc_id": "ND_12_2022",
+        "article": "9",
+        "clause": "3",
+        "point": "d",
+        "score": 0.016129032258064516
+      }
+    ],
+    "selected_context": [
+      "ND_12_2022#d42-k1",
+      "ND_12_2022#d45-k6",
+      "ND_12_2022#d42-k9",
+      "ND_12_2022#d42-k10",
+      "ND_12_2022#d46-k2",
+      "ND_12_2022#d42-k8",
+      "ND_12_2022#d42-k5",
+      "ND_12_2022#d9-k2-a"
+    ],
+    "final_answer": "Theo Nghị định 12/2022/NĐ-CP, không có quy định cụ thể về mức phạt tiền đối với hành vi giữ văn bằng gốc của người lao động. Tuy nhiên, hành vi này có thể bị xử phạt theo Điều 4, Khoản 4 của Nghị định",
+    "cited_chunk_ids": [
+      "ND_12_2022#d4-k4"
+    ],
+    "missing_gold_evidence": [
+      "12/2022/NĐ-CP Điều 9 Khoản 2"
+    ],
+    "failure_type": "RETRIEVAL_RANKING",
+    "secondary_failure_type": "CONTEXT_OMISSION",
+    "root_cause_analysis": "BM25 retrieved ND_12_2022#d9-k2-a at Rank 1. However, Dense retrieval failed completely (not in top 20) because the point text lacked the penalty monetary amount from parent Clause 2 and the decree name. RRF pushed it down to Rank 18, so top-8 context selection omitted it."
+  }
+]

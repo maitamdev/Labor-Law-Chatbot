@@ -1,0 +1,520 @@
+/* VietLabor AI - Approved Mockup Custom CSS (Phase 6 - Light SaaS) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* 1. Global Reset & Theme Variables */
+:root {
+    --primary-color: #2563EB !important;
+    --background-color: #F8FAFC !important;
+    --secondary-background-color: #FFFFFF !important;
+    --text-color: #0F172A !important;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+html, body, [class*="css"], .stApp {
+    font-family: var(--font) !important;
+    color: #0F172A !important;
+    background-color: #F8FAFC !important;
+}
+
+/* Force light backgrounds on all Streamlit containers */
+[data-testid="stAppViewContainer"],
+[data-testid="stHeader"],
+[data-testid="stBottom"],
+.main,
+.block-container {
+    background-color: #F8FAFC !important;
+    color: #0F172A !important;
+}
+
+/* Hide default Streamlit decoration, header, footer */
+header[data-testid="stHeader"] {
+    display: none !important;
+}
+footer {
+    display: none !important;
+}
+#MainMenu {
+    display: none !important;
+}
+.stDeployButton {
+    display: none !important;
+}
+
+/* Container Spacing */
+.block-container {
+    padding-top: 1.25rem !important;
+    padding-bottom: 3rem !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    max-width: 100% !important;
+}
+
+/* 2. Left Sidebar Styling */
+section[data-testid="stSidebar"] {
+    background-color: #FFFFFF !important;
+    border-right: 1px solid #E2E8F0 !important;
+    box-shadow: 1px 0 3px rgba(0, 0, 0, 0.02) !important;
+}
+section[data-testid="stSidebar"] [data-testid="stSidebarUserContent"] {
+    background-color: #FFFFFF !important;
+}
+section[data-testid="stSidebar"] .block-container {
+    padding-top: 1.25rem !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+}
+
+/* Brand Header */
+.brand-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F1F5F9;
+}
+.brand-logo-box {
+    width: 42px;
+    height: 42px;
+    background: #2563EB;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    font-size: 20px;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+    flex-shrink: 0;
+}
+.brand-text-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: #0F172A !important;
+    line-height: 1.2;
+}
+.brand-text-subtitle {
+    font-size: 12px;
+    color: #64748B !important;
+    line-height: 1.2;
+    margin-top: 2px;
+}
+
+/* Section Titles */
+.sidebar-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: #64748B !important;
+    text-transform: uppercase;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Primary "+ Cuộc trò chuyện mới" Button */
+.new-chat-btn button {
+    background-color: #2563EB !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    padding: 10px 16px !important;
+    width: 100% !important;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2) !important;
+    transition: all 0.15s ease !important;
+}
+.new-chat-btn button:hover {
+    background-color: #1D4ED8 !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25) !important;
+}
+
+/* Sidebar Conversation History Buttons (Eliminate Red Buttons!) */
+[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] {
+    background-color: #EFF6FF !important;
+    color: #2563EB !important;
+    border: 1.5px solid #BFDBFE !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+    text-align: left !important;
+}
+[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] p {
+    color: #2563EB !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"] {
+    background-color: #FFFFFF !important;
+    color: #334155 !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+    text-align: left !important;
+}
+[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"]:hover {
+    background-color: #F8FAFC !important;
+    border-color: #CBD5E1 !important;
+    color: #0F172A !important;
+}
+[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"] p {
+    color: #334155 !important;
+}
+
+/* Sidebar Search Topics Expander */
+[data-testid="stSidebar"] [data-testid="stExpander"] {
+    background-color: #FFFFFF !important;
+    border: 1px solid #F1F5F9 !important;
+    border-radius: 6px !important;
+    margin-bottom: 4px !important;
+}
+[data-testid="stSidebar"] [data-testid="stExpander"] summary {
+    font-size: 13.5px !important;
+    color: #334155 !important;
+    padding: 6px 8px !important;
+}
+[data-testid="stSidebar"] [data-testid="stExpander"] summary:hover {
+    color: #2563EB !important;
+}
+[data-testid="stSidebar"] [data-testid="stExpander"] p {
+    color: #475569 !important;
+    font-size: 13px !important;
+}
+
+/* 3. Center Chat Area */
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #E2E8F0;
+    margin-bottom: 24px;
+}
+.chat-header-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0F172A !important;
+}
+
+/* Welcome Center Screen */
+.welcome-container {
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 680px;
+    margin: 0 auto;
+}
+.welcome-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0F172A !important;
+    margin-bottom: 8px;
+}
+.welcome-subtitle {
+    font-size: 14.5px;
+    color: #64748B !important;
+    line-height: 1.5;
+    margin-bottom: 32px;
+}
+.suggested-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    text-align: left;
+}
+.suggested-card {
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 12px !important;
+    padding: 16px 18px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+}
+.suggested-card:hover {
+    border-color: #2563EB !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08) !important;
+    transform: translateY(-1px);
+}
+.suggested-card-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1E293B !important;
+    line-height: 1.45;
+}
+
+/* User Message Bubble */
+.user-msg-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 24px;
+}
+.user-msg-bubble {
+    background-color: #EFF6FF !important;
+    border: 1px solid #DBEAFE !important;
+    border-radius: 18px 18px 4px 18px;
+    padding: 12px 20px;
+    font-size: 15px;
+    color: #1E3A8A !important;
+    max-width: 82%;
+    line-height: 1.55;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+.user-msg-time {
+    font-size: 11px;
+    color: #94A3B8 !important;
+    margin-top: 4px;
+    margin-right: 4px;
+}
+
+/* Assistant Message Card */
+.assistant-msg-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 28px;
+}
+.assistant-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #2563EB;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+.assistant-msg-card {
+    background-color: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 4px 16px 16px 16px;
+    padding: 20px 24px;
+    font-size: 15px;
+    color: #0F172A !important;
+    line-height: 1.65;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    flex-grow: 1;
+}
+.assistant-msg-card p,
+.assistant-msg-card li,
+.assistant-msg-card span {
+    color: #0F172A !important;
+}
+.assistant-msg-time {
+    font-size: 11px;
+    color: #94A3B8 !important;
+    margin-top: 6px;
+}
+
+/* Clarification Quick-Reply Chips */
+.clarify-chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+.clarify-chip-btn button {
+    border: 1.5px solid #BFDBFE !important;
+    background-color: #FFFFFF !important;
+    color: #2563EB !important;
+    border-radius: 9999px !important;
+    padding: 6px 16px !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+}
+.clarify-chip-btn button:hover {
+    background-color: #EFF6FF !important;
+    border-color: #2563EB !important;
+    color: #1D4ED8 !important;
+}
+
+/* Citation Card */
+.citation-card {
+    background-color: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 12px 0 6px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+.citation-doc-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1E293B !important;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.citation-provision-badge {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #2563EB !important;
+    margin-top: 4px;
+}
+.citation-article-title {
+    font-size: 12.5px;
+    color: #64748B !important;
+    margin-top: 2px;
+}
+.citation-excerpt {
+    font-size: 13px;
+    color: #334155 !important;
+    background: #F8FAFC !important;
+    border-left: 3px solid #2563EB !important;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-top: 8px;
+    line-height: 1.5;
+}
+.citation-link {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #2563EB !important;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+}
+.citation-link:hover {
+    text-decoration: underline;
+}
+
+/* Expanders in Chat Area */
+[data-testid="stExpander"] {
+    background-color: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+}
+[data-testid="stExpander"] summary {
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: #334155 !important;
+    background-color: #FFFFFF !important;
+}
+[data-testid="stExpander"] summary:hover {
+    color: #2563EB !important;
+}
+[data-testid="stExpander"] p,
+[data-testid="stExpander"] span,
+[data-testid="stExpander"] div {
+    color: #1E293B !important;
+}
+
+/* 4. Right Information Panel */
+.right-panel-wrapper {
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* Popular Topics Buttons in Right Panel */
+[data-testid="stMain"] [data-testid="stBaseButton-secondary"] {
+    background-color: #FFFFFF !important;
+    color: #1E293B !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 8px !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    padding: 8px 14px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.15s ease !important;
+    text-align: left !important;
+}
+[data-testid="stMain"] [data-testid="stBaseButton-secondary"]:hover {
+    border-color: #2563EB !important;
+    color: #2563EB !important;
+    background-color: #EFF6FF !important;
+    transform: translateY(-1px);
+}
+[data-testid="stMain"] [data-testid="stBaseButton-secondary"] p {
+    color: #1E293B !important;
+}
+
+.right-card-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background-color: #FFFFFF !important;
+    border: 1px solid #E2E8F0;
+    color: #1E293B !important;
+    font-size: 13.5px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+.right-card-item:hover {
+    background-color: #EFF6FF !important;
+    border-color: #2563EB;
+    color: #2563EB !important;
+}
+.right-card-chevron {
+    color: #94A3B8;
+    font-size: 14px;
+}
+
+/* Disclaimer Card */
+.disclaimer-card {
+    background-color: #EFF6FF !important;
+    border: 1px solid #BFDBFE !important;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 24px;
+}
+.disclaimer-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1E40AF !important;
+    margin-bottom: 6px;
+}
+.disclaimer-text {
+    font-size: 12px;
+    color: #1E3A8A !important;
+    line-height: 1.5;
+}
+
+/* 5. Sticky Bottom Composer */
+.composer-wrapper {
+    position: sticky;
+    bottom: 0;
+    background-color: #F8FAFC !important;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+[data-testid="stChatInput"],
+[data-testid="stTextInput"] input {
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    font-size: 14.5px !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+}
+[data-testid="stChatInput"]:focus-within,
+[data-testid="stTextInput"] input:focus {
+    border-color: #2563EB !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+    outline: none !important;
+}
+[data-testid="stChatInput"] button {
+    background-color: #2563EB !important;
+    color: #FFFFFF !important;
+    border-radius: 8px !important;
+}

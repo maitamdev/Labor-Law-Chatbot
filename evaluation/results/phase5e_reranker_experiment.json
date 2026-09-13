@@ -1,0 +1,20 @@
+{
+  "config_a": {
+    "name": "EvidenceSelector (Deterministic Multi-Signal)",
+    "top1_accuracy": 66.66666666666666,
+    "top3_recall": 89.85507246376811,
+    "mean_latency_ms": 1.7273362319046746,
+    "median_latency_ms": 1.5749999984109309,
+    "p95_latency_ms": 2.938200002972735,
+    "vram_mb": 0.0
+  },
+  "config_b": {
+    "name": "EvidenceSelector + Neural Cross-Encoder",
+    "top1_accuracy": 66.66666666666666,
+    "top3_recall": 89.85507246376811,
+    "mean_latency_ms": 14.031268116156317,
+    "median_latency_ms": 13.9058999986446,
+    "p95_latency_ms": 15.556699999433476,
+    "vram_mb": 2200.0
+  }
+}

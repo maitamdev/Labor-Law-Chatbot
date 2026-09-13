@@ -1,0 +1,427 @@
+{
+  "total_queries": 30,
+  "clarification_decision_accuracy": 100.0,
+  "premature_answer_rate": 0.0,
+  "wrong_intent_routing_rate": 0.0,
+  "forbidden_evidence_violations": 0,
+  "citation_support": 47.368421052631575,
+  "citation_precision": 64.28571428571429,
+  "conversation_state_accuracy": 100.0,
+  "passed_all": true,
+  "multi_turn_results": {
+    "FLOW_A": {
+      "pass": true,
+      "t1_clarify": true,
+      "t2_answered": true,
+      "t2_citations": [
+        "VBHN_18_2026#d61-k1"
+      ]
+    },
+    "FLOW_B": {
+      "pass": true,
+      "t2_answered": true,
+      "t2_citations": [
+        "VBHN_18_2026#d13-k1"
+      ]
+    },
+    "FLOW_C": {
+      "pass": true,
+      "t2_clarify": true,
+      "t3_answered": true,
+      "t3_citations": [
+        "VBHN_18_2026#d26"
+      ]
+    }
+  },
+  "results_detail": [
+    {
+      "id": "RW_01",
+      "question": "tôi đi thực tập 7 tháng rồi mà ko có lương",
+      "category": "A_relationship_ambiguity",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Để xác định chính xác quy định về quyền lợi và tiền lương/phụ cấp thực tập, mình cần biết thêm thông tin về trường hợp của bạn:\n1. Bạn thực tập theo chương trình của nhà trường (có giấy giới thiệu/thỏa thuận với trường) hay do công ty trực tiếp tuyển dụng?\n2. Trong thời gian này, bạn có phải làm việc cố định theo ca/giờ, chấm công và thực hiện công việc như một nhân viên bình thường không?",
+      "latency_ms": 2.1275000035529956
+    },
+    {
+      "id": "RW_02",
+      "question": "công ty bảo em là cộng tác viên nhưng ngày nào cũng bắt chấm công làm 8 tiếng",
+      "category": "A_relationship_ambiguity",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Theo quy định tại Điều 13 Bộ luật Lao động, nếu bạn làm việc có sự quản lý, điều hành, giám sát, chấm công và trả công định kỳ thì được coi là quan hệ lao động thực tế. Bạn vui lòng cho biết: Công ty có quy định giờ giấc làm việc cố định và quản lý trực tiếp bạn không, hay bạn chỉ giao nộp kết quả công việc/sản phẩm?",
+      "latency_ms": 0.2921999985119328
+    },
+    {
+      "id": "RW_03",
+      "question": "em đi thực tập mà bị giao việc và chấm công như nhân viên chính thức",
+      "category": "A_relationship_ambiguity",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d128-k1"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": "Bạn đang thực tập theo hợp đồng thực tập hay hợp đồng lao động? Nếu có, hãy mô tả thêm về nội dung công việc và quản lý của bạn trong quá trình thực tập.",
+      "latency_ms": 18233.211500002653
+    },
+    {
+      "id": "RW_04",
+      "question": "công ty nhận em vào làm quen việc 2 tháng không trả tiền",
+      "category": "A_relationship_ambiguity",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Pháp luật lao động không có chế định 'làm quen việc' hay 'đi làm ké', mà chỉ điều chỉnh các quan hệ: Hợp đồng lao động, Thử việc (có trả lương tối thiểu 85%), hoặc Tập nghề/học nghề (tối đa 3 tháng và phải trả lương nếu trực tiếp làm việc). Để bảo vệ quyền lợi của bạn, bạn vui lòng cho biết:\n1. Bạn và công ty có thỏa thuận đây là thử việc, học việc hay làm việc thực tế không?\n2. Bạn có người quản lý trực tiếp giao việc, theo dõi giờ giấc làm việc hay không?",
+      "latency_ms": 0.5532000068342313
+    },
+    {
+      "id": "RW_05",
+      "question": "công ty ký hợp đồng dịch vụ freelance nhưng bắt ngồi văn phòng cố định 8h/ngày",
+      "category": "A_relationship_ambiguity",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Theo quy định tại Điều 13 Bộ luật Lao động, nếu bạn làm việc có sự quản lý, điều hành, giám sát, chấm công và trả công định kỳ thì được coi là quan hệ lao động thực tế. Bạn vui lòng cho biết: Công ty có quy định giờ giấc làm việc cố định và quản lý trực tiếp bạn không, hay bạn chỉ giao nộp kết quả công việc/sản phẩm?",
+      "latency_ms": 0.4071999865118414
+    },
+    {
+      "id": "RW_06",
+      "question": "cty chậm lương 2 tháng r thì nld dc quyền gì",
+      "category": "B_colloquial_wording",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d97-k4"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 10451.815000007628
+    },
+    {
+      "id": "RW_07",
+      "question": "bị cty đuổi ngang ko báo trước thì dc bồi thường thế nào",
+      "category": "B_colloquial_wording",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d36-k2-d"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 11157.385300000897
+    },
+    {
+      "id": "RW_08",
+      "question": "làm việc 8 tiếng mỗi ngày thì cty có dc bắt làm thêm k",
+      "category": "B_colloquial_wording",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d107-k2-b"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 9307.791600003839
+    },
+    {
+      "id": "RW_09",
+      "question": "cty ép làm thêm ngày lễ tết thì lương tính sao",
+      "category": "B_colloquial_wording",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d98-k1-c"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 8266.128499992192
+    },
+    {
+      "id": "RW_10",
+      "question": "cty giữ bằng gốc và cccd của em có đúng luật k",
+      "category": "B_colloquial_wording",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d17-k1"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 7444.454800002859
+    },
+    {
+      "id": "RW_11",
+      "question": "em làm ở công ty 6 tháng mà chưa ký hợp đồng có sao k",
+      "category": "C_missing_contract_facts",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Để xác định chính xác quyền lợi và nghĩa vụ của công ty khi chưa ký hợp đồng bằng văn bản, bạn vui lòng cho biết thêm:\n1. Bạn và công ty có thỏa thuận miệng về công việc, tiền lương và thời gian làm việc không?\n2. Hàng tháng bạn có được trả lương, chấm công và chịu sự quản lý, giám sát trực tiếp không?",
+      "latency_ms": 0.4361000028438866
+    },
+    {
+      "id": "RW_12",
+      "question": "tôi làm thời vụ mà ko biết hợp đồng của tôi thuộc loại gì",
+      "category": "C_missing_contract_facts",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Bộ luật Lao động 2019 hiện hành đã bỏ loại 'hợp đồng mùa vụ/thời vụ', chỉ còn 02 loại: Hợp đồng xác định thời hạn (tối đa 36 tháng) và Không xác định thời hạn. Để xác định công việc thời vụ của bạn thuộc loại hợp đồng nào, bạn vui lòng cho biết thời gian công việc mà hai bên đã thỏa thuận:",
+      "latency_ms": 0.2565000031609088
+    },
+    {
+      "id": "RW_13",
+      "question": "em mới vào làm chưa ký giấy tờ gì hết thì quyền lợi ra sao",
+      "category": "C_missing_contract_facts",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Để xác định chính xác quyền lợi và nghĩa vụ của công ty khi chưa ký hợp đồng bằng văn bản, bạn vui lòng cho biết thêm:\n1. Bạn và công ty có thỏa thuận miệng về công việc, tiền lương và thời gian làm việc không?\n2. Hàng tháng bạn có được trả lương, chấm công và chịu sự quản lý, giám sát trực tiếp không?",
+      "latency_ms": 0.3043999895453453
+    },
+    {
+      "id": "RW_14",
+      "question": "tôi muốn xin nghỉ việc thì phải báo trước bao nhiêu ngày",
+      "category": "C_missing_contract_facts",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Thời hạn báo trước khi chấm dứt hợp đồng lao động phụ thuộc vào loại hợp đồng của bạn (Điều 35, 36 BLLĐ). Bạn vui lòng cho biết loại hợp đồng lao động đang áp dụng:",
+      "latency_ms": 0.39990000368561596
+    },
+    {
+      "id": "RW_15",
+      "question": "công ty cho tôi nghỉ việc thì phải báo trước mấy ngày",
+      "category": "C_missing_contract_facts",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Thời hạn báo trước khi chấm dứt hợp đồng lao động phụ thuộc vào loại hợp đồng của bạn (Điều 35, 36 BLLĐ). Bạn vui lòng cho biết loại hợp đồng lao động đang áp dụng:",
+      "latency_ms": 0.33850000181701034
+    },
+    {
+      "id": "RW_16",
+      "question": "đơn phương chấm dứt hợp đồng thì cần báo trước bao lâu",
+      "category": "D_actor_ambiguity",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Thời hạn báo trước khi chấm dứt hợp đồng lao động phụ thuộc vào loại hợp đồng của bạn (Điều 35, 36 BLLĐ). Bạn vui lòng cho biết loại hợp đồng lao động đang áp dụng:",
+      "latency_ms": 0.3956000000471249
+    },
+    {
+      "id": "RW_17",
+      "question": "người lao động tự ý nghỉ việc 5 ngày liên tục thì công ty xử lý thế nào",
+      "category": "D_actor_ambiguity",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d125-k4"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 9865.74809999729
+    },
+    {
+      "id": "RW_18",
+      "question": "công ty muốn sa thải nhân viên mang thai có được không",
+      "category": "D_actor_ambiguity",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d137-k3"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 5550.118099999963
+    },
+    {
+      "id": "RW_19",
+      "question": "chấm dứt hợp đồng có phải trả tiền trợ cấp thôi việc không",
+      "category": "D_actor_ambiguity",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Theo Điều 46 Bộ luật Lao động, trợ cấp thôi việc chỉ áp dụng khi người lao động đã làm việc thường xuyên từ đủ 12 tháng trở lên và chấm dứt hợp đồng theo một số trường hợp luật định (hết hạn, thỏa thuận...). Để tư vấn chính xác, bạn vui lòng cho biết:\n1. Bạn đã làm việc tại công ty được bao lâu (đã đủ 12 tháng chưa)?\n2. Lý do hai bên chấm dứt hợp đồng lao động là gì?",
+      "latency_ms": 0.4563999973470345
+    },
+    {
+      "id": "RW_20",
+      "question": "nghỉ việc do công ty không trả đủ lương có cần báo trước không",
+      "category": "D_actor_ambiguity",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d99-k2"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 7747.718300000997
+    },
+    {
+      "id": "RW_21",
+      "question": "cty vừa nợ lương 3 tháng vừa giữ bằng đại học của em thì xử lý thế nào",
+      "category": "E_compound_informal",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d97-k3",
+        "VBHN_18_2026#d17-k1"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 8911.510299993097
+    },
+    {
+      "id": "RW_22",
+      "question": "công ty ép tăng ca ban đêm và trừ tiền phạt 500k vì đi trễ có đúng không",
+      "category": "E_compound_informal",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d48-k1-b"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 10792.939300008584
+    },
+    {
+      "id": "RW_23",
+      "question": "sếp đuổi việc ngay không báo trước và từ chối thanh toán lương tháng cuối",
+      "category": "E_compound_informal",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d99-k3-b"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 10187.70520000544
+    },
+    {
+      "id": "RW_24",
+      "question": "cty bắt đóng 10 triệu tiền cọc vào làm và giữ cccd gốc",
+      "category": "E_compound_informal",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d17-k1"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 8237.38739998953
+    },
+    {
+      "id": "RW_25",
+      "question": "lao động nữ nuôi con 7 tháng có phải làm ca đêm không và làm thêm tính lương thế nào",
+      "category": "E_compound_informal",
+      "expected_behavior": "ANSWER",
+      "actual_behavior": "ANSWER",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d98-k1-c"
+      ],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 16424.77990000043
+    },
+    {
+      "id": "RW_26",
+      "question": "tôi học việc 4 tháng không được đồng nào có đúng không",
+      "category": "F_misleading_labels",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Theo Điều 61 Bộ luật Lao động, thời hạn tập nghề tối đa không quá 03 tháng và nếu người tập nghề trực tiếp tham gia lao động thì phải được trả lương theo thỏa thuận. Để xác định việc công ty không trả lương cho bạn có vi phạm hay không, bạn vui lòng cho biết:\n1. Trong thời gian học việc, bạn chỉ học lý thuyết/thực hành hay trực tiếp làm ra sản phẩm/doanh thu cho công ty?\n2. Hai bên có ký kết hợp đồng đào tạo nghề/tập nghề bằng văn bản không?",
+      "latency_ms": 0.6135000003268942
+    },
+    {
+      "id": "RW_27",
+      "question": "công ty nhận em vào làm cộng tác viên thử việc 3 tháng",
+      "category": "F_misleading_labels",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Để xác định thời gian thử việc tối đa và tính hợp pháp của tiền lương thử việc theo Điều 25, 26 BLLĐ, bạn vui lòng cho biết vị trí công việc của bạn yêu cầu trình độ chuyên môn ở mức nào:",
+      "latency_ms": 0.577499988139607
+    },
+    {
+      "id": "RW_28",
+      "question": "em đi làm ké theo dự án của công ty 2 tháng mà không có tiền",
+      "category": "F_misleading_labels",
+      "expected_behavior": "CLARIFY",
+      "actual_behavior": "CLARIFY",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": "Pháp luật lao động không có chế định 'làm quen việc' hay 'đi làm ké', mà chỉ điều chỉnh các quan hệ: Hợp đồng lao động, Thử việc (có trả lương tối thiểu 85%), hoặc Tập nghề/học nghề (tối đa 3 tháng và phải trả lương nếu trực tiếp làm việc). Để bảo vệ quyền lợi của bạn, bạn vui lòng cho biết:\n1. Bạn và công ty có thỏa thuận đây là thử việc, học việc hay làm việc thực tế không?\n2. Bạn có người quản lý trực tiếp giao việc, theo dõi giờ giấc làm việc hay không?",
+      "latency_ms": 0.4265000025043264
+    },
+    {
+      "id": "RW_29",
+      "question": "tôi muốn ly hôn và chia tài sản nhà đất của vợ chồng thì làm thế nào",
+      "category": "G_out_of_scope",
+      "expected_behavior": "OUT_OF_SCOPE",
+      "actual_behavior": "OUT_OF_SCOPE",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 0.14279999595601112
+    },
+    {
+      "id": "RW_30",
+      "question": "công ty tranh chấp hợp đồng mua bán hàng hóa với đối tác thì kiện ở đâu",
+      "category": "G_out_of_scope",
+      "expected_behavior": "OUT_OF_SCOPE",
+      "actual_behavior": "OUT_OF_SCOPE",
+      "is_decision_correct": true,
+      "cited_chunk_ids": [],
+      "has_forbidden_violation": false,
+      "clarification_question": null,
+      "latency_ms": 0.22109999554231763
+    }
+  ]
+}

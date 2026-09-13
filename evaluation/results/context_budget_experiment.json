@@ -1,0 +1,26 @@
+{
+  "Config A (4500 global)": {
+    "fully_supported": 0,
+    "total_queries": 5,
+    "support_rate": 0.0,
+    "evidence_completeness": 50.0,
+    "context_omissions": 0,
+    "mean_latency_ms": 13227.1
+  },
+  "Config B (8000 global)": {
+    "fully_supported": 0,
+    "total_queries": 5,
+    "support_rate": 0.0,
+    "evidence_completeness": 50.0,
+    "context_omissions": 0,
+    "mean_latency_ms": 14053.8
+  },
+  "Config C (Per-issue + 8000)": {
+    "fully_supported": 3,
+    "total_queries": 5,
+    "support_rate": 60.0,
+    "evidence_completeness": 80.0,
+    "context_omissions": 0,
+    "mean_latency_ms": 11055.8
+  }
+}

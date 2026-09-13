@@ -1,0 +1,376 @@
+{
+  "metrics": {
+    "final_citation_id_validity": {
+      "valid": 128,
+      "total": 128,
+      "percentage": 100.0,
+      "gate_passed": true
+    },
+    "raw_evidence_id_validity": {
+      "valid": 128,
+      "total": 128,
+      "percentage": 100.0,
+      "raw_invalid_count": 0
+    },
+    "citation_support_accuracy": {
+      "passed": 61,
+      "total": 69,
+      "percentage": 88.41,
+      "gate_passed": false
+    },
+    "citation_completeness": {
+      "supported": 67,
+      "total": 75,
+      "percentage": 89.33,
+      "gate_passed": false
+    },
+    "ambiguous_accuracy": {
+      "passed": 20,
+      "total": 20,
+      "percentage": 100.0,
+      "gate_passed": true
+    },
+    "out_of_scope_accuracy": {
+      "passed": 10,
+      "total": 10,
+      "percentage": 100.0,
+      "gate_passed": true
+    },
+    "compound_full_support_accuracy": {
+      "passed": 4,
+      "total": 5,
+      "percentage": 80.0,
+      "gate_passed": true
+    },
+    "mandatory_cases": {
+      "Case A (General resignation 30d)": "PASS",
+      "Case B (Special flight crew 120d, both Điều 35k1d + Điều 7)": "PASS",
+      "Case C (Ambiguous probation clarification)": "PASS",
+      "all_passed": true
+    },
+    "critical_wrong_law_citations": 0,
+    "final_visible_phantom_citations": 0
+  },
+  "latencies": {
+    "retrieval": {
+      "mean_ms": 299.9,
+      "median_ms": 296.4,
+      "p95_ms": 488.7
+    },
+    "llm": {
+      "mean_ms": 10783.8,
+      "median_ms": 9816.8,
+      "p95_ms": 16908.2
+    },
+    "total": {
+      "mean_ms": 11084.4,
+      "median_ms": 10030.1,
+      "p95_ms": 17234.4
+    }
+  },
+  "compound_results": [
+    {
+      "qid": "IN_65",
+      "completeness": 1.0,
+      "supported": 2,
+      "required": 2,
+      "cited": [
+        "VBHN_18_2026#d97-k4",
+        "VBHN_18_2026#d17-k1"
+      ],
+      "missing": [],
+      "status": "PASS"
+    },
+    {
+      "qid": "IN_66",
+      "completeness": 0.5,
+      "supported": 1,
+      "required": 2,
+      "cited": [
+        "VBHN_18_2026#d98-k1-c",
+        "VBHN_18_2026#d98-k1",
+        "VBHN_18_2026#d98-k1-a",
+        "VBHN_18_2026#d98-k1-b"
+      ],
+      "missing": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Phải có sự đồng ý của NLĐ khi làm thêm Điều 107 Khoản 2 Điểm a"
+        }
+      ],
+      "status": "FAIL"
+    },
+    {
+      "qid": "IN_67",
+      "completeness": 1.0,
+      "supported": 2,
+      "required": 2,
+      "cited": [
+        "VBHN_18_2026#d36-k3",
+        "VBHN_18_2026#d36-k2-d",
+        "VBHN_18_2026#d48-k1",
+        "VBHN_18_2026#d48-k1-a",
+        "VBHN_18_2026#d48-k1-b",
+        "VBHN_18_2026#d48-k1-c"
+      ],
+      "missing": [],
+      "status": "PASS"
+    },
+    {
+      "qid": "IN_68",
+      "completeness": 1.0,
+      "supported": 2,
+      "required": 2,
+      "cited": [
+        "VBHN_18_2026#d137-k1-a",
+        "VBHN_18_2026#d122-k4-d"
+      ],
+      "missing": [],
+      "status": "PASS"
+    },
+    {
+      "qid": "IN_69",
+      "completeness": 1.0,
+      "supported": 2,
+      "required": 2,
+      "cited": [
+        "VBHN_18_2026#d17-k1",
+        "VBHN_18_2026#d17-k2",
+        "ND_12_2022#d9-k2-b"
+      ],
+      "missing": [],
+      "status": "PASS"
+    }
+  ],
+  "failed_in_scope_queries": [
+    {
+      "qid": "IN_05",
+      "question": "Công ty bắt tôi nộp tiền đặt cọc 5 triệu đồng để đảm bảo thực hiện hợp đồng lao động có đúng luật không?",
+      "failure_type": "RETRIEVAL_MISS",
+      "expected": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Nghiêm cấm yêu cầu tiền bảo đảm theo Điều 17 Khoản 2 BLLĐ"
+        }
+      ],
+      "missing": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Nghiêm cấm yêu cầu tiền bảo đảm theo Điều 17 Khoản 2 BLLĐ"
+        }
+      ],
+      "cited": [
+        "ND_12_2022#d9-k2-b"
+      ],
+      "raw_validity": 1.0,
+      "answer_preview": "Theo quy định tại Nghị định 12/2022/NĐ-CP, việc bắt buộc người lao động nộp tiền đặt cọc để đảm bảo thực hiện hợp đồng lao động là vi phạm pháp luật. Cụ thể, Điều 9 của Nghị định này quy định rằng ngư"
+    },
+    {
+      "qid": "IN_14",
+      "question": "Trong thời gian thử việc, mỗi bên có quyền hủy bỏ hợp đồng thử việc mà không cần báo trước không?",
+      "failure_type": "CONTEXT_OMISSION",
+      "expected": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "27",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Hủy bỏ thử việc không cần báo trước tại Điều 27 Khoản 2 BLLĐ"
+        }
+      ],
+      "missing": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "27",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Hủy bỏ thử việc không cần báo trước tại Điều 27 Khoản 2 BLLĐ"
+        }
+      ],
+      "cited": [
+        "VBHN_18_2026#d35-k1-a"
+      ],
+      "raw_validity": 1.0,
+      "answer_preview": "Theo quy định tại Khoản 1 Điều 35 Bộ luật Lao động (E9), trong thời gian thử việc, người lao động có quyền đơn phương chấm dứt hợp đồng lao động nhưng phải báo trước cho người sử dụng lao động ít nhất"
+    },
+    {
+      "qid": "IN_18",
+      "question": "Người sử dụng lao động có được khấu trừ lương của người lao động mà không thông báo lý do không?",
+      "failure_type": "WRONG_CITATION_SELECTION",
+      "expected": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "102",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Quy định khấu trừ tiền lương tại Điều 102 Khoản 1 BLLĐ"
+        }
+      ],
+      "missing": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "102",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Quy định khấu trừ tiền lương tại Điều 102 Khoản 1 BLLĐ"
+        }
+      ],
+      "cited": [
+        "VBHN_18_2026#d102-k2"
+      ],
+      "raw_validity": 1.0,
+      "answer_preview": "Theo quy định tại Khoản 2 Điều 102 của Bộ luật Lao động (E1), người sử dụng lao động chỉ được khấu trừ tiền lương của người lao động để bồi thường thiệt hại do làm hư hỏng dụng cụ, thiết bị, tài sản c"
+    },
+    {
+      "qid": "IN_20",
+      "question": "Khi công ty chậm trả lương từ 15 ngày trở lên thì phải đền bù thêm tiền thế nào?",
+      "failure_type": "WRONG_CITATION_SELECTION",
+      "expected": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "97",
+          "clause": "4",
+          "point": "",
+          "supports_fact": "Đền bù lãi suất khi chậm lương từ 15 ngày tại Điều 97 Khoản 4 BLLĐ"
+        }
+      ],
+      "missing": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "97",
+          "clause": "4",
+          "point": "",
+          "supports_fact": "Đền bù lãi suất khi chậm lương từ 15 ngày tại Điều 97 Khoản 4 BLLĐ"
+        }
+      ],
+      "cited": [
+        "VBHN_18_2026#d97-k1"
+      ],
+      "raw_validity": 1.0,
+      "answer_preview": "Theo quy định tại Điều 97 của Bộ luật Lao động (Khoản 1 - Văn bản hợp nhất 18/VBHN-VPQH), người lao động có quyền được trả lương sau giờ, ngày, tuần làm việc hoặc được trả gộp do hai bên thỏa thuận nh"
+    },
+    {
+      "qid": "IN_29",
+      "question": "Lao động làm công việc đặc biệt nặng nhọc, độc hại, nguy hiểm thì thời giờ làm việc có được rút ngắn không?",
+      "failure_type": "CONTEXT_OMISSION",
+      "expected": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "105",
+          "clause": "3",
+          "point": "",
+          "supports_fact": "Giảm giờ làm việc độc hại nguy hiểm tại Điều 105 Khoản 3 BLLĐ"
+        }
+      ],
+      "missing": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "105",
+          "clause": "3",
+          "point": "",
+          "supports_fact": "Giảm giờ làm việc độc hại nguy hiểm tại Điều 105 Khoản 3 BLLĐ"
+        }
+      ],
+      "cited": [
+        "VBHN_18_2026#d137-k2"
+      ],
+      "raw_validity": 1.0,
+      "answer_preview": "Theo quy định tại [E2] của Bộ luật Lao động, lao động nữ làm công việc nặng nhọc, độc hại, nguy hiểm hoặc đặc biệt nặng nhọc, độc hại, nguy hiểm có thể được chuyển sang làm công việc nhẹ nhàng hơn hoặ"
+    },
+    {
+      "qid": "IN_37",
+      "question": "Số giờ làm thêm của người lao động không được quá bao nhiêu giờ trong một ngày?",
+      "failure_type": "WRONG_CITATION_SELECTION",
+      "expected": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Giới hạn làm thêm giờ theo ngày tại Điều 107 Khoản 2 Điểm a BLLĐ"
+        }
+      ],
+      "missing": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Giới hạn làm thêm giờ theo ngày tại Điều 107 Khoản 2 Điểm a BLLĐ"
+        }
+      ],
+      "cited": [
+        "VBHN_18_2026#d107-k2-b"
+      ],
+      "raw_validity": 1.0,
+      "answer_preview": "Theo quy định tại Khoản 2, Điểm b Điều 107 của Bộ luật Lao động, số giờ làm thêm của người lao động không được quá 50% số giờ làm việc bình thường trong một ngày. Trong trường hợp áp dụng quy định thờ"
+    },
+    {
+      "qid": "IN_42",
+      "question": "Người lao động làm nghề, công việc nặng nhọc, độc hại, nguy hiểm được nghỉ bao nhiêu ngày phép hàng năm?",
+      "failure_type": "WRONG_CITATION_SELECTION",
+      "expected": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "113",
+          "clause": "1",
+          "point": "b",
+          "supports_fact": "Nghỉ phép 14 ngày làm việc công việc nặng nhọc độc hại tại Điều 113 Khoản 1 Điểm b BLLĐ"
+        }
+      ],
+      "missing": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "113",
+          "clause": "1",
+          "point": "b",
+          "supports_fact": "Nghỉ phép 14 ngày làm việc công việc nặng nhọc độc hại tại Điều 113 Khoản 1 Điểm b BLLĐ"
+        }
+      ],
+      "cited": [
+        "VBHN_18_2026#d113-k1-c"
+      ],
+      "raw_validity": 1.0,
+      "answer_preview": "Người lao động làm nghề, công việc nặng nhọc, độc hại, nguy hiểm được nghỉ 16 ngày làm việc mỗi năm theo quy định tại Điểm c Khoản 1 Điều 113 Bộ luật Lao động.\n\nCĂN CỨ PHÁP LÝ:\n- Văn bản hợp nhất 18/V"
+    },
+    {
+      "qid": "IN_45",
+      "question": "Người lao động thôi việc mà chưa nghỉ hết số ngày phép hàng năm thì có được thanh toán tiền lương không?",
+      "failure_type": "RETRIEVAL_MISS",
+      "expected": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "113",
+          "clause": "6",
+          "point": "",
+          "supports_fact": "Thanh toán tiền lương ngày phép chưa nghỉ tại Điều 113 Khoản 6 BLLĐ"
+        }
+      ],
+      "missing": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "113",
+          "clause": "6",
+          "point": "",
+          "supports_fact": "Thanh toán tiền lương ngày phép chưa nghỉ tại Điều 113 Khoản 6 BLLĐ"
+        }
+      ],
+      "cited": [
+        "VBHN_18_2026#d101-k3"
+      ],
+      "raw_validity": 1.0,
+      "answer_preview": "Theo quy định tại Điều 101 Bộ luật Lao động, khi nghỉ hằng năm, người lao động được tạm ứng một khoản tiền ít nhất bằng tiền lương của những ngày nghỉ. Tuy nhiên, nếu người lao động đã nghỉ hết số ngà"
+    }
+  ],
+  "raw_invalid_tokens": [],
+  "critical_wrong_law_details": []
+}

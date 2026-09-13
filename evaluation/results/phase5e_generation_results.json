@@ -1,0 +1,147 @@
+{
+  "metrics": {
+    "final_citation_id_validity": {
+      "valid": 117,
+      "total": 117,
+      "percentage": 100.0,
+      "gate_passed": true
+    },
+    "raw_evidence_id_validity": {
+      "valid": 117,
+      "total": 117,
+      "percentage": 100.0,
+      "raw_invalid_count": 0
+    },
+    "citation_support_accuracy": {
+      "passed": 69,
+      "total": 69,
+      "percentage": 100.0,
+      "gate_passed": true
+    },
+    "citation_completeness": {
+      "supported": 75,
+      "total": 75,
+      "percentage": 100.0,
+      "gate_passed": true
+    },
+    "ambiguous_accuracy": {
+      "passed": 20,
+      "total": 20,
+      "percentage": 100.0,
+      "gate_passed": true
+    },
+    "out_of_scope_accuracy": {
+      "passed": 10,
+      "total": 10,
+      "percentage": 100.0,
+      "gate_passed": true
+    },
+    "compound_full_support_accuracy": {
+      "passed": 5,
+      "total": 5,
+      "percentage": 100.0,
+      "gate_passed": true
+    },
+    "mandatory_cases": {
+      "Case A (General resignation 30d)": "PASS",
+      "Case B (Special flight crew 120d, both Điều 35k1d + Điều 7)": "PASS",
+      "Case C (Ambiguous probation clarification)": "PASS",
+      "all_passed": true
+    },
+    "multi_turn_passed": true,
+    "critical_wrong_law_citations": 0,
+    "final_visible_phantom_citations": 0
+  },
+  "latencies": {
+    "retrieval": {
+      "mean_ms": 298.9,
+      "median_ms": 300.3,
+      "p95_ms": 457.3
+    },
+    "selection": {
+      "mean_ms": 1.9,
+      "median_ms": 1.8,
+      "p95_ms": 3.0
+    },
+    "llm": {
+      "mean_ms": 8047.3,
+      "median_ms": 7289.4,
+      "p95_ms": 12136.9
+    },
+    "total": {
+      "mean_ms": 8348.7,
+      "median_ms": 7566.2,
+      "p95_ms": 12572.5
+    }
+  },
+  "compound_results": [
+    {
+      "qid": "IN_65",
+      "completeness": 1.0,
+      "supported": 2,
+      "required": 2,
+      "cited": [
+        "VBHN_18_2026#d97-k4",
+        "VBHN_18_2026#d17-k1"
+      ],
+      "missing": [],
+      "status": "PASS"
+    },
+    {
+      "qid": "IN_66",
+      "completeness": 1.0,
+      "supported": 2,
+      "required": 2,
+      "cited": [
+        "VBHN_18_2026#d107-k2-a",
+        "VBHN_18_2026#d107-k2-b",
+        "VBHN_18_2026#d98-k1-c",
+        "ND_145_2020#d55-k1-b"
+      ],
+      "missing": [],
+      "status": "PASS"
+    },
+    {
+      "qid": "IN_67",
+      "completeness": 1.0,
+      "supported": 2,
+      "required": 2,
+      "cited": [
+        "VBHN_18_2026#d36-k2-b",
+        "VBHN_18_2026#d48-k1"
+      ],
+      "missing": [],
+      "status": "PASS"
+    },
+    {
+      "qid": "IN_68",
+      "completeness": 1.0,
+      "supported": 2,
+      "required": 2,
+      "cited": [
+        "VBHN_18_2026#d137-k1-a",
+        "ND_145_2020#d58-k4",
+        "VBHN_18_2026#d122-k4-d",
+        "VBHN_18_2026#d35-k2-đ"
+      ],
+      "missing": [],
+      "status": "PASS"
+    },
+    {
+      "qid": "IN_69",
+      "completeness": 1.0,
+      "supported": 2,
+      "required": 2,
+      "cited": [
+        "VBHN_18_2026#d17-k1",
+        "VBHN_18_2026#d21-k1-b",
+        "VBHN_18_2026#d17-k2"
+      ],
+      "missing": [],
+      "status": "PASS"
+    }
+  ],
+  "failed_in_scope_queries": [],
+  "raw_invalid_tokens": [],
+  "critical_wrong_law_details": []
+}

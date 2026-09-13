@@ -1,0 +1,2378 @@
+{
+  "dataset": {
+    "total": 99,
+    "in_scope": 69,
+    "ambiguous": 20,
+    "out_of_scope": 10
+  },
+  "metrics": {
+    "citation_id_validity": {
+      "valid": 185,
+      "total": 220,
+      "percentage": 84.0909090909091
+    },
+    "citation_support_accuracy": {
+      "passed_questions": 51,
+      "total_questions": 69,
+      "percentage": 73.91304347826086
+    },
+    "citation_completeness": {
+      "supported_evidence_items": 54,
+      "total_required_evidence_items": 75,
+      "percentage": 72.0
+    },
+    "ambiguous_accuracy": {
+      "passed": 20,
+      "total": 20,
+      "percentage": 100.0
+    },
+    "out_of_scope_accuracy": {
+      "passed": 10,
+      "total": 10,
+      "percentage": 100.0
+    }
+  },
+  "latencies": {
+    "retrieval": {
+      "mean_ms": 205.76784347819435,
+      "median_ms": 210.7313000014983,
+      "p95_ms": 254.78699999803212
+    },
+    "llm": {
+      "mean_ms": 15686.645304347938,
+      "median_ms": 13510.167899999942,
+      "p95_ms": 27448.25480000145
+    },
+    "total": {
+      "mean_ms": 15892.86497971024,
+      "median_ms": 13737.13459999999,
+      "p95_ms": 27699.556600000506
+    }
+  },
+  "failed_in_scope_queries": [
+    {
+      "question_id": "IN_05",
+      "question": "Công ty bắt tôi nộp tiền đặt cọc 5 triệu đồng để đảm bảo thực hiện hợp đồng lao động có đúng luật không?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Nghiêm cấm yêu cầu tiền bảo đảm theo Điều 17 Khoản 2 BLLĐ"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "ND_12_2022#d42-k5-c",
+          "doc_id": "ND_12_2022",
+          "article": "42",
+          "clause": "5",
+          "point": "c",
+          "score": 0.028665028665028666
+        },
+        {
+          "rank": 2,
+          "chunk_id": "ND_12_2022#d11-k2-c",
+          "doc_id": "ND_12_2022",
+          "article": "11",
+          "clause": "2",
+          "point": "c",
+          "score": 0.026356857985087564
+        },
+        {
+          "rank": 3,
+          "chunk_id": "ND_12_2022#d11-k4-b",
+          "doc_id": "ND_12_2022",
+          "article": "11",
+          "clause": "4",
+          "point": "b",
+          "score": 0.023634453781512604
+        },
+        {
+          "rank": 4,
+          "chunk_id": "ND_12_2022#d42-k5-i",
+          "doc_id": "ND_12_2022",
+          "article": "42",
+          "clause": "5",
+          "point": "i",
+          "score": 0.023430301434776885
+        },
+        {
+          "rank": 5,
+          "chunk_id": "ND_12_2022#d7-k5-e",
+          "doc_id": "ND_12_2022",
+          "article": "7",
+          "clause": "5",
+          "point": "e",
+          "score": 0.02325863113264688
+        },
+        {
+          "rank": 6,
+          "chunk_id": "ND_12_2022#d11-k2-a",
+          "doc_id": "ND_12_2022",
+          "article": "11",
+          "clause": "2",
+          "point": "a",
+          "score": 0.021897007042253523
+        },
+        {
+          "rank": 7,
+          "chunk_id": "ND_12_2022#d16-k1-c",
+          "doc_id": "ND_12_2022",
+          "article": "16",
+          "clause": "1",
+          "point": "c",
+          "score": 0.020112708900116596
+        },
+        {
+          "rank": 8,
+          "chunk_id": "ND_12_2022#d42-k2-c",
+          "doc_id": "ND_12_2022",
+          "article": "42",
+          "clause": "2",
+          "point": "c",
+          "score": 0.01778827233372688
+        },
+        {
+          "rank": 9,
+          "chunk_id": "ND_12_2022#d11-k5-c",
+          "doc_id": "ND_12_2022",
+          "article": "11",
+          "clause": "5",
+          "point": "c",
+          "score": 0.017733835530445698
+        },
+        {
+          "rank": 10,
+          "chunk_id": "ND_12_2022#d33-k1",
+          "doc_id": "ND_12_2022",
+          "article": "33",
+          "clause": "1",
+          "point": "",
+          "score": 0.017711598746081504
+        }
+      ],
+      "selected_context": [
+        "ND_12_2022#d42-k5-c",
+        "ND_12_2022#d11-k4-b",
+        "ND_12_2022#d11-k2-a",
+        "ND_12_2022#d11-k4",
+        "ND_12_2022#d11-k2-b",
+        "ND_12_2022#d11-k2",
+        "ND_12_2022#d11-k2-c",
+        "ND_12_2022#d42-k5"
+      ],
+      "final_answer": "Theo quy định tại Nghị định 12/2022/NĐ-CP, không có quy định cụ thể về việc bắt buộc người lao động phải nộp tiền đặt cọc để đảm bảo thực hiện hợp đồng lao động. Do đó, yêu cầu của công ty bạn là không phù hợp với pháp luật lao động Việt Nam. Tuy nhi",
+      "cited_chunk_ids": [
+        "ND_12_2022#d42-k5-c",
+        "ND_12_2022#d11-k2-a",
+        "ND_12_2022#d11-k2-b",
+        "ND_12_2022#d11-k4-b",
+        "ND_12_2022#d11-k2-c"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Nghiêm cấm yêu cầu tiền bảo đảm theo Điều 17 Khoản 2 BLLĐ"
+        }
+      ],
+      "failure_type": "RETRIEVAL_MISS"
+    },
+    {
+      "question_id": "IN_16",
+      "question": "Theo Nghị định 12/2022/NĐ-CP, hành vi yêu cầu thử việc quá thời gian quy định bị phạt bao nhiêu tiền?",
+      "expected_evidence": [
+        {
+          "doc_id": "12/2022/NĐ-CP",
+          "article": "10",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Phạt 2 đến 5 triệu thử việc quá hạn tại Điều 10 Khoản 2 Điểm a NĐ 12/2022"
+        }
+      ],
+      "retrieval_method": "BM25 Lexical (Exact Reference)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "ND_12_2022#d10-k2-b",
+          "doc_id": "ND_12_2022",
+          "article": "10",
+          "clause": "2",
+          "point": "b",
+          "score": 9.717704772949219
+        },
+        {
+          "rank": 2,
+          "chunk_id": "ND_12_2022#d10-k2-a",
+          "doc_id": "ND_12_2022",
+          "article": "10",
+          "clause": "2",
+          "point": "a",
+          "score": 9.461543083190918
+        },
+        {
+          "rank": 3,
+          "chunk_id": "VBHN_18_2026#d27-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "27",
+          "clause": "1",
+          "point": "",
+          "score": 8.595975875854492
+        },
+        {
+          "rank": 4,
+          "chunk_id": "ND_12_2022#d10-k2-d",
+          "doc_id": "ND_12_2022",
+          "article": "10",
+          "clause": "2",
+          "point": "d",
+          "score": 8.550591468811035
+        },
+        {
+          "rank": 5,
+          "chunk_id": "ND_12_2022#d10-k1-a",
+          "doc_id": "ND_12_2022",
+          "article": "10",
+          "clause": "1",
+          "point": "a",
+          "score": 8.352360725402832
+        },
+        {
+          "rank": 6,
+          "chunk_id": "ND_12_2022#d10-k2-c",
+          "doc_id": "ND_12_2022",
+          "article": "10",
+          "clause": "2",
+          "point": "c",
+          "score": 7.8800764083862305
+        },
+        {
+          "rank": 7,
+          "chunk_id": "ND_12_2022#d10-k1-b",
+          "doc_id": "ND_12_2022",
+          "article": "10",
+          "clause": "1",
+          "point": "b",
+          "score": 7.510892868041992
+        },
+        {
+          "rank": 8,
+          "chunk_id": "VBHN_18_2026#d25",
+          "doc_id": "VBHN_18_2026",
+          "article": "25",
+          "clause": "",
+          "point": "",
+          "score": 7.156394958496094
+        },
+        {
+          "rank": 9,
+          "chunk_id": "VBHN_18_2026#d25-k4",
+          "doc_id": "VBHN_18_2026",
+          "article": "25",
+          "clause": "4",
+          "point": "",
+          "score": 6.934769630432129
+        },
+        {
+          "rank": 10,
+          "chunk_id": "VBHN_18_2026#d27-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "27",
+          "clause": "2",
+          "point": "",
+          "score": 6.698215484619141
+        }
+      ],
+      "selected_context": [
+        "ND_12_2022#d10-k2-a",
+        "ND_12_2022#d10-k2",
+        "ND_12_2022#d10-k2-d",
+        "ND_12_2022#d10-k2-b",
+        "VBHN_18_2026#d27-k1",
+        "ND_12_2022#d10-k1-a",
+        "ND_12_2022#d10-k2-c",
+        "ND_12_2022#d10-k1"
+      ],
+      "final_answer": "Theo Nghị định 12/2022/NĐ-CP, hành vi yêu cầu thử việc quá thời gian quy định bị phạt tiền từ 2.000.000 đồng đến 5.000.000 đồng. Cụ thể, Khoản 2, Điểm b của Nghị định này quy định: 'Phạt tiền từ 2.000.000 đồng đến 5.000.000 đồng đối với người sử dụng",
+      "cited_chunk_ids": [
+        "ND_12_2022#d10-k2-b"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "12/2022/NĐ-CP",
+          "article": "10",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Phạt 2 đến 5 triệu thử việc quá hạn tại Điều 10 Khoản 2 Điểm a NĐ 12/2022"
+        }
+      ],
+      "failure_type": "WRONG_CITATION_SELECTION"
+    },
+    {
+      "question_id": "IN_29",
+      "question": "Lao động làm công việc đặc biệt nặng nhọc, độc hại, nguy hiểm thì thời giờ làm việc có được rút ngắn không?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "105",
+          "clause": "3",
+          "point": "",
+          "supports_fact": "Giảm giờ làm việc độc hại nguy hiểm tại Điều 105 Khoản 3 BLLĐ"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "VBHN_18_2026#d137-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "137",
+          "clause": "2",
+          "point": "",
+          "score": 0.031754032258064516
+        },
+        {
+          "rank": 2,
+          "chunk_id": "VBHN_18_2026#d169-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "169",
+          "clause": "3",
+          "point": "",
+          "score": 0.031054405392392875
+        },
+        {
+          "rank": 3,
+          "chunk_id": "VBHN_18_2026#d149-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "149",
+          "clause": "3",
+          "point": "",
+          "score": 0.029051670471052088
+        },
+        {
+          "rank": 4,
+          "chunk_id": "VBHN_18_2026#d116",
+          "doc_id": "VBHN_18_2026",
+          "article": "116",
+          "clause": "",
+          "point": "",
+          "score": 0.02889344262295082
+        },
+        {
+          "rank": 5,
+          "chunk_id": "VBHN_18_2026#d219-k2-b-2",
+          "doc_id": "VBHN_18_2026",
+          "article": "219",
+          "clause": "2",
+          "point": "b",
+          "score": 0.028531243721117136
+        },
+        {
+          "rank": 6,
+          "chunk_id": "VBHN_18_2026#d113-k1-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "113",
+          "clause": "1",
+          "point": "c",
+          "score": 0.027108970929195647
+        },
+        {
+          "rank": 7,
+          "chunk_id": "VBHN_18_2026#d219-k2-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "219",
+          "clause": "2",
+          "point": "b",
+          "score": 0.02702702702702703
+        },
+        {
+          "rank": 8,
+          "chunk_id": "VBHN_18_2026#d108-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "108",
+          "clause": "2",
+          "point": "",
+          "score": 0.026878868258178604
+        },
+        {
+          "rank": 9,
+          "chunk_id": "ND_145_2020#d68-k1-a",
+          "doc_id": "ND_145_2020",
+          "article": "68",
+          "clause": "1",
+          "point": "a",
+          "score": 0.026779422128259338
+        },
+        {
+          "rank": 10,
+          "chunk_id": "VBHN_18_2026#d148-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "148",
+          "clause": "2",
+          "point": "",
+          "score": 0.026279628993473032
+        }
+      ],
+      "selected_context": [
+        "VBHN_18_2026#d149-k3",
+        "VBHN_18_2026#d116",
+        "VBHN_18_2026#d113-k1",
+        "VBHN_18_2026#d219-k2-b-2",
+        "VBHN_18_2026#d137-k2",
+        "VBHN_18_2026#d219-k2-3",
+        "VBHN_18_2026#d169-k3",
+        "VBHN_18_2026#d113-k1-c"
+      ],
+      "final_answer": "Theo quy định tại Điều 116 Bộ luật Lao động (18/VBHN-VPQH), đối với các công việc có tính chất đặc biệt, bao gồm công việc đặc biệt nặng nhọc, độc hại, nguy hiểm, người lao động có thể được quy định thời giờ làm việc, thời giờ nghỉ ngơi cụ thể sau kh",
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d116"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "105",
+          "clause": "3",
+          "point": "",
+          "supports_fact": "Giảm giờ làm việc độc hại nguy hiểm tại Điều 105 Khoản 3 BLLĐ"
+        }
+      ],
+      "failure_type": "CONTEXT_OMISSION"
+    },
+    {
+      "question_id": "IN_32",
+      "question": "Trường hợp làm việc theo ca liên tục từ 06 giờ trở lên thì thời gian nghỉ giữa giờ có được tính vào giờ làm việc không?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "109",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Nghỉ giữa giờ tính vào giờ làm việc khi làm theo ca tại Điều 109 Khoản 1 BLLĐ"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "ND_145_2020#d63-k3-a",
+          "doc_id": "ND_145_2020",
+          "article": "63",
+          "clause": "3",
+          "point": "a",
+          "score": 0.03252247488101534
+        },
+        {
+          "rank": 2,
+          "chunk_id": "VBHN_18_2026#d109-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "109",
+          "clause": "1",
+          "point": "",
+          "score": 0.03177805800756621
+        },
+        {
+          "rank": 3,
+          "chunk_id": "ND_145_2020#d63-k3-b",
+          "doc_id": "ND_145_2020",
+          "article": "63",
+          "clause": "3",
+          "point": "b",
+          "score": 0.0315136476426799
+        },
+        {
+          "rank": 4,
+          "chunk_id": "ND_145_2020#d64-k2",
+          "doc_id": "ND_145_2020",
+          "article": "64",
+          "clause": "2",
+          "point": "",
+          "score": 0.03149801587301587
+        },
+        {
+          "rank": 5,
+          "chunk_id": "ND_145_2020#d63-k3",
+          "doc_id": "ND_145_2020",
+          "article": "63",
+          "clause": "3",
+          "point": "",
+          "score": 0.030798389007344232
+        },
+        {
+          "rank": 6,
+          "chunk_id": "ND_145_2020#d64-k4",
+          "doc_id": "ND_145_2020",
+          "article": "64",
+          "clause": "4",
+          "point": "",
+          "score": 0.030330882352941176
+        },
+        {
+          "rank": 7,
+          "chunk_id": "ND_145_2020#d64-k1",
+          "doc_id": "ND_145_2020",
+          "article": "64",
+          "clause": "1",
+          "point": "",
+          "score": 0.030303030303030304
+        },
+        {
+          "rank": 8,
+          "chunk_id": "ND_145_2020#d63-k1",
+          "doc_id": "ND_145_2020",
+          "article": "63",
+          "clause": "1",
+          "point": "",
+          "score": 0.027745885954841176
+        },
+        {
+          "rank": 9,
+          "chunk_id": "ND_145_2020#d69-k2-a",
+          "doc_id": "ND_145_2020",
+          "article": "69",
+          "clause": "2",
+          "point": "a",
+          "score": 0.027051561365286855
+        },
+        {
+          "rank": 10,
+          "chunk_id": "ND_145_2020#d63-k2",
+          "doc_id": "ND_145_2020",
+          "article": "63",
+          "clause": "2",
+          "point": "",
+          "score": 0.026838432635534086
+        }
+      ],
+      "selected_context": [
+        "ND_145_2020#d63-k1",
+        "ND_145_2020#d63-k3-a",
+        "ND_145_2020#d64-k1",
+        "ND_145_2020#d64-k2",
+        "VBHN_18_2026#d109-k1",
+        "ND_145_2020#d63-k3",
+        "ND_145_2020#d64-k4",
+        "ND_145_2020#d63-k3-b"
+      ],
+      "final_answer": "Theo quy định tại Khoản 3 Điều 63 và Khoản 2 Điều 64 của Nghị định 145/2020/NĐ-CP, thời gian nghỉ giữa giờ đối với trường hợp làm việc theo ca liên tục từ 06 giờ trở lên sẽ được tính vào giờ làm việc. Cụ thể, nếu làm việc từ 06 giờ trở lên trong một ",
+      "cited_chunk_ids": [
+        "ND_145_2020#d63-k3",
+        "ND_145_2020#d64-k2"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "109",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Nghỉ giữa giờ tính vào giờ làm việc khi làm theo ca tại Điều 109 Khoản 1 BLLĐ"
+        }
+      ],
+      "failure_type": "WRONG_CITATION_SELECTION"
+    },
+    {
+      "question_id": "IN_37",
+      "question": "Số giờ làm thêm của người lao động không được quá bao nhiêu giờ trong một ngày?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Giới hạn làm thêm giờ theo ngày tại Điều 107 Khoản 2 Điểm a BLLĐ"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "ND_145_2020#d60-k4",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "4",
+          "point": "",
+          "score": 0.03252247488101534
+        },
+        {
+          "rank": 2,
+          "chunk_id": "ND_145_2020#d60-k3",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "3",
+          "point": "",
+          "score": 0.031754032258064516
+        },
+        {
+          "rank": 3,
+          "chunk_id": "ND_145_2020#d60-k1",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "1",
+          "point": "",
+          "score": 0.03125763125763126
+        },
+        {
+          "rank": 4,
+          "chunk_id": "ND_145_2020#d60-k2",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "2",
+          "point": "",
+          "score": 0.030776515151515152
+        },
+        {
+          "rank": 5,
+          "chunk_id": "VBHN_18_2026#d107-k2-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "2",
+          "point": "b",
+          "score": 0.03009207275993712
+        },
+        {
+          "rank": 6,
+          "chunk_id": "VBHN_18_2026#d107-k2-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "2",
+          "point": "c",
+          "score": 0.029211087420042643
+        },
+        {
+          "rank": 7,
+          "chunk_id": "VBHN_18_2026#d107-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "3",
+          "point": "",
+          "score": 0.027346637102734665
+        },
+        {
+          "rank": 8,
+          "chunk_id": "VBHN_18_2026#d107-k3-đ",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "3",
+          "point": "đ",
+          "score": 0.026419626007891578
+        },
+        {
+          "rank": 9,
+          "chunk_id": "VBHN_18_2026#d108",
+          "doc_id": "VBHN_18_2026",
+          "article": "108",
+          "clause": "",
+          "point": "",
+          "score": 0.026333789329685362
+        },
+        {
+          "rank": 10,
+          "chunk_id": "VBHN_18_2026#d146-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "146",
+          "clause": "1",
+          "point": "",
+          "score": 0.0259915611814346
+        }
+      ],
+      "selected_context": [
+        "ND_145_2020#d60-k1",
+        "ND_145_2020#d60-k3",
+        "VBHN_18_2026#d107-k2",
+        "VBHN_18_2026#d107-k2-a",
+        "VBHN_18_2026#d107-k2-b",
+        "ND_145_2020#d60-k2",
+        "VBHN_18_2026#d107-k2-c",
+        "ND_145_2020#d60-k4"
+      ],
+      "final_answer": "Theo quy định tại Điều 107 của Bộ luật Lao động (18/VBHN-VPQH) và Khoản 1 Điều 60 của Nghị định 145/2020/NĐ-CP, tổng số giờ làm thêm của người lao động không được quá 50% số giờ làm việc bình thường trong một ngày khi làm thêm vào ngày làm việc bình ",
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d107-k2-b",
+        "ND_145_2020#d60-k1",
+        "ND_145_2020#d60-k4"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Giới hạn làm thêm giờ theo ngày tại Điều 107 Khoản 2 Điểm a BLLĐ"
+        }
+      ],
+      "failure_type": "RETRIEVAL_MISS"
+    },
+    {
+      "question_id": "IN_38",
+      "question": "Tổng số giờ làm thêm của người lao động không quá bao nhiêu giờ trong một tháng?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "b",
+          "supports_fact": "Giới hạn làm thêm không quá 40 giờ/tháng tại Điều 107 Khoản 2 Điểm b BLLĐ"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "ND_145_2020#d60-k4",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "4",
+          "point": "",
+          "score": 0.03252247488101534
+        },
+        {
+          "rank": 2,
+          "chunk_id": "ND_145_2020#d60-k3",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "3",
+          "point": "",
+          "score": 0.03200204813108039
+        },
+        {
+          "rank": 3,
+          "chunk_id": "ND_145_2020#d60-k2",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "2",
+          "point": "",
+          "score": 0.03125
+        },
+        {
+          "rank": 4,
+          "chunk_id": "VBHN_18_2026#d107-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "3",
+          "point": "",
+          "score": 0.03057889822595705
+        },
+        {
+          "rank": 5,
+          "chunk_id": "VBHN_18_2026#d107-k2-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "2",
+          "point": "b",
+          "score": 0.03009207275993712
+        },
+        {
+          "rank": 6,
+          "chunk_id": "ND_145_2020#d60-k1",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "1",
+          "point": "",
+          "score": 0.03007688828584351
+        },
+        {
+          "rank": 7,
+          "chunk_id": "VBHN_18_2026#d107-k2-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "2",
+          "point": "c",
+          "score": 0.02900988017658188
+        },
+        {
+          "rank": 8,
+          "chunk_id": "VBHN_18_2026#d107-k3-đ",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "3",
+          "point": "đ",
+          "score": 0.0288981288981289
+        },
+        {
+          "rank": 9,
+          "chunk_id": "ND_145_2020#d61-k3",
+          "doc_id": "ND_145_2020",
+          "article": "61",
+          "clause": "3",
+          "point": "",
+          "score": 0.028370221327967807
+        },
+        {
+          "rank": 10,
+          "chunk_id": "VBHN_18_2026#d107-k3-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "3",
+          "point": "c",
+          "score": 0.027364110201042444
+        }
+      ],
+      "selected_context": [
+        "ND_145_2020#d60-k3",
+        "VBHN_18_2026#d107-k3",
+        "VBHN_18_2026#d107-k3-b",
+        "VBHN_18_2026#d107-k3-c",
+        "VBHN_18_2026#d107-k3-a",
+        "ND_145_2020#d60-k2",
+        "ND_145_2020#d60-k4",
+        "VBHN_18_2026#d107-k3-d"
+      ],
+      "final_answer": "Theo quy định tại Khoản 4 Điều 60 của Nghị định 145/2020/NĐ-CP, tổng số giờ làm thêm không quá 12 giờ trong một ngày, bao gồm cả ngày nghỉ lễ, tết và ngày nghỉ hằng tuần. Tuy nhiên, không có quy định cụ thể về tổng số giờ làm thêm trong một tháng. Do",
+      "cited_chunk_ids": [
+        "ND_145_2020#d60-k2",
+        "ND_145_2020#d60-k3",
+        "ND_145_2020#d60-k4",
+        "VBHN_18_2026#d107-k3",
+        "VBHN_18_2026#d107-k3-a",
+        "VBHN_18_2026#d107-k3-b",
+        "VBHN_18_2026#d107-k3-c",
+        "VBHN_18_2026#d107-k3-d"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "b",
+          "supports_fact": "Giới hạn làm thêm không quá 40 giờ/tháng tại Điều 107 Khoản 2 Điểm b BLLĐ"
+        }
+      ],
+      "failure_type": "CONTEXT_OMISSION"
+    },
+    {
+      "question_id": "IN_39",
+      "question": "Tổng số giờ làm thêm của người lao động không quá bao nhiêu giờ trong một năm trong điều kiện bình thường?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "c",
+          "supports_fact": "Giới hạn làm thêm không quá 200 giờ/năm tại Điều 107 Khoản 2 Điểm c BLLĐ"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "ND_145_2020#d60-k2",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "2",
+          "point": "",
+          "score": 0.03225806451612903
+        },
+        {
+          "rank": 2,
+          "chunk_id": "ND_145_2020#d60-k3",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "3",
+          "point": "",
+          "score": 0.032018442622950824
+        },
+        {
+          "rank": 3,
+          "chunk_id": "ND_145_2020#d60-k1",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "1",
+          "point": "",
+          "score": 0.030798389007344232
+        },
+        {
+          "rank": 4,
+          "chunk_id": "ND_145_2020#d60-k4",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "4",
+          "point": "",
+          "score": 0.030536130536130537
+        },
+        {
+          "rank": 5,
+          "chunk_id": "ND_145_2020#d61-k3",
+          "doc_id": "ND_145_2020",
+          "article": "61",
+          "clause": "3",
+          "point": "",
+          "score": 0.029857397504456328
+        },
+        {
+          "rank": 6,
+          "chunk_id": "VBHN_18_2026#d107-k2-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "2",
+          "point": "b",
+          "score": 0.02921395544346364
+        },
+        {
+          "rank": 7,
+          "chunk_id": "VBHN_18_2026#d107-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "3",
+          "point": "",
+          "score": 0.0288981288981289
+        },
+        {
+          "rank": 8,
+          "chunk_id": "VBHN_18_2026#d107-k2-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "2",
+          "point": "c",
+          "score": 0.02817460317460317
+        },
+        {
+          "rank": 9,
+          "chunk_id": "VBHN_18_2026#d107-k3-đ",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "3",
+          "point": "đ",
+          "score": 0.027637721755368813
+        },
+        {
+          "rank": 10,
+          "chunk_id": "ND_145_2020#d62-k1-a",
+          "doc_id": "ND_145_2020",
+          "article": "62",
+          "clause": "1",
+          "point": "a",
+          "score": 0.027479766610201392
+        }
+      ],
+      "selected_context": [
+        "ND_145_2020#d60-k1",
+        "ND_145_2020#d60-k3",
+        "VBHN_18_2026#d107-k2",
+        "VBHN_18_2026#d107-k2-a",
+        "VBHN_18_2026#d107-k2-b",
+        "ND_145_2020#d61-k3",
+        "ND_145_2020#d60-k2",
+        "ND_145_2020#d60-k4"
+      ],
+      "final_answer": "Theo quy định tại Điều 107 của Bộ luật Lao động (18/VBHN-VPQH), tổng số giờ làm thêm của người lao động không quá 40 giờ trong một tháng. Tuy nhiên, trong một năm, tổng số giờ làm thêm không có quy định cụ thể về giới hạn tổng số giờ làm thêm. Điều n",
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d107-k2",
+        "VBHN_18_2026#d107-k2-a",
+        "VBHN_18_2026#d107-k2-b"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "c",
+          "supports_fact": "Giới hạn làm thêm không quá 200 giờ/năm tại Điều 107 Khoản 2 Điểm c BLLĐ"
+        }
+      ],
+      "failure_type": "CONTEXT_OMISSION"
+    },
+    {
+      "question_id": "IN_42",
+      "question": "Người lao động làm nghề, công việc nặng nhọc, độc hại, nguy hiểm được nghỉ bao nhiêu ngày phép hàng năm?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "113",
+          "clause": "1",
+          "point": "b",
+          "supports_fact": "Nghỉ phép 14 ngày làm việc công việc nặng nhọc độc hại tại Điều 113 Khoản 1 Điểm b BLLĐ"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "ND_12_2022#d31-k2",
+          "doc_id": "ND_12_2022",
+          "article": "31",
+          "clause": "2",
+          "point": "",
+          "score": 0.030621785881252923
+        },
+        {
+          "rank": 2,
+          "chunk_id": "ND_12_2022#d21-k4-đ",
+          "doc_id": "ND_12_2022",
+          "article": "21",
+          "clause": "4",
+          "point": "đ",
+          "score": 0.030158730158730156
+        },
+        {
+          "rank": 3,
+          "chunk_id": "ND_12_2022#d21-k4-d",
+          "doc_id": "ND_12_2022",
+          "article": "21",
+          "clause": "4",
+          "point": "d",
+          "score": 0.029709507042253523
+        },
+        {
+          "rank": 4,
+          "chunk_id": "ND_12_2022#d21-k4",
+          "doc_id": "ND_12_2022",
+          "article": "21",
+          "clause": "4",
+          "point": "",
+          "score": 0.02900988017658188
+        },
+        {
+          "rank": 5,
+          "chunk_id": "ND_12_2022#d21-k4-c",
+          "doc_id": "ND_12_2022",
+          "article": "21",
+          "clause": "4",
+          "point": "c",
+          "score": 0.028665028665028666
+        },
+        {
+          "rank": 6,
+          "chunk_id": "ND_12_2022#d21-k4-a",
+          "doc_id": "ND_12_2022",
+          "article": "21",
+          "clause": "4",
+          "point": "a",
+          "score": 0.028594771241830064
+        },
+        {
+          "rank": 7,
+          "chunk_id": "ND_12_2022#d21-k4-b",
+          "doc_id": "ND_12_2022",
+          "article": "21",
+          "clause": "4",
+          "point": "b",
+          "score": 0.02819138376017471
+        },
+        {
+          "rank": 8,
+          "chunk_id": "ND_12_2022#d21-k5",
+          "doc_id": "ND_12_2022",
+          "article": "21",
+          "clause": "5",
+          "point": "",
+          "score": 0.027106227106227107
+        },
+        {
+          "rank": 9,
+          "chunk_id": "ND_12_2022#d22-k3",
+          "doc_id": "ND_12_2022",
+          "article": "22",
+          "clause": "3",
+          "point": "",
+          "score": 0.02424331472230385
+        },
+        {
+          "rank": 10,
+          "chunk_id": "VBHN_18_2026#d113-k1-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "113",
+          "clause": "1",
+          "point": "c",
+          "score": 0.01639344262295082
+        }
+      ],
+      "selected_context": [
+        "ND_12_2022#d31-k2",
+        "ND_12_2022#d21-k4-a",
+        "ND_12_2022#d21-k5",
+        "ND_12_2022#d21-k4-đ",
+        "ND_12_2022#d21-k4-b",
+        "ND_12_2022#d21-k4-c",
+        "ND_12_2022#d21-k4",
+        "ND_12_2022#d21-k4-d"
+      ],
+      "final_answer": "Theo quy định hiện hành, người lao động làm nghề, công việc nặng nhọc, độc hại, nguy hiểm không có quy định cụ thể về số ngày phép hàng năm. Tuy nhiên, người lao động này có quyền được hưởng các chế độ nghỉ ngơi theo quy định của Bộ luật Lao động, ba",
+      "cited_chunk_ids": [],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "113",
+          "clause": "1",
+          "point": "b",
+          "supports_fact": "Nghỉ phép 14 ngày làm việc công việc nặng nhọc độc hại tại Điều 113 Khoản 1 Điểm b BLLĐ"
+        }
+      ],
+      "failure_type": "CONTEXT_OMISSION"
+    },
+    {
+      "question_id": "IN_45",
+      "question": "Người lao động thôi việc mà chưa nghỉ hết số ngày phép hàng năm thì có được thanh toán tiền lương không?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "113",
+          "clause": "6",
+          "point": "",
+          "supports_fact": "Thanh toán tiền lương ngày phép chưa nghỉ tại Điều 113 Khoản 6 BLLĐ"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "VBHN_18_2026#d41-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "41",
+          "clause": "1",
+          "point": "",
+          "score": 0.025974025974025976
+        },
+        {
+          "rank": 2,
+          "chunk_id": "VBHN_18_2026#d101-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "101",
+          "clause": "2",
+          "point": "",
+          "score": 0.023122159850307404
+        },
+        {
+          "rank": 3,
+          "chunk_id": "VBHN_18_2026#d139-k4",
+          "doc_id": "VBHN_18_2026",
+          "article": "139",
+          "clause": "4",
+          "point": "",
+          "score": 0.022366769371219904
+        },
+        {
+          "rank": 4,
+          "chunk_id": "VBHN_18_2026#d115-k1-a",
+          "doc_id": "VBHN_18_2026",
+          "article": "115",
+          "clause": "1",
+          "point": "a",
+          "score": 0.020944692920257444
+        },
+        {
+          "rank": 5,
+          "chunk_id": "VBHN_18_2026#d115-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "115",
+          "clause": "1",
+          "point": "",
+          "score": 0.020410165832597388
+        },
+        {
+          "rank": 6,
+          "chunk_id": "VBHN_18_2026#d115-k1-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "115",
+          "clause": "1",
+          "point": "b",
+          "score": 0.019798136645962732
+        },
+        {
+          "rank": 7,
+          "chunk_id": "VBHN_18_2026#d115-k1-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "115",
+          "clause": "1",
+          "point": "c",
+          "score": 0.019536019536019536
+        }
+      ],
+      "selected_context": [
+        "VBHN_18_2026#d139-k4",
+        "VBHN_18_2026#d115-k1-a",
+        "VBHN_18_2026#d101-k2",
+        "VBHN_18_2026#d115-k1-c",
+        "VBHN_18_2026#d115-k1-b",
+        "VBHN_18_2026#d41-k1",
+        "VBHN_18_2026#d115-k1"
+      ],
+      "final_answer": "Theo quy định tại Điều 115 Bộ luật Lao động (18/VBHN-VPQH), người lao động có quyền nghỉ việc riêng mà vẫn hưởng nguyên lương trong một số trường hợp cụ thể, bao gồm việc kết hôn, con đẻ/con nuôi kết hôn, cha đẻ/cha nuôi, mẹ đẻ/mẹ nuôi, cha đẻ/cha nu",
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d115-k1"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "113",
+          "clause": "6",
+          "point": "",
+          "supports_fact": "Thanh toán tiền lương ngày phép chưa nghỉ tại Điều 113 Khoản 6 BLLĐ"
+        }
+      ],
+      "failure_type": "RETRIEVAL_MISS"
+    },
+    {
+      "question_id": "IN_52",
+      "question": "Tôi là thành viên tổ lái tàu bay, ký hợp đồng 2 năm, muốn nghỉ việc thì phải báo trước bao lâu?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "35",
+          "clause": "1",
+          "point": "d",
+          "supports_fact": "Ngành nghề đặc thù thực hiện theo quy định của Chính phủ tại Điều 35 Khoản 1 Điểm d BLLĐ"
+        },
+        {
+          "doc_id": "145/2020/NĐ-CP",
+          "article": "7",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Báo trước ít nhất 120 ngày đối với thành viên tổ lái tàu bay tại Điều 7 Khoản 2 NĐ 145/2020"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "ND_145_2020#d7-k1-a",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "clause": "1",
+          "point": "a",
+          "score": 0.03278688524590164
+        },
+        {
+          "rank": 2,
+          "chunk_id": "ND_145_2020#d7",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "clause": "",
+          "point": "",
+          "score": 0.03125763125763126
+        },
+        {
+          "rank": 3,
+          "chunk_id": "ND_145_2020#d7-k2",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "clause": "2",
+          "point": "",
+          "score": 0.030776515151515152
+        },
+        {
+          "rank": 4,
+          "chunk_id": "ND_145_2020#d7-k2-a",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "clause": "2",
+          "point": "a",
+          "score": 0.03036576949620428
+        },
+        {
+          "rank": 5,
+          "chunk_id": "ND_145_2020#d7-k2-b",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "clause": "2",
+          "point": "b",
+          "score": 0.029857397504456328
+        },
+        {
+          "rank": 6,
+          "chunk_id": "ND_145_2020#d7-k1-c",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "clause": "1",
+          "point": "c",
+          "score": 0.029827662395050816
+        },
+        {
+          "rank": 7,
+          "chunk_id": "ND_145_2020#d7-k1",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "clause": "1",
+          "point": "",
+          "score": 0.029418126757516764
+        },
+        {
+          "rank": 8,
+          "chunk_id": "ND_145_2020#d7-k1-d",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "clause": "1",
+          "point": "d",
+          "score": 0.028991596638655463
+        },
+        {
+          "rank": 9,
+          "chunk_id": "ND_145_2020#d7-k1-b",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "clause": "1",
+          "point": "b",
+          "score": 0.028814262023217248
+        },
+        {
+          "rank": 10,
+          "chunk_id": "VBHN_18_2026#d35-k1-d",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "d",
+          "score": 0.029513888888888888
+        }
+      ],
+      "selected_context": [
+        "ND_145_2020#d7-k1-a",
+        "ND_145_2020#d7",
+        "ND_145_2020#d7-k1-b",
+        "ND_145_2020#d7-k1-c",
+        "ND_145_2020#d7-k1-d",
+        "ND_145_2020#d7-k2-a",
+        "ND_145_2020#d7-k2",
+        "ND_145_2020#d7-k1"
+      ],
+      "final_answer": "Theo quy định tại Điều 7, Khoản 1 và Khoản 2, Điểm a của Nghị định 145/2020/NĐ-CP, đối với thành viên tổ lái tàu bay, thời hạn báo trước khi đơn phương chấm dứt hợp đồng la động là ít nhất 120 ngày. Do bạn ký hợp đồng lao động xác định thời hạn từ 12",
+      "cited_chunk_ids": [
+        "ND_145_2020#d7",
+        "ND_145_2020#d7-k1",
+        "ND_145_2020#d7-k2",
+        "ND_145_2020#d7-k2-a"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "35",
+          "clause": "1",
+          "point": "d",
+          "supports_fact": "Ngành nghề đặc thù thực hiện theo quy định của Chính phủ tại Điều 35 Khoản 1 Điểm d BLLĐ"
+        }
+      ],
+      "failure_type": "CONTEXT_OMISSION"
+    },
+    {
+      "question_id": "IN_54",
+      "question": "Người sử dụng lao động đơn phương chấm dứt hợp đồng không xác định thời hạn phải báo trước cho người lao động bao nhiêu ngày?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "36",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "NSDLĐ báo trước 45 ngày HĐ KXDTH tại Điều 36 Khoản 2 Điểm a BLLĐ"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "VBHN_18_2026#d35-k1-a",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "a",
+          "score": 0.031544957774465976
+        },
+        {
+          "rank": 2,
+          "chunk_id": "VBHN_18_2026#d35-k1-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "c",
+          "score": 0.029206349206349208
+        },
+        {
+          "rank": 3,
+          "chunk_id": "VBHN_18_2026#d35-k1-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "b",
+          "score": 0.029138513513513514
+        },
+        {
+          "rank": 4,
+          "chunk_id": "VBHN_18_2026#d35-k1-d",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "d",
+          "score": 0.028991596638655463
+        },
+        {
+          "rank": 5,
+          "chunk_id": "VBHN_18_2026#d35-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "",
+          "score": 0.026279628993473032
+        },
+        {
+          "rank": 6,
+          "chunk_id": "VBHN_18_2026#d35-k2-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "2",
+          "point": "b",
+          "score": 0.025
+        }
+      ],
+      "selected_context": [
+        "VBHN_18_2026#d35-k1-d",
+        "VBHN_18_2026#d35-k1-a",
+        "VBHN_18_2026#d35-k2",
+        "VBHN_18_2026#d35-k2-b",
+        "VBHN_18_2026#d35-k1",
+        "VBHN_18_2026#d35-k1-c",
+        "VBHN_18_2026#d35-k1-b"
+      ],
+      "final_answer": "Theo quy định tại Khoản 1, Điểm b của Điều 35 Bộ luật Lao động (18/VBHN-VPQH), người sử dụng lao động đơn phương chấm dứt hợp đồng lao động không xác định thời hạn phải báo trước cho người lao động ít nhất 30 ngày.\n\nCĂN CỨ PHÁP LÝ:\n- Văn bản hợp nhất",
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d35-k1",
+        "VBHN_18_2026#d35-k1-b"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "36",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "NSDLĐ báo trước 45 ngày HĐ KXDTH tại Điều 36 Khoản 2 Điểm a BLLĐ"
+        }
+      ],
+      "failure_type": "RETRIEVAL_MISS"
+    },
+    {
+      "question_id": "IN_55",
+      "question": "Người sử dụng lao động đơn phương chấm dứt hợp đồng xác định thời hạn từ 12 đến 36 tháng phải báo trước bao lâu?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "36",
+          "clause": "2",
+          "point": "b",
+          "supports_fact": "NSDLĐ báo trước 30 ngày HĐ 12-36 tháng tại Điều 36 Khoản 2 Điểm b BLLĐ"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "VBHN_18_2026#d35-k1-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "b",
+          "score": 0.03131881575727918
+        },
+        {
+          "rank": 2,
+          "chunk_id": "VBHN_18_2026#d35-k1-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "c",
+          "score": 0.02967032967032967
+        },
+        {
+          "rank": 3,
+          "chunk_id": "VBHN_18_2026#d35-k1-a",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "a",
+          "score": 0.028169014084507043
+        },
+        {
+          "rank": 4,
+          "chunk_id": "VBHN_18_2026#d35-k1-d",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "d",
+          "score": 0.02758751902587519
+        },
+        {
+          "rank": 5,
+          "chunk_id": "VBHN_18_2026#d35-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "",
+          "score": 0.025974025974025976
+        },
+        {
+          "rank": 6,
+          "chunk_id": "VBHN_18_2026#d35-k2-g",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "2",
+          "point": "g",
+          "score": 0.02452153110047847
+        },
+        {
+          "rank": 7,
+          "chunk_id": "VBHN_18_2026#d35-k2-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "2",
+          "point": "b",
+          "score": 0.024127906976744187
+        },
+        {
+          "rank": 8,
+          "chunk_id": "VBHN_18_2026#d35-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "2",
+          "point": "",
+          "score": 0.024096385542168676
+        }
+      ],
+      "selected_context": [
+        "VBHN_18_2026#d35-k1-d",
+        "VBHN_18_2026#d35-k1-a",
+        "VBHN_18_2026#d35-k2",
+        "VBHN_18_2026#d35-k2-b",
+        "VBHN_18_2026#d35-k1",
+        "VBHN_18_2026#d35-k1-c",
+        "VBHN_18_2026#d35-k1-b",
+        "VBHN_18_2026#d35-k2-g"
+      ],
+      "final_answer": "Theo quy định tại Khoản 1, Điểm b Điều 35 của Bộ luật Lao động (18/VBHN-VPQH), người sử dụng lao động đơn phương chấm dứt hợp đồng lao động xác định thời hạn từ 12 đến 36 tháng phải báo trước ít nhất 30 ngày cho người lao động.\n\nCĂN CỨ PHÁP LÝ:\n- Văn",
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d35-k1",
+        "VBHN_18_2026#d35-k1-b"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "36",
+          "clause": "2",
+          "point": "b",
+          "supports_fact": "NSDLĐ báo trước 30 ngày HĐ 12-36 tháng tại Điều 36 Khoản 2 Điểm b BLLĐ"
+        }
+      ],
+      "failure_type": "RETRIEVAL_MISS"
+    },
+    {
+      "question_id": "IN_57",
+      "question": "Có bao nhiêu hình thức xử lý kỷ luật lao động theo quy định của Bộ luật Lao động?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "124",
+          "clause": null,
+          "point": "",
+          "supports_fact": "Bốn hình thức kỷ luật lao động tại Điều 124 BLLĐ"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "VBHN_18_2026#d122-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "122",
+          "clause": "2",
+          "point": "",
+          "score": 0.03131881575727918
+        },
+        {
+          "rank": 2,
+          "chunk_id": "VBHN_18_2026#d122-k1-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "122",
+          "clause": "1",
+          "point": "b",
+          "score": 0.030776515151515152
+        },
+        {
+          "rank": 3,
+          "chunk_id": "VBHN_18_2026#d122-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "122",
+          "clause": "3",
+          "point": "",
+          "score": 0.029030910609857977
+        },
+        {
+          "rank": 4,
+          "chunk_id": "ND_145_2020#d70",
+          "doc_id": "ND_145_2020",
+          "article": "70",
+          "clause": "",
+          "point": "",
+          "score": 0.02877846790890269
+        },
+        {
+          "rank": 5,
+          "chunk_id": "VBHN_18_2026#d122-k1-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "122",
+          "clause": "1",
+          "point": "c",
+          "score": 0.028404512489927477
+        },
+        {
+          "rank": 6,
+          "chunk_id": "VBHN_18_2026#d122-k1-d",
+          "doc_id": "VBHN_18_2026",
+          "article": "122",
+          "clause": "1",
+          "point": "d",
+          "score": 0.028258706467661692
+        },
+        {
+          "rank": 7,
+          "chunk_id": "VBHN_18_2026#d122-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "122",
+          "clause": "1",
+          "point": "",
+          "score": 0.028177225029148854
+        },
+        {
+          "rank": 8,
+          "chunk_id": "VBHN_18_2026#d122-k6",
+          "doc_id": "VBHN_18_2026",
+          "article": "122",
+          "clause": "6",
+          "point": "",
+          "score": 0.027346637102734665
+        },
+        {
+          "rank": 9,
+          "chunk_id": "VBHN_18_2026#d122-k1-a",
+          "doc_id": "VBHN_18_2026",
+          "article": "122",
+          "clause": "1",
+          "point": "a",
+          "score": 0.027149321266968326
+        },
+        {
+          "rank": 10,
+          "chunk_id": "ND_145_2020#d70-k4",
+          "doc_id": "ND_145_2020",
+          "article": "70",
+          "clause": "4",
+          "point": "",
+          "score": 0.02661401098901099
+        }
+      ],
+      "selected_context": [
+        "VBHN_18_2026#d122-k3",
+        "VBHN_18_2026#d122-k2",
+        "ND_145_2020#d70",
+        "VBHN_18_2026#d122-k1-c",
+        "VBHN_18_2026#d122-k1-b",
+        "VBHN_18_2026#d122-k1",
+        "VBHN_18_2026#d122-k1-d",
+        "VBHN_18_2026#d122-k1-a"
+      ],
+      "final_answer": "Theo quy định của Bộ luật Lao động, không có quy định cụ thể về số lượng hình thức xử lý kỷ luật lao động. Tuy nhiên, Bộ luật Lao động quy định các nguyên tắc, trình tự và thủ tục xử lý kỷ luật lao động. Cụ thể, theo Điều 122 Bộ luật Lao động, việc x",
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d122-k1",
+        "VBHN_18_2026#d122-k2",
+        "VBHN_18_2026#d122-k3"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "124",
+          "clause": null,
+          "point": "",
+          "supports_fact": "Bốn hình thức kỷ luật lao động tại Điều 124 BLLĐ"
+        }
+      ],
+      "failure_type": "CONTEXT_OMISSION"
+    },
+    {
+      "question_id": "IN_65",
+      "question": "Tôi bị công ty chậm trả lương 2 tháng và còn giữ bằng đại học gốc của tôi, công ty làm vậy có đúng không?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "97",
+          "clause": "4",
+          "point": "",
+          "supports_fact": "Chậm trả lương từ 15 ngày phải đền bù lãi suất Điều 97 Khoản 4"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Nghiêm cấm giữ bản chính văn bằng Điều 17 Khoản 1"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "VBHN_18_2026#d97-k4",
+          "doc_id": "VBHN_18_2026",
+          "article": "97",
+          "clause": "4",
+          "point": "",
+          "score": 0.032266458495966696
+        },
+        {
+          "rank": 2,
+          "chunk_id": "ND_12_2022#d17-k2",
+          "doc_id": "ND_12_2022",
+          "article": "17",
+          "clause": "2",
+          "point": "",
+          "score": 0.025914384123339348
+        },
+        {
+          "rank": 3,
+          "chunk_id": "VBHN_18_2026#d97-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "97",
+          "clause": "2",
+          "point": "",
+          "score": 0.024451318309029312
+        },
+        {
+          "rank": 4,
+          "chunk_id": "ND_12_2022#d17-k2-đ",
+          "doc_id": "ND_12_2022",
+          "article": "17",
+          "clause": "2",
+          "point": "đ",
+          "score": 0.022757216433105763
+        },
+        {
+          "rank": 5,
+          "chunk_id": "VBHN_18_2026#d97-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "97",
+          "clause": "3",
+          "point": "",
+          "score": 0.021592442645074223
+        },
+        {
+          "rank": 6,
+          "chunk_id": "ND_12_2022#d17-k2-d",
+          "doc_id": "ND_12_2022",
+          "article": "17",
+          "clause": "2",
+          "point": "d",
+          "score": 0.021296296296296296
+        },
+        {
+          "rank": 7,
+          "chunk_id": "ND_12_2022#d17-k2-c",
+          "doc_id": "ND_12_2022",
+          "article": "17",
+          "clause": "2",
+          "point": "c",
+          "score": 0.02105157131345689
+        },
+        {
+          "rank": 8,
+          "chunk_id": "ND_12_2022#d9-k1",
+          "doc_id": "ND_12_2022",
+          "article": "9",
+          "clause": "1",
+          "point": "",
+          "score": 0.019242437375400885
+        },
+        {
+          "rank": 9,
+          "chunk_id": "ND_12_2022#d12-k2",
+          "doc_id": "ND_12_2022",
+          "article": "12",
+          "clause": "2",
+          "point": "",
+          "score": 0.01921309064166207
+        },
+        {
+          "rank": 10,
+          "chunk_id": "ND_12_2022#d3-k2-i",
+          "doc_id": "ND_12_2022",
+          "article": "3",
+          "clause": "2",
+          "point": "i",
+          "score": 0.018790778599391038
+        }
+      ],
+      "selected_context": [
+        "ND_12_2022#d17-k2-a",
+        "VBHN_18_2026#d97-k4",
+        "ND_12_2022#d17-k2-d",
+        "VBHN_18_2026#d97-k2",
+        "ND_12_2022#d17-k2",
+        "ND_12_2022#d17-k2-c",
+        "ND_12_2022#d17-k2-đ",
+        "ND_12_2022#d17-k2-b"
+      ],
+      "final_answer": "{\n  \"answer\": \"Theo quy định của Bộ luật Lao động (BLLĐ), việc chậm trả lương là vi phạm pháp luật. Cụ thể, theo Điều 97 BLLĐ, người sử dụng lao động phải trả lương đúng hạn theo thỏa thuận giữa hai bên. Nếu vì lý do bất khả kháng mà không thể trả đú",
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d97-k4",
+        "VBHN_18_2026#d97-k2"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Nghiêm cấm giữ bản chính văn bằng Điều 17 Khoản 1"
+        }
+      ],
+      "failure_type": "RETRIEVAL_MISS"
+    },
+    {
+      "question_id": "IN_66",
+      "question": "Công ty ép tôi làm thêm ngày lễ và không trả tiền lương làm thêm giờ 300% thì vi phạm quy định nào?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Phải có sự đồng ý của NLĐ khi làm thêm Điều 107 Khoản 2 Điểm a"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "98",
+          "clause": "1",
+          "point": "c",
+          "supports_fact": "Làm thêm ngày lễ ít nhất 300% Điều 98 Khoản 1 Điểm c"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "ND_145_2020#d55-k3",
+          "doc_id": "ND_145_2020",
+          "article": "55",
+          "clause": "3",
+          "point": "",
+          "score": 0.03028233151183971
+        },
+        {
+          "rank": 2,
+          "chunk_id": "ND_145_2020#d55-k1-b",
+          "doc_id": "ND_145_2020",
+          "article": "55",
+          "clause": "1",
+          "point": "b",
+          "score": 0.02724014336917563
+        },
+        {
+          "rank": 3,
+          "chunk_id": "ND_145_2020#ph-l-c-iv-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph-4",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "clause": "",
+          "point": "",
+          "score": 0.026373626373626377
+        },
+        {
+          "rank": 4,
+          "chunk_id": "ND_145_2020#d62-k1-a",
+          "doc_id": "ND_145_2020",
+          "article": "62",
+          "clause": "1",
+          "point": "a",
+          "score": 0.025837770122142185
+        },
+        {
+          "rank": 5,
+          "chunk_id": "ND_145_2020#d60-k4",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "clause": "4",
+          "point": "",
+          "score": 0.025807525807525808
+        },
+        {
+          "rank": 6,
+          "chunk_id": "ND_145_2020#d55-k2",
+          "doc_id": "ND_145_2020",
+          "article": "55",
+          "clause": "2",
+          "point": "",
+          "score": 0.025728708679368183
+        },
+        {
+          "rank": 7,
+          "chunk_id": "VBHN_18_2026#d98-k1-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "98",
+          "clause": "1",
+          "point": "c",
+          "score": 0.02542892156862745
+        },
+        {
+          "rank": 8,
+          "chunk_id": "ND_145_2020#d61",
+          "doc_id": "ND_145_2020",
+          "article": "61",
+          "clause": "",
+          "point": "",
+          "score": 0.02488425925925926
+        },
+        {
+          "rank": 9,
+          "chunk_id": "VBHN_18_2026#d107-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "clause": "3",
+          "point": "",
+          "score": 0.02390271176963936
+        },
+        {
+          "rank": 10,
+          "chunk_id": "ND_12_2022#d18-k1-b",
+          "doc_id": "ND_12_2022",
+          "article": "18",
+          "clause": "1",
+          "point": "b",
+          "score": 0.023697302958889763
+        }
+      ],
+      "selected_context": [
+        "ND_145_2020#ph-l-c-iv-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph-4",
+        "ND_145_2020#d55-k1",
+        "ND_145_2020#d55-k3",
+        "ND_145_2020#d55-k1-a",
+        "ND_145_2020#d55-k1-b"
+      ],
+      "final_answer": "Công ty của bạn đã vi phạm quy định về trả tiền lương làm thêm giờ vào ngày lễ, tết theo Nghị định 145/2020/NĐ-CP. Theo Khoản 1 Điều 55 của Nghị định này, người lao động làm thêm giờ vào ngày lễ, tết phải được trả tiền lương làm thêm giờ theo mức ít ",
+      "cited_chunk_ids": [
+        "ND_145_2020#d55-k1",
+        "ND_145_2020#d55-k3"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Phải có sự đồng ý của NLĐ khi làm thêm Điều 107 Khoản 2 Điểm a"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "98",
+          "clause": "1",
+          "point": "c",
+          "supports_fact": "Làm thêm ngày lễ ít nhất 300% Điều 98 Khoản 1 Điểm c"
+        }
+      ],
+      "failure_type": "CONTEXT_OMISSION"
+    },
+    {
+      "question_id": "IN_67",
+      "question": "Công ty cho tôi nghỉ việc ngay lập tức không báo trước và không trả lương tháng cuối thì sai những gì?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "36",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Thời hạn báo trước khi NSDLĐ đơn phương chấm dứt Điều 36 Khoản 2"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "48",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Trách nhiệm thanh toán các khoản tiền trong 14 ngày Điều 48 Khoản 1"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "VBHN_18_2026#d35-k1-d",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "d",
+          "score": 0.024007908487501763
+        },
+        {
+          "rank": 2,
+          "chunk_id": "VBHN_18_2026#d35-k1-a",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "1",
+          "point": "a",
+          "score": 0.02073365231259968
+        },
+        {
+          "rank": 3,
+          "chunk_id": "VBHN_18_2026#d35-k2-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "2",
+          "point": "b",
+          "score": 0.031754032258064516
+        },
+        {
+          "rank": 4,
+          "chunk_id": "VBHN_18_2026#d35-k2-đ",
+          "doc_id": "VBHN_18_2026",
+          "article": "35",
+          "clause": "2",
+          "point": "đ",
+          "score": 0.02728937728937729
+        },
+        {
+          "rank": 5,
+          "chunk_id": "VBHN_18_2026#d41-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "41",
+          "clause": "1",
+          "point": "",
+          "score": 0.025917252146760345
+        },
+        {
+          "rank": 6,
+          "chunk_id": "VBHN_18_2026#d97-k4",
+          "doc_id": "VBHN_18_2026",
+          "article": "97",
+          "clause": "4",
+          "point": "",
+          "score": 0.0240053050397878
+        },
+        {
+          "rank": 7,
+          "chunk_id": "VBHN_18_2026#d115-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "115",
+          "clause": "1",
+          "point": "",
+          "score": 0.022517394054395953
+        }
+      ],
+      "selected_context": [
+        "VBHN_18_2026#d35-k1-d",
+        "VBHN_18_2026#d35-k1-a",
+        "VBHN_18_2026#d35-k2",
+        "VBHN_18_2026#d35-k2-đ",
+        "VBHN_18_2026#d35-k2-b",
+        "VBHN_18_2026#d35-k1",
+        "VBHN_18_2026#d35-k1-c",
+        "VBHN_18_2026#d35-k1-b"
+      ],
+      "final_answer": "Theo quy định tại Khoản 2 Điều 35 của Bộ luật Lao động (18/VBHN-VPQH), người lao động chỉ có quyền đơn phương chấm dứt hợp đồng lao động không cần báo trước trong một số trường hợp cụ thể. Trong trường hợp của bạn, công ty cho bạn nghỉ việc ngay lập ",
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d35-k1",
+        "VBHN_18_2026#d35-k2-b",
+        "VBHN_18_2026#d35-k2-đ",
+        "VBHN_18_2026#d35-k2"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "36",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Thời hạn báo trước khi NSDLĐ đơn phương chấm dứt Điều 36 Khoản 2"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "48",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Trách nhiệm thanh toán các khoản tiền trong 14 ngày Điều 48 Khoản 1"
+        }
+      ],
+      "failure_type": "RETRIEVAL_MISS"
+    },
+    {
+      "question_id": "IN_68",
+      "question": "Lao động nữ mang thai tháng thứ 7 có được yêu cầu làm thêm giờ ban đêm không và có được sa thải không?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "137",
+          "clause": "1",
+          "point": "a",
+          "supports_fact": "Không sử dụng lao động mang thai từ tháng thứ 7 làm ban đêm, làm thêm Điều 137 Khoản 1 Điểm a"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "122",
+          "clause": "4",
+          "point": "d",
+          "supports_fact": "Không xử lý kỷ luật người lao động đang mang thai Điều 122 Khoản 4 Điểm d"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "VBHN_18_2026#d137-k1-a",
+          "doc_id": "VBHN_18_2026",
+          "article": "137",
+          "clause": "1",
+          "point": "a",
+          "score": 0.03278688524590164
+        },
+        {
+          "rank": 2,
+          "chunk_id": "VBHN_18_2026#d137-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "137",
+          "clause": "3",
+          "point": "",
+          "score": 0.03149801587301587
+        },
+        {
+          "rank": 3,
+          "chunk_id": "ND_12_2022#d28-k2-a",
+          "doc_id": "ND_12_2022",
+          "article": "28",
+          "clause": "2",
+          "point": "a",
+          "score": 0.031054405392392875
+        },
+        {
+          "rank": 4,
+          "chunk_id": "VBHN_18_2026#d137-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "137",
+          "clause": "2",
+          "point": "",
+          "score": 0.030536130536130537
+        },
+        {
+          "rank": 5,
+          "chunk_id": "VBHN_18_2026#d137-k1-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "137",
+          "clause": "1",
+          "point": "b",
+          "score": 0.0304147465437788
+        },
+        {
+          "rank": 6,
+          "chunk_id": "VBHN_18_2026#d137-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "137",
+          "clause": "1",
+          "point": "",
+          "score": 0.029030910609857977
+        },
+        {
+          "rank": 7,
+          "chunk_id": "VBHN_18_2026#d139-k5",
+          "doc_id": "VBHN_18_2026",
+          "article": "139",
+          "clause": "5",
+          "point": "",
+          "score": 0.02854251012145749
+        },
+        {
+          "rank": 8,
+          "chunk_id": "VBHN_18_2026#d37-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "37",
+          "clause": "3",
+          "point": "",
+          "score": 0.026992753623188405
+        },
+        {
+          "rank": 9,
+          "chunk_id": "VBHN_18_2026#d139",
+          "doc_id": "VBHN_18_2026",
+          "article": "139",
+          "clause": "",
+          "point": "",
+          "score": 0.026709401709401708
+        },
+        {
+          "rank": 10,
+          "chunk_id": "ND_145_2020#d80-k2",
+          "doc_id": "ND_145_2020",
+          "article": "80",
+          "clause": "2",
+          "point": "",
+          "score": 0.02507351803126451
+        }
+      ],
+      "selected_context": [
+        "VBHN_18_2026#d137-k3",
+        "ND_12_2022#d28-k2",
+        "VBHN_18_2026#d137-k1-a",
+        "VBHN_18_2026#d139-k5",
+        "VBHN_18_2026#d137-k1",
+        "ND_12_2022#d28-k2-a",
+        "VBHN_18_2026#d137-k2",
+        "VBHN_18_2026#d137-k1-b"
+      ],
+      "final_answer": "Lao động nữ mang thai từ tháng thứ 7 hoặc từ tháng thứ 6 nếu làm việc ở vùng cao, vùng sâu, vùng xa, biên giới, hải đảo không được yêu cầu làm thêm giờ ban đêm. Theo Khoản 1, Điểm a Điều 137 Bộ luật Lao động (18/VBHN-VPQH), người sử dụng lao động khô",
+      "cited_chunk_ids": [
+        "VBHN_18_2026#d137-k1-a",
+        "VBHN_18_2026#d137-k3"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "122",
+          "clause": "4",
+          "point": "d",
+          "supports_fact": "Không xử lý kỷ luật người lao động đang mang thai Điều 122 Khoản 4 Điểm d"
+        }
+      ],
+      "failure_type": "CONTEXT_OMISSION"
+    },
+    {
+      "question_id": "IN_69",
+      "question": "Công ty tuyển dụng bắt tôi nộp lại Căn cước công dân gốc và đóng tiền thế chấp 10 triệu đồng mới cho nhận việc, làm vậy có đúng không?",
+      "expected_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Cấm giữ bản chính giấy tờ tùy thân Điều 17 Khoản 1"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Cấm yêu cầu biện pháp bảo đảm bằng tiền hoặc tài sản Điều 17 Khoản 2"
+        }
+      ],
+      "retrieval_method": "Hybrid RRF (BM25 + BGE-M3)",
+      "retrieved_top_k": [
+        {
+          "rank": 1,
+          "chunk_id": "ND_12_2022#d40-k1-a",
+          "doc_id": "ND_12_2022",
+          "article": "40",
+          "clause": "1",
+          "point": "a",
+          "score": 0.027884615384615386
+        },
+        {
+          "rank": 2,
+          "chunk_id": "ND_12_2022#d39-k10-b",
+          "doc_id": "ND_12_2022",
+          "article": "39",
+          "clause": "10",
+          "point": "b",
+          "score": 0.026263297872340427
+        },
+        {
+          "rank": 3,
+          "chunk_id": "ND_12_2022#d4-k43",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "clause": "43",
+          "point": "",
+          "score": 0.02625745950554135
+        },
+        {
+          "rank": 4,
+          "chunk_id": "ND_145_2020#d16-k2",
+          "doc_id": "ND_145_2020",
+          "article": "16",
+          "clause": "2",
+          "point": "",
+          "score": 0.0240053050397878
+        },
+        {
+          "rank": 5,
+          "chunk_id": "ND_12_2022#d33-k1",
+          "doc_id": "ND_12_2022",
+          "article": "33",
+          "clause": "1",
+          "point": "",
+          "score": 0.023853944562899784
+        },
+        {
+          "rank": 6,
+          "chunk_id": "ND_12_2022#d4-k44",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "clause": "44",
+          "point": "",
+          "score": 0.02353266888150609
+        },
+        {
+          "rank": 7,
+          "chunk_id": "ND_12_2022#d40-k3",
+          "doc_id": "ND_12_2022",
+          "article": "40",
+          "clause": "3",
+          "point": "",
+          "score": 0.02072274397713352
+        },
+        {
+          "rank": 8,
+          "chunk_id": "ND_12_2022#d39-k4",
+          "doc_id": "ND_12_2022",
+          "article": "39",
+          "clause": "4",
+          "point": "",
+          "score": 0.01989761421810103
+        },
+        {
+          "rank": 9,
+          "chunk_id": "ND_12_2022#d39-k10-a",
+          "doc_id": "ND_12_2022",
+          "article": "39",
+          "clause": "10",
+          "point": "a",
+          "score": 0.01847457627118644
+        },
+        {
+          "rank": 10,
+          "chunk_id": "ND_145_2020#d17-k2",
+          "doc_id": "ND_145_2020",
+          "article": "17",
+          "clause": "2",
+          "point": "",
+          "score": 0.01639344262295082
+        }
+      ],
+      "selected_context": [
+        "ND_12_2022#d40-k1-a",
+        "ND_12_2022#d39-k10-b",
+        "ND_12_2022#d39-k10-a",
+        "ND_12_2022#d4-k43",
+        "ND_12_2022#d40-k1-c",
+        "ND_12_2022#d40-k1-b",
+        "ND_12_2022#d39-k10",
+        "ND_12_2022#d40-k1"
+      ],
+      "final_answer": "Theo quy định tại Nghị định 12/2022/NĐ-CP, việc công ty yêu cầu bạn nộp lại Căn cước công dân gốc và đóng tiền thế chấp 10 triệu đồng mới cho nhận việc là không đúng theo pháp luật. Căn cước công dân là tài sản cá nhân và không được yêu cầu nộp lại c",
+      "cited_chunk_ids": [
+        "ND_12_2022#d40-k1",
+        "ND_12_2022#d40-k1-a",
+        "ND_12_2022#d40-k1-b",
+        "ND_12_2022#d40-k1-c",
+        "ND_12_2022#d39-k10",
+        "ND_12_2022#d39-k10-a",
+        "ND_12_2022#d39-k10-b",
+        "ND_12_2022#d4-k43"
+      ],
+      "missing_gold_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Cấm giữ bản chính giấy tờ tùy thân Điều 17 Khoản 1"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Cấm yêu cầu biện pháp bảo đảm bằng tiền hoặc tài sản Điều 17 Khoản 2"
+        }
+      ],
+      "failure_type": "RETRIEVAL_MISS"
+    }
+  ]
+}

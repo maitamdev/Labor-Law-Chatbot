@@ -1,0 +1,64 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing and Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local Storage and Vector Database
+storage/*
+!storage/.gitkeep
+
+# Processed Data
+data/processed/*
+!data/processed/.gitkeep
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Scratch and Large Binaries
+scratch/
+*.exe
+*.pth
+*.tar.gz
+*.zip
+*.log
+.system_generated/
+

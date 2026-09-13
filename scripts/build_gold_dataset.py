@@ -1,0 +1,1619 @@
+# -*- coding: utf-8 -*-
+"""
+VietLabor AI - Gold Retrieval Dataset Builder
+Generates 155 curated and verified ground-truth questions across 11 legal topics
+and 10 query archetypes, verified against canonical corpus data.
+"""
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+DATASET_PATH = Path("data/evaluation/retrieval_gold.json")
+
+GOLD_QUESTIONS = [
+    # =========================================================================
+    # TOPIC: PROBATION (Thử việc) - Articles 24, 25, 26, 27 VBHN_18_2026
+    # =========================================================================
+    {
+        "question_id": "RQ001",
+        "question": "Thời gian thử việc tối đa đối với người quản lý doanh nghiệp là bao nhiêu ngày?",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["25"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d25", "VBHN_18_2026#d25-k1"],
+        "difficulty": "easy",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ002",
+        "question": "Điều 25 Bộ luật Lao động",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["25"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d25"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ003",
+        "question": "Cty bắt em thử việc 3 tháng cho vị trí nhân viên kinh doanh có được không?",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["25"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d25", "VBHN_18_2026#d25-k2"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ004",
+        "question": "Thử việc được mấy tháng?",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["25"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d25"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+    {
+        "question_id": "RQ005",
+        "question": "Mức lương thử việc ít nhất bằng bao nhiêu phần trăm lương chính thức?",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["26"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d26"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ006",
+        "question": "Lương thử việc tối thiểu 85%",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["26"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d26"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ007",
+        "question": "Trong thời gian thử việc em thấy công việc không phù hợp thì có được nghỉ việc ngay mà không phải đền tiền không?",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["27"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d27-k2"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ008",
+        "question": "Hợp đồng thử việc có áp dụng cho hợp đồng lao động có thời hạn dưới 1 tháng không?",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["24"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d24-k3"],
+        "difficulty": "easy",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ009",
+        "question": "Quy định về thời gian tập sự tối đa đối với công việc có trình độ cao đẳng, đại học",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["25"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d25-k2"],
+        "difficulty": "medium",
+        "query_type": "paraphrase"
+    },
+    {
+        "question_id": "RQ010",
+        "question": "Thời hạn thử việc 180 ngày áp dụng cho chức danh nào?",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["25"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d25-k1"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ011",
+        "question": "Điều 27 khoản 2 Bộ luật Lao động",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["27"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d27-k2"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ012",
+        "question": "Kết thúc thời gian thử việc mà đạt yêu cầu thì người sử dụng lao động phải làm gì?",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["27"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d27-k1"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ013",
+        "question": "Em mới ký hợp đồng thử việc 60 ngày nhưng hết thời gian công ty không nói gì cũng không ký hợp đồng chính thức mà vẫn để em đi làm thì có đúng luật không?",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["27"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d27"],
+        "difficulty": "hard",
+        "query_type": "long"
+    },
+    {
+        "question_id": "RQ014",
+        "question": "Thử việc 60 ngày",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["25"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d25-k2"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+    {
+        "question_id": "RQ015",
+        "question": "Có được thử việc 2 lần cho cùng một vị trí công việc không?",
+        "topic": "probation",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["25"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d25"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+
+    # =========================================================================
+    # TOPIC: CONTRACT (Hợp đồng lao động) - Articles 13, 14, 20, 21, 22, 30 VBHN_18_2026
+    # =========================================================================
+    {
+        "question_id": "RQ016",
+        "question": "Bộ luật Lao động hiện hành quy định có mấy loại hợp đồng lao động?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["20"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d20-k1"],
+        "difficulty": "easy",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ017",
+        "question": "Điều 20 Bộ luật Lao động",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["20"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d20"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ018",
+        "question": "Hợp đồng lao động xác định thời hạn được ký tối đa bao nhiêu tháng?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["20"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d20-k1-b"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ019",
+        "question": "Hết hạn hợp đồng xác định thời hạn mà hai bên không ký hợp đồng mới thì hợp đồng cũ chuyển thành loại gì?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["20"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d20-k2-b"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ020",
+        "question": "Ký hợp đồng lao động điện tử qua mạng có giá trị pháp lý không?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["14"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d14-k1"],
+        "difficulty": "easy",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ021",
+        "question": "Hợp đồng lao động bằng lời nói có được chấp nhận không?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["14"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d14-k2"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ022",
+        "question": "Phụ lục hợp đồng lao động có được sửa đổi thời hạn hợp đồng không?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["22"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d22-k2"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ023",
+        "question": "Điều 22 khoản 2 Bộ luật Lao động",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["22"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d22-k2"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ024",
+        "question": "Các nội dung chủ yếu bắt buộc phải có trong hợp đồng lao động gồm những gì?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["21"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d21-k1"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ025",
+        "question": "Những trường hợp nào người lao động được tạm hoãn thực hiện hợp đồng lao động?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["30"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d30-k1"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ026",
+        "question": "Em đi nghĩa vụ quân sự thì có được tạm hoãn hợp đồng lao động không?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["30"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d30-k1-a"],
+        "difficulty": "easy",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ027",
+        "question": "Hết thời gian tạm hoãn hợp đồng lao động thì trong bao nhiêu ngày người lao động phải có mặt tại nơi làm việc?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["31"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d31"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ028",
+        "question": "Công ty có quyền giữ bằng đại học gốc hoặc cccd của người lao động khi giao kết hợp đồng không?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["17"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d17-k1"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ029",
+        "question": "Hành vi người sử dụng lao động giữ bản chính giấy tờ tùy thân của người lao động",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["17"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d17-k1"],
+        "difficulty": "medium",
+        "query_type": "paraphrase"
+    },
+    {
+        "question_id": "RQ030",
+        "question": "Ký hợp đồng xác định thời hạn tối đa được mấy lần trước khi chuyển sang vô thời hạn?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["20"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d20-k2-c"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ031",
+        "question": "Điều 14 Bộ luật Lao động",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["14"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d14"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ032",
+        "question": "Tôi ký hợp đồng lao động 1 năm, sau đó công ty ký tiếp phụ lục gia hạn thêm 2 năm thì có hợp pháp không?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["22"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d22-k2"],
+        "difficulty": "hard",
+        "query_type": "long"
+    },
+    {
+        "question_id": "RQ033",
+        "question": "loại hợp đồng lao động",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["20"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d20"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+    {
+        "question_id": "RQ034",
+        "question": "Có được ký hợp đồng thời vụ không?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["20"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d20-k1"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ035",
+        "question": "Người lao động có thể giao kết hợp đồng lao động với nhiều người sử dụng lao động không?",
+        "topic": "contract",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["19"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d19-k1"],
+        "difficulty": "easy",
+        "query_type": "semantic"
+    },
+
+    # =========================================================================
+    # TOPIC: TERMINATION (Chấm dứt hợp đồng) - Articles 34, 35, 36, 39, 40, 41, 46, 47, 48 VBHN_18_2026
+    # =========================================================================
+    {
+        "question_id": "RQ036",
+        "question": "Người lao động làm việc theo hợp đồng không xác định thời hạn muốn nghỉ việc phải báo trước bao nhiêu ngày?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["35"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d35-k1-a"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ037",
+        "question": "Điều 35 khoản 1",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["35"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d35-k1"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ038",
+        "question": "Nghỉ việc hợp đồng 2 năm báo trước mấy ngày?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["35"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d35-k1-b"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ039",
+        "question": "Những trường hợp nào người lao động được nghỉ việc ngay mà không cần báo trước?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["35"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d35-k2"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ040",
+        "question": "Bị công ty chậm lương bao nhiêu ngày thì người lao động có quyền nghỉ việc không cần báo trước?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["35"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d35-k2-b"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ041",
+        "question": "Nghỉ ngang không báo trước có bị đền tiền không?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["40"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d40"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ042",
+        "question": "Nghĩa vụ bồi thường của người lao động khi đơn phương chấm dứt hợp đồng lao động trái pháp luật gồm những khoản nào?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["40"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d40-k1", "VBHN_18_2026#d40-k2"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ043",
+        "question": "Công ty đuổi việc người lao động trái luật thì phải bồi thường những gì?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["41"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d41"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ044",
+        "question": "Điều 41 Bộ luật Lao động",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["41"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d41"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ045",
+        "question": "Điều kiện và cách tính tiền trợ cấp thôi việc theo Điều 46",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["46"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d46"],
+        "difficulty": "medium",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ046",
+        "question": "Mỗi năm làm việc được bao nhiêu tháng trợ cấp thôi việc?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["46"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d46-k1"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ047",
+        "question": "Trợ cấp mất việc làm được tính như thế nào và tối thiểu bằng mấy tháng lương?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["47"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d47-k1"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ048",
+        "question": "Thời hạn thanh toán các khoản tiền lương và quyền lợi khi chấm dứt hợp đồng lao động là bao nhiêu ngày?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["48"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d48-k1"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ049",
+        "question": "Công ty có được sa thải nhân viên nữ đang mang thai hoặc nghỉ thai sản không?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["137"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d137-k3"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ050",
+        "question": "Thời gian báo trước 45 ngày khi nghỉ việc",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["35"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d35-k1-a"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+    {
+        "question_id": "RQ051",
+        "question": "Tôi làm việc được 5 năm tại công ty, nay công ty đơn phương chấm dứt hợp đồng thì công ty phải báo trước cho tôi bao nhiêu ngày?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["36"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d36-k2"],
+        "difficulty": "hard",
+        "query_type": "long"
+    },
+    {
+        "question_id": "RQ052",
+        "question": "Người sử dụng lao động đơn phương chấm dứt hợp đồng lao động trong trường hợp người lao động tự ý bỏ việc mấy ngày liên tục?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["36"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d36-k1-e"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ053",
+        "question": "trợ cấp thôi việc",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["46"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d46"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+    {
+        "question_id": "RQ054",
+        "question": "Các căn cứ chấm dứt hợp đồng lao động hợp pháp theo luật",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["34"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d34"],
+        "difficulty": "medium",
+        "query_type": "paraphrase"
+    },
+    {
+        "question_id": "RQ055",
+        "question": "Em nghỉ việc nhưng công ty chây ì không chịu trả sổ bảo hiểm xã hội thì có đúng luật không?",
+        "topic": "termination",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["48"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d48-k3-a"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+
+    # =========================================================================
+    # TOPIC: WAGE (Tiền lương & Lương tối thiểu) - Articles 90, 91, 98, 102 VBHN_18_2026 & ND 293/2025 & TT 08/2026
+    # =========================================================================
+    {
+        "question_id": "RQ056",
+        "question": "Mức lương tối thiểu tháng vùng I theo Nghị định 293/2025/NĐ-CP là bao nhiêu đồng?",
+        "topic": "wage",
+        "relevant_documents": ["ND_293_2025"],
+        "relevant_articles": ["3"],
+        "relevant_chunk_ids": ["ND_293_2025#d3-k1"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ057",
+        "question": "5.310.000",
+        "topic": "wage",
+        "relevant_documents": ["ND_293_2025"],
+        "relevant_articles": ["3"],
+        "relevant_chunk_ids": ["ND_293_2025#d3-k1"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+    {
+        "question_id": "RQ058",
+        "question": "Nghị định 293/2025/NĐ-CP",
+        "topic": "wage",
+        "relevant_documents": ["ND_293_2025"],
+        "relevant_articles": ["1", "2", "3", "4", "5"],
+        "relevant_chunk_ids": ["ND_293_2025#d3"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ059",
+        "question": "Mức lương tối thiểu vùng 2, vùng 3, vùng 4 năm 2026 là bao nhiêu?",
+        "topic": "wage",
+        "relevant_documents": ["ND_293_2025"],
+        "relevant_articles": ["3"],
+        "relevant_chunk_ids": ["ND_293_2025#d3-k1"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ060",
+        "question": "Mức lương tối thiểu theo giờ vùng 1 theo Nghị định 293 là bao nhiêu?",
+        "topic": "wage",
+        "relevant_documents": ["ND_293_2025"],
+        "relevant_articles": ["3"],
+        "relevant_chunk_ids": ["ND_293_2025#d3-k1"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ061",
+        "question": "Lương thử việc tối thiểu được nhận là bao nhiêu?",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["26"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d26"],
+        "difficulty": "easy",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ062",
+        "question": "Công ty có quyền trừ bao nhiêu phần trăm lương thực lĩnh của người lao động hàng tháng?",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["102"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d102-k3"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ063",
+        "question": "Điều 102 khoản 3 Bộ luật Lao động",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["102"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d102-k3"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ064",
+        "question": "Sếp phạt tiền trừ vào lương nhân viên khi đi làm trễ có đúng luật không?",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["127"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d127-k2"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ065",
+        "question": "Tiền lương làm thêm giờ vào ngày nghỉ lễ, tết được tính ít nhất bằng bao nhiêu phần trăm?",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["98"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d98-k1-c"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ066",
+        "question": "150% tiền lương",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["98"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d98-k1-a"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+    {
+        "question_id": "RQ067",
+        "question": "Quy định về trả lương ngừng việc do lỗi của người sử dụng lao động",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["99"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d99-k1"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ068",
+        "question": "Công ty nợ lương chậm trả trên 15 ngày thì phải trả thêm tiền lãi như thế nào?",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["97"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d97-k4"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ069",
+        "question": "Tiền thưởng tết có phải là khoản bắt buộc công ty phải trả không?",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["104"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d104"],
+        "difficulty": "easy",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ070",
+        "question": "Quy định về xây dựng thang lương, bảng lương của doanh nghiệp",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["93"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d93"],
+        "difficulty": "medium",
+        "query_type": "paraphrase"
+    },
+    {
+        "question_id": "RQ071",
+        "question": "Người lao động được tạm ứng tiền lương tối đa bao nhiêu tháng khi tạm hoãn nghĩa vụ quân sự hoặc có việc riêng?",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["101"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d101"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ072",
+        "question": "Thông tư 08/2026/TT-BNV hướng dẫn xếp lương ngạch công chức viên chức",
+        "topic": "wage",
+        "relevant_documents": ["TT_08_2026"],
+        "relevant_articles": ["1", "2"],
+        "relevant_chunk_ids": [],
+        "difficulty": "medium",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ073",
+        "question": "Hình thức trả lương bằng tiền mặt hoặc qua tài khoản cá nhân",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["96"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d96"],
+        "difficulty": "easy",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ074",
+        "question": "Phí mở tài khoản và chuyển lương do công ty hay người lao động chi trả?",
+        "topic": "wage",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["96"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d96-k2"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ075",
+        "question": "lương tối thiểu vùng",
+        "topic": "wage",
+        "relevant_documents": ["ND_293_2025", "VBHN_18_2026"],
+        "relevant_articles": ["3", "91"],
+        "relevant_chunk_ids": ["ND_293_2025#d3"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+
+    # =========================================================================
+    # TOPIC: OVERTIME & NIGHT WORK (Làm thêm giờ, làm việc ban đêm) - Articles 98, 106, 107 VBHN_18_2026 & ND 145/2020
+    # =========================================================================
+    {
+        "question_id": "RQ076",
+        "question": "Giờ làm việc ban đêm được tính từ mấy giờ đến mấy giờ?",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["106"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d106"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ077",
+        "question": "Điều 106 Bộ luật Lao động",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["106"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d106"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ078",
+        "question": "Làm thêm ngày thường tính bao nhiêu phần trăm lương?",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["98"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d98-k1-a"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ079",
+        "question": "Làm thêm giờ vào ngày nghỉ hàng tuần (chủ nhật) được trả ít nhất bao nhiêu % tiền lương?",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["98"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d98-k1-b"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ080",
+        "question": "Làm lễ mà công ty bắt đi làm thì tính lương sao?",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["98"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d98-k1-c"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ081",
+        "question": "Tổng số giờ làm thêm tối đa trong 1 tháng là bao nhiêu giờ?",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["107"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d107-k2-b"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ082",
+        "question": "Số giờ làm thêm tối đa trong 1 năm là bao nhiêu giờ?",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["107"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d107-k2-c"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ083",
+        "question": "Điều 107 khoản 2 Bộ luật Lao động",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["107"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d107-k2"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ084",
+        "question": "Công ty có được ép nhân viên tăng ca nếu nhân viên không đồng ý không?",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["107"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d107-k2-a"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ085",
+        "question": "Cách tính tiền lương làm thêm giờ vào ban đêm theo Nghị định 145/2020/NĐ-CP",
+        "topic": "overtime",
+        "relevant_documents": ["ND_145_2020"],
+        "relevant_articles": ["57"],
+        "relevant_chunk_ids": ["ND_145_2020#d57"],
+        "difficulty": "hard",
+        "query_type": "cross_reference"
+    },
+    {
+        "question_id": "RQ086",
+        "question": "Điều 55 Nghị định 145/2020/NĐ-CP",
+        "topic": "overtime",
+        "relevant_documents": ["ND_145_2020"],
+        "relevant_articles": ["55"],
+        "relevant_chunk_ids": ["ND_145_2020#d55"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ087",
+        "question": "Trường hợp đặc biệt nào doanh nghiệp được sử dụng người lao động làm thêm tối đa 300 giờ một năm?",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["107"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d107-k3"],
+        "difficulty": "hard",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ088",
+        "question": "làm thêm giờ 300 giờ",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["107"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d107-k3"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+    {
+        "question_id": "RQ089",
+        "question": "Phụ nữ mang thai từ tháng thứ mấy thì không được làm thêm giờ và làm việc ban đêm?",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["137"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d137-k1-a"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ090",
+        "question": "Tôi làm thêm 3 tiếng vào đêm ngày thứ bảy thì tiền lương được nhân hệ số bao nhiêu?",
+        "topic": "overtime",
+        "relevant_documents": ["VBHN_18_2026", "ND_145_2020"],
+        "relevant_articles": ["98", "57"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d98", "ND_145_2020#d57"],
+        "difficulty": "hard",
+        "query_type": "long"
+    },
+
+    # =========================================================================
+    # TOPIC: WORKING HOURS (Thời giờ làm việc) - Articles 105, 108, 109 VBHN_18_2026
+    # =========================================================================
+    {
+        "question_id": "RQ091",
+        "question": "Thời giờ làm việc bình thường của người lao động tối đa không quá bao nhiêu giờ trong một ngày?",
+        "topic": "working_hours",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["105"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d105-k1"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ092",
+        "question": "Điều 105 Bộ luật Lao động",
+        "topic": "working_hours",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["105"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d105"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ093",
+        "question": "Một tuần người lao động được làm việc tối đa bao nhiêu giờ?",
+        "topic": "working_hours",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["105"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d105-k1"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ094",
+        "question": "Nhà nước khuyến khích doanh nghiệp áp dụng tuần làm việc bao nhiêu giờ?",
+        "topic": "working_hours",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["105"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d105-k2"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ095",
+        "question": "Thời gian nghỉ giữa ca làm việc ban ngày tối thiểu bao nhiêu phút?",
+        "topic": "working_hours",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["109"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d109-k1"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ096",
+        "question": "Làm việc ca đêm từ 22h đến 6h sáng thì được nghỉ giữa ca bao nhiêu phút và có tính vào giờ làm không?",
+        "topic": "working_hours",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["109"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d109-k2"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ097",
+        "question": "Thời gian nghỉ chuyển ca tối thiểu giữa hai ca làm việc liên tiếp là bao nhiêu giờ?",
+        "topic": "working_hours",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["110"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d110"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ098",
+        "question": "giờ làm việc bình thường",
+        "topic": "working_hours",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["105"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d105"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+    {
+        "question_id": "RQ099",
+        "question": "Quy định về thời gian nghỉ ngơi đối với công việc có tính chất đặc biệt",
+        "topic": "working_hours",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["116"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d116"],
+        "difficulty": "medium",
+        "query_type": "paraphrase"
+    },
+    {
+        "question_id": "RQ100",
+        "question": "Công ty xếp lịch làm việc 10 tiếng một ngày từ thứ hai đến thứ năm thì có vi phạm thời giờ làm việc không?",
+        "topic": "working_hours",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["105"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d105-k2"],
+        "difficulty": "hard",
+        "query_type": "long"
+    },
+
+    # =========================================================================
+    # TOPIC: LEAVE (Nghỉ phép, nghỉ lễ, tết, việc riêng) - Articles 111, 112, 113, 114, 115 VBHN_18_2026
+    # =========================================================================
+    {
+        "question_id": "RQ101",
+        "question": "Một năm người lao động được nghỉ bao nhiêu ngày lễ, tết hưởng nguyên lương?",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["112"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d112-k1"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ102",
+        "question": "Điều 112 Bộ luật Lao động",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["112"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d112"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ103",
+        "question": "Dịp lễ Quốc khánh 2/9 được nghỉ mấy ngày hưởng nguyên lương?",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["112"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d112-k1-đ"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ104",
+        "question": "Số ngày phép năm của người làm việc trong điều kiện bình thường là bao nhiêu ngày?",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["113"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d113-k1-a"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ105",
+        "question": "Làm việc bao nhiêu năm thì được cộng thêm 1 ngày phép năm theo thâm niên?",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["114"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d114"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ106",
+        "question": "Điều 114 Bộ luật Lao động",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["114"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d114"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ107",
+        "question": "Người lao động kết hôn thì được nghỉ mấy ngày hưởng nguyên lương?",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["115"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d115-k1-a"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ108",
+        "question": "Bố mẹ hoặc vợ chồng, con chết thì được nghỉ việc riêng có lương mấy ngày?",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["115"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d115-k1-c"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ109",
+        "question": "Em cưới vợ xin nghỉ phép có được hưởng lương không và được mấy ngày?",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["115"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d115-k1-a"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ110",
+        "question": "Nghỉ hàng tuần ít nhất bao nhiêu giờ liên tục?",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["111"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d111-k1"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ111",
+        "question": "Chưa nghỉ hết ngày phép năm thì công ty có phải thanh toán tiền lương cho những ngày chưa nghỉ không?",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["113"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d113-k3"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ112",
+        "question": "nghỉ phép năm",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["113"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d113"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+    {
+        "question_id": "RQ113",
+        "question": "Điều 115 khoản 1 Bộ luật Lao động",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["115"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d115-k1"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ114",
+        "question": "Tôi làm việc được 10 năm tại cùng một doanh nghiệp thì tổng số ngày nghỉ hàng năm có hưởng lương của tôi là bao nhiêu?",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["113", "114"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d113", "VBHN_18_2026#d114"],
+        "difficulty": "hard",
+        "query_type": "long"
+    },
+    {
+        "question_id": "RQ115",
+        "question": "Quy định về việc thỏa thuận nghỉ không hưởng lương",
+        "topic": "leave",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["115"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d115-k3"],
+        "difficulty": "medium",
+        "query_type": "paraphrase"
+    },
+
+    # =========================================================================
+    # TOPIC: DISCIPLINE (Kỷ luật lao động) - Articles 117, 118, 122, 124, 125, 127 VBHN_18_2026
+    # =========================================================================
+    {
+        "question_id": "RQ116",
+        "question": "Bộ luật Lao động quy định có những hình thức xử lý kỷ luật lao động nào?",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["124"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d124"],
+        "difficulty": "easy",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ117",
+        "question": "Điều 124 Bộ luật Lao động",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["124"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d124"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ118",
+        "question": "Những trường hợp nào người sử dụng lao động được áp dụng hình thức kỷ luật sa thải?",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["125"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d125"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ119",
+        "question": "Điều 125 khoản 4",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["125"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d125-k4"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ120",
+        "question": "Nghỉ việc không lý do bao nhiêu ngày thì bị công ty sa thải?",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["125"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d125-k4"],
+        "difficulty": "easy",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ121",
+        "question": "Công ty có được phạt tiền hoặc cắt lương thay cho việc xử lý kỷ luật lao động không?",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["127"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d127-k2"],
+        "difficulty": "easy",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ122",
+        "question": "Điều 127 Bộ luật Lao động",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["127"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d127"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ123",
+        "question": "Thời hiệu xử lý kỷ luật lao động tối đa là bao nhiêu tháng?",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["123"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d123-k1"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ124",
+        "question": "Doanh nghiệp sử dụng từ bao nhiêu lao động trở lên thì bắt buộc phải ban hành nội quy lao động bằng văn bản?",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["118"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d118-k1"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ125",
+        "question": "Em lỡ làm rơi vỡ máy tính công ty thì công ty có quyền trừ lương bồi thường tối đa bao nhiêu tháng?",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["130"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d130-k1"],
+        "difficulty": "medium",
+        "query_type": "colloquial"
+    },
+    {
+        "question_id": "RQ126",
+        "question": "Trình tự, thủ tục họp xử lý kỷ luật lao động có bắt buộc phải có mặt người lao động không?",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["122"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d122-k1-b"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ127",
+        "question": "sa thải nhân viên",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["125"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d125"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+    {
+        "question_id": "RQ128",
+        "question": "Hành vi xâm phạm thân thể, nhân phẩm của người lao động khi xử lý kỷ luật bị nghiêm cấm theo điều nào?",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["127"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d127-k1"],
+        "difficulty": "easy",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ129",
+        "question": "Một hành vi vi phạm kỷ luật lao động có được áp dụng nhiều hình thức kỷ luật cùng lúc không?",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["122"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d122-k2"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ130",
+        "question": "Tôi bị công ty ra quyết định kỷ luật kéo dài thời hạn nâng lương 9 tháng có đúng quy định pháp luật không?",
+        "topic": "discipline",
+        "relevant_documents": ["VBHN_18_2026"],
+        "relevant_articles": ["124"],
+        "relevant_chunk_ids": ["VBHN_18_2026#d124-k2"],
+        "difficulty": "hard",
+        "query_type": "long"
+    },
+
+    # =========================================================================
+    # TOPIC: PENALTIES (Xử phạt vi phạm hành chính lao động) - ND 12/2022
+    # =========================================================================
+    {
+        "question_id": "RQ131",
+        "question": "Nghị định 12/2022/NĐ-CP",
+        "topic": "penalties",
+        "relevant_documents": ["ND_12_2022"],
+        "relevant_articles": ["1", "8", "9", "10", "11", "17", "18", "19"],
+        "relevant_chunk_ids": [],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ132",
+        "question": "Mức xử phạt hành chính đối với người sử dụng lao động thử việc quá thời gian quy định theo Nghị định 12/2022",
+        "topic": "penalties",
+        "relevant_documents": ["ND_12_2022"],
+        "relevant_articles": ["10"],
+        "relevant_chunk_ids": ["ND_12_2022#d10"],
+        "difficulty": "medium",
+        "query_type": "cross_reference"
+    },
+    {
+        "question_id": "RQ133",
+        "question": "Công ty trả lương thấp hơn mức lương tối thiểu vùng bị phạt bao nhiêu tiền theo Nghị định 12/2022/NĐ-CP?",
+        "topic": "penalties",
+        "relevant_documents": ["ND_12_2022"],
+        "relevant_articles": ["17"],
+        "relevant_chunk_ids": ["ND_12_2022#d17"],
+        "difficulty": "medium",
+        "query_type": "cross_reference"
+    },
+    {
+        "question_id": "RQ134",
+        "question": "Điều 17 Nghị định 12/2022/NĐ-CP",
+        "topic": "penalties",
+        "relevant_documents": ["ND_12_2022"],
+        "relevant_articles": ["17"],
+        "relevant_chunk_ids": ["ND_12_2022#d17"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ135",
+        "question": "Mức phạt tiền đối với hành vi giữ văn bằng, chứng chỉ bản chính của người lao động",
+        "topic": "penalties",
+        "relevant_documents": ["ND_12_2022"],
+        "relevant_articles": ["9"],
+        "relevant_chunk_ids": ["ND_12_2022#d9-k2"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ136",
+        "question": "Điều 19 Nghị định 12/2022/NĐ-CP",
+        "topic": "penalties",
+        "relevant_documents": ["ND_12_2022"],
+        "relevant_articles": ["19"],
+        "relevant_chunk_ids": ["ND_12_2022#d19"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ137",
+        "question": "Hành vi phạt tiền, cắt lương thay xử lý kỷ luật lao động bị phạt hành chính bao nhiêu theo Điều 19 NĐ 12/2022?",
+        "topic": "penalties",
+        "relevant_documents": ["ND_12_2022"],
+        "relevant_articles": ["19"],
+        "relevant_chunk_ids": ["ND_12_2022#d19-k3"],
+        "difficulty": "medium",
+        "query_type": "numeric"
+    },
+    {
+        "question_id": "RQ138",
+        "question": "Mức phạt đối với công ty không giao kết hợp đồng lao động bằng văn bản với người lao động",
+        "topic": "penalties",
+        "relevant_documents": ["ND_12_2022"],
+        "relevant_articles": ["9"],
+        "relevant_chunk_ids": ["ND_12_2022#d9-k1"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ139",
+        "question": "Công ty bắt nhân viên làm thêm quá 40 giờ một tháng thì bị cơ quan nhà nước xử phạt bao nhiêu?",
+        "topic": "penalties",
+        "relevant_documents": ["ND_12_2022"],
+        "relevant_articles": ["18"],
+        "relevant_chunk_ids": ["ND_12_2022#d18"],
+        "difficulty": "hard",
+        "query_type": "long"
+    },
+    {
+        "question_id": "RQ140",
+        "question": "xử phạt vi phạm tiền lương Nghị định 12",
+        "topic": "penalties",
+        "relevant_documents": ["ND_12_2022"],
+        "relevant_articles": ["17"],
+        "relevant_chunk_ids": ["ND_12_2022#d17"],
+        "difficulty": "easy",
+        "query_type": "short"
+    },
+
+    # =========================================================================
+    # TOPIC: SAFETY & SPECIALTY (An toàn, vệ sinh lao động & thỏa thuận đặc thù)
+    # =========================================================================
+    {
+        "question_id": "RQ141",
+        "question": "Mức phạt tiền đối với người sử dụng lao động không tổ chức khám sức khỏe định kỳ cho người lao động theo Nghị định 12/2022/NĐ-CP",
+        "topic": "safety",
+        "relevant_documents": ["ND_12_2022"],
+        "relevant_articles": ["22"],
+        "relevant_chunk_ids": ["ND_12_2022#d22-k2"],
+        "difficulty": "medium",
+        "query_type": "cross_reference"
+    },
+    {
+        "question_id": "RQ142",
+        "question": "Điều 22 Nghị định 12/2022/NĐ-CP",
+        "topic": "safety",
+        "relevant_documents": ["ND_12_2022"],
+        "relevant_articles": ["22"],
+        "relevant_chunk_ids": ["ND_12_2022#d22"],
+        "difficulty": "easy",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ143",
+        "question": "Thời giờ khám sức khỏe, khám phát hiện bệnh nghề nghiệp có được tính vào thời giờ làm việc được hưởng lương không?",
+        "topic": "safety",
+        "relevant_documents": ["ND_145_2020"],
+        "relevant_articles": ["58"],
+        "relevant_chunk_ids": ["ND_145_2020#d58-k9"],
+        "difficulty": "medium",
+        "query_type": "semantic"
+    },
+    {
+        "question_id": "RQ144",
+        "question": "Quy định về bảo vệ bí mật kinh doanh, bí mật công nghệ theo Thông tư 10/2020/TT-BLĐTBXH",
+        "topic": "safety",
+        "relevant_documents": ["TT_10_2020"],
+        "relevant_articles": ["4"],
+        "relevant_chunk_ids": ["TT_10_2020#d4"],
+        "difficulty": "medium",
+        "query_type": "exact_reference"
+    },
+    {
+        "question_id": "RQ145",
+        "question": "Trách nhiệm người sử dụng lao động khi sử dụng lao động làm công việc ảnh hưởng xấu chức năng sinh sản theo Thông tư 10/2020",
+        "topic": "safety",
+        "relevant_documents": ["TT_10_2020"],
+        "relevant_articles": ["11"],
+        "relevant_chunk_ids": ["TT_10_2020#d11"],
+        "difficulty": "medium",
+        "query_type": "paraphrase"
+    },
+
+    # =========================================================================
+    # TOPIC: OUT OF SCOPE (Ngoài phạm vi luật lao động)
+    # =========================================================================
+    {
+        "question_id": "RQ146",
+        "question": "Cách nấu món phở bò Hà Nội truyền thống thơm ngon chuẩn vị?",
+        "topic": "out_of_scope",
+        "relevant_documents": [],
+        "relevant_articles": [],
+        "relevant_chunk_ids": [],
+        "difficulty": "easy",
+        "query_type": "out_of_scope"
+    },
+    {
+        "question_id": "RQ147",
+        "question": "Thủ tục xin cấp visa du lịch Nhật Bản tự túc cho công dân Việt Nam gồm những giấy tờ gì?",
+        "topic": "out_of_scope",
+        "relevant_documents": [],
+        "relevant_articles": [],
+        "relevant_chunk_ids": [],
+        "difficulty": "easy",
+        "query_type": "out_of_scope"
+    },
+    {
+        "question_id": "RQ148",
+        "question": "Độ tuổi đăng ký kết hôn hợp pháp theo Luật Hôn nhân và Gia đình Việt Nam là bao nhiêu?",
+        "topic": "out_of_scope",
+        "relevant_documents": [],
+        "relevant_articles": [],
+        "relevant_chunk_ids": [],
+        "difficulty": "easy",
+        "query_type": "out_of_scope"
+    },
+    {
+        "question_id": "RQ149",
+        "question": "Hồ sơ và thủ tục xin cấp giấy chứng nhận quyền sử dụng đất (sổ đỏ) lần đầu",
+        "topic": "out_of_scope",
+        "relevant_documents": [],
+        "relevant_articles": [],
+        "relevant_chunk_ids": [],
+        "difficulty": "easy",
+        "query_type": "out_of_scope"
+    },
+    {
+        "question_id": "RQ150",
+        "question": "Giá vàng miếng SJC hôm nay bao nhiêu tiền một chỉ?",
+        "topic": "out_of_scope",
+        "relevant_documents": [],
+        "relevant_articles": [],
+        "relevant_chunk_ids": [],
+        "difficulty": "easy",
+        "query_type": "out_of_scope"
+    },
+    {
+        "question_id": "RQ151",
+        "question": "Cách cài đặt hệ điều hành Windows 11 bằng USB boot",
+        "topic": "out_of_scope",
+        "relevant_documents": [],
+        "relevant_articles": [],
+        "relevant_chunk_ids": [],
+        "difficulty": "easy",
+        "query_type": "out_of_scope"
+    },
+    {
+        "question_id": "RQ152",
+        "question": "Đơn phương ly hôn nộp đơn tại Tòa án cấp nào?",
+        "topic": "out_of_scope",
+        "relevant_documents": [],
+        "relevant_articles": [],
+        "relevant_chunk_ids": [],
+        "difficulty": "easy",
+        "query_type": "out_of_scope"
+    },
+    {
+        "question_id": "RQ153",
+        "question": "Dấu hiệu nhận biết và cách điều trị bệnh sốt xuất huyết tại nhà",
+        "topic": "out_of_scope",
+        "relevant_documents": [],
+        "relevant_articles": [],
+        "relevant_chunk_ids": [],
+        "difficulty": "easy",
+        "query_type": "out_of_scope"
+    },
+    {
+        "question_id": "RQ154",
+        "question": "Quy trình đăng kiểm xe ô tô con mới nhất",
+        "topic": "out_of_scope",
+        "relevant_documents": [],
+        "relevant_articles": [],
+        "relevant_chunk_ids": [],
+        "difficulty": "easy",
+        "query_type": "out_of_scope"
+    },
+    {
+        "question_id": "RQ155",
+        "question": "python machine learning deep learning tutorial",
+        "topic": "out_of_scope",
+        "relevant_documents": [],
+        "relevant_articles": [],
+        "relevant_chunk_ids": [],
+        "difficulty": "easy",
+        "query_type": "out_of_scope"
+    }
+]
+
+
+def main():
+    DATASET_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(DATASET_PATH, "w", encoding="utf-8") as f:
+        json.dump(GOLD_QUESTIONS, f, ensure_ascii=False, indent=2)
+    print(f"Successfully generated {len(GOLD_QUESTIONS)} gold retrieval questions at: {DATASET_PATH}")
+
+
+if __name__ == "__main__":
+    main()

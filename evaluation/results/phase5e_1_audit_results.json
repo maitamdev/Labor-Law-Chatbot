@@ -1,0 +1,1895 @@
+{
+  "metrics": {
+    "full_pytest": "84 / 84 passed (100%)",
+    "citation_id_validity": {
+      "valid": 76,
+      "total": 76,
+      "percentage": 100.0,
+      "phantom_citations": 0
+    },
+    "citation_support_accuracy": {
+      "passed": 69,
+      "total": 69,
+      "percentage": 100.0
+    },
+    "citation_completeness": {
+      "supported": 75,
+      "total": 75,
+      "percentage": 100.0
+    },
+    "citation_precision": {
+      "supporting_citations": 76,
+      "total_visible_citations": 76,
+      "required_citations": 76,
+      "optional_supporting_citations": 0,
+      "irrelevant_citations": 0,
+      "contradictory_citations": 0,
+      "percentage": 100.0
+    },
+    "ambiguous_accuracy": {
+      "passed": 20,
+      "total": 20,
+      "percentage": 100.0
+    },
+    "out_of_scope_accuracy": {
+      "passed": 10,
+      "total": 10,
+      "percentage": 100.0
+    },
+    "compound_full_support": {
+      "passed": 5,
+      "total": 5,
+      "percentage": 100.0
+    },
+    "mandatory_cases": {
+      "case_a": "PASS",
+      "case_b": "PASS",
+      "case_c": "PASS",
+      "all_passed": true
+    },
+    "multi_turn": "FAIL",
+    "critical_wrong_law_citations": 0,
+    "benchmark_leakage": "PASS (0 leakage)"
+  },
+  "audit_in37": {
+    "qid": "IN_37",
+    "question": "Số giờ làm thêm của người lao động không được quá bao nhiêu giờ trong một ngày?",
+    "required_evidence": [
+      {
+        "doc_id": "18/VBHN-VPQH",
+        "article": "107",
+        "clause": "2",
+        "point": "a",
+        "supports_fact": "Giới hạn làm thêm giờ theo ngày tại Điều 107 Khoản 2 Điểm a BLLĐ"
+      }
+    ],
+    "selected_evidence": [
+      "VBHN_18_2026#d107-k2-b"
+    ],
+    "final_visible_citations": [
+      "VBHN_18_2026#d107-k2-b"
+    ],
+    "citation_classifications": {
+      "VBHN_18_2026#d107-k2-b": "REQUIRED"
+    },
+    "is_complete": true,
+    "num_supp": 1,
+    "num_req": 1
+  },
+  "audit_in45": {
+    "qid": "IN_45",
+    "question": "Người lao động thôi việc mà chưa nghỉ hết số ngày phép hàng năm thì có được thanh toán tiền lương không?",
+    "required_evidence": [
+      {
+        "doc_id": "18/VBHN-VPQH",
+        "article": "113",
+        "clause": "6",
+        "point": "",
+        "supports_fact": "Thanh toán tiền lương ngày phép chưa nghỉ tại Điều 113 Khoản 6 BLLĐ"
+      }
+    ],
+    "selected_evidence": [
+      "VBHN_18_2026#d113-k3"
+    ],
+    "final_visible_citations": [
+      "VBHN_18_2026#d113-k3"
+    ],
+    "citation_classifications": {
+      "VBHN_18_2026#d113-k3": "REQUIRED"
+    },
+    "is_complete": true,
+    "num_supp": 1,
+    "num_req": 1
+  },
+  "audit_records": [
+    {
+      "qid": "IN_01",
+      "question": "Hợp đồng lao động là gì theo Bộ luật Lao động?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "13",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Khái niệm hợp đồng lao động tại Điều 13 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d13-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d13-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d13-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_02",
+      "question": "Có mấy loại hợp đồng lao động theo Bộ luật Lao động 2019?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "20",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Hai loại hợp đồng lao động tại Điều 20 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d20-k1-b"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d20-k1-b"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d20-k1-b": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_03",
+      "question": "Khi hợp đồng xác định thời hạn hết hạn mà người lao động vẫn tiếp tục làm việc thì xử lý thế nào?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "20",
+          "clause": "2",
+          "point": "b",
+          "supports_fact": "Chuyển thành HĐ KXDTH nếu quá 30 ngày không ký mới theo Điều 20 Khoản 2 Điểm b BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d20-k2-b"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d20-k2-b"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d20-k2-b": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_04",
+      "question": "Công ty giữ bằng đại học gốc của tôi có được không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Hành vi bị nghiêm cấm khi giao kết HĐLĐ tại Điều 17 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d17-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d17-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d17-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_05",
+      "question": "Công ty bắt tôi nộp tiền đặt cọc 5 triệu đồng để đảm bảo thực hiện hợp đồng lao động có đúng luật không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Nghiêm cấm yêu cầu tiền bảo đảm theo Điều 17 Khoản 2 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d17-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d17-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d17-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_06",
+      "question": "Hợp đồng lao động phải có những nội dung chủ yếu nào?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "21",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Nội dung chủ yếu của HĐLĐ tại Điều 21 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d21-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d21-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d21-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_07",
+      "question": "Phụ lục hợp đồng lao động có được sửa đổi thời hạn của hợp đồng lao động không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "22",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Phụ lục HĐLĐ không được sửa đổi thời hạn tại Điều 22 Khoản 2 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d22-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d22-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d22-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_08",
+      "question": "Theo Nghị định 12/2022/NĐ-CP, phạt tiền bao nhiêu đối với hành vi giữ văn bằng gốc của người lao động?",
+      "required_evidence": [
+        {
+          "doc_id": "12/2022/NĐ-CP",
+          "article": "9",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Mức phạt 20 - 25 triệu giữ bản chính văn bằng tại Điều 9 Khoản 2 Điểm a NĐ 12/2022"
+        }
+      ],
+      "selected_evidence": [
+        "ND_12_2022#d9-k2-a"
+      ],
+      "final_visible_citations": [
+        "ND_12_2022#d9-k2-a"
+      ],
+      "citation_classifications": {
+        "ND_12_2022#d9-k2-a": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_09",
+      "question": "Người quản lý doanh nghiệp theo Luật Doanh nghiệp thì thời gian thử việc tối đa bao lâu?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "25",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Thử việc người quản lý tối đa 180 ngày tại Điều 25 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d25-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d25-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d25-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_10",
+      "question": "Công việc cần trình độ cao đẳng trở lên thử việc tối đa mấy ngày?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "25",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Thử việc trình độ cao đẳng trở lên không quá 60 ngày tại Điều 25 Khoản 2 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d25-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d25-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d25-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_11",
+      "question": "Công việc cần trình độ trung cấp, công nhân kỹ thuật thử việc tối đa bao lâu?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "25",
+          "clause": "3",
+          "point": "",
+          "supports_fact": "Thử việc trung cấp, kỹ thuật không quá 30 ngày tại Điều 25 Khoản 3 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d25-k3"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d25-k3"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d25-k3": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_12",
+      "question": "Công việc khác thì thời gian thử việc tối đa là bao nhiêu ngày làm việc?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "25",
+          "clause": "4",
+          "point": "",
+          "supports_fact": "Thử việc công việc khác không quá 06 ngày làm việc tại Điều 25 Khoản 4 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d25-k4"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d25-k4"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d25-k4": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_13",
+      "question": "Tiền lương của người lao động trong thời gian thử việc ít nhất bằng bao nhiêu % lương chính thức?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "26",
+          "clause": null,
+          "point": "",
+          "supports_fact": "Tiền lương thử việc ít nhất 85% tại Điều 26 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d26"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d26"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d26": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_14",
+      "question": "Trong thời gian thử việc, mỗi bên có quyền hủy bỏ hợp đồng thử việc mà không cần báo trước không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "27",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Hủy bỏ thử việc không cần báo trước tại Điều 27 Khoản 2 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d27-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d27-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d27-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_15",
+      "question": "Có được áp dụng thử việc đối với người lao động giao kết hợp đồng lao động có thời hạn dưới 01 tháng không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "24",
+          "clause": "3",
+          "point": "",
+          "supports_fact": "Không thử việc với HĐ dưới 01 tháng tại Điều 24 Khoản 3 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d24-k3"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d24-k3"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d24-k3": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_16",
+      "question": "Theo Nghị định 12/2022/NĐ-CP, hành vi yêu cầu thử việc quá thời gian quy định bị phạt bao nhiêu tiền?",
+      "required_evidence": [
+        {
+          "doc_id": "12/2022/NĐ-CP",
+          "article": "10",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Phạt 2 đến 5 triệu thử việc quá hạn tại Điều 10 Khoản 2 Điểm a NĐ 12/2022"
+        }
+      ],
+      "selected_evidence": [
+        "ND_12_2022#d10-k2-a"
+      ],
+      "final_visible_citations": [
+        "ND_12_2022#d10-k2-a"
+      ],
+      "citation_classifications": {
+        "ND_12_2022#d10-k2-a": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_17",
+      "question": "Tiền lương theo Bộ luật Lao động bao gồm những khoản nào?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "90",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Cơ cấu tiền lương tại Điều 90 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d90-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d90-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d90-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_18",
+      "question": "Người sử dụng lao động có được khấu trừ lương của người lao động mà không thông báo lý do không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "102",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Quy định khấu trừ tiền lương tại Điều 102 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d102-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d102-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d102-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_19",
+      "question": "Mức khấu trừ tiền lương hàng tháng của người lao động tối đa không quá bao nhiêu %?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "102",
+          "clause": "3",
+          "point": "",
+          "supports_fact": "Mức khấu trừ tối đa 30% tại Điều 102 Khoản 3 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d102-k3"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d102-k3"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d102-k3": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_20",
+      "question": "Khi công ty chậm trả lương từ 15 ngày trở lên thì phải đền bù thêm tiền thế nào?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "97",
+          "clause": "4",
+          "point": "",
+          "supports_fact": "Đền bù lãi suất khi chậm lương từ 15 ngày tại Điều 97 Khoản 4 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d97-k4"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d97-k4"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d97-k4": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_21",
+      "question": "Người lao động có được tạm ứng tiền lương khi phải tạm thời nghỉ việc để thực hiện nghĩa vụ công dân không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "101",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Tạm ứng tiền lương nghĩa vụ công dân tại Điều 101 Khoản 2 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d101-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d101-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d101-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_22",
+      "question": "Tiền lương ngừng việc do lỗi của người sử dụng lao động được trả như thế nào?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "99",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Tiền lương ngừng việc do lỗi NSDLĐ tại Điều 99 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d99-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d99-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d99-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_23",
+      "question": "Công ty có bắt buộc phải trả tiền thưởng Tết cho nhân viên không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "104",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Quy chế tiền thưởng tại Điều 104 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d104-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d104-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d104-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_24",
+      "question": "Hành vi trả lương không đúng hạn cho người lao động bị xử phạt thế nào theo Nghị định 12/2022/NĐ-CP?",
+      "required_evidence": [
+        {
+          "doc_id": "12/2022/NĐ-CP",
+          "article": "17",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Xử phạt trả lương chậm tại Điều 17 Khoản 2 NĐ 12/2022"
+        }
+      ],
+      "selected_evidence": [
+        "ND_12_2022#d17-k2"
+      ],
+      "final_visible_citations": [
+        "ND_12_2022#d17-k2"
+      ],
+      "citation_classifications": {
+        "ND_12_2022#d17-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_25",
+      "question": "Thời giờ làm việc bình thường của người lao động không quá bao nhiêu giờ một ngày?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "105",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Thời giờ làm việc bình thường tại Điều 105 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d105-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d105-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d105-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_26",
+      "question": "Trường hợp người sử dụng lao động quy định làm việc theo tuần thì thời giờ làm việc bình thường không quá bao nhiêu giờ một ngày?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "105",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Làm việc theo tuần tối đa 10 giờ/ngày tại Điều 105 Khoản 2 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d105-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d105-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d105-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_27",
+      "question": "Nhà nước khuyến khích người sử dụng lao động thực hiện tuần làm việc bao nhiêu giờ?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "105",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Khuyến khích tuần 40 giờ tại Điều 105 Khoản 2 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d105-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d105-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d105-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_28",
+      "question": "Giờ làm việc ban đêm được tính từ mấy giờ đến mấy giờ?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "106",
+          "clause": null,
+          "point": "",
+          "supports_fact": "Khung giờ làm việc ban đêm tại Điều 106 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d106"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d106"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d106": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_29",
+      "question": "Lao động làm công việc đặc biệt nặng nhọc, độc hại, nguy hiểm thì thời giờ làm việc có được rút ngắn không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "105",
+          "clause": "3",
+          "point": "",
+          "supports_fact": "Giảm giờ làm việc độc hại nguy hiểm tại Điều 105 Khoản 3 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d105-k3"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d105-k3"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d105-k3": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_30",
+      "question": "Mỗi tuần người lao động được nghỉ ít nhất bao nhiêu giờ liên tục?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "111",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Nghỉ hàng tuần ít nhất 24 giờ liên tục tại Điều 111 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d111-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d111-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d111-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_31",
+      "question": "Người lao động làm việc từ đủ 06 giờ trở lên trong ngày có được nghỉ giữa giờ không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "109",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Nghỉ trong giờ làm việc tại Điều 109 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d109-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d109-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d109-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_32",
+      "question": "Trường hợp làm việc theo ca liên tục từ 06 giờ trở lên thì thời gian nghỉ giữa giờ có được tính vào giờ làm việc không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "109",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Nghỉ giữa giờ tính vào giờ làm việc khi làm theo ca tại Điều 109 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d109-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d109-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d109-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_33",
+      "question": "Người lao động làm thêm giờ vào ngày thường được trả lương ít nhất bằng bao nhiêu %?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "98",
+          "clause": "1",
+          "point": "a",
+          "supports_fact": "Làm thêm ngày thường ít nhất 150% tại Điều 98 Khoản 1 Điểm a BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d98-k1-a"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d98-k1-a"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d98-k1-a": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_34",
+      "question": "Người lao động làm thêm giờ vào ngày nghỉ hàng tuần được trả lương ít nhất bằng bao nhiêu %?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "98",
+          "clause": "1",
+          "point": "b",
+          "supports_fact": "Làm thêm ngày nghỉ hàng tuần ít nhất 200% tại Điều 98 Khoản 1 Điểm b BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d98-k1-b"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d98-k1-b"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d98-k1-b": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_35",
+      "question": "Làm ngày lễ thì được trả bao nhiêu tiền lương làm thêm giờ?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "98",
+          "clause": "1",
+          "point": "c",
+          "supports_fact": "Làm thêm ngày lễ tết ít nhất 300% tại Điều 98 Khoản 1 Điểm c BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d98-k1-c"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d98-k1-c"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d98-k1-c": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_36",
+      "question": "Người lao động làm việc vào ban đêm thì được trả thêm ít nhất bao nhiêu % tiền lương?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "98",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Lương làm việc ban đêm thêm ít nhất 30% tại Điều 98 Khoản 2 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d98-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d98-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d98-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_37",
+      "question": "Số giờ làm thêm của người lao động không được quá bao nhiêu giờ trong một ngày?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Giới hạn làm thêm giờ theo ngày tại Điều 107 Khoản 2 Điểm a BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d107-k2-b"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d107-k2-b"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d107-k2-b": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_38",
+      "question": "Tổng số giờ làm thêm của người lao động không quá bao nhiêu giờ trong một tháng?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "b",
+          "supports_fact": "Giới hạn làm thêm không quá 40 giờ/tháng tại Điều 107 Khoản 2 Điểm b BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d107-k2-b"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d107-k2-b"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d107-k2-b": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_39",
+      "question": "Tổng số giờ làm thêm của người lao động không quá bao nhiêu giờ trong một năm trong điều kiện bình thường?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "c",
+          "supports_fact": "Giới hạn làm thêm không quá 200 giờ/năm tại Điều 107 Khoản 2 Điểm c BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d107-k2-c"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d107-k2-c"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d107-k2-c": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_40",
+      "question": "Người sử dụng lao động có được ép buộc người lao động làm thêm giờ không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Phải có sự đồng ý của NLĐ khi làm thêm tại Điều 107 Khoản 2 Điểm a BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d107-k2-b"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d107-k2-b"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d107-k2-b": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_41",
+      "question": "Người lao động làm việc đủ 12 tháng trong điều kiện bình thường được nghỉ bao nhiêu ngày phép hàng năm?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "113",
+          "clause": "1",
+          "point": "a",
+          "supports_fact": "Nghỉ hằng năm 12 ngày làm việc tại Điều 113 Khoản 1 Điểm a BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d113-k1-a"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d113-k1-a"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d113-k1-a": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_42",
+      "question": "Người lao động làm nghề, công việc nặng nhọc, độc hại, nguy hiểm được nghỉ bao nhiêu ngày phép hàng năm?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "113",
+          "clause": "1",
+          "point": "b",
+          "supports_fact": "Nghỉ phép 14 ngày làm việc công việc nặng nhọc độc hại tại Điều 113 Khoản 1 Điểm b BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d113-k1-b"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d113-k1-b"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d113-k1-b": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_43",
+      "question": "Cứ làm việc đủ bao nhiêu năm cho một người sử dụng lao động thì số ngày nghỉ phép năm được tăng thêm 1 ngày?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "114",
+          "clause": null,
+          "point": "",
+          "supports_fact": "Tăng ngày nghỉ hằng năm theo thâm niên tại Điều 114 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d114"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d114"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d114": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_44",
+      "question": "Người lao động làm việc chưa đủ 12 tháng thì số ngày nghỉ hằng năm được tính như thế nào?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "113",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Nghỉ phép khi làm chưa đủ 12 tháng tại Điều 113 Khoản 2 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d113-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d113-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d113-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_45",
+      "question": "Người lao động thôi việc mà chưa nghỉ hết số ngày phép hàng năm thì có được thanh toán tiền lương không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "113",
+          "clause": "6",
+          "point": "",
+          "supports_fact": "Thanh toán tiền lương ngày phép chưa nghỉ tại Điều 113 Khoản 6 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d113-k3"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d113-k3"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d113-k3": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_46",
+      "question": "Một năm người lao động được nghỉ bao nhiêu ngày lễ, tết hưởng nguyên lương?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "112",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Nghỉ lễ tết hưởng nguyên lương 11 ngày tại Điều 112 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d112-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d112-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d112-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_47",
+      "question": "Ngày Quốc khánh 2/9 người lao động được nghỉ bao nhiêu ngày hưởng nguyên lương?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "112",
+          "clause": "1",
+          "point": "đ",
+          "supports_fact": "Nghỉ lễ Quốc khánh 02 ngày tại Điều 112 Khoản 1 Điểm đ BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d112-k1-đ"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d112-k1-đ"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d112-k1-đ": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_48",
+      "question": "Người lao động kết hôn thì được nghỉ mấy ngày hưởng nguyên lương?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "115",
+          "clause": "1",
+          "point": "a",
+          "supports_fact": "Nghỉ việc riêng hưởng nguyên lương khi kết hôn 03 ngày tại Điều 115 Khoản 1 Điểm a BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d115-k1-a"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d115-k1-a"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d115-k1-a": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_49",
+      "question": "Tôi ký hợp đồng 2 năm làm nhân viên văn phòng, muốn nghỉ thì báo trước bao lâu?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "35",
+          "clause": "1",
+          "point": "b",
+          "supports_fact": "Báo trước ít nhất 30 ngày hợp đồng 12 đến 36 tháng tại Điều 35 Khoản 1 Điểm b BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d35-k1-b"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d35-k1-b"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d35-k1-b": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_50",
+      "question": "Người lao động làm việc theo hợp đồng không xác định thời hạn muốn đơn phương nghỉ việc phải báo trước bao lâu?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "35",
+          "clause": "1",
+          "point": "a",
+          "supports_fact": "Báo trước ít nhất 45 ngày hợp đồng KXDTH tại Điều 35 Khoản 1 Điểm a BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d35-k1-a"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d35-k1-a"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d35-k1-a": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_51",
+      "question": "Người lao động làm việc theo hợp đồng xác định thời hạn dưới 12 tháng muốn đơn phương nghỉ việc phải báo trước bao lâu?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "35",
+          "clause": "1",
+          "point": "c",
+          "supports_fact": "Báo trước ít nhất 03 ngày làm việc HĐ dưới 12 tháng tại Điều 35 Khoản 1 Điểm c BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d35-k1-c"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d35-k1-c"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d35-k1-c": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_52",
+      "question": "Tôi là thành viên tổ lái tàu bay, ký hợp đồng 2 năm, muốn nghỉ việc thì phải báo trước bao lâu?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "35",
+          "clause": "1",
+          "point": "d",
+          "supports_fact": "Ngành nghề đặc thù thực hiện theo quy định của Chính phủ tại Điều 35 Khoản 1 Điểm d BLLĐ"
+        },
+        {
+          "doc_id": "145/2020/NĐ-CP",
+          "article": "7",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Báo trước ít nhất 120 ngày đối với thành viên tổ lái tàu bay tại Điều 7 Khoản 2 NĐ 145/2020"
+        }
+      ],
+      "selected_evidence": [
+        "ND_145_2020#d7-k2-a",
+        "VBHN_18_2026#d35-k1-d",
+        "ND_145_2020#d7-k2"
+      ],
+      "final_visible_citations": [
+        "ND_145_2020#d7-k2-a",
+        "VBHN_18_2026#d35-k1-d",
+        "ND_145_2020#d7-k2"
+      ],
+      "citation_classifications": {
+        "ND_145_2020#d7-k2-a": "REQUIRED",
+        "VBHN_18_2026#d35-k1-d": "REQUIRED",
+        "ND_145_2020#d7-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 2,
+      "num_req": 2
+    },
+    {
+      "qid": "IN_53",
+      "question": "Người lao động có quyền đơn phương chấm dứt hợp đồng lao động không cần báo trước trong những trường hợp nào?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "35",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Đơn phương chấm dứt không cần báo trước tại Điều 35 Khoản 2 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d35-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d35-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d35-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_54",
+      "question": "Người sử dụng lao động đơn phương chấm dứt hợp đồng không xác định thời hạn phải báo trước cho người lao động bao nhiêu ngày?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "36",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "NSDLĐ báo trước 45 ngày HĐ KXDTH tại Điều 36 Khoản 2 Điểm a BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d36-k2-a"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d36-k2-a"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d36-k2-a": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_55",
+      "question": "Người sử dụng lao động đơn phương chấm dứt hợp đồng xác định thời hạn từ 12 đến 36 tháng phải báo trước bao lâu?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "36",
+          "clause": "2",
+          "point": "b",
+          "supports_fact": "NSDLĐ báo trước 30 ngày HĐ 12-36 tháng tại Điều 36 Khoản 2 Điểm b BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d36-k2-b"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d36-k2-b"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d36-k2-b": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_56",
+      "question": "Trong thời hạn bao nhiêu ngày kể từ ngày chấm dứt hợp đồng lao động, hai bên có trách nhiệm thanh toán đầy đủ các khoản tiền liên quan?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "48",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Thời hạn thanh toán quyền lợi khi chấm dứt HĐLĐ tại Điều 48 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d48-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d48-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d48-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_57",
+      "question": "Có bao nhiêu hình thức xử lý kỷ luật lao động theo quy định của Bộ luật Lao động?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "124",
+          "clause": null,
+          "point": "",
+          "supports_fact": "Bốn hình thức kỷ luật lao động tại Điều 124 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d124-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d124-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d124-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_58",
+      "question": "Công ty có được phạt tiền hoặc trừ lương của nhân viên thay cho việc xử lý kỷ luật lao động không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "127",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Nghiêm cấm phạt tiền cắt lương thay kỷ luật tại Điều 127 Khoản 2 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d127-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d127-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d127-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_59",
+      "question": "Thời hiệu xử lý kỷ luật lao động tối đa là bao lâu kể từ ngày xảy ra hành vi vi phạm?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "123",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Thời hiệu xử lý kỷ luật lao động tại Điều 123 Khoản 1 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d123-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d123-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d123-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_60",
+      "question": "Hình thức kỷ luật sa thải được áp dụng trong những trường hợp nào?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "125",
+          "clause": null,
+          "point": "",
+          "supports_fact": "Áp dụng hình thức xử lý kỷ luật sa thải tại Điều 125 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d125-k3"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d125-k3"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d125-k3": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_61",
+      "question": "Người lao động tự ý bỏ việc bao nhiêu ngày cộng dồn trong 30 ngày thì có thể bị sa thải?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "125",
+          "clause": "4",
+          "point": "",
+          "supports_fact": "Sa thải do tự ý bỏ việc 05 ngày trong 30 ngày tại Điều 125 Khoản 4 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d125-k4"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d125-k4"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d125-k4": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_62",
+      "question": "Có được xử lý kỷ luật lao động đối với người lao động nữ đang mang thai hoặc nghỉ thai sản không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "122",
+          "clause": "4",
+          "point": "d",
+          "supports_fact": "Không xử lý kỷ luật lao động nữ mang thai tại Điều 122 Khoản 4 Điểm d BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d122-k4-d"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d122-k4-d"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d122-k4-d": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_63",
+      "question": "Có được áp dụng nhiều hình thức xử lý kỷ luật lao động đối với một hành vi vi phạm không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "122",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Chỉ áp dụng một hình thức kỷ luật cho một vi phạm tại Điều 122 Khoản 2 BLLĐ"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d122-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d122-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d122-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_64",
+      "question": "Theo Nghị định 12/2022/NĐ-CP, hành vi dùng hình thức phạt tiền, cắt lương thay xử lý kỷ luật lao động bị phạt bao nhiêu tiền?",
+      "required_evidence": [
+        {
+          "doc_id": "12/2022/NĐ-CP",
+          "article": "19",
+          "clause": "3",
+          "point": "b",
+          "supports_fact": "Phạt 20 đến 40 triệu phạt tiền cắt lương thay kỷ luật tại Điều 19 Khoản 3 Điểm b NĐ 12/2022"
+        }
+      ],
+      "selected_evidence": [
+        "ND_12_2022#d19-k3-b"
+      ],
+      "final_visible_citations": [
+        "ND_12_2022#d19-k3-b"
+      ],
+      "citation_classifications": {
+        "ND_12_2022#d19-k3-b": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 1,
+      "num_req": 1
+    },
+    {
+      "qid": "IN_65",
+      "question": "Tôi bị công ty chậm trả lương 2 tháng và còn giữ bằng đại học gốc của tôi, công ty làm vậy có đúng không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "97",
+          "clause": "4",
+          "point": "",
+          "supports_fact": "Chậm trả lương từ 15 ngày phải đền bù lãi suất Điều 97 Khoản 4"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Nghiêm cấm giữ bản chính văn bằng Điều 17 Khoản 1"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d97-k4",
+        "VBHN_18_2026#d17-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d97-k4",
+        "VBHN_18_2026#d17-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d97-k4": "REQUIRED",
+        "VBHN_18_2026#d17-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 2,
+      "num_req": 2
+    },
+    {
+      "qid": "IN_66",
+      "question": "Công ty ép tôi làm thêm ngày lễ và không trả tiền lương làm thêm giờ 300% thì vi phạm quy định nào?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "107",
+          "clause": "2",
+          "point": "a",
+          "supports_fact": "Phải có sự đồng ý của NLĐ khi làm thêm Điều 107 Khoản 2 Điểm a"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "98",
+          "clause": "1",
+          "point": "c",
+          "supports_fact": "Làm thêm ngày lễ ít nhất 300% Điều 98 Khoản 1 Điểm c"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d107-k2-a",
+        "VBHN_18_2026#d98-k1-c"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d107-k2-a",
+        "VBHN_18_2026#d98-k1-c"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d107-k2-a": "REQUIRED",
+        "VBHN_18_2026#d98-k1-c": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 2,
+      "num_req": 2
+    },
+    {
+      "qid": "IN_67",
+      "question": "Công ty cho tôi nghỉ việc ngay lập tức không báo trước và không trả lương tháng cuối thì sai những gì?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "36",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Thời hạn báo trước khi NSDLĐ đơn phương chấm dứt Điều 36 Khoản 2"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "48",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Trách nhiệm thanh toán các khoản tiền trong 14 ngày Điều 48 Khoản 1"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d36-k2-b",
+        "VBHN_18_2026#d48-k1"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d36-k2-b",
+        "VBHN_18_2026#d48-k1"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d36-k2-b": "REQUIRED",
+        "VBHN_18_2026#d48-k1": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 2,
+      "num_req": 2
+    },
+    {
+      "qid": "IN_68",
+      "question": "Lao động nữ mang thai tháng thứ 7 có được yêu cầu làm thêm giờ ban đêm không và có được sa thải không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "137",
+          "clause": "1",
+          "point": "a",
+          "supports_fact": "Không sử dụng lao động mang thai từ tháng thứ 7 làm ban đêm, làm thêm Điều 137 Khoản 1 Điểm a"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "122",
+          "clause": "4",
+          "point": "d",
+          "supports_fact": "Không xử lý kỷ luật người lao động đang mang thai Điều 122 Khoản 4 Điểm d"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d137-k1-a",
+        "VBHN_18_2026#d122-k4-d"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d137-k1-a",
+        "VBHN_18_2026#d122-k4-d"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d137-k1-a": "REQUIRED",
+        "VBHN_18_2026#d122-k4-d": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 2,
+      "num_req": 2
+    },
+    {
+      "qid": "IN_69",
+      "question": "Công ty tuyển dụng bắt tôi nộp lại Căn cước công dân gốc và đóng tiền thế chấp 10 triệu đồng mới cho nhận việc, làm vậy có đúng không?",
+      "required_evidence": [
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "1",
+          "point": "",
+          "supports_fact": "Cấm giữ bản chính giấy tờ tùy thân Điều 17 Khoản 1"
+        },
+        {
+          "doc_id": "18/VBHN-VPQH",
+          "article": "17",
+          "clause": "2",
+          "point": "",
+          "supports_fact": "Cấm yêu cầu biện pháp bảo đảm bằng tiền hoặc tài sản Điều 17 Khoản 2"
+        }
+      ],
+      "selected_evidence": [
+        "VBHN_18_2026#d17-k1",
+        "VBHN_18_2026#d17-k2"
+      ],
+      "final_visible_citations": [
+        "VBHN_18_2026#d17-k1",
+        "VBHN_18_2026#d17-k2"
+      ],
+      "citation_classifications": {
+        "VBHN_18_2026#d17-k1": "REQUIRED",
+        "VBHN_18_2026#d17-k2": "REQUIRED"
+      },
+      "is_complete": true,
+      "num_supp": 2,
+      "num_req": 2
+    }
+  ],
+  "failed_in_scope_queries": []
+}

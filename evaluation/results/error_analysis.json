@@ -1,0 +1,2918 @@
+{
+  "bm25": [
+    {
+      "question_id": "RQ020",
+      "question": "Ký hợp đồng lao động điện tử qua mạng có giá trị pháp lý không?",
+      "query_type": "semantic",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "14"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_337_2025#d3-k1",
+          "doc_id": "ND_337_2025",
+          "article": "3",
+          "score": 7.7009148597717285,
+          "preview": "1. Hợp đồng lao động điện tử là hợp đồng lao động được giao kết, thiết lập dưới dạng thông điệp dữ liệu theo quy định củ"
+        },
+        {
+          "chunk_id": "TT_08_2026#d24-k2-b",
+          "doc_id": "TT_08_2026",
+          "article": "24",
+          "score": 7.0970354080200195,
+          "preview": "b) Hợp đồng lao động điện tử được giao kết bởi các eContract trong thời gian chờ kết nối với Nền tảng hợp đồng lao động "
+        },
+        {
+          "chunk_id": "TT_08_2026#d14-k1",
+          "doc_id": "TT_08_2026",
+          "article": "14",
+          "score": 5.7026166915893555,
+          "preview": "1. Việc bảo đảm an ninh mạng phải tuân thủ quy định của pháp luật về an ninh mạng, dữ liệu, bảo vệ dữ liệu cá nhân và cá"
+        }
+      ],
+      "failure_reason": "Semantic boundary mismatch"
+    },
+    {
+      "question_id": "RQ028",
+      "question": "Công ty có quyền giữ bằng đại học gốc hoặc cccd của người lao động khi giao kết hợp đồng không?",
+      "query_type": "colloquial",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "17"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d5-k1",
+          "doc_id": "ND_145_2020",
+          "article": "5",
+          "score": 6.979543685913086,
+          "preview": "1. Tên, địa chỉ trụ sở chính của doanh nghiệp theo giấy chứng nhận đăng ký doanh nghiệp; họ tên, ngày tháng năm sinh, số"
+        },
+        {
+          "chunk_id": "ND_12_2022#d9-k3-b",
+          "doc_id": "ND_12_2022",
+          "article": "9",
+          "score": 6.570987701416016,
+          "preview": "b) Buộc người sử dụng lao động giao kết hợp đồng lao động bằng văn bản với người được ủy quyền giao kết hợp đồng lao độn"
+        },
+        {
+          "chunk_id": "ND_12_2022#d9-k1",
+          "doc_id": "ND_12_2022",
+          "article": "9",
+          "score": 6.565249919891357,
+          "preview": "1. Phạt tiền đối với người sử dụng lao động khi có một trong các hành vi: giao kết hợp đồng lao động không bằng văn bản "
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ031",
+      "question": "Điều 14 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "14"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d14",
+          "doc_id": "ND_145_2020",
+          "article": "14",
+          "score": 4.619292259216309,
+          "preview": "Điều 14. Người lao động thuê lại\nNgười lao động thuê lại là người lao động có năng lực hành vi dân sự đầy đủ, được doanh"
+        },
+        {
+          "chunk_id": "TT_08_2026#d14",
+          "doc_id": "TT_08_2026",
+          "article": "14",
+          "score": 4.442855358123779,
+          "preview": "Điều 14. Kiểm tra an toàn thông tin\nViệc kết nối, truy cập, khai thác, chia sẻ dữ liệu trên Nền tảng hợp đồng lao động đ"
+        },
+        {
+          "chunk_id": "ND_12_2022#d14-k2-b",
+          "doc_id": "ND_12_2022",
+          "article": "14",
+          "score": 3.743863344192505,
+          "preview": "b) Tuyển người dưới 14 tuổi vào học nghề, tập nghề, trừ những nghề, công việc được pháp luật cho phép;"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ032",
+      "question": "Tôi ký hợp đồng lao động 1 năm, sau đó công ty ký tiếp phụ lục gia hạn thêm 2 năm thì có hợp pháp không?",
+      "query_type": "long",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "22"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-iv-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph-3",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 11.667503356933594,
+          "preview": "Mẫu số 01/PLIV TÊN CƠ QUAN CHỦ QUẢN TÊN DOANH NGHIỆP, CƠ SỞ SẢN XUẤT, KINH DOANH\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc "
+        },
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-iii-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph-9",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 9.906343460083008,
+          "preview": "Mẫu số 07/PLIII LÝ LỊCH TỰ THUẬT\nẢnh chân dung 4 x 6 I. SƠ YẾU LÝ LỊCH\n1. Họ tên:......................................."
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d20-k2-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "20",
+          "score": 9.6369047164917,
+          "preview": "c) Trường hợp hai bên ký kết hợp đồng lao động mới là hợp đồng lao động xác định thời hạn thì cũng chỉ được ký thêm 01 l"
+        }
+      ],
+      "failure_reason": "Multi-sentence context dilution / query noise"
+    },
+    {
+      "question_id": "RQ034",
+      "question": "Có được ký hợp đồng thời vụ không?",
+      "query_type": "colloquial",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "20"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d71-k3",
+          "doc_id": "ND_145_2020",
+          "article": "71",
+          "score": 4.078155994415283,
+          "preview": "3. Nội dung cuộc họp xử lý bồi thường thiệt hại phải được lập thành biên bản, thông qua trước khi kết thúc cuộc họp và c"
+        },
+        {
+          "chunk_id": "ND_145_2020#d70-k3",
+          "doc_id": "ND_145_2020",
+          "article": "70",
+          "score": 3.978386878967285,
+          "preview": "3. Nội dung cuộc họp xử lý kỷ luật lao động phải được lập thành biên bản, thông qua trước khi kết thúc cuộc họp và có ch"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d55-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "55",
+          "score": 3.5084056854248047,
+          "preview": "3. Hợp đồng cho thuê lại lao động không được có những thỏa thuận về quyền, lợi ích của người lao động thấp hơn so với hợ"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ036",
+      "question": "Người lao động làm việc theo hợp đồng không xác định thời hạn muốn nghỉ việc phải báo trước bao nhiêu ngày?",
+      "query_type": "numeric",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "35"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d41-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "41",
+          "score": 10.262894630432129,
+          "preview": "1. Phải nhận người lao động trở lại làm việc theo hợp đồng lao động đã giao kết; phải trả tiền lương, đóng bảo hiểm xã h"
+        },
+        {
+          "chunk_id": "ND_145_2020#d7-k2-a",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 9.600210189819336,
+          "preview": "a) Ít nhất 120 ngày đối với hợp đồng lao động không xác định thời hạn hoặc hợp đồng lao động xác định thời hạn từ 12 thá"
+        },
+        {
+          "chunk_id": "ND_145_2020#d89-k1-d",
+          "doc_id": "ND_145_2020",
+          "article": "89",
+          "score": 7.885955333709717,
+          "preview": "d) Trong quá trình thực hiện hợp đồng lao động, mỗi bên có quyền đơn phương chấm dứt hợp đồng lao động mà không cần lý d"
+        }
+      ],
+      "failure_reason": "Numeric threshold mismatch or dense embedding invariant to exact digit values"
+    },
+    {
+      "question_id": "RQ038",
+      "question": "Nghỉ việc hợp đồng 2 năm báo trước mấy ngày?",
+      "query_type": "numeric",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "35"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d67-k2",
+          "doc_id": "ND_145_2020",
+          "article": "67",
+          "score": 5.917914867401123,
+          "preview": "2. Tiền lương làm căn cứ trả cho người lao động những ngày nghỉ lễ, tết, nghỉ hằng năm, nghỉ việc riêng có hưởng lương t"
+        },
+        {
+          "chunk_id": "ND_145_2020#d7",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 5.814391136169434,
+          "preview": "Điều 7. Thời hạn báo trước khi đơn phương chấm dứt hợp đồng lao động đối với một số ngành, nghề, công việc đặc thù\nNgành"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d40-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "40",
+          "score": 5.669613838195801,
+          "preview": "2. Phải bồi thường cho người sử dụng lao động nửa tháng tiền lương theo hợp đồng lao động và một khoản tiền tương ứng vớ"
+        }
+      ],
+      "failure_reason": "Numeric threshold mismatch or dense embedding invariant to exact digit values"
+    },
+    {
+      "question_id": "RQ041",
+      "question": "Nghỉ ngang không báo trước có bị đền tiền không?",
+      "query_type": "colloquial",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "40"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d140",
+          "doc_id": "VBHN_18_2026",
+          "article": "140",
+          "score": 6.2306227684021,
+          "preview": "Điều 140. Bảo đảm việc làm cho lao động nghỉ thai sản\nLao động được bảo đảm việc làm cũ khi trở lại làm việc sau khi ngh"
+        },
+        {
+          "chunk_id": "ND_12_2022#d12-k4-c",
+          "doc_id": "ND_12_2022",
+          "article": "12",
+          "score": 6.210838794708252,
+          "preview": "c) Buộc người sử dụng lao động trả cho người lao động một khoản tiền tương ứng với tiền lương theo hợp đồng lao động của"
+        },
+        {
+          "chunk_id": "ND_145_2020#d89-k1-d",
+          "doc_id": "ND_145_2020",
+          "article": "89",
+          "score": 6.180858612060547,
+          "preview": "d) Trong quá trình thực hiện hợp đồng lao động, mỗi bên có quyền đơn phương chấm dứt hợp đồng lao động mà không cần lý d"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ043",
+      "question": "Công ty đuổi việc người lao động trái luật thì phải bồi thường những gì?",
+      "query_type": "colloquial",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "41"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d40-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "40",
+          "score": 5.936267852783203,
+          "preview": "2. Phải bồi thường cho người sử dụng lao động nửa tháng tiền lương theo hợp đồng lao động và một khoản tiền tương ứng vớ"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d129-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "129",
+          "score": 5.769700050354004,
+          "preview": "2. Người lao động làm mất dụng cụ, thiết bị, tài sản của người sử dụng lao động hoặc tài sản khác do người sử dụng lao đ"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d3-k7",
+          "doc_id": "VBHN_18_2026",
+          "article": "3",
+          "score": 5.543423652648926,
+          "preview": "7. Cưỡng bức lao động là việc dùng vũ lực, đe dọa dùng vũ lực hoặc các thủ đoạn khác để ép buộc người lao động phải làm "
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ050",
+      "question": "Thời gian báo trước 45 ngày khi nghỉ việc",
+      "query_type": "short",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "35"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d7",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 5.7716169357299805,
+          "preview": "Điều 7. Thời hạn báo trước khi đơn phương chấm dứt hợp đồng lao động đối với một số ngành, nghề, công việc đặc thù\nNgành"
+        },
+        {
+          "chunk_id": "ND_12_2022#d12-k4-c",
+          "doc_id": "ND_12_2022",
+          "article": "12",
+          "score": 5.371086120605469,
+          "preview": "c) Buộc người sử dụng lao động trả cho người lao động một khoản tiền tương ứng với tiền lương theo hợp đồng lao động của"
+        },
+        {
+          "chunk_id": "ND_145_2020#d7-k2",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 5.177850723266602,
+          "preview": "2. Khi người lao động làm ngành, nghề, công việc quy định tại khoản 1 Điều này đơn phương chấm dứt hợp đồng lao động hoặ"
+        }
+      ],
+      "failure_reason": "High lexical ambiguity from overly brief query"
+    },
+    {
+      "question_id": "RQ054",
+      "question": "Các căn cứ chấm dứt hợp đồng lao động hợp pháp theo luật",
+      "query_type": "paraphrase",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "34"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_337_2025#preamble",
+          "doc_id": "ND_337_2025",
+          "article": "",
+          "score": 6.8286333084106445,
+          "preview": "CHÍNH PHỦ\nSố: 337/2025/NĐ-CP\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nHà Nội, ngày 24 tháng 12 năm"
+        },
+        {
+          "chunk_id": "TT_08_2026#preamble",
+          "doc_id": "TT_08_2026",
+          "article": "",
+          "score": 5.994281768798828,
+          "preview": "BỘ NỘI VỤ\nSố: 08/2026/TT-BNV\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập – Tự do – Hạnh phúc\nHà Nội, ngày 15 tháng 5 năm "
+        },
+        {
+          "chunk_id": "ND_12_2022#preamble",
+          "doc_id": "ND_12_2022",
+          "article": "",
+          "score": 5.979961395263672,
+          "preview": "CHÍNH PHỦ\nCHÍNH PHỦ\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nSố: 12/2022/NĐ-CP\nHà Nội, ngày 17 thá"
+        }
+      ],
+      "failure_reason": "Synonym vocabulary mismatch in lexical search or semantic drift"
+    },
+    {
+      "question_id": "RQ055",
+      "question": "Em nghỉ việc nhưng công ty chây ì không chịu trả sổ bảo hiểm xã hội thì có đúng luật không?",
+      "query_type": "colloquial",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "48"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d115-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "115",
+          "score": 8.066104888916016,
+          "preview": "2. Người lao động được nghỉ không hưởng lương 01 ngày và phải thông báo với người sử dụng lao động khi ông nội, bà nội, "
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d168-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "168",
+          "score": 7.779906272888184,
+          "preview": "2. Trong thời gian người lao động nghỉ việc hưởng chế độ bảo hiểm xã hội thì người sử dụng lao động không phải trả lương"
+        },
+        {
+          "chunk_id": "ND_12_2022#d8-k2-d",
+          "doc_id": "ND_12_2022",
+          "article": "8",
+          "score": 7.510116100311279,
+          "preview": "d) Không lập sổ quản lý lao động hoặc lập sổ quản lý lao động không đúng thời hạn hoặc không đảm bảo các nội dung cơ bản"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ062",
+      "question": "Công ty có quyền trừ bao nhiêu phần trăm lương thực lĩnh của người lao động hàng tháng?",
+      "query_type": "numeric",
+      "topic": "wage",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "102"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-vi-danh-m-c-n-i-s-d-ng-lao-ng-kh-ng-c-nh-c-ng-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 6.31201171875,
+          "preview": "Phụ lục VI DANH MỤC NƠI SỬ DỤNG LAO ĐỘNG KHÔNG ĐƯỢC ĐÌNH CÔNG (Kèm theo Nghị định số 145/2020/NĐ-CP ngày 14 tháng 12 năm"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d154-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "154",
+          "score": 3.737992286682129,
+          "preview": "1. Là chủ sở hữu hoặc thành viên góp vốn của công ty trách nhiệm hữu hạn có giá trị góp vốn theo quy định của Chính phủ."
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d154-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "154",
+          "score": 3.737992286682129,
+          "preview": "2. Là Chủ tịch Hội đồng quản trị hoặc thành viên Hội đồng quản trị của công ty cổ phần có giá trị góp vốn theo quy định "
+        }
+      ],
+      "failure_reason": "Numeric threshold mismatch or dense embedding invariant to exact digit values"
+    },
+    {
+      "question_id": "RQ064",
+      "question": "Sếp phạt tiền trừ vào lương nhân viên khi đi làm trễ có đúng luật không?",
+      "query_type": "colloquial",
+      "topic": "wage",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "127"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d17-k2",
+          "doc_id": "ND_12_2022",
+          "article": "17",
+          "score": 6.77522087097168,
+          "preview": "2. Phạt tiền đối với người sử dụng lao động có một trong các hành vi: Trả lương không đúng hạn theo quy định của pháp lu"
+        },
+        {
+          "chunk_id": "ND_145_2020#d55-k1-a",
+          "doc_id": "ND_145_2020",
+          "article": "55",
+          "score": 6.290189743041992,
+          "preview": "a) Tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường, được xác định bằng tiền lương thực trả "
+        },
+        {
+          "chunk_id": "ND_145_2020#d55-k3",
+          "doc_id": "ND_145_2020",
+          "article": "55",
+          "score": 6.211420059204102,
+          "preview": "3. Người lao động làm thêm giờ vào ngày lễ, tết trùng vào ngày nghỉ hằng tuần thì được trả lương làm thêm giờ vào ngày n"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ069",
+      "question": "Tiền thưởng tết có phải là khoản bắt buộc công ty phải trả không?",
+      "query_type": "colloquial",
+      "topic": "wage",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "104"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d55-k1-a",
+          "doc_id": "ND_145_2020",
+          "article": "55",
+          "score": 6.5590691566467285,
+          "preview": "a) Tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường, được xác định bằng tiền lương thực trả "
+        },
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-v-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph-3",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 6.534487724304199,
+          "preview": "Mẫu số 01/PLV\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nHỢP ĐỒNG LAO ĐỘNG GIÚP VIỆC GIA ĐÌNH\nCăn cứ"
+        },
+        {
+          "chunk_id": "ND_12_2022#d39-k6",
+          "doc_id": "ND_12_2022",
+          "article": "39",
+          "score": 6.147811412811279,
+          "preview": "6. Phạt tiền từ 18% đến 20% tổng số tiền phải đóng bảo hiểm xã hội bắt buộc, bảo hiểm thất nghiệp tại thời điểm lập biên"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ072",
+      "question": "Thông tư 08/2026/TT-BNV hướng dẫn xếp lương ngạch công chức viên chức",
+      "query_type": "exact_reference",
+      "topic": "wage",
+      "expected_documents": [
+        "TT_08_2026"
+      ],
+      "expected_articles": [
+        "1",
+        "2"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "TT_08_2026#d16-k4",
+          "doc_id": "TT_08_2026",
+          "article": "16",
+          "score": 6.566495418548584,
+          "preview": "4. Công chức, viên chức, người lao động của Bộ Nội vụ, Tổng Liên đoàn Lao động Việt Nam, Sở Nội vụ, Ban quản lý khu công"
+        },
+        {
+          "chunk_id": "TT_08_2026#d16-k1",
+          "doc_id": "TT_08_2026",
+          "article": "16",
+          "score": 6.337760925292969,
+          "preview": "1. Tài khoản của các đơn vị thuộc Bộ Nội vụ, Tổng Liên đoàn Lao động Việt Nam, Sở Nội vụ, Ban quản lý khu công nghiệp, k"
+        },
+        {
+          "chunk_id": "TT_08_2026#d7-k2",
+          "doc_id": "TT_08_2026",
+          "article": "7",
+          "score": 6.057428359985352,
+          "preview": "2. Tổng Liên đoàn Lao động Việt Nam; Sở Nội vụ; Ban quản lý khu công nghiệp, khu kinh tế, khu chế xuất; các đơn vị thuộc"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ078",
+      "question": "Làm thêm ngày thường tính bao nhiêu phần trăm lương?",
+      "query_type": "numeric",
+      "topic": "overtime",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "98"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d55-k2",
+          "doc_id": "ND_145_2020",
+          "article": "55",
+          "score": 9.337250709533691,
+          "preview": "2. Đối với người lao động hưởng lương theo sản phẩm, được trả lương làm thêm giờ khi làm việc ngoài thời giờ làm việc bì"
+        },
+        {
+          "chunk_id": "ND_145_2020#d55-k1-b",
+          "doc_id": "ND_145_2020",
+          "article": "55",
+          "score": 8.69114875793457,
+          "preview": "b) Mức ít nhất bằng 150% so với tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường, áp dụng đố"
+        },
+        {
+          "chunk_id": "ND_145_2020#d57-k1",
+          "doc_id": "ND_145_2020",
+          "article": "57",
+          "score": 7.601587295532227,
+          "preview": "1. Đối với người lao động hưởng lương theo thời gian, tiền lương làm thêm giờ vào ban đêm được tính như sau:\nTiền lương "
+        }
+      ],
+      "failure_reason": "Numeric threshold mismatch or dense embedding invariant to exact digit values"
+    },
+    {
+      "question_id": "RQ079",
+      "question": "Làm thêm giờ vào ngày nghỉ hàng tuần (chủ nhật) được trả ít nhất bao nhiêu % tiền lương?",
+      "query_type": "numeric",
+      "topic": "overtime",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "98"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d55-k3",
+          "doc_id": "ND_145_2020",
+          "article": "55",
+          "score": 19.333402633666992,
+          "preview": "3. Người lao động làm thêm giờ vào ngày lễ, tết trùng vào ngày nghỉ hằng tuần thì được trả lương làm thêm giờ vào ngày n"
+        },
+        {
+          "chunk_id": "ND_145_2020#d55-k1-b",
+          "doc_id": "ND_145_2020",
+          "article": "55",
+          "score": 18.694416046142578,
+          "preview": "b) Mức ít nhất bằng 150% so với tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường, áp dụng đố"
+        },
+        {
+          "chunk_id": "ND_145_2020#d57-k1",
+          "doc_id": "ND_145_2020",
+          "article": "57",
+          "score": 18.459796905517578,
+          "preview": "1. Đối với người lao động hưởng lương theo thời gian, tiền lương làm thêm giờ vào ban đêm được tính như sau:\nTiền lương "
+        }
+      ],
+      "failure_reason": "Numeric threshold mismatch or dense embedding invariant to exact digit values"
+    },
+    {
+      "question_id": "RQ084",
+      "question": "Công ty có được ép nhân viên tăng ca nếu nhân viên không đồng ý không?",
+      "query_type": "colloquial",
+      "topic": "overtime",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "107"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d7-k1-a",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 10.766570091247559,
+          "preview": "a) Thành viên tổ lái tàu bay; nhân viên kỹ thuật bảo dưỡng tàu bay, nhân viên sửa chữa chuyên ngành hàng không; nhân viê"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d25-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "25",
+          "score": 8.719751358032227,
+          "preview": "3. Không quá 30 ngày đối với công việc có chức danh nghề nghiệp cần trình độ chuyên môn, kỹ thuật trung cấp, công nhân k"
+        },
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-vi-danh-m-c-n-i-s-d-ng-lao-ng-kh-ng-c-nh-c-ng-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 6.300324440002441,
+          "preview": "Phụ lục VI DANH MỤC NƠI SỬ DỤNG LAO ĐỘNG KHÔNG ĐƯỢC ĐÌNH CÔNG (Kèm theo Nghị định số 145/2020/NĐ-CP ngày 14 tháng 12 năm"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ087",
+      "question": "Trường hợp đặc biệt nào doanh nghiệp được sử dụng người lao động làm thêm tối đa 300 giờ một năm?",
+      "query_type": "semantic",
+      "topic": "overtime",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "107"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-iv-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph-4",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 13.594402313232422,
+          "preview": "Mẫu số 02/PLIV TÊN CƠ QUAN CHỦ QUẢN TÊN DOANH NGHIỆP, CƠ SỞ SẢN XUẤT, KINH DOANH\nSố:..............\nV/v tổ chức làm thêm "
+        },
+        {
+          "chunk_id": "ND_145_2020#d61",
+          "doc_id": "ND_145_2020",
+          "article": "61",
+          "score": 13.585275650024414,
+          "preview": "Điều 61. Các trường hợp được tổ chức làm thêm từ trên 200 giờ đến 300 giờ trong một năm\nNgoài các trường hợp quy định tạ"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d108",
+          "doc_id": "VBHN_18_2026",
+          "article": "108",
+          "score": 13.548532485961914,
+          "preview": "Điều 108. Làm thêm giờ trong trường hợp đặc biệt\nNgười sử dụng lao động có quyền yêu cầu người lao động làm thêm giờ vào"
+        }
+      ],
+      "failure_reason": "Semantic boundary mismatch"
+    },
+    {
+      "question_id": "RQ088",
+      "question": "làm thêm giờ 300 giờ",
+      "query_type": "short",
+      "topic": "overtime",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "107"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-iv-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph-4",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 11.582796096801758,
+          "preview": "Mẫu số 02/PLIV TÊN CƠ QUAN CHỦ QUẢN TÊN DOANH NGHIỆP, CƠ SỞ SẢN XUẤT, KINH DOANH\nSố:..............\nV/v tổ chức làm thêm "
+        },
+        {
+          "chunk_id": "ND_145_2020#d61",
+          "doc_id": "ND_145_2020",
+          "article": "61",
+          "score": 11.143078804016113,
+          "preview": "Điều 61. Các trường hợp được tổ chức làm thêm từ trên 200 giờ đến 300 giờ trong một năm\nNgoài các trường hợp quy định tạ"
+        },
+        {
+          "chunk_id": "ND_145_2020#d62-k1-a",
+          "doc_id": "ND_145_2020",
+          "article": "62",
+          "score": 11.016358375549316,
+          "preview": "a) Nơi người sử dụng lao động tổ chức làm thêm từ trên 200 giờ đến 300 giờ trong một năm;"
+        }
+      ],
+      "failure_reason": "High lexical ambiguity from overly brief query"
+    },
+    {
+      "question_id": "RQ100",
+      "question": "Công ty xếp lịch làm việc 10 tiếng một ngày từ thứ hai đến thứ năm thì có vi phạm thời giờ làm việc không?",
+      "query_type": "long",
+      "topic": "working_hours",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "105"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d113-k6",
+          "doc_id": "VBHN_18_2026",
+          "article": "113",
+          "score": 11.640095710754395,
+          "preview": "6. Khi nghỉ hằng năm, nếu người lao động đi bằng các phương tiện đường bộ, đường sắt, đường thủy mà số ngày đi đường cả "
+        },
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-iii-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph-6",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 10.677166938781738,
+          "preview": "Mẫu số 04/PLIII ỦY BAN NHÂN DÂN... (1)\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nGIẤY PHÉP HOẠT ĐỘN"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d139",
+          "doc_id": "VBHN_18_2026",
+          "article": "139",
+          "score": 9.595098495483398,
+          "preview": "Điều 139. Nghỉ thai sản\n1.44 Lao động nữ được nghỉ thai sản trước và sau khi sinh con là 06 tháng; trường hợp sinh con t"
+        }
+      ],
+      "failure_reason": "Multi-sentence context dilution / query noise"
+    },
+    {
+      "question_id": "RQ104",
+      "question": "Số ngày phép năm của người làm việc trong điều kiện bình thường là bao nhiêu ngày?",
+      "query_type": "numeric",
+      "topic": "leave",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "113"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d66-k2",
+          "doc_id": "ND_145_2020",
+          "article": "66",
+          "score": 9.15859603881836,
+          "preview": "2. Trường hợp người lao động làm việc chưa đủ tháng, nếu tổng số ngày làm việc và ngày nghỉ có hưởng lương của người lao"
+        },
+        {
+          "chunk_id": "ND_145_2020#d66-k1",
+          "doc_id": "ND_145_2020",
+          "article": "66",
+          "score": 8.385198593139648,
+          "preview": "1. Số ngày nghỉ hằng năm của người lao động làm việc chưa đủ 12 tháng theo quy định tại khoản 2 Điều 113 của Bộ luật Lao"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d107-k2-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "score": 8.25524616241455,
+          "preview": "b) Bảo đảm số giờ làm thêm của người lao động không quá 50% số giờ làm việc bình thường trong 01 ngày; trường hợp áp dụn"
+        }
+      ],
+      "failure_reason": "Numeric threshold mismatch or dense embedding invariant to exact digit values"
+    },
+    {
+      "question_id": "RQ116",
+      "question": "Bộ luật Lao động quy định có những hình thức xử lý kỷ luật lao động nào?",
+      "query_type": "semantic",
+      "topic": "discipline",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "124"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d217-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "217",
+          "score": 6.43253231048584,
+          "preview": "1. Người nào có hành vi vi phạm quy định của Bộ luật này thì tùy theo tính chất, mức độ vi phạm mà bị xử lý kỷ luật, xử "
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d125",
+          "doc_id": "VBHN_18_2026",
+          "article": "125",
+          "score": 5.658205032348633,
+          "preview": "Điều 125. Áp dụng hình thức xử lý kỷ luật sa thải\nHình thức xử lý kỷ luật sa thải được người sử dụng lao động áp dụng tr"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d125-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "125",
+          "score": 5.291073322296143,
+          "preview": "3. Người lao động bị xử lý kỷ luật kéo dài thời hạn nâng lương hoặc cách chức mà tái phạm trong thời gian chưa xóa kỷ lu"
+        }
+      ],
+      "failure_reason": "Semantic boundary mismatch"
+    },
+    {
+      "question_id": "RQ125",
+      "question": "Em lỡ làm rơi vỡ máy tính công ty thì công ty có quyền trừ lương bồi thường tối đa bao nhiêu tháng?",
+      "query_type": "colloquial",
+      "topic": "discipline",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "130"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-vi-danh-m-c-n-i-s-d-ng-lao-ng-kh-ng-c-nh-c-ng-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 11.37143325805664,
+          "preview": "Phụ lục VI DANH MỤC NƠI SỬ DỤNG LAO ĐỘNG KHÔNG ĐƯỢC ĐÌNH CÔNG (Kèm theo Nghị định số 145/2020/NĐ-CP ngày 14 tháng 12 năm"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d129-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "129",
+          "score": 7.386318683624268,
+          "preview": "1. Người lao động làm hư hỏng dụng cụ, thiết bị hoặc có hành vi khác gây thiệt hại tài sản của người sử dụng lao động th"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d30-k1-đ",
+          "doc_id": "VBHN_18_2026",
+          "article": "30",
+          "score": 7.079844951629639,
+          "preview": "đ) Người lao động được bổ nhiệm làm người quản lý doanh nghiệp của công ty trách nhiệm hữu hạn một thành viên do Nhà nướ"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ131",
+      "question": "Nghị định 12/2022/NĐ-CP",
+      "query_type": "exact_reference",
+      "topic": "penalties",
+      "expected_documents": [
+        "ND_12_2022"
+      ],
+      "expected_articles": [
+        "1",
+        "8",
+        "9",
+        "10",
+        "11",
+        "17",
+        "18",
+        "19"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d62-k1",
+          "doc_id": "ND_12_2022",
+          "article": "62",
+          "score": 0.9007452726364136,
+          "preview": "1. Nghị định này có hiệu lực thi hành kể từ ngày 17 tháng 01 năm 2022."
+        },
+        {
+          "chunk_id": "ND_12_2022#d2-k2",
+          "doc_id": "ND_12_2022",
+          "article": "2",
+          "score": 0.8943989276885986,
+          "preview": "2. Người có thẩm quyền xử phạt, thẩm quyền lập biên bản được quy định tại Chương V Nghị định này."
+        },
+        {
+          "chunk_id": "ND_12_2022#d64-k1",
+          "doc_id": "ND_12_2022",
+          "article": "64",
+          "score": 0.8819782733917236,
+          "preview": "1. Bộ trưởng Bộ Lao động - Thương binh và Xã hội có trách nhiệm hướng dẫn, kiểm tra việc thi hành Nghị định này."
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ139",
+      "question": "Công ty bắt nhân viên làm thêm quá 40 giờ một tháng thì bị cơ quan nhà nước xử phạt bao nhiêu?",
+      "query_type": "long",
+      "topic": "penalties",
+      "expected_documents": [
+        "ND_12_2022"
+      ],
+      "expected_articles": [
+        "18"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d107-k2-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "107",
+          "score": 12.35974407196045,
+          "preview": "b) Bảo đảm số giờ làm thêm của người lao động không quá 50% số giờ làm việc bình thường trong 01 ngày; trường hợp áp dụn"
+        },
+        {
+          "chunk_id": "ND_145_2020#d60-k4",
+          "doc_id": "ND_145_2020",
+          "article": "60",
+          "score": 8.953667640686035,
+          "preview": "4. Tổng số giờ làm thêm không quá 12 giờ trong một ngày, khi làm thêm vào ngày nghỉ lễ, tết và ngày nghỉ hằng tuần."
+        },
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-iv-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph-3",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 8.607990264892578,
+          "preview": "Mẫu số 01/PLIV TÊN CƠ QUAN CHỦ QUẢN TÊN DOANH NGHIỆP, CƠ SỞ SẢN XUẤT, KINH DOANH\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc "
+        }
+      ],
+      "failure_reason": "Multi-sentence context dilution / query noise"
+    },
+    {
+      "question_id": "RQ140",
+      "question": "xử phạt vi phạm tiền lương Nghị định 12",
+      "query_type": "short",
+      "topic": "penalties",
+      "expected_documents": [
+        "ND_12_2022"
+      ],
+      "expected_articles": [
+        "17"
+      ],
+      "method": "bm25",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d4-k12",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 4.358400821685791,
+          "preview": "12. Buộc người sử dụng lao động trả tiền lương cho người lao động nữ tương ứng với thời gian người lao động nữ không đượ"
+        },
+        {
+          "chunk_id": "ND_12_2022#d12-k4-c",
+          "doc_id": "ND_12_2022",
+          "article": "12",
+          "score": 3.6725759506225586,
+          "preview": "c) Buộc người sử dụng lao động trả cho người lao động một khoản tiền tương ứng với tiền lương theo hợp đồng lao động của"
+        },
+        {
+          "chunk_id": "ND_145_2020#d54-k1-a2",
+          "doc_id": "ND_145_2020",
+          "article": "54",
+          "score": 3.5456347465515137,
+          "preview": "a2) Tiền lương tuần được trả cho một tuần làm việc. Trường hợp hợp đồng lao động thỏa thuận tiền lương theo tháng thì ti"
+        }
+      ],
+      "failure_reason": "High lexical ambiguity from overly brief query"
+    }
+  ],
+  "dense": [
+    {
+      "question_id": "RQ011",
+      "question": "Điều 27 khoản 2 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "probation",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "27"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d2-k2",
+          "doc_id": "ND_145_2020",
+          "article": "2",
+          "score": 0.5926555395126343,
+          "preview": "2. Người sử dụng lao động theo khoản 2 Điều 2 của Bộ luật Lao động."
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d2-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "2",
+          "score": 0.5748584270477295,
+          "preview": "2. Người sử dụng lao động."
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d219-k1-b-4",
+          "doc_id": "VBHN_18_2026",
+          "article": "219",
+          "score": 0.5665136575698853,
+          "preview": "b) Bãi bỏ khoản 2 Điều 32."
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ017",
+      "question": "Điều 20 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "20"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d219-k1-3",
+          "doc_id": "VBHN_18_2026",
+          "article": "219",
+          "score": 0.5658900141716003,
+          "preview": "1. Người lao động quy định tại các điểm a, b, c, d, g, h và i khoản 1 Điều 2 của Luật này khi nghỉ việc có đủ 20 năm đón"
+        },
+        {
+          "chunk_id": "ND_145_2020#preamble",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 0.5649735927581787,
+          "preview": "CHÍNH PHỦ\nCHÍNH PHỦ\nSố: 145/2020/NĐ-CP\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nHà Nội, ngày 14 th"
+        },
+        {
+          "chunk_id": "ND_12_2022#d4-k20",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 0.5573004484176636,
+          "preview": "20. Buộc người sử dụng lao động hoàn thành thủ tục xác nhận và trả lại những giấy tờ khác đã giữ của người lao động cho "
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ020",
+      "question": "Ký hợp đồng lao động điện tử qua mạng có giá trị pháp lý không?",
+      "query_type": "semantic",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "14"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_337_2025#d3-k1",
+          "doc_id": "ND_337_2025",
+          "article": "3",
+          "score": 0.7392613291740417,
+          "preview": "1. Hợp đồng lao động điện tử là hợp đồng lao động được giao kết, thiết lập dưới dạng thông điệp dữ liệu theo quy định củ"
+        },
+        {
+          "chunk_id": "ND_337_2025#d7",
+          "doc_id": "ND_337_2025",
+          "article": "7",
+          "score": 0.7003418207168579,
+          "preview": "Điều 7. Hiệu lực của hợp đồng lao động điện tử\nHợp đồng lao động điện tử có hiệu lực kể từ thời điểm bên sau cùng ký số,"
+        },
+        {
+          "chunk_id": "ND_337_2025#d29-k1",
+          "doc_id": "ND_337_2025",
+          "article": "29",
+          "score": 0.696100652217865,
+          "preview": "1. Hợp đồng lao động điện tử được giao kết trước ngày Nghị định này có hiệu lực thi hành và đến ngày Nghị định này có hi"
+        }
+      ],
+      "failure_reason": "Semantic boundary mismatch"
+    },
+    {
+      "question_id": "RQ023",
+      "question": "Điều 22 khoản 2 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "22"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d4-k22",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 0.6118990778923035,
+          "preview": "22. Buộc người sử dụng lao động bảo đảm thành viên ban lãnh đạo của tổ chức đại diện người lao động tại cơ sở được hưởng"
+        },
+        {
+          "chunk_id": "ND_12_2022#d22-k10-a",
+          "doc_id": "ND_12_2022",
+          "article": "22",
+          "score": 0.5971403121948242,
+          "preview": "a) Buộc người lao động phải làm việc khi có nguy cơ xảy ra tai nạn lao động đe dọa nghiêm trọng sức khỏe, tính mạng của "
+        },
+        {
+          "chunk_id": "ND_12_2022#d22-k10-c",
+          "doc_id": "ND_12_2022",
+          "article": "22",
+          "score": 0.5904620885848999,
+          "preview": "c) Buộc người lao động tiếp tục làm việc khi các nguy cơ xảy ra tai nạn lao động đe dọa nghiêm trọng sức khỏe, tính mạng"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ031",
+      "question": "Điều 14 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "14"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d144-k4",
+          "doc_id": "VBHN_18_2026",
+          "article": "144",
+          "score": 0.6031685471534729,
+          "preview": "4. Người sử dụng lao động phải tạo cơ hội để lao động chưa thành niên được học văn hóa, giáo dục nghề nghiệp, đào tạo, b"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d145-k4",
+          "doc_id": "VBHN_18_2026",
+          "article": "145",
+          "score": 0.60267573595047,
+          "preview": "4. Bộ trưởng Bộ Lao động - Thương binh và Xã hội quy định chi tiết Điều này."
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d145-k1-d",
+          "doc_id": "VBHN_18_2026",
+          "article": "145",
+          "score": 0.5864862203598022,
+          "preview": "d) Bảo đảm điều kiện làm việc, an toàn, vệ sinh lao động phù hợp với lứa tuổi."
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ036",
+      "question": "Người lao động làm việc theo hợp đồng không xác định thời hạn muốn nghỉ việc phải báo trước bao nhiêu ngày?",
+      "query_type": "numeric",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "35"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d7-k2-a",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 0.7659281492233276,
+          "preview": "a) Ít nhất 120 ngày đối với hợp đồng lao động không xác định thời hạn hoặc hợp đồng lao động xác định thời hạn từ 12 thá"
+        },
+        {
+          "chunk_id": "ND_145_2020#d89-k1-d",
+          "doc_id": "ND_145_2020",
+          "article": "89",
+          "score": 0.7448119521141052,
+          "preview": "d) Trong quá trình thực hiện hợp đồng lao động, mỗi bên có quyền đơn phương chấm dứt hợp đồng lao động mà không cần lý d"
+        },
+        {
+          "chunk_id": "ND_145_2020#d7-k2",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 0.7273694276809692,
+          "preview": "2. Khi người lao động làm ngành, nghề, công việc quy định tại khoản 1 Điều này đơn phương chấm dứt hợp đồng lao động hoặ"
+        }
+      ],
+      "failure_reason": "Numeric threshold mismatch or dense embedding invariant to exact digit values"
+    },
+    {
+      "question_id": "RQ038",
+      "question": "Nghỉ việc hợp đồng 2 năm báo trước mấy ngày?",
+      "query_type": "numeric",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "35"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d7-k2-a",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 0.7058072090148926,
+          "preview": "a) Ít nhất 120 ngày đối với hợp đồng lao động không xác định thời hạn hoặc hợp đồng lao động xác định thời hạn từ 12 thá"
+        },
+        {
+          "chunk_id": "ND_145_2020#d89-k1-d",
+          "doc_id": "ND_145_2020",
+          "article": "89",
+          "score": 0.6912989020347595,
+          "preview": "d) Trong quá trình thực hiện hợp đồng lao động, mỗi bên có quyền đơn phương chấm dứt hợp đồng lao động mà không cần lý d"
+        },
+        {
+          "chunk_id": "ND_145_2020#d7-k2",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 0.6778753399848938,
+          "preview": "2. Khi người lao động làm ngành, nghề, công việc quy định tại khoản 1 Điều này đơn phương chấm dứt hợp đồng lao động hoặ"
+        }
+      ],
+      "failure_reason": "Numeric threshold mismatch or dense embedding invariant to exact digit values"
+    },
+    {
+      "question_id": "RQ040",
+      "question": "Bị công ty chậm lương bao nhiêu ngày thì người lao động có quyền nghỉ việc không cần báo trước?",
+      "query_type": "semantic",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "35"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d4-k25",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 0.6776910424232483,
+          "preview": "25. Buộc người sử dụng lao động trả cho người lao động một khoản tiền tương ứng với tiền lương theo hợp đồng lao động củ"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d97-k4",
+          "doc_id": "VBHN_18_2026",
+          "article": "97",
+          "score": 0.6740654706954956,
+          "preview": "4. Trường hợp vì lý do bất khả kháng mà người sử dụng lao động đã tìm mọi biện pháp khắc phục nhưng không thể trả lương "
+        },
+        {
+          "chunk_id": "ND_145_2020#d89-k1-d",
+          "doc_id": "ND_145_2020",
+          "article": "89",
+          "score": 0.653095006942749,
+          "preview": "d) Trong quá trình thực hiện hợp đồng lao động, mỗi bên có quyền đơn phương chấm dứt hợp đồng lao động mà không cần lý d"
+        }
+      ],
+      "failure_reason": "Semantic boundary mismatch"
+    },
+    {
+      "question_id": "RQ043",
+      "question": "Công ty đuổi việc người lao động trái luật thì phải bồi thường những gì?",
+      "query_type": "colloquial",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "41"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d4-k56",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 0.7174736261367798,
+          "preview": "56. Buộc doanh nghiệp dịch vụ trả lại cho người lao động khoản tiền đã thu trái pháp luật của người lao động và khoản ti"
+        },
+        {
+          "chunk_id": "ND_12_2022#d4-k55",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 0.6808390617370605,
+          "preview": "55. Buộc doanh nghiệp dịch vụ bồi thường cho người lao động về những thiệt hại do doanh nghiệp, chi nhánh doanh nghiệp g"
+        },
+        {
+          "chunk_id": "ND_12_2022#d4-k61",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 0.6771319508552551,
+          "preview": "61. Buộc tổ chức, cá nhân Việt Nam đầu tư ra nước ngoài trả lại cho người lao động khoản tiền đã thu trái pháp luật của "
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ050",
+      "question": "Thời gian báo trước 45 ngày khi nghỉ việc",
+      "query_type": "short",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "35"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d89-k1-d",
+          "doc_id": "ND_145_2020",
+          "article": "89",
+          "score": 0.6772794127464294,
+          "preview": "d) Trong quá trình thực hiện hợp đồng lao động, mỗi bên có quyền đơn phương chấm dứt hợp đồng lao động mà không cần lý d"
+        },
+        {
+          "chunk_id": "ND_145_2020#d7-k2-a",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 0.6622100472450256,
+          "preview": "a) Ít nhất 120 ngày đối với hợp đồng lao động không xác định thời hạn hoặc hợp đồng lao động xác định thời hạn từ 12 thá"
+        },
+        {
+          "chunk_id": "ND_145_2020#d7-k2",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 0.6521315574645996,
+          "preview": "2. Khi người lao động làm ngành, nghề, công việc quy định tại khoản 1 Điều này đơn phương chấm dứt hợp đồng lao động hoặ"
+        }
+      ],
+      "failure_reason": "High lexical ambiguity from overly brief query"
+    },
+    {
+      "question_id": "RQ054",
+      "question": "Các căn cứ chấm dứt hợp đồng lao động hợp pháp theo luật",
+      "query_type": "paraphrase",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "34"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d39",
+          "doc_id": "VBHN_18_2026",
+          "article": "39",
+          "score": 0.7516645193099976,
+          "preview": "Điều 39. Đơn phương chấm dứt hợp đồng lao động trái pháp luật\nĐơn phương chấm dứt hợp đồng lao động trái pháp luật là tr"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d48-k1-d",
+          "doc_id": "VBHN_18_2026",
+          "article": "48",
+          "score": 0.7500386238098145,
+          "preview": "d) Do thiên tai, hỏa hoạn, địch họa hoặc dịch bệnh nguy hiểm."
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d36-k1-a",
+          "doc_id": "VBHN_18_2026",
+          "article": "36",
+          "score": 0.7433392405509949,
+          "preview": "a) Người lao động thường xuyên không hoàn thành công việc theo hợp đồng lao động được xác định theo tiêu chí đánh giá mứ"
+        }
+      ],
+      "failure_reason": "Synonym vocabulary mismatch in lexical search or semantic drift"
+    },
+    {
+      "question_id": "RQ055",
+      "question": "Em nghỉ việc nhưng công ty chây ì không chịu trả sổ bảo hiểm xã hội thì có đúng luật không?",
+      "query_type": "colloquial",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "48"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d41-k4-d",
+          "doc_id": "ND_12_2022",
+          "article": "41",
+          "score": 0.6711085438728333,
+          "preview": "d) Không trả sổ bảo hiểm xã hội cho người lao động theo quy định tại khoản 5\nĐiều 21 của Luật Bảo hiểm xã hội."
+        },
+        {
+          "chunk_id": "ND_12_2022#d41-k4-a",
+          "doc_id": "ND_12_2022",
+          "article": "41",
+          "score": 0.6434907913208008,
+          "preview": "a) Không lập hồ sơ tham gia bảo hiểm xã hội bắt buộc trong thời hạn 30 ngày kể từ ngày giao kết hợp đồng lao động, hợp đ"
+        },
+        {
+          "chunk_id": "ND_12_2022#d4-k17",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 0.6417676210403442,
+          "preview": "17. Buộc người sử dụng lao động nhận người lao động trở lại làm việc và trả đủ tiền lương, bảo hiểm xã hội, bảo hiểm y t"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ057",
+      "question": "5.310.000",
+      "query_type": "short",
+      "topic": "wage",
+      "expected_documents": [
+        "ND_293_2025"
+      ],
+      "expected_articles": [
+        "3"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d54-k2-b",
+          "doc_id": "ND_12_2022",
+          "article": "54",
+          "score": 0.398980975151062,
+          "preview": "b) Phạt tiền đến 3.750.000 đồng đối với hành vi vi phạm quy định tại Chương II Nghị định này."
+        },
+        {
+          "chunk_id": "ND_12_2022#d12-k2-b",
+          "doc_id": "ND_12_2022",
+          "article": "12",
+          "score": 0.39892578125,
+          "preview": "b) Từ 2.000.000 đồng đến 5.000.000 đồng đối với vi phạm từ 11 người đến 50 người lao động;"
+        },
+        {
+          "chunk_id": "ND_12_2022#d14-k1-b",
+          "doc_id": "ND_12_2022",
+          "article": "14",
+          "score": 0.39818471670150757,
+          "preview": "b) Từ 2.000.000 đồng đến 5.000.000 đồng đối với vi phạm từ 11 người đến 50 người lao động;"
+        }
+      ],
+      "failure_reason": "High lexical ambiguity from overly brief query"
+    },
+    {
+      "question_id": "RQ063",
+      "question": "Điều 102 khoản 3 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "wage",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "102"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d42-k1-a",
+          "doc_id": "VBHN_18_2026",
+          "article": "42",
+          "score": 0.6093865036964417,
+          "preview": "a) Thay đổi cơ cấu tổ chức, tổ chức lại lao động;"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d42-k1-b",
+          "doc_id": "VBHN_18_2026",
+          "article": "42",
+          "score": 0.6073406934738159,
+          "preview": "b) Thay đổi quy trình, công nghệ, máy móc, thiết bị sản xuất, kinh doanh gắn với ngành, nghề sản xuất, kinh doanh của ng"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d12-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "12",
+          "score": 0.6025009155273438,
+          "preview": "3. Chính phủ quy định chi tiết Điều này."
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ064",
+      "question": "Sếp phạt tiền trừ vào lương nhân viên khi đi làm trễ có đúng luật không?",
+      "query_type": "colloquial",
+      "topic": "wage",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "127"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d17-k2",
+          "doc_id": "ND_12_2022",
+          "article": "17",
+          "score": 0.664766252040863,
+          "preview": "2. Phạt tiền đối với người sử dụng lao động có một trong các hành vi: Trả lương không đúng hạn theo quy định của pháp lu"
+        },
+        {
+          "chunk_id": "ND_12_2022#d4-k8",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 0.6513620018959045,
+          "preview": "8. Buộc người sử dụng lao động trả đủ tiền lương cộng với khoản tiền lãi của số tiền lương chậm trả, trả thiếu cho người"
+        },
+        {
+          "chunk_id": "ND_12_2022#d4-k9",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 0.6428956985473633,
+          "preview": "9. Buộc người sử dụng lao động trả đủ tiền lương những ngày tạm đình chỉ công việc đối với người lao động."
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ072",
+      "question": "Thông tư 08/2026/TT-BNV hướng dẫn xếp lương ngạch công chức viên chức",
+      "query_type": "exact_reference",
+      "topic": "wage",
+      "expected_documents": [
+        "TT_08_2026"
+      ],
+      "expected_articles": [
+        "1",
+        "2"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_293_2025#ph-l-c-d-anh-m-c-a-b-n-p-d-ng-m-c-l-ng-t-i-thi-u-t-ng-y-01-th-ng-01-n-m-2026-k-m-theo-ngh-nh-s-293-2025-n-cp-ng-y-10-th-ng-11-n-m-2025-c-a-ch-nh-ph",
+          "doc_id": "ND_293_2025",
+          "article": "",
+          "score": 0.5530489683151245,
+          "preview": "Phụ lục DANH MỤC ĐỊA BÀN ÁP DỤNG MỨC LƯƠNG TỐI THIỂU TỪ NGÀY 01 THÁNG 01 NĂM 2026 (Kèm theo Nghị định số 293/2025/NĐ-CP "
+        },
+        {
+          "chunk_id": "ND_293_2025#ph-l-c-d-anh-m-c-a-b-n-p-d-ng-m-c-l-ng-t-i-thi-u-t-ng-y-01-th-ng-01-n-m-2026-k-m-theo-ngh-nh-s-293-2025-n-cp-ng-y-10-th-ng-11-n-m-2025-c-a-ch-nh-ph-3",
+          "doc_id": "ND_293_2025",
+          "article": "",
+          "score": 0.5513713359832764,
+          "preview": "16. Tỉnh Thanh Hóa - Vùng II, gồm các phường Hạc Thành, Quảng Phú, Đông Quang, Đông Sơn, Đông Tiến, Hàm Rồng, Nguyệt Viê"
+        },
+        {
+          "chunk_id": "ND_293_2025#ph-l-c-d-anh-m-c-a-b-n-p-d-ng-m-c-l-ng-t-i-thi-u-t-ng-y-01-th-ng-01-n-m-2026-k-m-theo-ngh-nh-s-293-2025-n-cp-ng-y-10-th-ng-11-n-m-2025-c-a-ch-nh-ph-4",
+          "doc_id": "ND_293_2025",
+          "article": "",
+          "score": 0.5506461262702942,
+          "preview": "25. Tỉnh Đắk Lắk - Vùng III, gồm các phường Buôn Ma Thuột, Tân An, Tân Lập, Xuân Đài, Sông Cầu, Thành Nhất, Ea Kao, Tuy "
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ077",
+      "question": "Điều 106 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "overtime",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "106"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d218-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "218",
+          "score": 0.567910373210907,
+          "preview": "1. Luật này có hiệu lực thi hành từ ngày 01 tháng 01 năm 2026, trừ trường hợp quy định tại khoản 2 Điều này."
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d36-k1-d",
+          "doc_id": "VBHN_18_2026",
+          "article": "36",
+          "score": 0.5654402375221252,
+          "preview": "d) Người lao động không có mặt tại nơi làm việc sau thời hạn quy định tại\nĐiều 31 của Bộ luật này;"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d90-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "90",
+          "score": 0.5640366077423096,
+          "preview": "3. Người sử dụng lao động phải bảo đảm trả lương bình đẳng, không phân biệt giới tính đối với người lao động làm công vi"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ084",
+      "question": "Công ty có được ép nhân viên tăng ca nếu nhân viên không đồng ý không?",
+      "query_type": "colloquial",
+      "topic": "overtime",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "107"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d108",
+          "doc_id": "VBHN_18_2026",
+          "article": "108",
+          "score": 0.5662494897842407,
+          "preview": "Điều 108. Làm thêm giờ trong trường hợp đặc biệt\nNgười sử dụng lao động có quyền yêu cầu người lao động làm thêm giờ vào"
+        },
+        {
+          "chunk_id": "ND_145_2020#d59-k1",
+          "doc_id": "ND_145_2020",
+          "article": "59",
+          "score": 0.5494120121002197,
+          "preview": "1. Trừ các trường hợp quy định tại Điều 108 của Bộ luật Lao động, các trường hợp khác khi tổ chức làm thêm giờ, người sử"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d5-k1-d",
+          "doc_id": "VBHN_18_2026",
+          "article": "5",
+          "score": 0.5449903011322021,
+          "preview": "d) Từ chối làm việc nếu có nguy cơ rõ ràng đe dọa trực tiếp đến tính mạng, sức khỏe trong quá trình thực hiện công việc;"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ086",
+      "question": "Điều 55 Nghị định 145/2020/NĐ-CP",
+      "query_type": "exact_reference",
+      "topic": "overtime",
+      "expected_documents": [
+        "ND_145_2020"
+      ],
+      "expected_articles": [
+        "55"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-v-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 0.6957829594612122,
+          "preview": "Phụ lục V (Kèm theo Nghị định số 145/2020/NĐ-CP ngày 14 tháng 12 năm 2020 của Chính phủ)"
+        },
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-i-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 0.6830693483352661,
+          "preview": "Phụ lục I (Kèm theo Nghị định số 145/2020/NĐ-CP ngày 14 tháng 12 năm 2020 của Chính phủ)"
+        },
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-iii-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 0.6801848411560059,
+          "preview": "Phụ lục III (Kèm theo Nghị định số 145/2020/NĐ-CP ngày 14 tháng 12 năm 2020 của Chính phủ)"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ100",
+      "question": "Công ty xếp lịch làm việc 10 tiếng một ngày từ thứ hai đến thứ năm thì có vi phạm thời giờ làm việc không?",
+      "query_type": "long",
+      "topic": "working_hours",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "105"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d18-k1-b",
+          "doc_id": "ND_12_2022",
+          "article": "18",
+          "score": 0.638690173625946,
+          "preview": "b) Không thông báo bằng văn bản cho Sở Lao động - Thương binh và Xã hội nơi tổ chức làm thêm giờ và nơi đặt trụ sở chính"
+        },
+        {
+          "chunk_id": "ND_12_2022#d18-k3-b",
+          "doc_id": "ND_12_2022",
+          "article": "18",
+          "score": 0.6296181082725525,
+          "preview": "b) Huy động người lao động làm thêm giờ mà không được sự đồng ý của người lao động, trừ trường hợp theo quy định tại Điề"
+        },
+        {
+          "chunk_id": "ND_12_2022#d18-k3-a",
+          "doc_id": "ND_12_2022",
+          "article": "18",
+          "score": 0.6259874105453491,
+          "preview": "a) Thực hiện thời giờ làm việc bình thường quá số giờ làm việc theo quy định của pháp luật;"
+        }
+      ],
+      "failure_reason": "Multi-sentence context dilution / query noise"
+    },
+    {
+      "question_id": "RQ102",
+      "question": "Điều 112 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "leave",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "112"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d219-k2-3",
+          "doc_id": "VBHN_18_2026",
+          "article": "219",
+          "score": 0.6010542511940002,
+          "preview": "2. Sửa đổi, bổ sung Điều 32 của Bộ luật Tố tụng dân sự số 92/2015/QH13 như sau:"
+        },
+        {
+          "chunk_id": "ND_12_2022#d4-k11",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 0.5651782751083374,
+          "preview": "11. Buộc người sử dụng lao động trả lương cho thành viên ban lãnh đạo của tổ chức đại diện người lao động tại cơ sở tron"
+        },
+        {
+          "chunk_id": "ND_12_2022#preamble",
+          "doc_id": "ND_12_2022",
+          "article": "",
+          "score": 0.564712643623352,
+          "preview": "CHÍNH PHỦ\nCHÍNH PHỦ\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nSố: 12/2022/NĐ-CP\nHà Nội, ngày 17 thá"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ106",
+      "question": "Điều 114 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "leave",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "114"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d114-k2-a",
+          "doc_id": "ND_145_2020",
+          "article": "114",
+          "score": 0.5766006708145142,
+          "preview": "a) Nghị định số 03/2014/NĐ-CP ngày 16 tháng 01 năm 2014 của Chính phủ quy định chi tiết thi hành một số điều của Bộ luật"
+        },
+        {
+          "chunk_id": "ND_145_2020#d114-k2-b",
+          "doc_id": "ND_145_2020",
+          "article": "114",
+          "score": 0.5725817084312439,
+          "preview": "b) Nghị định số 44/2013/NĐ-CP ngày 09 tháng 5 năm 2013 của Chính phủ quy định chi tiết thi hành một số điều của Bộ luật "
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d144-k4",
+          "doc_id": "VBHN_18_2026",
+          "article": "144",
+          "score": 0.5669112205505371,
+          "preview": "4. Người sử dụng lao động phải tạo cơ hội để lao động chưa thành niên được học văn hóa, giáo dục nghề nghiệp, đào tạo, b"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ113",
+      "question": "Điều 115 khoản 1 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "leave",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "115"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d114-k2-b",
+          "doc_id": "ND_145_2020",
+          "article": "114",
+          "score": 0.5920646786689758,
+          "preview": "b) Nghị định số 44/2013/NĐ-CP ngày 09 tháng 5 năm 2013 của Chính phủ quy định chi tiết thi hành một số điều của Bộ luật "
+        },
+        {
+          "chunk_id": "ND_145_2020#d1-k2",
+          "doc_id": "ND_145_2020",
+          "article": "1",
+          "score": 0.5814850330352783,
+          "preview": "2. Hợp đồng lao động theo khoản 4 Điều 21; điểm d khoản 1 Điều 35, điểm d khoản 2 Điều 36; khoản 4 Điều 46; khoản 4 Điều"
+        },
+        {
+          "chunk_id": "ND_145_2020#d1-k6",
+          "doc_id": "ND_145_2020",
+          "article": "1",
+          "score": 0.5775215029716492,
+          "preview": "6. Thời giờ làm việc, thời giờ nghỉ ngơi theo khoản 5 Điều 107, khoản 7\nĐiều 113, Điều 116."
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ116",
+      "question": "Bộ luật Lao động quy định có những hình thức xử lý kỷ luật lao động nào?",
+      "query_type": "semantic",
+      "topic": "discipline",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "124"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d122-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "122",
+          "score": 0.7582973837852478,
+          "preview": "1. Việc xử lý kỷ luật lao động được quy định như sau:"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d122-k6",
+          "doc_id": "VBHN_18_2026",
+          "article": "122",
+          "score": 0.7413983941078186,
+          "preview": "6. Chính phủ quy định trình tự, thủ tục xử lý kỷ luật lao động."
+        },
+        {
+          "chunk_id": "ND_145_2020#d70",
+          "doc_id": "ND_145_2020",
+          "article": "70",
+          "score": 0.7304424047470093,
+          "preview": "Điều 70. Trình tự, thủ tục xử lý kỷ luật lao động\nTrình tự, thủ tục xử lý kỷ luật lao động tại khoản 6 Điều 122 của Bộ l"
+        }
+      ],
+      "failure_reason": "Semantic boundary mismatch"
+    },
+    {
+      "question_id": "RQ117",
+      "question": "Điều 124 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "discipline",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "124"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d114-k2-b",
+          "doc_id": "ND_145_2020",
+          "article": "114",
+          "score": 0.5545893907546997,
+          "preview": "b) Nghị định số 44/2013/NĐ-CP ngày 09 tháng 5 năm 2013 của Chính phủ quy định chi tiết thi hành một số điều của Bộ luật "
+        },
+        {
+          "chunk_id": "ND_145_2020#d114-k2-đ",
+          "doc_id": "ND_145_2020",
+          "article": "114",
+          "score": 0.5512429475784302,
+          "preview": "đ) Nghị định số 49/2013/NĐ-CP ngày 14 tháng 5 năm 2013 của Chính phủ quy định chi tiết thi hành một số điều của Bộ luật "
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d122-k4-c",
+          "doc_id": "VBHN_18_2026",
+          "article": "122",
+          "score": 0.5487935543060303,
+          "preview": "c) Đang chờ kết quả của cơ quan có thẩm quyền điều tra xác minh và kết luận đối với hành vi vi phạm được quy định tại kh"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ119",
+      "question": "Điều 125 khoản 4",
+      "query_type": "exact_reference",
+      "topic": "discipline",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "125"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-iv-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 0.5191926956176758,
+          "preview": "Phụ lục IV (Kèm theo Nghị định số 145/2020/NĐ-CP ngày 14 tháng 12 năm 2020 của Chính phủ)"
+        },
+        {
+          "chunk_id": "ND_145_2020#d1-k4",
+          "doc_id": "ND_145_2020",
+          "article": "1",
+          "score": 0.5012112855911255,
+          "preview": "4. Tổ chức đối thoại và thực hiện quy chế dân chủ ở cơ sở tại nơi làm việc theo khoản 4 Điều 63."
+        },
+        {
+          "chunk_id": "ND_145_2020#d1-k2",
+          "doc_id": "ND_145_2020",
+          "article": "1",
+          "score": 0.4993879795074463,
+          "preview": "2. Hợp đồng lao động theo khoản 4 Điều 21; điểm d khoản 1 Điều 35, điểm d khoản 2 Điều 36; khoản 4 Điều 46; khoản 4 Điều"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ122",
+      "question": "Điều 127 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "discipline",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "127"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d1-k7",
+          "doc_id": "ND_145_2020",
+          "article": "1",
+          "score": 0.5751166343688965,
+          "preview": "7. Kỷ luật lao động, trách nhiệm vật chất theo khoản 5 Điều 118; khoản 6\nĐiều 122; khoản 2 Điều 130; Điều 131."
+        },
+        {
+          "chunk_id": "ND_145_2020#d114-k2-đ",
+          "doc_id": "ND_145_2020",
+          "article": "114",
+          "score": 0.5690460205078125,
+          "preview": "đ) Nghị định số 49/2013/NĐ-CP ngày 14 tháng 5 năm 2013 của Chính phủ quy định chi tiết thi hành một số điều của Bộ luật "
+        },
+        {
+          "chunk_id": "ND_12_2022#d4-k7",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 0.5641052722930908,
+          "preview": "7. Buộc người sử dụng lao động trả lương cho người lao động; người học nghề, tập nghề hoặc trả đủ tiền lương cho người l"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ125",
+      "question": "Em lỡ làm rơi vỡ máy tính công ty thì công ty có quyền trừ lương bồi thường tối đa bao nhiêu tháng?",
+      "query_type": "colloquial",
+      "topic": "discipline",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "130"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d129-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "129",
+          "score": 0.6682708263397217,
+          "preview": "1. Người lao động làm hư hỏng dụng cụ, thiết bị hoặc có hành vi khác gây thiệt hại tài sản của người sử dụng lao động th"
+        },
+        {
+          "chunk_id": "ND_145_2020#d72-k1",
+          "doc_id": "ND_145_2020",
+          "article": "72",
+          "score": 0.6168086528778076,
+          "preview": "1. Thời hiệu xử lý bồi thường thiệt hại là 06 tháng kể từ ngày người lao động có hành vi làm hư hỏng, làm mất dụng cụ, t"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d47-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "47",
+          "score": 0.583246648311615,
+          "preview": "1. Người sử dụng lao động trả trợ cấp mất việc làm cho người lao động đã làm việc thường xuyên cho mình từ đủ 12 tháng t"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ131",
+      "question": "Nghị định 12/2022/NĐ-CP",
+      "query_type": "exact_reference",
+      "topic": "penalties",
+      "expected_documents": [
+        "ND_12_2022"
+      ],
+      "expected_articles": [
+        "1",
+        "8",
+        "9",
+        "10",
+        "11",
+        "17",
+        "18",
+        "19"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d62-k1",
+          "doc_id": "ND_12_2022",
+          "article": "62",
+          "score": 0.6183685660362244,
+          "preview": "1. Nghị định này có hiệu lực thi hành kể từ ngày 17 tháng 01 năm 2022."
+        },
+        {
+          "chunk_id": "ND_12_2022#preamble",
+          "doc_id": "ND_12_2022",
+          "article": "",
+          "score": 0.6013265252113342,
+          "preview": "CHÍNH PHỦ\nCHÍNH PHỦ\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\nSố: 12/2022/NĐ-CP\nHà Nội, ngày 17 thá"
+        },
+        {
+          "chunk_id": "ND_12_2022#d2-k3",
+          "doc_id": "ND_12_2022",
+          "article": "2",
+          "score": 0.5968717336654663,
+          "preview": "3. Cơ quan, tổ chức, cá nhân khác có liên quan đến việc xử phạt và thi hành các hình thức xử phạt, các biện pháp khắc ph"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ135",
+      "question": "Mức phạt tiền đối với hành vi giữ văn bằng, chứng chỉ bản chính của người lao động",
+      "query_type": "semantic",
+      "topic": "penalties",
+      "expected_documents": [
+        "ND_12_2022"
+      ],
+      "expected_articles": [
+        "9"
+      ],
+      "method": "dense",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d53-k4-a",
+          "doc_id": "ND_12_2022",
+          "article": "53",
+          "score": 0.68758624792099,
+          "preview": "a) Phạt tiền đến 75.000.000 đồng đối với các hành vi vi phạm quy định tại điểm b, c, d, đ khoản 5, khoản 6 Điều 7; điểm "
+        },
+        {
+          "chunk_id": "ND_12_2022#d24-k2",
+          "doc_id": "ND_12_2022",
+          "article": "24",
+          "score": 0.6789111495018005,
+          "preview": "2. Từ 5.000.000 đồng đến 10.000.000 đồng đối với hành vi không lưu giữ đầy đủ hồ sơ kỹ thuật máy, thiết bị, vật tư có yê"
+        },
+        {
+          "chunk_id": "ND_12_2022#d25-k4",
+          "doc_id": "ND_12_2022",
+          "article": "25",
+          "score": 0.6762204170227051,
+          "preview": "4. Phạt tiền từ 60.000.000 đồng đến 70.000.000 đồng đối với một trong các hành vi: thực hiện huấn luyện thuộc trường hợp"
+        }
+      ],
+      "failure_reason": "Semantic boundary mismatch"
+    }
+  ],
+  "hybrid": [
+    {
+      "question_id": "RQ011",
+      "question": "Điều 27 khoản 2 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "probation",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "27"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d27-k9",
+          "doc_id": "ND_12_2022",
+          "article": "27",
+          "score": 0.02844551282051282,
+          "preview": "9. Biện pháp khắc phục hậu quả"
+        },
+        {
+          "chunk_id": "ND_12_2022#d27-k7-b",
+          "doc_id": "ND_12_2022",
+          "article": "27",
+          "score": 0.02728937728937729,
+          "preview": "b) Sử dụng nhân lực thực hiện quan trắc môi trường lao động không đảm bảo tiêu chuẩn theo quy định của pháp luật;"
+        },
+        {
+          "chunk_id": "ND_12_2022#d27-k7-a",
+          "doc_id": "ND_12_2022",
+          "article": "27",
+          "score": 0.024350649350649352,
+          "preview": "a) Cung cấp dịch vụ quan trắc môi trường lao động nhưng chưa được công bố đủ điều kiện hoạt động quan trắc môi trường la"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ017",
+      "question": "Điều 20 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "20"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_337_2025#d20-k2",
+          "doc_id": "ND_337_2025",
+          "article": "20",
+          "score": 0.026984126984126985,
+          "preview": "2. Người lao động có trách nhiệm sau đây:"
+        },
+        {
+          "chunk_id": "ND_12_2022#d4-k20",
+          "doc_id": "ND_12_2022",
+          "article": "4",
+          "score": 0.026625704045058884,
+          "preview": "20. Buộc người sử dụng lao động hoàn thành thủ tục xác nhận và trả lại những giấy tờ khác đã giữ của người lao động cho "
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d219-k2-b-3",
+          "doc_id": "VBHN_18_2026",
+          "article": "219",
+          "score": 0.023684210526315787,
+          "preview": "b) Đủ 20 năm đóng bảo hiểm xã hội trở lên.”."
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ020",
+      "question": "Ký hợp đồng lao động điện tử qua mạng có giá trị pháp lý không?",
+      "query_type": "semantic",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "14"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_337_2025#d3-k1",
+          "doc_id": "ND_337_2025",
+          "article": "3",
+          "score": 0.03278688524590164,
+          "preview": "1. Hợp đồng lao động điện tử là hợp đồng lao động được giao kết, thiết lập dưới dạng thông điệp dữ liệu theo quy định củ"
+        },
+        {
+          "chunk_id": "ND_337_2025#d8-k3",
+          "doc_id": "ND_337_2025",
+          "article": "8",
+          "score": 0.030776515151515152,
+          "preview": "3. Hợp đồng lao động được chuyển đổi có giá trị như bản gốc khi đáp ứng đủ các điều kiện theo quy định của pháp luật về "
+        },
+        {
+          "chunk_id": "ND_337_2025#d7",
+          "doc_id": "ND_337_2025",
+          "article": "7",
+          "score": 0.029116045245077504,
+          "preview": "Điều 7. Hiệu lực của hợp đồng lao động điện tử\nHợp đồng lao động điện tử có hiệu lực kể từ thời điểm bên sau cùng ký số,"
+        }
+      ],
+      "failure_reason": "Semantic boundary mismatch"
+    },
+    {
+      "question_id": "RQ023",
+      "question": "Điều 22 khoản 2 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "22"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d22-k5-b",
+          "doc_id": "ND_12_2022",
+          "article": "22",
+          "score": 0.02817460317460317,
+          "preview": "b) Không tổ chức nhận diện, đánh giá các yếu tố nguy hiểm, yếu tố có hại tại nơi làm việc;"
+        },
+        {
+          "chunk_id": "ND_12_2022#d22-k1-a",
+          "doc_id": "ND_12_2022",
+          "article": "22",
+          "score": 0.028169014084507043,
+          "preview": "a) Không sử dụng phương tiện bảo vệ cá nhân đã được trang cấp;"
+        },
+        {
+          "chunk_id": "ND_12_2022#d22-k10-a",
+          "doc_id": "ND_12_2022",
+          "article": "22",
+          "score": 0.02749266862170088,
+          "preview": "a) Buộc người lao động phải làm việc khi có nguy cơ xảy ra tai nạn lao động đe dọa nghiêm trọng sức khỏe, tính mạng của "
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ028",
+      "question": "Công ty có quyền giữ bằng đại học gốc hoặc cccd của người lao động khi giao kết hợp đồng không?",
+      "query_type": "colloquial",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "17"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d5-k1",
+          "doc_id": "ND_145_2020",
+          "article": "5",
+          "score": 0.031544957774465976,
+          "preview": "1. Tên, địa chỉ trụ sở chính của doanh nghiệp theo giấy chứng nhận đăng ký doanh nghiệp; họ tên, ngày tháng năm sinh, số"
+        },
+        {
+          "chunk_id": "ND_145_2020#d5",
+          "doc_id": "ND_145_2020",
+          "article": "5",
+          "score": 0.029877369007803793,
+          "preview": "Điều 5. Nội dung hợp đồng lao động đối với người lao động được thuê làm giám đốc trong doanh nghiệp do Nhà nước nắm giữ "
+        },
+        {
+          "chunk_id": "ND_12_2022#d9-k2-a",
+          "doc_id": "ND_12_2022",
+          "article": "9",
+          "score": 0.02946236559139785,
+          "preview": "a) Giữ bản chính giấy tờ tùy thân, văn bằng hoặc chứng chỉ của người lao động khi giao kết hoặc thực hiện hợp đồng lao đ"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ031",
+      "question": "Điều 14 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "contract",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "14"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d14",
+          "doc_id": "ND_145_2020",
+          "article": "14",
+          "score": 0.01639344262295082,
+          "preview": "Điều 14. Người lao động thuê lại\nNgười lao động thuê lại là người lao động có năng lực hành vi dân sự đầy đủ, được doanh"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d144-k4",
+          "doc_id": "VBHN_18_2026",
+          "article": "144",
+          "score": 0.01639344262295082,
+          "preview": "4. Người sử dụng lao động phải tạo cơ hội để lao động chưa thành niên được học văn hóa, giáo dục nghề nghiệp, đào tạo, b"
+        },
+        {
+          "chunk_id": "TT_08_2026#d14",
+          "doc_id": "TT_08_2026",
+          "article": "14",
+          "score": 0.016129032258064516,
+          "preview": "Điều 14. Kiểm tra an toàn thông tin\nViệc kết nối, truy cập, khai thác, chia sẻ dữ liệu trên Nền tảng hợp đồng lao động đ"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ036",
+      "question": "Người lao động làm việc theo hợp đồng không xác định thời hạn muốn nghỉ việc phải báo trước bao nhiêu ngày?",
+      "query_type": "numeric",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "35"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d7-k2-a",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 0.03252247488101534,
+          "preview": "a) Ít nhất 120 ngày đối với hợp đồng lao động không xác định thời hạn hoặc hợp đồng lao động xác định thời hạn từ 12 thá"
+        },
+        {
+          "chunk_id": "ND_145_2020#d89-k1-d",
+          "doc_id": "ND_145_2020",
+          "article": "89",
+          "score": 0.03200204813108039,
+          "preview": "d) Trong quá trình thực hiện hợp đồng lao động, mỗi bên có quyền đơn phương chấm dứt hợp đồng lao động mà không cần lý d"
+        },
+        {
+          "chunk_id": "ND_145_2020#d7",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 0.03007688828584351,
+          "preview": "Điều 7. Thời hạn báo trước khi đơn phương chấm dứt hợp đồng lao động đối với một số ngành, nghề, công việc đặc thù\nNgành"
+        }
+      ],
+      "failure_reason": "Numeric threshold mismatch or dense embedding invariant to exact digit values"
+    },
+    {
+      "question_id": "RQ038",
+      "question": "Nghỉ việc hợp đồng 2 năm báo trước mấy ngày?",
+      "query_type": "numeric",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "35"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d7-k2-a",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 0.031544957774465976,
+          "preview": "a) Ít nhất 120 ngày đối với hợp đồng lao động không xác định thời hạn hoặc hợp đồng lao động xác định thời hạn từ 12 thá"
+        },
+        {
+          "chunk_id": "ND_145_2020#d89-k1-d",
+          "doc_id": "ND_145_2020",
+          "article": "89",
+          "score": 0.0315136476426799,
+          "preview": "d) Trong quá trình thực hiện hợp đồng lao động, mỗi bên có quyền đơn phương chấm dứt hợp đồng lao động mà không cần lý d"
+        },
+        {
+          "chunk_id": "ND_145_2020#d7-k2",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 0.03149801587301587,
+          "preview": "2. Khi người lao động làm ngành, nghề, công việc quy định tại khoản 1 Điều này đơn phương chấm dứt hợp đồng lao động hoặ"
+        }
+      ],
+      "failure_reason": "Numeric threshold mismatch or dense embedding invariant to exact digit values"
+    },
+    {
+      "question_id": "RQ040",
+      "question": "Bị công ty chậm lương bao nhiêu ngày thì người lao động có quyền nghỉ việc không cần báo trước?",
+      "query_type": "semantic",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "35"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d89-k1-d",
+          "doc_id": "ND_145_2020",
+          "article": "89",
+          "score": 0.032266458495966696,
+          "preview": "d) Trong quá trình thực hiện hợp đồng lao động, mỗi bên có quyền đơn phương chấm dứt hợp đồng lao động mà không cần lý d"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d97-k4",
+          "doc_id": "VBHN_18_2026",
+          "article": "97",
+          "score": 0.0315136476426799,
+          "preview": "4. Trường hợp vì lý do bất khả kháng mà người sử dụng lao động đã tìm mọi biện pháp khắc phục nhưng không thể trả lương "
+        },
+        {
+          "chunk_id": "ND_12_2022#d12-k4-c",
+          "doc_id": "ND_12_2022",
+          "article": "12",
+          "score": 0.029083245521601686,
+          "preview": "c) Buộc người sử dụng lao động trả cho người lao động một khoản tiền tương ứng với tiền lương theo hợp đồng lao động của"
+        }
+      ],
+      "failure_reason": "Semantic boundary mismatch"
+    },
+    {
+      "question_id": "RQ050",
+      "question": "Thời gian báo trước 45 ngày khi nghỉ việc",
+      "query_type": "short",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "35"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d7-k2",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 0.031746031746031744,
+          "preview": "2. Khi người lao động làm ngành, nghề, công việc quy định tại khoản 1 Điều này đơn phương chấm dứt hợp đồng lao động hoặ"
+        },
+        {
+          "chunk_id": "ND_145_2020#d89-k1-d",
+          "doc_id": "ND_145_2020",
+          "article": "89",
+          "score": 0.031544957774465976,
+          "preview": "d) Trong quá trình thực hiện hợp đồng lao động, mỗi bên có quyền đơn phương chấm dứt hợp đồng lao động mà không cần lý d"
+        },
+        {
+          "chunk_id": "ND_145_2020#d7-k2-a",
+          "doc_id": "ND_145_2020",
+          "article": "7",
+          "score": 0.030621785881252923,
+          "preview": "a) Ít nhất 120 ngày đối với hợp đồng lao động không xác định thời hạn hoặc hợp đồng lao động xác định thời hạn từ 12 thá"
+        }
+      ],
+      "failure_reason": "High lexical ambiguity from overly brief query"
+    },
+    {
+      "question_id": "RQ055",
+      "question": "Em nghỉ việc nhưng công ty chây ì không chịu trả sổ bảo hiểm xã hội thì có đúng luật không?",
+      "query_type": "colloquial",
+      "topic": "termination",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "48"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d41-k4-d",
+          "doc_id": "ND_12_2022",
+          "article": "41",
+          "score": 0.031544957774465976,
+          "preview": "d) Không trả sổ bảo hiểm xã hội cho người lao động theo quy định tại khoản 5\nĐiều 21 của Luật Bảo hiểm xã hội."
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d168-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "168",
+          "score": 0.03128054740957967,
+          "preview": "2. Trong thời gian người lao động nghỉ việc hưởng chế độ bảo hiểm xã hội thì người sử dụng lao động không phải trả lương"
+        },
+        {
+          "chunk_id": "ND_12_2022#d41-k4-b",
+          "doc_id": "ND_12_2022",
+          "article": "41",
+          "score": 0.028371628371628373,
+          "preview": "b) Không lập danh sách người lao động hoặc không lập hồ sơ hoặc không nộp hồ sơ đúng thời hạn quy định tại khoản 2 Điều "
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ064",
+      "question": "Sếp phạt tiền trừ vào lương nhân viên khi đi làm trễ có đúng luật không?",
+      "query_type": "colloquial",
+      "topic": "wage",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "127"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d17-k2",
+          "doc_id": "ND_12_2022",
+          "article": "17",
+          "score": 0.03278688524590164,
+          "preview": "2. Phạt tiền đối với người sử dụng lao động có một trong các hành vi: Trả lương không đúng hạn theo quy định của pháp lu"
+        },
+        {
+          "chunk_id": "ND_12_2022#d17-k4",
+          "doc_id": "ND_12_2022",
+          "article": "17",
+          "score": 0.02900988017658188,
+          "preview": "4. Phạt tiền đối với người sử dụng lao động khi có hành vi không trả hoặc trả không đủ cùng lúc với kỳ trả lương một kho"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d97-k4",
+          "doc_id": "VBHN_18_2026",
+          "article": "97",
+          "score": 0.026838432635534086,
+          "preview": "4. Trường hợp vì lý do bất khả kháng mà người sử dụng lao động đã tìm mọi biện pháp khắc phục nhưng không thể trả lương "
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ072",
+      "question": "Thông tư 08/2026/TT-BNV hướng dẫn xếp lương ngạch công chức viên chức",
+      "query_type": "exact_reference",
+      "topic": "wage",
+      "expected_documents": [
+        "TT_08_2026"
+      ],
+      "expected_articles": [
+        "1",
+        "2"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "TT_10_2020#d3-k6",
+          "doc_id": "TT_10_2020",
+          "article": "3",
+          "score": 0.025833333333333333,
+          "preview": "6. Chế độ nâng bậc, nâng lương: theo thỏa thuận của hai bên về điều kiện, thời gian, mức lương sau khi nâng bậc, nâng lư"
+        },
+        {
+          "chunk_id": "ND_145_2020#d96-k1-c",
+          "doc_id": "ND_145_2020",
+          "article": "96",
+          "score": 0.02578981302385558,
+          "preview": "c) Được áp dụng chế độ công tác phí quy định đối với cán bộ, công chức, viên chức nhà nước trong thời gian thực hiện nhi"
+        },
+        {
+          "chunk_id": "TT_08_2026#d16-k4",
+          "doc_id": "TT_08_2026",
+          "article": "16",
+          "score": 0.01639344262295082,
+          "preview": "4. Công chức, viên chức, người lao động của Bộ Nội vụ, Tổng Liên đoàn Lao động Việt Nam, Sở Nội vụ, Ban quản lý khu công"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ084",
+      "question": "Công ty có được ép nhân viên tăng ca nếu nhân viên không đồng ý không?",
+      "query_type": "colloquial",
+      "topic": "overtime",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "107"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d63-k3",
+          "doc_id": "ND_145_2020",
+          "article": "63",
+          "score": 0.029910714285714284,
+          "preview": "3. Trường hợp làm việc theo ca liên tục để được tính nghỉ giữa giờ vào giờ làm việc quy định tại khoản 1 Điều 109 của Bộ"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d79-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "79",
+          "score": 0.023431077007399288,
+          "preview": "3. Khi một bên cho rằng bên kia thực hiện không đầy đủ hoặc vi phạm thỏa ước lao động tập thể thì có quyền yêu cầu thi h"
+        },
+        {
+          "chunk_id": "ND_145_2020#d63-k3-a",
+          "doc_id": "ND_145_2020",
+          "article": "63",
+          "score": 0.02249747219413549,
+          "preview": "a) Người lao động làm việc trong ca từ 06 giờ trở lên;"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ086",
+      "question": "Điều 55 Nghị định 145/2020/NĐ-CP",
+      "query_type": "exact_reference",
+      "topic": "overtime",
+      "expected_documents": [
+        "ND_145_2020"
+      ],
+      "expected_articles": [
+        "55"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-v-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 0.02750455373406193,
+          "preview": "Phụ lục V (Kèm theo Nghị định số 145/2020/NĐ-CP ngày 14 tháng 12 năm 2020 của Chính phủ)"
+        },
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-i-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 0.02749266862170088,
+          "preview": "Phụ lục I (Kèm theo Nghị định số 145/2020/NĐ-CP ngày 14 tháng 12 năm 2020 của Chính phủ)"
+        },
+        {
+          "chunk_id": "ND_145_2020#ph-l-c-iii-k-m-theo-ngh-nh-s-145-2020-n-cp-ng-y-14-th-ng-12-n-m-2020-c-a-ch-nh-ph",
+          "doc_id": "ND_145_2020",
+          "article": "",
+          "score": 0.027108970929195647,
+          "preview": "Phụ lục III (Kèm theo Nghị định số 145/2020/NĐ-CP ngày 14 tháng 12 năm 2020 của Chính phủ)"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ106",
+      "question": "Điều 114 Bộ luật Lao động",
+      "query_type": "exact_reference",
+      "topic": "leave",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "114"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d114-k2-a",
+          "doc_id": "ND_145_2020",
+          "article": "114",
+          "score": 0.03177805800756621,
+          "preview": "a) Nghị định số 03/2014/NĐ-CP ngày 16 tháng 01 năm 2014 của Chính phủ quy định chi tiết thi hành một số điều của Bộ luật"
+        },
+        {
+          "chunk_id": "ND_145_2020#d114-k2-h",
+          "doc_id": "ND_145_2020",
+          "article": "114",
+          "score": 0.030330882352941176,
+          "preview": "h) Nghị định số 27/2014/NĐ-CP ngày 07 tháng 4 năm 2014 của Chính phủ quy định chi tiết thi hành một số điều của Bộ luật "
+        },
+        {
+          "chunk_id": "ND_145_2020#d114-k2-d",
+          "doc_id": "ND_145_2020",
+          "article": "114",
+          "score": 0.02967032967032967,
+          "preview": "d) Nghị định số 149/2018/NĐ-CP ngày 07 tháng 11 năm 2018 của Chính phủ quy định chi tiết khoản 3 Điều 63 của Bộ luật Lao"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ116",
+      "question": "Bộ luật Lao động quy định có những hình thức xử lý kỷ luật lao động nào?",
+      "query_type": "semantic",
+      "topic": "discipline",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "124"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_145_2020#d70",
+          "doc_id": "ND_145_2020",
+          "article": "70",
+          "score": 0.030158730158730156,
+          "preview": "Điều 70. Trình tự, thủ tục xử lý kỷ luật lao động\nTrình tự, thủ tục xử lý kỷ luật lao động tại khoản 6 Điều 122 của Bộ l"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d122-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "122",
+          "score": 0.03009207275993712,
+          "preview": "1. Việc xử lý kỷ luật lao động được quy định như sau:"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d127-k3",
+          "doc_id": "VBHN_18_2026",
+          "article": "127",
+          "score": 0.030090497737556562,
+          "preview": "3. Xử lý kỷ luật lao động đối với người lao động có hành vi vi phạm không được quy định trong nội quy lao động hoặc khôn"
+        }
+      ],
+      "failure_reason": "Semantic boundary mismatch"
+    },
+    {
+      "question_id": "RQ125",
+      "question": "Em lỡ làm rơi vỡ máy tính công ty thì công ty có quyền trừ lương bồi thường tối đa bao nhiêu tháng?",
+      "query_type": "colloquial",
+      "topic": "discipline",
+      "expected_documents": [
+        "VBHN_18_2026"
+      ],
+      "expected_articles": [
+        "130"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "VBHN_18_2026#d129-k1",
+          "doc_id": "VBHN_18_2026",
+          "article": "129",
+          "score": 0.03252247488101534,
+          "preview": "1. Người lao động làm hư hỏng dụng cụ, thiết bị hoặc có hành vi khác gây thiệt hại tài sản của người sử dụng lao động th"
+        },
+        {
+          "chunk_id": "ND_145_2020#d72-k1",
+          "doc_id": "ND_145_2020",
+          "article": "72",
+          "score": 0.0304147465437788,
+          "preview": "1. Thời hiệu xử lý bồi thường thiệt hại là 06 tháng kể từ ngày người lao động có hành vi làm hư hỏng, làm mất dụng cụ, t"
+        },
+        {
+          "chunk_id": "VBHN_18_2026#d129-k2",
+          "doc_id": "VBHN_18_2026",
+          "article": "129",
+          "score": 0.02964426877470356,
+          "preview": "2. Người lao động làm mất dụng cụ, thiết bị, tài sản của người sử dụng lao động hoặc tài sản khác do người sử dụng lao đ"
+        }
+      ],
+      "failure_reason": "Colloquial terminology gap / informal phrasing not in official statutory text"
+    },
+    {
+      "question_id": "RQ131",
+      "question": "Nghị định 12/2022/NĐ-CP",
+      "query_type": "exact_reference",
+      "topic": "penalties",
+      "expected_documents": [
+        "ND_12_2022"
+      ],
+      "expected_articles": [
+        "1",
+        "8",
+        "9",
+        "10",
+        "11",
+        "17",
+        "18",
+        "19"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d62-k1",
+          "doc_id": "ND_12_2022",
+          "article": "62",
+          "score": 0.03278688524590164,
+          "preview": "1. Nghị định này có hiệu lực thi hành kể từ ngày 17 tháng 01 năm 2022."
+        },
+        {
+          "chunk_id": "ND_12_2022#d2-k3",
+          "doc_id": "ND_12_2022",
+          "article": "2",
+          "score": 0.030798389007344232,
+          "preview": "3. Cơ quan, tổ chức, cá nhân khác có liên quan đến việc xử phạt và thi hành các hình thức xử phạt, các biện pháp khắc ph"
+        },
+        {
+          "chunk_id": "ND_12_2022#d7-k8",
+          "doc_id": "ND_12_2022",
+          "article": "7",
+          "score": 0.027730294396961064,
+          "preview": "8. Biện pháp khắc phục hậu quả"
+        }
+      ],
+      "failure_reason": "Exact reference syntax mismatch or missing cross-document link"
+    },
+    {
+      "question_id": "RQ135",
+      "question": "Mức phạt tiền đối với hành vi giữ văn bằng, chứng chỉ bản chính của người lao động",
+      "query_type": "semantic",
+      "topic": "penalties",
+      "expected_documents": [
+        "ND_12_2022"
+      ],
+      "expected_articles": [
+        "9"
+      ],
+      "method": "hybrid",
+      "retrieved_top3": [
+        {
+          "chunk_id": "ND_12_2022#d42-k1",
+          "doc_id": "ND_12_2022",
+          "article": "42",
+          "score": 0.025396825396825397,
+          "preview": "1. Phạt tiền từ 10.000.000 đồng đến 15.000.000 đồng khi có một trong các hành vi sau đây:"
+        },
+        {
+          "chunk_id": "ND_12_2022#d45-k6",
+          "doc_id": "ND_12_2022",
+          "article": "45",
+          "score": 0.024925373134328358,
+          "preview": "6. Phạt tiền từ 150.000.000 đồng đến 180.000.000 đồng đối với một trong các hành vi sau đây:"
+        },
+        {
+          "chunk_id": "ND_12_2022#d42-k8",
+          "doc_id": "ND_12_2022",
+          "article": "42",
+          "score": 0.024184149184149184,
+          "preview": "8. Phạt tiền từ 80.000.000 đồng đến 100.000.000 đồng khi có một trong các hành vi sau đây:"
+        }
+      ],
+      "failure_reason": "Semantic boundary mismatch"
+    }
+  ]
+}
