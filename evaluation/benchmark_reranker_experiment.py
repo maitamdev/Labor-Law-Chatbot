@@ -15,7 +15,8 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List
 
-sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stdout, "reconfigure"):
+    getattr(sys.stdout, "reconfigure")(encoding='utf-8')
 sys.path.insert(0, ".")
 
 from rag.legal_issue_parser import LegalIssueParser

@@ -1,0 +1,99 @@
+{
+  "total_extended_chunks": 138,
+  "duplicate_chunks": [],
+  "records": [
+    {
+      "document": "ND_135_2020",
+      "title": "Nghị định 135/2020/NĐ-CP quy định về tuổi nghỉ hưu",
+      "official_article_count": 7,
+      "parsed_article_count": 7,
+      "parsed_articles_list": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "parsed_clause_count": 21,
+      "parsed_point_count": 0,
+      "chunk_count": 25,
+      "source_type": "Chính phủ (vanban.chinhphu.vn)",
+      "source_url": "https://vanban.chinhphu.vn/default.aspx?docid=201886&pageid=27160",
+      "status": "SCOPED_EXCERPT_PASS",
+      "scope": "FULL_TEXT (Chính văn Điều 1-7)",
+      "notes": "Phụ lục I (bảng tra tháng/năm sinh chi tiết) & Phụ lục II. Thân văn bản Điều 1-7 đầy đủ 100%."
+    },
+    {
+      "document": "LVL_74_2025",
+      "title": "Luật Việc làm 74/2025/QH15",
+      "official_article_count": 105,
+      "parsed_article_count": 8,
+      "parsed_articles_list": [
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        105
+      ],
+      "parsed_clause_count": 27,
+      "parsed_point_count": 28,
+      "chunk_count": 58,
+      "source_type": "Cơ sở dữ liệu Quốc gia về VBPL (vbpl.vn)",
+      "source_url": "https://vbpl.vn/TW/Pages/vbpq-toanvan.aspx?ItemID=174000",
+      "status": "SCOPED_EXCERPT_PASS",
+      "scope": "SCOPED_EXCERPT (Chương VI BHTN & Hiệu lực)",
+      "notes": "Trích xuất có chủ đích Chương VI Bảo hiểm thất nghiệp (Điều 58-64) + Điều 105 Hiệu lực. Các chương khác (Chính sách tạo việc làm, kỹ năng nghề...) thuộc ngoài phạm vi BHTN của Wave 1."
+    },
+    {
+      "document": "ND_374_2025",
+      "title": "Nghị định 374/2025/NĐ-CP quy định chi tiết thi hành Luật Việc làm về BHTN",
+      "official_article_count": 6,
+      "parsed_article_count": 6,
+      "parsed_articles_list": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "parsed_clause_count": 16,
+      "parsed_point_count": 5,
+      "chunk_count": 23,
+      "source_type": "Chính phủ (vanban.chinhphu.vn)",
+      "source_url": "https://vanban.chinhphu.vn/?classid=0&docid=216890&pageid=27160",
+      "status": "SCOPED_EXCERPT_PASS",
+      "scope": "FULL_TEXT (Điều 1-6)",
+      "notes": "Quy định thủ tục, hồ sơ hưởng BHTN, thông báo tìm kiếm việc làm hàng tháng. Toàn văn 6/6 Điều đầy đủ."
+    },
+    {
+      "document": "ND_219_2025",
+      "title": "Nghị định 219/2025/NĐ-CP quy định về lao động nước ngoài tại Việt Nam",
+      "official_article_count": 18,
+      "parsed_article_count": 8,
+      "parsed_articles_list": [
+        1,
+        2,
+        3,
+        7,
+        8,
+        9,
+        10,
+        18
+      ],
+      "parsed_clause_count": 24,
+      "parsed_point_count": 5,
+      "chunk_count": 32,
+      "source_type": "Chính phủ (vanban.chinhphu.vn)",
+      "source_url": "https://vanban.chinhphu.vn/?classid=0&docid=215240&pageid=27160",
+      "status": "SCOPED_EXCERPT_PASS",
+      "scope": "SCOPED_EXCERPT (Trích 8/18 Điều trọng tâm)",
+      "notes": "Chỉ trích xuất các điều cốt lõi: Điều 1 (phạm vi), Điều 2 (đối tượng), Điều 3 (định nghĩa chuyên gia/kỹ thuật), Điều 7 (miễn work permit), Điều 8 (điều kiện cấp), Điều 9 (thời hạn tối đa 2 năm), Điều 10 (thủ tục cấp), Điều 18 (hiệu lực thay thế NĐ 152 & NĐ 70). Các điều về giải trình nhu cầu (Đ4-6) và gia hạn/thu hồi (Đ11-17) chưa có trong văn bản raw."
+    }
+  ]
+}

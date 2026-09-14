@@ -4,6 +4,13 @@ VietLabor AI - Deterministic Evidence Selector (Phase 5E)
 Evaluates candidate legal evidence chunks against structured LegalIssue features
 using multi-signal generic scoring (numeric, qualifier, temporal unit, actor, intent,
 and sibling competition) and LOCKS canonical evidence before generation.
+
+Score magnitudes follow a documented scale (see config/evidence_scoring_rules.yaml):
+    SCORE_NUDGE       (+/- 1.0 ~ 2.0)  Minor preference / soft penalty
+    SCORE_STRONG      (+/- 3.0 ~ 4.0)  Confidently select correct clause/point
+    SCORE_LOCK        (+/- 5.0 ~ 6.5)  Single authoritative provision for the issue
+    SCORE_DOMINANT    (+/- 8.0 ~10.0)  Exactly ONE correct provision; suppress all others
+    SCORE_HARD_SUPPRESS   (-15.0)      Categorically irrelevant provision
 """
 from __future__ import annotations
 
@@ -17,6 +24,29 @@ import unicodedata
 from rag.legal_issue_parser import LegalIssue, LegalIssueParser
 
 logger = logging.getLogger(__name__)
+
+
+# ==============================================================================
+# SCORING SCALE CONSTANTS
+# All numeric score values in score_candidate() follow this scale.
+# See config/evidence_scoring_rules.yaml for full rationale per rule.
+# ==============================================================================
+
+# Nudge: minor preference, used for topic-level article range matching
+SCORE_NUDGE = 1.0         # (+/- 1.0 ~ 2.0)
+
+# Strong: confidently disambiguate among 2-3 sibling clauses/points
+SCORE_STRONG = 3.0        # (+/- 3.0 ~ 4.0)
+
+# Lock: single authoritative provision for the legal issue
+SCORE_LOCK = 5.0          # (+/- 5.0 ~ 6.5)
+
+# Dominant: exactly ONE correct provision exists; aggressively suppress all others
+SCORE_DOMINANT = 8.0      # (+/- 8.0 ~ 10.0)
+
+# Hard suppress: provision is categorically irrelevant to the query type
+SCORE_HARD_SUPPRESS = -15.0
+
 
 
 @dataclass
@@ -100,6 +130,8 @@ class EvidenceSelector:
             "clause_number": int(meta["clause_number"]) if meta.get("clause_number") is not None and str(meta["clause_number"]).isdigit() else None,
             "point": str(meta.get("point") or "").strip().lower() or None,
             "content": chunk.get("content", meta.get("content", "")),
+            "domain": meta.get("domain", "CORE_LABOR"),
+            "status": meta.get("status", "CURRENT"),
         }
 
     def score_candidate(
@@ -133,8 +165,35 @@ class EvidenceSelector:
         overlap = len(q_tokens.intersection(c_tokens))
         s_lex = overlap / max(1, len(q_tokens))
 
-        # 3. Topic score
+        # 3. Topic & Domain score (Phase 5G)
         s_top = 0.0
+        c_domain = m.get("domain", "CORE_LABOR")
+        c_status = m.get("status", "CURRENT")
+
+        # Status-aware guard: suppressed repealed law from overriding current law
+        if c_status == "REPEALED":
+            s_top += SCORE_HARD_SUPPRESS  # -15.0
+
+        if getattr(issue, "domain", "CORE_LABOR") == "RETIREMENT":
+            if doc_id == "ND_135_2020" or c_domain == "RETIREMENT" or (doc_id == "VBHN_18_2026" and art_num == 169):
+                s_top += SCORE_LOCK  # +5.0
+            else:
+                s_top -= SCORE_STRONG
+        elif getattr(issue, "domain", "CORE_LABOR") == "UNEMPLOYMENT_INSURANCE":
+            if doc_id in ["LVL_74_2025", "ND_374_2025"] or c_domain == "UNEMPLOYMENT_INSURANCE":
+                s_top += SCORE_LOCK  # +5.0
+            else:
+                s_top -= SCORE_STRONG
+        elif getattr(issue, "domain", "CORE_LABOR") == "FOREIGN_WORKER":
+            if doc_id == "ND_219_2025" or c_domain == "FOREIGN_WORKER" or (doc_id == "VBHN_18_2026" and art_num in [151, 152, 153, 154, 155]):
+                s_top += SCORE_LOCK  # +5.0
+            else:
+                s_top -= SCORE_STRONG
+        elif getattr(issue, "domain", "CORE_LABOR") == "CORE_LABOR":
+            # Protect CORE queries from collision with extended provisions
+            if c_domain in ["RETIREMENT", "UNEMPLOYMENT_INSURANCE", "FOREIGN_WORKER"]:
+                s_top -= SCORE_STRONG  # -3.0
+
         if issue.topic == "probation":
             if doc_id == "VBHN_18_2026" and art_num in [24, 25, 26, 27]:
                 s_top += 1.5
@@ -294,6 +353,27 @@ class EvidenceSelector:
                         s_qual -= 3.5
             elif doc_id == "VBHN_18_2026" and art_num == 35 and pt == "d":
                 s_qual += 3.5
+
+        # General employee notice period (Điều 35 Khoản 1)
+        if "flight_crew" not in issue.special_conditions and "special_occupation_notice" not in issue.qualifiers:
+            if doc_id == "VBHN_18_2026" and art_num == 35:
+                if "contract_definite_12_36_months" in issue.qualifiers:
+                    if cl_num == 1:
+                        s_qual += 8.0 if pt == "b" else 4.0
+                    elif cl_num == 2:
+                        s_qual -= 6.0
+                elif "contract_indefinite" in issue.qualifiers:
+                    if cl_num == 1:
+                        s_qual += 8.0 if pt == "a" else 4.0
+                    elif cl_num == 2:
+                        s_qual -= 6.0
+                elif "contract_under_12_months" in issue.qualifiers:
+                    if cl_num == 1:
+                        s_qual += 8.0 if pt == "c" else 4.0
+                    elif cl_num == 2:
+                        s_qual -= 6.0
+            elif doc_id == "ND_145_2020" and art_num == 7:
+                s_qual -= 6.0
 
         # Probation duration 4 groups (Điều 25)
         if issue.topic == "probation":

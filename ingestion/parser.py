@@ -51,6 +51,10 @@ DOC_MAX_ARTICLES: dict[str, int] = {
     'TT_08_2026': 24,
     'TT_10_2020': 12,
     'VBHN_18_2026': 220,
+    'ND_135_2020': 10,
+    'LVL_74_2025': 120,
+    'ND_374_2025': 20,
+    'ND_219_2025': 30,
 }
 
 
@@ -97,7 +101,13 @@ class LegalParser:
         signer = self.doc_metadata.get("signer")
         effective_from = self.doc_metadata.get("effective_from")
         effective_to = self.doc_metadata.get("effective_to")
-        status = self.doc_metadata.get("status")
+        status = self.doc_metadata.get("status", "CURRENT")
+        scope_tier = self.doc_metadata.get("scope_tier", "core")
+        domain = self.doc_metadata.get("domain", "CORE_LABOR")
+        amends = self.doc_metadata.get("amends")
+        amended_by = self.doc_metadata.get("amended_by")
+        replaces = self.doc_metadata.get("replaces")
+        replaced_by = self.doc_metadata.get("replaced_by")
         extraction_method = self.doc_metadata.get("extraction_method", "pdf_text")
         ocr_engine = self.doc_metadata.get("ocr_engine")
         ocr_model = self.doc_metadata.get("ocr_model")
@@ -234,6 +244,12 @@ class LegalParser:
                 effective_to=effective_to,
                 status=status,
                 official_source=official_source,
+                scope_tier=scope_tier,
+                domain=domain,
+                amends=amends,
+                amended_by=amended_by,
+                replaces=replaces,
+                replaced_by=replaced_by,
             )
             chunks.append(chunk)
 
@@ -361,9 +377,17 @@ class LegalParser:
                 if in_appendix:
                     form_match = re.match(r"^\s*(?:Mẫu\s+số|MAU\s+SO)\s+([\w/]+)", line, re.IGNORECASE)
                     region_sec_match = re.match(r"^\s*(\d+)\.\s+(Vùng\s+[IVXLCDM\d]+|Địa\s+bàn)", line, re.IGNORECASE)
-                    if form_match or region_sec_match:
+                    if form_match:
                         commit_chunk()
-                        sub_label = form_match.group(0).strip() if form_match else region_sec_match.group(0).strip()
+                        sub_label = form_match.group(0).strip()
+                        current_section = sub_label
+                        chunk_page_start = page_num
+                        chunk_page_end = page_num
+                        chunk_lines.append(line)
+                        continue
+                    elif region_sec_match:
+                        commit_chunk()
+                        sub_label = region_sec_match.group(0).strip()
                         current_section = sub_label
                         chunk_page_start = page_num
                         chunk_page_end = page_num

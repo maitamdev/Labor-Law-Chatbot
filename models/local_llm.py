@@ -54,8 +54,8 @@ class LocalLLMManager:
         model_name: str = DEFAULT_MODEL_NAME,
         base_url: str = DEFAULT_OLLAMA_URL,
         temperature: float = 0.0,
-        num_predict: int = 2048,
-        num_ctx: int = 4096,
+        num_predict: int = 1536,
+        num_ctx: int = 8192,
     ):
         self.model_name = model_name
         self.base_url = base_url

@@ -22,6 +22,7 @@ class LegalIssue:
     topic: str
     actor: str  # "EMPLOYEE" | "EMPLOYER" | "BOTH" | "UNKNOWN"
     intent: str  # "SUBSTANTIVE_RULE" | "SANCTION" | "BOTH" | "CLARIFICATION"
+    domain: str = "CORE_LABOR"  # "CORE_LABOR" | "RETIREMENT" | "UNEMPLOYMENT_INSURANCE" | "FOREIGN_WORKER"
     action: Optional[str] = None
     object: Optional[str] = None
     qualifiers: List[str] = field(default_factory=list)
@@ -47,6 +48,7 @@ class LegalIssue:
             "issue_id": self.issue_id,
             "raw_query": self.raw_query,
             "topic": self.topic,
+            "domain": self.domain,
             "actor": self.actor,
             "intent": self.intent,
             "action": self.action,
@@ -128,8 +130,57 @@ class LegalIssueParser:
         qualifiers: List[str] = []
         special_conditions: List[str] = []
 
+        # Phase 5G Domain extraction
+        issue_domain = getattr(route, "domain", "CORE_LABOR")
+        if issue_domain == "CROSS_DOMAIN":
+            if any(k in q_lower for k in ["thất nghiệp", "bhtn", "việc làm", "374/2025", "74/2025"]):
+                issue_domain = "UNEMPLOYMENT_INSURANCE"
+            elif any(k in q_lower for k in ["hưu", "nghỉ hưu", "tuổi hưu", "135/2020"]):
+                issue_domain = "RETIREMENT"
+            elif any(k in q_lower for k in ["nước ngoài", "work permit", "giấy phép lao động", "219/2025"]):
+                issue_domain = "FOREIGN_WORKER"
+            else:
+                issue_domain = "CORE_LABOR"
+
+        # Retirement Topics
+        if issue_domain == "RETIREMENT" or any(k in q_lower for k in ["nghỉ hưu", "tuổi hưu", "hưu trí", "135/2020"]):
+            topic = "retirement"
+            issue_domain = "RETIREMENT"
+            obj = "retirement_age"
+            qualifiers.append("retirement")
+            if any(k in q_lower for k in ["sớm", "nặng nhọc", "độc hại", "suy giảm"]):
+                qualifiers.append("early_retirement")
+            if any(k in q_lower for k in ["lộ trình", "năm 20", "bao giờ", "khi nào"]):
+                qualifiers.append("retirement_roadmap")
+
+        # Unemployment Insurance Topics
+        elif issue_domain == "UNEMPLOYMENT_INSURANCE" or any(k in q_lower for k in ["thất nghiệp", "bhtn", "trợ cấp thất nghiệp"]):
+            topic = "unemployment_insurance"
+            issue_domain = "UNEMPLOYMENT_INSURANCE"
+            obj = "unemployment_allowance"
+            qualifiers.append("unemployment_insurance")
+            if any(k in q_lower for k in ["hồ sơ", "thủ tục", "nộp"]):
+                qualifiers.append("unemployment_dossier")
+            if any(k in q_lower for k in ["mức hưởng", "bao nhiêu %", "mấy tháng"]):
+                qualifiers.append("unemployment_rate")
+            if any(k in q_lower for k in ["điều kiện"]):
+                qualifiers.append("unemployment_conditions")
+
+        # Foreign Worker Topics
+        elif issue_domain == "FOREIGN_WORKER" or any(k in q_lower for k in ["người nước ngoài", "work permit", "giấy phép lao động", "gplđ", "219/2025"]):
+            topic = "foreign_worker"
+            issue_domain = "FOREIGN_WORKER"
+            obj = "work_permit"
+            qualifiers.append("foreign_worker")
+            if any(k in q_lower for k in ["miễn", "không thuộc diện", "kết hôn"]):
+                qualifiers.append("work_permit_exemption")
+            if any(k in q_lower for k in ["thời hạn", "bao lâu", "mấy năm"]):
+                qualifiers.append("work_permit_duration")
+            if any(k in q_lower for k in ["chuyên gia", "lao động kỹ thuật", "giám đốc"]):
+                qualifiers.append("foreign_worker_qualifications")
+
         # Probation Topics
-        if any(k in q_lower for k in ["thử việc", "thu viec", "hợp đồng thử việc"]):
+        elif any(k in q_lower for k in ["thử việc", "thu viec", "hợp đồng thử việc"]):
             topic = "probation"
             qualifiers.append("probation")
             obj = "probation_agreement"
@@ -480,6 +531,7 @@ class LegalIssueParser:
             issue_id=issue_id,
             raw_query=norm_q,
             topic=topic,
+            domain=issue_domain,
             actor=actor,
             intent=intent,
             action=action,

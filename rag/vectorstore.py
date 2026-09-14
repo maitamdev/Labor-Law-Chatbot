@@ -10,7 +10,7 @@ import datetime
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, cast
 
 import chromadb
 from chromadb.config import Settings
@@ -56,7 +56,13 @@ def clean_metadata_for_chroma(chunk: dict[str, Any]) -> dict[str, Union[str, int
         "official_source": str(chunk.get("official_source") or ""),
         "signer": str(chunk.get("signer") or ""),
         "effective_from": str(chunk.get("effective_from") or ""),
-        "status": str(chunk.get("status") or ""),
+        "status": str(chunk.get("status") or "CURRENT"),
+        "scope_tier": str(chunk.get("scope_tier") or "core"),
+        "domain": str(chunk.get("domain") or "CORE_LABOR"),
+        "amends": str(chunk.get("amends") or ""),
+        "amended_by": str(chunk.get("amended_by") or ""),
+        "replaces": str(chunk.get("replaces") or ""),
+        "replaced_by": str(chunk.get("replaced_by") or ""),
         "content": str(chunk.get("content") or ""),
     }
     return cleaned
@@ -198,9 +204,9 @@ class LegalVectorStore:
 
             collection.add(
                 ids=batch_ids,
-                embeddings=batch_embeddings,
+                embeddings=cast(Any, batch_embeddings),
                 documents=batch_texts,
-                metadatas=batch_metas,
+                metadatas=cast(Any, batch_metas),
             )
 
             if show_progress and (i + len(batch_chunks)) % 256 == 0 or (i + len(batch_chunks)) == total_chunks:

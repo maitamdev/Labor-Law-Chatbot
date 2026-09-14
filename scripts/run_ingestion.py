@@ -19,8 +19,8 @@ from ingestion.parser import LegalParser
 from ingestion.schemas import LegalChunk
 
 # Set up logging and UTF-8 console output
-if sys.platform == "win32":
-    sys.stdout.reconfigure(encoding="utf-8")
+if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
+    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -82,7 +82,7 @@ def run_pipeline(target_doc_id: str | None = None) -> list[LegalChunk]:
         "VBHN_18_2026": 6,
         "ND_145_2020": 7,
     }
-    core_docs.sort(key=lambda r: doc_priority.get(r.get("id"), 99))
+    core_docs.sort(key=lambda r: doc_priority.get(str(r.get("id", "")), 99))
 
     if target_doc_id:
         core_docs = [r for r in core_docs if r.get("id") == target_doc_id]

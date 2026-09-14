@@ -1,0 +1,1362 @@
+[
+  {
+    "id": "RET_01",
+    "domain": "RETIREMENT",
+    "question": "Tuổi nghỉ hưu của người lao động trong điều kiện bình thường được quy định như thế nào tại Nghị định 135/2020/NĐ-CP?",
+    "query_type": "exact_reference",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "4"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d4",
+      "ND_135_2020#d4-k1",
+      "ND_135_2020#d4-k2"
+    ],
+    "expected_answer_facts": [
+      "Kể từ năm 2021, tuổi nghỉ hưu của người lao động nam là đủ 60 tuổi 03 tháng, nữ là đủ 55 tuổi 04 tháng",
+      "Mỗi năm tăng thêm 03 tháng đối với lao động nam cho đến khi đủ 62 tuổi vào năm 2028",
+      "Mỗi năm tăng thêm 04 tháng đối với lao động nữ cho đến khi đủ 60 tuổi vào năm 2035"
+    ]
+  },
+  {
+    "id": "RET_02",
+    "domain": "RETIREMENT",
+    "question": "Điều 4 Nghị định 135/2020/NĐ-CP",
+    "query_type": "exact_reference",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "4"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d4",
+      "ND_135_2020#d4-k1",
+      "ND_135_2020#d4-k2"
+    ],
+    "expected_answer_facts": [
+      "Điều 4 quy định về tuổi nghỉ hưu trong điều kiện lao động bình thường và lộ trình điều chỉnh tuổi nghỉ hưu"
+    ]
+  },
+  {
+    "id": "RET_03",
+    "domain": "RETIREMENT",
+    "question": "Năm 2026 tuổi nghỉ hưu của lao động nam và lao động nữ là bao nhiêu tuổi?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "4"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d4",
+      "ND_135_2020#d4-k2"
+    ],
+    "expected_answer_facts": [
+      "Năm 2026, tuổi nghỉ hưu của lao động nam là 61 tuổi 06 tháng",
+      "Năm 2026, tuổi nghỉ hưu của lao động nữ là 57 tuổi 00 tháng"
+    ]
+  },
+  {
+    "id": "RET_04",
+    "domain": "RETIREMENT",
+    "question": "Lộ trình tăng tuổi nghỉ hưu của lao động nữ kết thúc vào năm nào và ở độ tuổi bao nhiêu?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "4"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d4",
+      "ND_135_2020#d4-k2"
+    ],
+    "expected_answer_facts": [
+      "Lộ trình của lao động nữ đạt đủ 60 tuổi vào năm 2035"
+    ]
+  },
+  {
+    "id": "RET_05",
+    "domain": "RETIREMENT",
+    "question": "Lộ trình tăng tuổi nghỉ hưu của lao động nam đạt đủ 62 tuổi vào năm nào?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "4"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d4",
+      "ND_135_2020#d4-k2"
+    ],
+    "expected_answer_facts": [
+      "Lộ trình của lao động nam đạt đủ 62 tuổi vào năm 2028"
+    ]
+  },
+  {
+    "id": "RET_06",
+    "domain": "RETIREMENT",
+    "question": "Trường hợp nào người lao động được nghỉ hưu ở độ tuổi thấp hơn tối đa 5 tuổi?",
+    "query_type": "colloquial_realworld",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "5"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d5",
+      "ND_135_2020#d5-k1",
+      "ND_135_2020#d5-k2"
+    ],
+    "expected_answer_facts": [
+      "Có từ đủ 15 năm trở lên làm nghề, công việc nặng nhọc, độc hại, nguy hiểm hoặc đặc biệt nặng nhọc, độc hại, nguy hiểm",
+      "Có từ đủ 15 năm trở lên làm việc ở vùng có điều kiện kinh tế - xã hội đặc biệt khó khăn",
+      "Bị suy giảm khả năng lao động từ 61% trở lên"
+    ]
+  },
+  {
+    "id": "RET_07",
+    "domain": "RETIREMENT",
+    "question": "Điều 5 Nghị định 135/2020/NĐ-CP",
+    "query_type": "exact_reference",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "5"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d5",
+      "ND_135_2020#d5-k1",
+      "ND_135_2020#d5-k2",
+      "ND_135_2020#d5-k3"
+    ],
+    "expected_answer_facts": [
+      "Điều 5 quy định về nghỉ hưu ở tuổi thấp hơn tuổi nghỉ hưu trong điều kiện lao động bình thường"
+    ]
+  },
+  {
+    "id": "RET_08",
+    "domain": "RETIREMENT",
+    "question": "Người lao động làm công việc khai thác than trong hầm lò được nghỉ hưu sớm tối đa bao nhiêu tuổi?",
+    "query_type": "scenario_based",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "5"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d5",
+      "ND_135_2020#d5-k3"
+    ],
+    "expected_answer_facts": [
+      "Người lao động có từ đủ 15 năm trở lên làm công việc khai thác than trong hầm lò có thể nghỉ hưu ở tuổi thấp hơn tối đa 10 tuổi"
+    ]
+  },
+  {
+    "id": "RET_09",
+    "domain": "RETIREMENT",
+    "question": "Người lao động có trình độ chuyên môn kỹ thuật cao có được kéo dài tuổi nghỉ hưu không?",
+    "query_type": "scenario_based",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "6"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d6",
+      "ND_135_2020#d6-k1",
+      "ND_135_2020#d6-k2"
+    ],
+    "expected_answer_facts": [
+      "Được nghỉ hưu ở tuổi cao hơn nhưng không quá 05 năm so với tuổi nghỉ hưu quy định tại Điều 4 tại thời điểm nghỉ hưu",
+      "Phải trên cơ sở thỏa thuận giữa người lao động và người sử dụng lao động"
+    ]
+  },
+  {
+    "id": "RET_10",
+    "domain": "RETIREMENT",
+    "question": "Điều 6 Nghị định 135/2020/NĐ-CP",
+    "query_type": "exact_reference",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "6"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d6",
+      "ND_135_2020#d6-k1",
+      "ND_135_2020#d6-k2"
+    ],
+    "expected_answer_facts": [
+      "Điều 6 quy định về nghỉ hưu ở tuổi cao hơn tuổi nghỉ hưu trong điều kiện lao động bình thường"
+    ]
+  },
+  {
+    "id": "RET_11",
+    "domain": "RETIREMENT",
+    "question": "Thời điểm nghỉ hưu và thời điểm hưởng lương hưu được xác định như thế nào?",
+    "query_type": "exact_reference",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d3-k1",
+      "ND_135_2020#d3-k2",
+      "ND_135_2020#d3-k3"
+    ],
+    "expected_answer_facts": [
+      "Thời điểm nghỉ hưu là kết thúc ngày cuối cùng của tháng đủ tuổi nghỉ hưu theo quy định",
+      "Thời điểm hưởng lương hưu là ngày đầu tiên của tháng liền kề sau thời điểm nghỉ hưu"
+    ]
+  },
+  {
+    "id": "RET_12",
+    "domain": "RETIREMENT",
+    "question": "Tôi là nam sinh tháng 8 năm 1964, làm việc văn phòng thì khi nào đủ tuổi nghỉ hưu?",
+    "query_type": "scenario_based",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "4"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d4",
+      "ND_135_2020#d4-k2"
+    ],
+    "expected_answer_facts": [
+      "Lao động nam sinh từ tháng 01/1964 đến tháng 09/1964 đủ tuổi nghỉ hưu vào năm 2025 ở tuổi 61 tuổi 03 tháng"
+    ]
+  },
+  {
+    "id": "RET_13",
+    "domain": "RETIREMENT",
+    "question": "Lao động nữ sinh tháng 3 năm 1970 làm việc bình thường thì tuổi về hưu là bao nhiêu?",
+    "query_type": "scenario_based",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "4"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d4",
+      "ND_135_2020#d4-k2"
+    ],
+    "expected_answer_facts": [
+      "Lao động nữ sinh năm 1970 theo lộ trình tăng tuổi hưu tại Phụ lục II Nghị định 135/2020/NĐ-CP"
+    ]
+  },
+  {
+    "id": "RET_14",
+    "domain": "RETIREMENT",
+    "question": "Nghị định 135/2020/NĐ-CP có hiệu lực từ ngày nào?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "7"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d7",
+      "ND_135_2020#d7-k1"
+    ],
+    "expected_answer_facts": [
+      "Nghị định 135/2020/NĐ-CP có hiệu lực thi hành từ ngày 01 tháng 01 năm 2021"
+    ]
+  },
+  {
+    "id": "RET_15",
+    "domain": "RETIREMENT",
+    "question": "Công nhân may làm việc trong môi trường nặng nhọc có được về hưu sớm trước 5 năm không?",
+    "query_type": "colloquial_realworld",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "5"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d5",
+      "ND_135_2020#d5-k1"
+    ],
+    "expected_answer_facts": [
+      "Nếu có từ đủ 15 năm trở lên làm nghề, công việc nặng nhọc, độc hại, nguy hiểm thuộc danh mục do Bộ Lao động ban hành thì được nghỉ hưu sớm tối đa 5 tuổi"
+    ]
+  },
+  {
+    "id": "RET_16",
+    "domain": "RETIREMENT",
+    "question": "Trường hợp hồ sơ người lao động không xác định được ngày tháng sinh thì xác định tháng sinh để tính tuổi nghỉ hưu thế nào?",
+    "query_type": "scenario_based",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d3-k1"
+    ],
+    "expected_answer_facts": [
+      "Trường hợp chỉ có năm sinh thì lấy ngày 01 tháng 01 của năm sinh để xác định thời điểm nghỉ hưu"
+    ]
+  },
+  {
+    "id": "RET_17",
+    "domain": "RETIREMENT",
+    "question": "Khoản 1 Điều 4 Nghị định 135/2020/NĐ-CP quy định gì?",
+    "query_type": "exact_reference",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "4"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d4-k1"
+    ],
+    "expected_answer_facts": [
+      "Quy định kể từ ngày 01/01/2021, tuổi nghỉ hưu là đủ 60 tuổi 03 tháng đối với nam và đủ 55 tuổi 04 tháng đối với nữ"
+    ]
+  },
+  {
+    "id": "RET_18",
+    "domain": "RETIREMENT",
+    "question": "Giáo sư, phó giáo sư có thể kéo dài tuổi làm việc sau khi đến tuổi nghỉ hưu bao lâu?",
+    "query_type": "scenario_based",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "6"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d6",
+      "ND_135_2020#d6-k1"
+    ],
+    "expected_answer_facts": [
+      "Người lao động có trình độ chuyên môn, kỹ thuật cao có thể nghỉ hưu ở tuổi cao hơn nhưng không quá 05 năm so với quy định"
+    ]
+  },
+  {
+    "id": "RET_19",
+    "domain": "RETIREMENT",
+    "question": "Suy giảm khả năng lao động từ bao nhiêu % thì được nghỉ hưu sớm 5 năm theo Nghị định 135?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "5"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d5-k1"
+    ],
+    "expected_answer_facts": [
+      "Bị suy giảm khả năng lao động từ 61% trở lên"
+    ]
+  },
+  {
+    "id": "RET_20",
+    "domain": "RETIREMENT",
+    "question": "Nghị định 135/2020/NĐ-CP được ban hành căn cứ vào điều luật nào của Bộ luật Lao động?",
+    "query_type": "exact_reference",
+    "expected_domain": "RETIREMENT",
+    "relevant_documents": [
+      "ND_135_2020"
+    ],
+    "relevant_articles": [
+      "1"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#preamble",
+      "ND_135_2020#d1"
+    ],
+    "expected_answer_facts": [
+      "Quy định chi tiết Điều 169 của Bộ luật Lao động năm 2019 về tuổi nghỉ hưu"
+    ]
+  },
+  {
+    "id": "UI_01",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Điều kiện hưởng trợ cấp thất nghiệp theo Luật Việc làm số 74/2025/QH15 là gì?",
+    "query_type": "exact_reference",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "61"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d61",
+      "LVL_74_2025#d61-k1",
+      "LVL_74_2025#d61-k2"
+    ],
+    "expected_answer_facts": [
+      "Đã chấm dứt hợp đồng lao động hoặc hợp đồng làm việc đúng luật (trừ trường hợp đơn phương chấm dứt trái luật, hưởng lương hưu)",
+      "Đã đóng bảo hiểm thất nghiệp từ đủ 12 tháng trở lên trong thời gian 24 tháng trước khi chấm dứt hợp đồng",
+      "Đã nộp hồ sơ hưởng trợ cấp thất nghiệp tại trung tâm dịch vụ việc làm trong thời hạn quy định",
+      "Chưa tìm được việc làm sau 15 ngày kể từ ngày nộp hồ sơ"
+    ]
+  },
+  {
+    "id": "UI_02",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Điều 61 Luật Việc làm 2025",
+    "query_type": "exact_reference",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "61"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d61",
+      "LVL_74_2025#d61-k1",
+      "LVL_74_2025#d61-k2",
+      "LVL_74_2025#d61-k3",
+      "LVL_74_2025#d61-k4"
+    ],
+    "expected_answer_facts": [
+      "Điều 61 quy định về các điều kiện hưởng trợ cấp thất nghiệp của người lao động"
+    ]
+  },
+  {
+    "id": "UI_03",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Mức hưởng trợ cấp thất nghiệp hằng tháng bằng bao nhiêu phần trăm mức bình quân tiền lương tháng đóng BHTN?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "62"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d62",
+      "LVL_74_2025#d62-k1"
+    ],
+    "expected_answer_facts": [
+      "Bằng 60% mức bình quân tiền lương tháng đóng bảo hiểm thất nghiệp của 06 tháng đã đóng BHTN gần nhất trước khi thất nghiệp",
+      "Mức hưởng tối đa không quá 5 lần mức lương tối thiểu vùng hoặc mức tham chiếu"
+    ]
+  },
+  {
+    "id": "UI_04",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Thời gian hưởng trợ cấp thất nghiệp tối đa là bao nhiêu tháng theo Luật Việc làm 74/2025?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "62"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d62",
+      "LVL_74_2025#d62-k2"
+    ],
+    "expected_answer_facts": [
+      "Đóng đủ 12 tháng đến đủ 36 tháng thì được hưởng 03 tháng trợ cấp thất nghiệp",
+      "Sau đó, cứ đóng đủ thêm 12 tháng thì được hưởng thêm 01 tháng trợ cấp thất nghiệp nhưng tối đa không quá 12 tháng"
+    ]
+  },
+  {
+    "id": "UI_05",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Hạn nộp hồ sơ hưởng bảo hiểm thất nghiệp là bao lâu kể từ ngày nghỉ việc?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "ND_374_2025",
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "4",
+      "61"
+    ],
+    "relevant_chunk_ids": [
+      "ND_374_2025#d4",
+      "ND_374_2025#d4-k1",
+      "LVL_74_2025#d61-k3"
+    ],
+    "expected_answer_facts": [
+      "Trong thời hạn 03 tháng kể từ ngày chấm dứt hợp đồng lao động hoặc hợp đồng làm việc"
+    ]
+  },
+  {
+    "id": "UI_06",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Hồ sơ đề nghị hưởng trợ cấp thất nghiệp gồm những giấy tờ gì theo Nghị định 374/2025/NĐ-CP?",
+    "query_type": "colloquial_realworld",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "ND_374_2025"
+    ],
+    "relevant_articles": [
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "ND_374_2025#d3",
+      "ND_374_2025#d3-k1",
+      "ND_374_2025#d3-k2"
+    ],
+    "expected_answer_facts": [
+      "Đơn đề nghị hưởng trợ cấp thất nghiệp theo mẫu quy định",
+      "Bản chính hoặc bản sao công chứng giấy tờ xác nhận về việc chấm dứt hợp đồng lao động",
+      "Sổ bảo hiểm xã hội đã được cơ quan BHXH xác nhận chốt thời gian đóng BHTN"
+    ]
+  },
+  {
+    "id": "UI_07",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Điều 3 Nghị định 374/2025/NĐ-CP",
+    "query_type": "exact_reference",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "ND_374_2025"
+    ],
+    "relevant_articles": [
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "ND_374_2025#d3",
+      "ND_374_2025#d3-k1",
+      "ND_374_2025#d3-k2"
+    ],
+    "expected_answer_facts": [
+      "Quy định chi tiết thành phần hồ sơ đề nghị hưởng trợ cấp thất nghiệp"
+    ]
+  },
+  {
+    "id": "UI_08",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Trường hợp nào người lao động đang hưởng trợ cấp thất nghiệp bị chấm dứt hưởng?",
+    "query_type": "scenario_based",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "63"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d63",
+      "LVL_74_2025#d63-k1"
+    ],
+    "expected_answer_facts": [
+      "Hết thời hạn hưởng trợ cấp thất nghiệp",
+      "Tìm được việc làm mới",
+      "Thực hiện nghĩa vụ quân sự, nghĩa vụ công an",
+      "Hưởng lương hưu hằng tháng",
+      "Sau 02 lần từ chối nhận việc làm do trung tâm dịch vụ việc làm giới thiệu mà không có lý do chính đáng"
+    ]
+  },
+  {
+    "id": "UI_09",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Hằng tháng người hưởng trợ cấp thất nghiệp có phải thông báo về việc tìm kiếm việc làm không?",
+    "query_type": "colloquial_realworld",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "ND_374_2025"
+    ],
+    "relevant_articles": [
+      "5"
+    ],
+    "relevant_chunk_ids": [
+      "ND_374_2025#d5",
+      "ND_374_2025#d5-k1",
+      "ND_374_2025#d5-k2"
+    ],
+    "expected_answer_facts": [
+      "Trong thời gian hưởng trợ cấp thất nghiệp, hằng tháng người lao động phải trực tiếp hoặc gián tiếp thông báo về việc tìm kiếm việc làm với trung tâm dịch vụ việc làm"
+    ]
+  },
+  {
+    "id": "UI_10",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Tôi đóng bảo hiểm thất nghiệp được 2 năm rưỡi thì được hưởng mấy tháng trợ cấp?",
+    "query_type": "scenario_based",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "62"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d62-k2"
+    ],
+    "expected_answer_facts": [
+      "Đóng được 30 tháng (từ đủ 12 đến 36 tháng) thì được hưởng 03 tháng trợ cấp thất nghiệp, số tháng dư 18 tháng chưa tính được bảo lưu"
+    ]
+  },
+  {
+    "id": "UI_11",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Tôi tự ý nghỉ việc không báo trước (đơn phương chấm dứt trái luật) có được lấy bảo hiểm thất nghiệp không?",
+    "query_type": "scenario_based",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "61"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d61",
+      "LVL_74_2025#d61-k1"
+    ],
+    "expected_answer_facts": [
+      "Không được hưởng trợ cấp thất nghiệp nếu người lao động đơn phương chấm dứt hợp đồng lao động trái pháp luật"
+    ]
+  },
+  {
+    "id": "UI_12",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Đối tượng nào bắt buộc phải tham gia bảo hiểm thất nghiệp theo Luật Việc làm 2025?",
+    "query_type": "exact_reference",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "59"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d59",
+      "LVL_74_2025#d59-k1"
+    ],
+    "expected_answer_facts": [
+      "Người lao động làm việc theo hợp đồng lao động không xác định thời hạn hoặc xác định thời hạn từ 01 tháng trở lên",
+      "Người sử dụng lao động có thuê mướn, sử dụng người lao động"
+    ]
+  },
+  {
+    "id": "UI_13",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Thời điểm bắt đầu tính hưởng trợ cấp thất nghiệp là ngày nào?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "62"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d62",
+      "LVL_74_2025#d62-k3"
+    ],
+    "expected_answer_facts": [
+      "Được tính từ ngày thứ 16 kể từ ngày nộp đủ hồ sơ hưởng trợ cấp thất nghiệp theo quy định"
+    ]
+  },
+  {
+    "id": "UI_14",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Trình tự giải quyết hồ sơ hưởng trợ cấp thất nghiệp tại trung tâm dịch vụ việc làm mất bao nhiêu ngày?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "ND_374_2025"
+    ],
+    "relevant_articles": [
+      "4"
+    ],
+    "relevant_chunk_ids": [
+      "ND_374_2025#d4",
+      "ND_374_2025#d4-k2"
+    ],
+    "expected_answer_facts": [
+      "Trong thời hạn 20 ngày làm việc kể từ ngày nhận đủ hồ sơ theo quy định, cơ quan có thẩm quyền ra quyết định hưởng trợ cấp thất nghiệp"
+    ]
+  },
+  {
+    "id": "UI_15",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Người thất nghiệp có được hỗ trợ học nghề không?",
+    "query_type": "colloquial_realworld",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "60",
+      "64"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d60",
+      "LVL_74_2025#d64",
+      "LVL_74_2025#d64-k1"
+    ],
+    "expected_answer_facts": [
+      "Người lao động đang đóng BHTN bị thất nghiệp được hỗ trợ đào tạo, bồi dưỡng, nâng cao trình độ kỹ năng nghề để duy trì việc làm hoặc chuyển đổi nghề"
+    ]
+  },
+  {
+    "id": "UI_16",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Thời gian đóng BHTN trên 36 tháng chưa được hưởng trợ cấp thất nghiệp có bị mất không?",
+    "query_type": "scenario_based",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "62"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d62-k2"
+    ],
+    "expected_answer_facts": [
+      "Thời gian đóng bảo hiểm thất nghiệp trên 36 tháng chưa được tính hưởng trợ cấp thất nghiệp được bảo lưu làm căn cứ để tính thời gian hưởng cho lần tiếp theo"
+    ]
+  },
+  {
+    "id": "UI_17",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Khoản 1 Điều 62 Luật Việc làm 2025 quy định công thức tính mức trợ cấp thất nghiệp thế nào?",
+    "query_type": "exact_reference",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "62"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d62-k1"
+    ],
+    "expected_answer_facts": [
+      "Mức hưởng hằng tháng bằng 60% mức bình quân tiền lương tháng đóng bảo hiểm thất nghiệp của 06 tháng gần nhất"
+    ]
+  },
+  {
+    "id": "UI_18",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Đang nhận trợ cấp thất nghiệp mà có việc làm mới thì có phải báo cơ quan bảo hiểm không?",
+    "query_type": "scenario_based",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025",
+      "ND_374_2025"
+    ],
+    "relevant_articles": [
+      "63",
+      "5"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d63",
+      "LVL_74_2025#d63-k1",
+      "ND_374_2025#d5"
+    ],
+    "expected_answer_facts": [
+      "Phải thông báo ngay với trung tâm dịch vụ việc làm để làm thủ tục chấm dứt hưởng trợ cấp thất nghiệp và bảo lưu thời gian đóng tương ứng"
+    ]
+  },
+  {
+    "id": "UI_19",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Quá 3 tháng kể từ ngày nghỉ việc mới đi nộp hồ sơ bảo hiểm thất nghiệp có được nhận tiền không?",
+    "query_type": "colloquial_realworld",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "ND_374_2025",
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "4",
+      "61"
+    ],
+    "relevant_chunk_ids": [
+      "ND_374_2025#d4-k1",
+      "LVL_74_2025#d61-k3"
+    ],
+    "expected_answer_facts": [
+      "Quá thời hạn 03 tháng sẽ không được giải quyết hưởng trợ cấp thất nghiệp cho đợt nghỉ việc đó, nhưng toàn bộ thời gian đóng BHTN chưa hưởng sẽ được tự động bảo lưu"
+    ]
+  },
+  {
+    "id": "UI_20",
+    "domain": "UNEMPLOYMENT_INSURANCE",
+    "question": "Bảo hiểm thất nghiệp chi trả những chế độ nào theo Điều 60 Luật Việc làm 2025?",
+    "query_type": "exact_reference",
+    "expected_domain": "UNEMPLOYMENT_INSURANCE",
+    "relevant_documents": [
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "60"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d60"
+    ],
+    "expected_answer_facts": [
+      "Trợ cấp thất nghiệp",
+      "Hỗ trợ tư vấn, giới thiệu việc làm",
+      "Hỗ trợ học nghề, đào tạo bồi dưỡng nâng cao trình độ kỹ năng nghề"
+    ]
+  },
+  {
+    "id": "FW_01",
+    "domain": "FOREIGN_WORKER",
+    "question": "Thời hạn tối đa của giấy phép lao động cấp cho người nước ngoài là bao lâu theo Nghị định 219/2025/NĐ-CP?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "9"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d9",
+      "ND_219_2025#d9-k1",
+      "ND_219_2025#d9-k2"
+    ],
+    "expected_answer_facts": [
+      "Thời hạn của giấy phép lao động được cấp theo thời hạn của một trong các trường hợp quy định nhưng tối đa không quá 02 năm",
+      "Giấy phép lao động chỉ được gia hạn 01 lần với thời hạn tối đa không quá 02 năm"
+    ]
+  },
+  {
+    "id": "FW_02",
+    "domain": "FOREIGN_WORKER",
+    "question": "Điều 9 Nghị định 219/2025/NĐ-CP",
+    "query_type": "exact_reference",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "9"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d9",
+      "ND_219_2025#d9-k1",
+      "ND_219_2025#d9-k2"
+    ],
+    "expected_answer_facts": [
+      "Điều 9 quy định về thời hạn của giấy phép lao động cấp cho người nước ngoài"
+    ]
+  },
+  {
+    "id": "FW_03",
+    "domain": "FOREIGN_WORKER",
+    "question": "Các trường hợp người nước ngoài không thuộc diện cấp giấy phép lao động theo Điều 7 Nghị định 219/2025/NĐ-CP là gì?",
+    "query_type": "exact_reference",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "7"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d7",
+      "ND_219_2025#d7-k1",
+      "ND_219_2025#d7-k2"
+    ],
+    "expected_answer_facts": [
+      "Người nước ngoài kết hôn với người Việt Nam và sinh sống trên lãnh thổ Việt Nam",
+      "Chủ sở hữu hoặc thành viên góp vốn của công ty trách nhiệm hữu hạn có giá trị góp vốn theo quy định",
+      "Chủ tịch Hội đồng quản trị hoặc thành viên Hội đồng quản trị của công ty cổ phần có giá trị góp vốn theo quy định",
+      "Vào Việt Nam làm việc tại vị trí chuyên gia, nhà quản lý, giám đốc điều hành hoặc lao động kỹ thuật có thời gian làm việc dưới 30 ngày và không quá 03 lần trong 01 năm"
+    ]
+  },
+  {
+    "id": "FW_04",
+    "domain": "FOREIGN_WORKER",
+    "question": "Người nước ngoài kết hôn với người Việt Nam đi làm tại Việt Nam có phải xin giấy phép lao động không?",
+    "query_type": "colloquial_realworld",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "7"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d7",
+      "ND_219_2025#d7-k2"
+    ],
+    "expected_answer_facts": [
+      "Không phải xin giấy phép lao động (thuộc trường hợp không thuộc diện cấp giấy phép lao động theo Điều 7 Nghị định 219/2025/NĐ-CP)"
+    ]
+  },
+  {
+    "id": "FW_05",
+    "domain": "FOREIGN_WORKER",
+    "question": "Tiêu chuẩn để được công nhận là chuyên gia nước ngoài theo Nghị định 219/2025/NĐ-CP gồm những gì?",
+    "query_type": "exact_reference",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d3",
+      "ND_219_2025#d3-k1"
+    ],
+    "expected_answer_facts": [
+      "Tốt nghiệp đại học trở lên hoặc tương đương và có ít nhất 03 năm kinh nghiệm làm việc phù hợp với vị trí công việc dự kiến làm việc tại Việt Nam",
+      "Hoặc có ít nhất 05 năm kinh nghiệm và có chứng chỉ hành nghề phù hợp với vị trí công việc dự kiến làm việc tại Việt Nam"
+    ]
+  },
+  {
+    "id": "FW_06",
+    "domain": "FOREIGN_WORKER",
+    "question": "Tiêu chuẩn lao động kỹ thuật nước ngoài làm việc tại Việt Nam theo Điều 3 Nghị định 219/2025?",
+    "query_type": "exact_reference",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d3",
+      "ND_219_2025#d3-k2"
+    ],
+    "expected_answer_facts": [
+      "Được đào tạo ít nhất 01 năm và có ít nhất 03 năm kinh nghiệm phù hợp với vị trí công việc dự kiến làm việc tại Việt Nam",
+      "Hoặc có ít nhất 05 năm kinh nghiệm làm việc phù hợp với vị trí công việc dự kiến làm việc tại Việt Nam"
+    ]
+  },
+  {
+    "id": "FW_07",
+    "domain": "FOREIGN_WORKER",
+    "question": "Điều 8 Nghị định 219/2025/NĐ-CP quy định những điều kiện nào để cấp giấy phép lao động?",
+    "query_type": "exact_reference",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "8"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d8",
+      "ND_219_2025#d8-k1"
+    ],
+    "expected_answer_facts": [
+      "Đủ 18 tuổi trở lên và có năng lực hành vi dân sự đầy đủ",
+      "Có trình độ chuyên môn, kỹ thuật, tay nghề, kinh nghiệm làm việc; có đủ sức khỏe theo quy định",
+      "Không phải là người đang trong thời gian chấp hành hình phạt hoặc chưa được xóa án tích",
+      "Có văn bản chấp thuận nhu cầu sử dụng người lao động nước ngoài của cơ quan có thẩm quyền"
+    ]
+  },
+  {
+    "id": "FW_08",
+    "domain": "FOREIGN_WORKER",
+    "question": "Nghị định 219/2025/NĐ-CP thay thế cho những nghị định nào trước đây?",
+    "query_type": "colloquial_realworld",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "18"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d18",
+      "ND_219_2025#d18-k1"
+    ],
+    "expected_answer_facts": [
+      "Thay thế Nghị định số 152/2020/NĐ-CP và Nghị định số 70/2023/NĐ-CP của Chính phủ về lao động nước ngoài làm việc tại Việt Nam"
+    ]
+  },
+  {
+    "id": "FW_09",
+    "domain": "FOREIGN_WORKER",
+    "question": "Trước khi nộp hồ sơ xin giấy phép lao động bao nhiêu ngày người sử dụng lao động phải giải trình nhu cầu sử dụng lao động nước ngoài?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "10"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d10",
+      "ND_219_2025#d10-k1"
+    ],
+    "expected_answer_facts": [
+      "Trước ít nhất 15 ngày kể từ ngày dự kiến sử dụng người lao động nước ngoài, người sử dụng lao động phải nộp báo cáo giải trình nhu cầu sử dụng"
+    ]
+  },
+  {
+    "id": "FW_10",
+    "domain": "FOREIGN_WORKER",
+    "question": "Giấy phép lao động cấp cho người nước ngoài được gia hạn mấy lần?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "9"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d9-k2"
+    ],
+    "expected_answer_facts": [
+      "Giấy phép lao động chỉ được gia hạn 01 lần với thời hạn tối đa là 02 năm"
+    ]
+  },
+  {
+    "id": "FW_11",
+    "domain": "FOREIGN_WORKER",
+    "question": "Chuyên gia nước ngoài sang Việt Nam làm việc dưới 30 ngày có cần xin work permit không?",
+    "query_type": "colloquial_realworld",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "7"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d7-k2"
+    ],
+    "expected_answer_facts": [
+      "Không cần giấy phép lao động nếu vào Việt Nam làm việc dưới 30 ngày và không quá 03 lần trong 01 năm"
+    ]
+  },
+  {
+    "id": "FW_12",
+    "domain": "FOREIGN_WORKER",
+    "question": "Trình tự cơ quan có thẩm quyền cấp giấy phép lao động mất bao nhiêu ngày làm việc?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "10"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d10-k2"
+    ],
+    "expected_answer_facts": [
+      "Trong thời hạn 05 ngày làm việc kể từ ngày nhận đủ hồ sơ đề nghị cấp giấy phép lao động hợp lệ"
+    ]
+  },
+  {
+    "id": "FW_13",
+    "domain": "FOREIGN_WORKER",
+    "question": "Luật sư nước ngoài đã được cấp Giấy phép hành nghề luật sư tại Việt Nam có cần xin giấy phép lao động không?",
+    "query_type": "scenario_based",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "7"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d7",
+      "ND_219_2025#d7-k1"
+    ],
+    "expected_answer_facts": [
+      "Không thuộc diện cấp giấy phép lao động (miễn giấy phép lao động)"
+    ]
+  },
+  {
+    "id": "FW_14",
+    "domain": "FOREIGN_WORKER",
+    "question": "Người lao động nước ngoài làm việc không có giấy phép lao động thì bị xử lý như thế nào?",
+    "query_type": "colloquial_realworld",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "8",
+      "18"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d8",
+      "ND_219_2025#d18"
+    ],
+    "expected_answer_facts": [
+      "Người lao động nước ngoài làm việc tại Việt Nam không có giấy phép lao động sẽ bị trục xuất khỏi lãnh thổ Việt Nam và người sử dụng lao động bị xử phạt vi phạm hành chính"
+    ]
+  },
+  {
+    "id": "FW_15",
+    "domain": "FOREIGN_WORKER",
+    "question": "Khái niệm Giám đốc điều hành là người nước ngoài theo Nghị định 219/2025/NĐ-CP là gì?",
+    "query_type": "exact_reference",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d3",
+      "ND_219_2025#d3-k1"
+    ],
+    "expected_answer_facts": [
+      "Là người đứng đầu chi nhánh, văn phòng đại diện hoặc địa điểm kinh doanh của doanh nghiệp hoặc người đứng đầu và trực tiếp điều hành ít nhất một lĩnh vực của cơ quan, tổ chức, doanh nghiệp"
+    ]
+  },
+  {
+    "id": "FW_16",
+    "domain": "FOREIGN_WORKER",
+    "question": "Giấy khám sức khỏe để xin giấy phép lao động cho người nước ngoài có giá trị trong bao lâu?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "8"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d8",
+      "ND_219_2025#d8-k1"
+    ],
+    "expected_answer_facts": [
+      "Giấy chứng nhận sức khỏe hoặc giấy khám sức khỏe có giá trị trong thời hạn 12 tháng kể từ ngày ký kết luận sức khỏe"
+    ]
+  },
+  {
+    "id": "FW_17",
+    "domain": "FOREIGN_WORKER",
+    "question": "Điều 18 Nghị định 219/2025/NĐ-CP",
+    "query_type": "exact_reference",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "18"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d18",
+      "ND_219_2025#d18-k1"
+    ],
+    "expected_answer_facts": [
+      "Điều 18 quy định về hiệu lực thi hành của Nghị định 219/2025/NĐ-CP"
+    ]
+  },
+  {
+    "id": "FW_18",
+    "domain": "FOREIGN_WORKER",
+    "question": "Trường hợp người nước ngoài di chuyển trong nội bộ doanh nghiệp có được miễn giấy phép lao động không?",
+    "query_type": "scenario_based",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "7"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d7",
+      "ND_219_2025#d7-k1"
+    ],
+    "expected_answer_facts": [
+      "Di chuyển trong nội bộ doanh nghiệp thuộc phạm vi 11 ngành dịch vụ trong biểu cam kết dịch vụ của Việt Nam với WTO thì không thuộc diện cấp giấy phép lao động"
+    ]
+  },
+  {
+    "id": "FW_19",
+    "domain": "FOREIGN_WORKER",
+    "question": "Tình nguyện viên nước ngoài làm việc tại Việt Nam không hưởng lương có phải xin giấy phép lao động không?",
+    "query_type": "scenario_based",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "7"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d7",
+      "ND_219_2025#d7-k1"
+    ],
+    "expected_answer_facts": [
+      "Tình nguyện viên nước ngoài làm việc tại Việt Nam không hưởng lương theo điều ước quốc tế mà Việt Nam là thành viên thì không thuộc diện cấp giấy phép lao động"
+    ]
+  },
+  {
+    "id": "FW_20",
+    "domain": "FOREIGN_WORKER",
+    "question": "Khoản 2 Điều 9 Nghị định 219/2025/NĐ-CP",
+    "query_type": "exact_reference",
+    "expected_domain": "FOREIGN_WORKER",
+    "relevant_documents": [
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "9"
+    ],
+    "relevant_chunk_ids": [
+      "ND_219_2025#d9-k2"
+    ],
+    "expected_answer_facts": [
+      "Quy định giấy phép lao động được gia hạn 01 lần với thời hạn tối đa 02 năm"
+    ]
+  },
+  {
+    "id": "CROSS_01",
+    "domain": "CROSS_DOMAIN",
+    "question": "Tôi làm việc 5 năm rồi xin nghỉ việc đúng luật, tôi có được nhận trợ cấp thôi việc từ công ty và trợ cấp thất nghiệp từ bảo hiểm không?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "VBHN_18_2026",
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "46",
+      "61"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_18_2026#d46",
+      "LVL_74_2025#d61"
+    ],
+    "expected_answer_facts": [
+      "Về trợ cấp thôi việc từ công ty: Áp dụng Điều 46 BLLĐ 2019, thời gian tính trợ cấp thôi việc là tổng thời gian làm việc trừ đi thời gian đã tham gia BHTN",
+      "Về trợ cấp thất nghiệp từ quỹ BHTN: Áp dụng Điều 61 Luật Việc làm 2025, người lao động đủ điều kiện sẽ được cơ quan BHXH chi trả trợ cấp thất nghiệp"
+    ]
+  },
+  {
+    "id": "CROSS_02",
+    "domain": "CROSS_DOMAIN",
+    "question": "Người lao động nước ngoài làm việc tại Việt Nam có phải đóng bảo hiểm thất nghiệp không?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "LVL_74_2025",
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "59",
+      "2"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d59",
+      "ND_219_2025#d2"
+    ],
+    "expected_answer_facts": [
+      "Theo Luật Việc làm 74/2025 Điều 59, đối tượng bắt buộc tham gia BHTN là người lao động Việt Nam; người lao động là công dân nước ngoài làm việc tại Việt Nam không thuộc đối tượng tham gia bảo hiểm thất nghiệp bắt buộc"
+    ]
+  },
+  {
+    "id": "CROSS_03",
+    "domain": "CROSS_DOMAIN",
+    "question": "Người lao động đã đủ tuổi nghỉ hưu theo Nghị định 135/2020 mà chấm dứt hợp đồng lao động thì có được hưởng trợ cấp thất nghiệp không?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "ND_135_2020",
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "4",
+      "61"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d4",
+      "LVL_74_2025#d61-k1"
+    ],
+    "expected_answer_facts": [
+      "Người lao động đã đủ điều kiện hưởng lương hưu hoặc đang hưởng lương hưu hằng tháng thì không thuộc diện được hưởng trợ cấp thất nghiệp theo Điều 61 Luật Việc làm 2025"
+    ]
+  },
+  {
+    "id": "CROSS_04",
+    "domain": "CROSS_DOMAIN",
+    "question": "Công ty có được ký hợp đồng lao động xác định thời hạn với lao động nước ngoài quá 2 năm không?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "VBHN_18_2026",
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "151",
+      "9"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_18_2026#d151",
+      "ND_219_2025#d9"
+    ],
+    "expected_answer_facts": [
+      "Thời hạn hợp đồng lao động đối với người lao động nước ngoài không được vượt quá thời hạn của giấy phép lao động (tối đa 2 năm) theo Điều 151 BLLĐ và Điều 9 Nghị định 219/2025"
+    ]
+  },
+  {
+    "id": "CROSS_05",
+    "domain": "CROSS_DOMAIN",
+    "question": "Công ty sa thải lao động mang thai khi đang làm thủ tục xin cấp giấy phép lao động thì bị xử phạt thế nào?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "VBHN_18_2026",
+      "ND_219_2025"
+    ],
+    "relevant_articles": [
+      "122",
+      "8"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_18_2026#d122",
+      "ND_219_2025#d8"
+    ],
+    "expected_answer_facts": [
+      "Không được xử lý kỷ luật lao động đối với người lao động đang mang thai theo Điều 122 BLLĐ 2019",
+      "Việc sử dụng lao động nước ngoài phải tuân thủ điều kiện cấp giấy phép lao động theo quy định"
+    ]
+  }
+]

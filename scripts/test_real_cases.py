@@ -24,8 +24,10 @@ if str(PROJECT_ROOT) not in sys.path:
 
 # Ensure Windows terminal prints Vietnamese UTF-8 cleanly
 if sys.platform == "win32":
-    sys.stdout.reconfigure(encoding="utf-8")
-    sys.stderr.reconfigure(encoding="utf-8")
+    if hasattr(sys.stdout, "reconfigure"):
+        getattr(sys.stdout, "reconfigure")(encoding="utf-8")
+    if hasattr(sys.stderr, "reconfigure"):
+        getattr(sys.stderr, "reconfigure")(encoding="utf-8")
 
 from rag.chain import VietLaborRAGChain
 

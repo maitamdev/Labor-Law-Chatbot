@@ -17,6 +17,7 @@ class DecomposedIssue:
     issue_id: str          # E.g. "issue_1", "issue_2"
     raw_issue_text: str    # Segment from user query
     retrieval_query: str   # Expanded query for hybrid search
+    domain: str = "CORE_LABOR"  # "CORE_LABOR" | "RETIREMENT" | "UNEMPLOYMENT_INSURANCE" | "FOREIGN_WORKER"
 
 
 class IssueDecomposer:
@@ -71,6 +72,7 @@ class IssueDecomposer:
                             issue_id=f"issue_{idx}",
                             raw_issue_text=q_text,
                             retrieval_query=expanded,
+                            domain=self._detect_domain(q_text),
                         )
                     )
                 return results
@@ -95,7 +97,7 @@ class IssueDecomposer:
             if not sub_texts and " và " in norm_q.lower():
                 # E.g.: "Lao động nữ mang thai tháng thứ 7 có được yêu cầu làm thêm giờ ban đêm không và có được sa thải không?"
                 parts = norm_q.split(" và ")
-                if len(parts) == 2 and any(k in parts[1].lower() for k in ["có được", "không trả", "không đóng", "giữ bằng", "đóng tiền", "sa thải"]):
+                if len(parts) == 2 and any(k in parts[1].lower() for k in ["có được", "không trả", "không đóng", "giữ bằng", "đóng tiền", "sa thải", "thất nghiệp"]):
                     sub_texts = [parts[0].strip(), parts[1].strip()]
 
         # Fallback: single issue
@@ -105,6 +107,7 @@ class IssueDecomposer:
                     issue_id="issue_1",
                     raw_issue_text=norm_q,
                     retrieval_query=self.expander.expand(norm_q),
+                    domain=self._detect_domain(norm_q),
                 )
             ]
 
@@ -136,10 +139,22 @@ class IssueDecomposer:
                     issue_id=f"issue_{idx}",
                     raw_issue_text=clean_text,
                     retrieval_query=expanded,
+                    domain=self._detect_domain(clean_text),
                 )
             )
 
         return results
+
+    def _detect_domain(self, text: str) -> str:
+        """Determines statutory legal domain for an issue."""
+        t_low = text.lower()
+        if any(k in t_low for k in ["hưu", "nghỉ hưu", "tuổi hưu", "135/2020", "nghị định 135"]):
+            return "RETIREMENT"
+        if any(k in t_low for k in ["thất nghiệp", "bhtn", "việc làm", "374/2025", "74/2025", "nghị định 374"]):
+            return "UNEMPLOYMENT_INSURANCE"
+        if any(k in t_low for k in ["nước ngoài", "work permit", "giấy phép lao động", "gplđ", "219/2025", "nghị định 219"]):
+            return "FOREIGN_WORKER"
+        return "CORE_LABOR"
 
     def _enrich_with_scenario(self, raw_q: str, scenario: str) -> str:
         """Finds sentences in scenario relevant to the sub-question and joins them."""

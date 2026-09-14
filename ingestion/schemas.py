@@ -59,5 +59,13 @@ class LegalChunk(BaseModel):
     signer: Optional[str] = Field(None, description="Signer / Người ký xác thực")
     effective_from: Optional[str] = Field(None, description="Effective date (YYYY-MM-DD) if verified")
     effective_to: Optional[str] = Field(None, description="Expiry date (YYYY-MM-DD) if verified")
-    status: Optional[str] = Field(None, description="Validity status if known")
+    status: Optional[str] = Field("CURRENT", description="Validity status: CURRENT, PARTIALLY_EFFECTIVE, REPEALED, HISTORICAL")
     official_source: Optional[str] = Field(None, description="Official portal URL or verified source")
+
+    # Phase 5G - Extended Scope & Domain Metadata
+    scope_tier: Optional[str] = Field("core", description="Scope tier: core or extended")
+    domain: Optional[str] = Field("CORE_LABOR", description="Legal domain: CORE_LABOR, RETIREMENT, UNEMPLOYMENT_INSURANCE, FOREIGN_WORKER, UNKNOWN")
+    amends: Optional[str] = Field(None, description="Document amended by this doc")
+    amended_by: Optional[str] = Field(None, description="Document amending this doc")
+    replaces: Optional[str] = Field(None, description="Document replaced by this doc")
+    replaced_by: Optional[str] = Field(None, description="Document replacing this doc")

@@ -1,0 +1,243 @@
+{
+  "timestamp": "2026-09-14T13:07:00Z",
+  "domain_routing": {
+    "total_queries": 95,
+    "overall_accuracy": 0.9578947368421052,
+    "domain_breakdown": {
+      "RETIREMENT": {
+        "total": 20,
+        "correct": 18
+      },
+      "UNEMPLOYMENT_INSURANCE": {
+        "total": 20,
+        "correct": 19
+      },
+      "FOREIGN_WORKER": {
+        "total": 20,
+        "correct": 20
+      },
+      "CROSS_DOMAIN": {
+        "total": 5,
+        "correct": 4
+      },
+      "CORE_LABOR": {
+        "total": 30,
+        "correct": 30
+      }
+    }
+  },
+  "core_regression": {
+    "core_queries_count": 69,
+    "hit@1": 0.5942028985507246,
+    "hit@3": 0.7101449275362319,
+    "hit@5": 0.7681159420289855,
+    "hit@10": 0.8260869565217391,
+    "mrr": 0.668391994478951
+  },
+  "extended_retrieval": {
+    "total_queries": 65,
+    "hit@1": 0.7692307692307693,
+    "hit@3": 0.8923076923076924,
+    "hit@5": 0.9076923076923077,
+    "hit@10": 0.9384615384615385,
+    "mrr": 0.83006105006105,
+    "recall@5": 0.4176923076923077,
+    "latency_ms": {
+      "mean": 184.32329846148676,
+      "median": 178.31790000127512,
+      "p95": 215.3904999995575
+    },
+    "domain_metrics": {
+      "RETIREMENT": {
+        "hit@5": 1.0,
+        "mrr": 0.9
+      },
+      "UNEMPLOYMENT_INSURANCE": {
+        "hit@5": 0.95,
+        "mrr": 0.95
+      },
+      "FOREIGN_WORKER": {
+        "hit@5": 0.85,
+        "mrr": 0.7571428571428571
+      },
+      "CROSS_DOMAIN": {
+        "hit@5": 0.6,
+        "mrr": 0.3622222222222222
+      }
+    }
+  },
+  "extended_generation": {
+    "evaluated_queries": 16,
+    "citation_support_rate": 1.0,
+    "fact_completeness_rate": 0.9655172413793104,
+    "phantom_citations_count": 0,
+    "repealed_law_citations_count": 0,
+    "generation_latency_ms": {
+      "mean": 27121.968606249993,
+      "median": 25516.330350000317
+    },
+    "details": [
+      {
+        "id": "RET_01",
+        "domain": "RETIREMENT",
+        "question": "Tuổi nghỉ hưu của người lao động trong điều kiện bình thường được quy định như thế nào tại Nghị định 135/2020/NĐ-CP?",
+        "is_supported": true,
+        "cited_chunks": [
+          "VBHN_18_2026#d169-k2"
+        ],
+        "latency_ms": 32089.88540000064
+      },
+      {
+        "id": "RET_02",
+        "domain": "RETIREMENT",
+        "question": "Điều 4 Nghị định 135/2020/NĐ-CP",
+        "is_supported": true,
+        "cited_chunks": [
+          "ND_135_2020#preamble"
+        ],
+        "latency_ms": 47047.370899999805
+      },
+      {
+        "id": "RET_03",
+        "domain": "RETIREMENT",
+        "question": "Năm 2026 tuổi nghỉ hưu của lao động nam và lao động nữ là bao nhiêu tuổi?",
+        "is_supported": true,
+        "cited_chunks": [
+          "VBHN_18_2026#d169-k2"
+        ],
+        "latency_ms": 27660.23099999984
+      },
+      {
+        "id": "RET_04",
+        "domain": "RETIREMENT",
+        "question": "Lộ trình tăng tuổi nghỉ hưu của lao động nữ kết thúc vào năm nào và ở độ tuổi bao nhiêu?",
+        "is_supported": true,
+        "cited_chunks": [
+          "VBHN_18_2026#d169-k2"
+        ],
+        "latency_ms": 26309.12989999888
+      },
+      {
+        "id": "UI_01",
+        "domain": "UNEMPLOYMENT_INSURANCE",
+        "question": "Điều kiện hưởng trợ cấp thất nghiệp theo Luật Việc làm số 74/2025/QH15 là gì?",
+        "is_supported": true,
+        "cited_chunks": [
+          "LVL_74_2025#d63-k1"
+        ],
+        "latency_ms": 18767.34159999978
+      },
+      {
+        "id": "UI_02",
+        "domain": "UNEMPLOYMENT_INSURANCE",
+        "question": "Điều 61 Luật Việc làm 2025",
+        "is_supported": true,
+        "cited_chunks": [
+          "LVL_74_2025#d62-k3"
+        ],
+        "latency_ms": 28978.239699999904
+      },
+      {
+        "id": "UI_03",
+        "domain": "UNEMPLOYMENT_INSURANCE",
+        "question": "Mức hưởng trợ cấp thất nghiệp hằng tháng bằng bao nhiêu phần trăm mức bình quân tiền lương tháng đóng BHTN?",
+        "is_supported": true,
+        "cited_chunks": [
+          "LVL_74_2025#d62-k1"
+        ],
+        "latency_ms": 26030.58179999971
+      },
+      {
+        "id": "UI_04",
+        "domain": "UNEMPLOYMENT_INSURANCE",
+        "question": "Thời gian hưởng trợ cấp thất nghiệp tối đa là bao nhiêu tháng theo Luật Việc làm 74/2025?",
+        "is_supported": true,
+        "cited_chunks": [
+          "LVL_74_2025#d62-k1"
+        ],
+        "latency_ms": 22299.198499998965
+      },
+      {
+        "id": "FW_01",
+        "domain": "FOREIGN_WORKER",
+        "question": "Thời hạn tối đa của giấy phép lao động cấp cho người nước ngoài là bao lâu theo Nghị định 219/2025/NĐ-CP?",
+        "is_supported": true,
+        "cited_chunks": [
+          "VBHN_18_2026#d155"
+        ],
+        "latency_ms": 17866.158700000597
+      },
+      {
+        "id": "FW_02",
+        "domain": "FOREIGN_WORKER",
+        "question": "Điều 9 Nghị định 219/2025/NĐ-CP",
+        "is_supported": true,
+        "cited_chunks": [
+          "ND_219_2025#preamble"
+        ],
+        "latency_ms": 21176.04089999986
+      },
+      {
+        "id": "FW_03",
+        "domain": "FOREIGN_WORKER",
+        "question": "Các trường hợp người nước ngoài không thuộc diện cấp giấy phép lao động theo Điều 7 Nghị định 219/2025/NĐ-CP là gì?",
+        "is_supported": true,
+        "cited_chunks": [
+          "VBHN_18_2026#d154-k7"
+        ],
+        "latency_ms": 25002.078900000924
+      },
+      {
+        "id": "FW_04",
+        "domain": "FOREIGN_WORKER",
+        "question": "Người nước ngoài kết hôn với người Việt Nam đi làm tại Việt Nam có phải xin giấy phép lao động không?",
+        "is_supported": true,
+        "cited_chunks": [
+          "VBHN_18_2026#d151-k1-d"
+        ],
+        "latency_ms": 22266.965400000117
+      },
+      {
+        "id": "CROSS_01",
+        "domain": "CROSS_DOMAIN",
+        "question": "Tôi làm việc 5 năm rồi xin nghỉ việc đúng luật, tôi có được nhận trợ cấp thôi việc từ công ty và trợ cấp thất nghiệp từ bảo hiểm không?",
+        "is_supported": true,
+        "cited_chunks": [
+          "VBHN_18_2026#d139-k5",
+          "ND_374_2025#d4-k4"
+        ],
+        "latency_ms": 44327.14430000124
+      },
+      {
+        "id": "CROSS_02",
+        "domain": "CROSS_DOMAIN",
+        "question": "Người lao động nước ngoài làm việc tại Việt Nam có phải đóng bảo hiểm thất nghiệp không?",
+        "is_supported": true,
+        "cited_chunks": [
+          "LVL_74_2025#d62-k1"
+        ],
+        "latency_ms": 28833.861299999626
+      },
+      {
+        "id": "CROSS_03",
+        "domain": "CROSS_DOMAIN",
+        "question": "Người lao động đã đủ tuổi nghỉ hưu theo Nghị định 135/2020 mà chấm dứt hợp đồng lao động thì có được hưởng trợ cấp thất nghiệp không?",
+        "is_supported": true,
+        "cited_chunks": [
+          "VBHN_18_2026#d169-k1"
+        ],
+        "latency_ms": 24145.992899999328
+      },
+      {
+        "id": "CROSS_04",
+        "domain": "CROSS_DOMAIN",
+        "question": "Công ty có được ký hợp đồng lao động xác định thời hạn với lao động nước ngoài quá 2 năm không?",
+        "is_supported": true,
+        "cited_chunks": [
+          "VBHN_18_2026#d155"
+        ],
+        "latency_ms": 21151.276500000677
+      }
+    ]
+  }
+}

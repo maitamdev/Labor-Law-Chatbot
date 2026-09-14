@@ -20,7 +20,8 @@ from ingestion.diacritic_restorer import LegalDiacriticRestorer
 
 
 def main():
-    sys.stdout.reconfigure(encoding='utf-8')
+    if hasattr(sys.stdout, "reconfigure"):
+        getattr(sys.stdout, "reconfigure")(encoding='utf-8')
     input_file = os.path.join(BASE_DIR, 'data', 'processed', 'legal_documents.jsonl')
     backup_file = os.path.join(BASE_DIR, 'data', 'processed', 'legal_documents.bak.jsonl')
     temp_file = os.path.join(BASE_DIR, 'data', 'processed', 'legal_documents.tmp.jsonl')

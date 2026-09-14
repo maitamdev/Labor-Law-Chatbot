@@ -194,6 +194,7 @@ class TestVietLaborRAGChainPhase5F:
         assert not any("d46" in cid for cid in res.validated_response.cited_chunk_ids)
         assert not any("Điều 46" in res.validated_response.final_answer for cid in ["d46"])
         # Clarification prompt must inquire about nature of relationship
+        assert res.validated_response.clarification_question is not None
         assert "chương trình của nhà trường" in res.validated_response.clarification_question
         assert len(res.validated_response.clarification_options) >= 3
 
@@ -239,6 +240,7 @@ class TestVietLaborRAGChainPhase5F:
         res2 = chain.run("Thực ra công ty bảo đây là thử việc trước khi ký hợp đồng.")
         # Transitions to probation analysis; asks for qualification if needed
         assert res2.validated_response.needs_clarification is True
+        assert res2.validated_response.clarification_question is not None
         assert "trình độ chuyên môn" in res2.validated_response.clarification_question
 
         # Turn 3: User provides qualification

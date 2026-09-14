@@ -254,8 +254,10 @@ class VietLaborRAGChain:
         max_context_chars: int = 8000,
         max_chunks: int = 10,
         max_per_issue_blocks: int = 4,
+        index_version: str = "v2",
     ):
         self.top_k = top_k
+        self.index_version = index_version
         self.router = QueryRouter()
         self.decomposer = IssueDecomposer()
         self.issue_parser = LegalIssueParser(router=self.router)
@@ -276,156 +278,153 @@ class VietLaborRAGChain:
             self.bm25_retriever = hybrid_retriever.bm25_retriever
         elif bm25_retriever is not None:
             self.bm25_retriever = bm25_retriever
-            self.hybrid_retriever = HybridRetriever(bm25_retriever=bm25_retriever)
+            self.hybrid_retriever = HybridRetriever(
+                bm25_retriever=bm25_retriever,
+                index_version=index_version,
+            )
         else:
-            self.hybrid_retriever = HybridRetriever()
+            self.hybrid_retriever = HybridRetriever(index_version=index_version)
             self.bm25_retriever = self.hybrid_retriever.bm25_retriever
 
         # Local LLM manager
         self.llm_manager = llm_manager or LocalLLMManager()
 
-    def run(
+    # -------------------------------------------------------------------------
+    # Out-of-scope response message (DRY: used in run() and tests)
+    # -------------------------------------------------------------------------
+    _OOS_MESSAGE = (
+        "Câu hỏi của bạn không thuộc phạm vi tư vấn của pháp luật lao động Việt Nam "
+        "(ví dụ: hôn nhân gia đình, đất đai, hình sự, giao thông, thuế doanh nghiệp, kiện đòi nợ, thủ tục doanh nghiệp, sở hữu trí tuệ). "
+        "VietLabor AI chỉ hỗ trợ tra cứu các quy định về quan hệ lao động, tiền lương, "
+        "hợp đồng, kỷ luật, bảo hiểm và thời giờ làm việc theo Bộ luật Lao động và các văn bản hướng dẫn thi hành."
+    )
+
+    # -------------------------------------------------------------------------
+    # Private pipeline stage methods
+    # -------------------------------------------------------------------------
+
+    def _handle_empty_query(self, question: str) -> ChainExecutionResult:
+        """Stage 0: Return early for empty/whitespace-only queries."""
+        empty_resp = ValidatedResponse(
+            raw_answer="Vui lòng nhập câu hỏi của bạn.",
+            final_answer="Vui lòng nhập câu hỏi của bạn.",
+            legal_findings=[],
+            cited_chunk_ids=[],
+            rejected_chunk_ids=[],
+            formatted_citations="",
+            needs_clarification=False,
+            clarification_question=None,
+            abstain=True,
+            abstain_reason="Empty query",
+            is_fully_grounded=True,
+        )
+        return ChainExecutionResult(
+            query=question,
+            normalized_query="",
+            resolved_query="",
+            route_decision=RouteDecision(strategy="hybrid", reason="Empty"),
+            retrieval_method="None",
+            retrieved_chunks=[],
+            formatted_context=self.context_builder.build_context([]),
+            raw_llm_output="",
+            validated_response=empty_resp,
+            retrieval_latency_ms=0.0,
+            llm_latency_ms=0.0,
+            total_latency_ms=0.0,
+        )
+
+    def _handle_out_of_scope(
+        self, question: str, norm_q: str, resolved_q: str, route_decision: RouteDecision,
+    ) -> ChainExecutionResult:
+        """Stage 1: Return early for queries outside labor law scope."""
+        oos_resp = ValidatedResponse(
+            raw_answer=self._OOS_MESSAGE,
+            final_answer=self._OOS_MESSAGE,
+            legal_findings=[],
+            cited_chunk_ids=[],
+            rejected_chunk_ids=[],
+            formatted_citations="",
+            needs_clarification=False,
+            clarification_question=None,
+            abstain=True,
+            abstain_reason=route_decision.reason,
+            is_fully_grounded=True,
+        )
+        return ChainExecutionResult(
+            query=question,
+            normalized_query=norm_q,
+            resolved_query=resolved_q,
+            route_decision=route_decision,
+            retrieval_method="None (Out-of-scope Abstained)",
+            retrieved_chunks=[],
+            formatted_context=self.context_builder.build_context([]),
+            raw_llm_output="",
+            validated_response=oos_resp,
+            retrieval_latency_ms=0.0,
+            llm_latency_ms=0.0,
+            total_latency_ms=0.0,
+        )
+
+    def _handle_premise_gate(
         self,
         question: str,
-        update_memory: bool = True,
+        norm_q: str,
+        resolved_q: str,
+        route_decision: RouteDecision,
+        premise_result: "PremiseGateResult",
+        update_memory: bool,
+        t0: float,
     ) -> ChainExecutionResult:
-        """Executes the full deterministic RAG pipeline.
-        
-        Args:
-            question: Raw user question string.
-            update_memory: Whether to commit this turn to short-term memory.
-            
-        Returns:
-            ChainExecutionResult with validated legal answer and full telemetry.
-        """
-        t0 = time.perf_counter()
-
-        # Step 1: Normalize input query
-        norm_q = normalize_query(question)
-        if not norm_q:
-            empty_resp = ValidatedResponse(
-                raw_answer="Vui lòng nhập câu hỏi của bạn.",
-                final_answer="Vui lòng nhập câu hỏi của bạn.",
-                legal_findings=[],
-                cited_chunk_ids=[],
-                rejected_chunk_ids=[],
-                formatted_citations="",
-                needs_clarification=False,
-                clarification_question=None,
-                abstain=True,
-                abstain_reason="Empty query",
-                is_fully_grounded=True,
-            )
-            return ChainExecutionResult(
-                query=question,
-                normalized_query="",
-                resolved_query="",
-                route_decision=RouteDecision(strategy="hybrid", reason="Empty"),
-                retrieval_method="None",
-                retrieved_chunks=[],
-                formatted_context=self.context_builder.build_context([]),
-                raw_llm_output="",
-                validated_response=empty_resp,
-                retrieval_latency_ms=0.0,
-                llm_latency_ms=0.0,
-                total_latency_ms=0.0,
-            )
-
-        # Colloquial normalization for internal routing and retrieval
-        colloquial_q = normalize_colloquial_vietnamese(norm_q)
-
-        # Step 2: Resolve short-term conversation context
-        resolved_q = self.memory.resolve_context(colloquial_q)
-
-        # Step 3: Route retrieval strategy
-        route_decision = self.router.route(resolved_q)
-
-        # Early abstention for clear out-of-scope queries
-        if route_decision.strategy == "out_of_scope":
-            oos_resp = ValidatedResponse(
-                raw_answer=(
-                    "Câu hỏi của bạn không thuộc phạm vi tư vấn của pháp luật lao động Việt Nam "
-                    "(ví dụ: hôn nhân gia đình, đất đai, hình sự, giao thông, thuế doanh nghiệp, kiện đòi nợ, thủ tục doanh nghiệp, sở hữu trí tuệ). "
-                    "VietLabor AI chỉ hỗ trợ tra cứu các quy định về quan hệ lao động, tiền lương, "
-                    "hợp đồng, kỷ luật, bảo hiểm và thời giờ làm việc theo Bộ luật Lao động và các văn bản hướng dẫn thi hành."
-                ),
-                final_answer=(
-                    "Câu hỏi của bạn không thuộc phạm vi tư vấn của pháp luật lao động Việt Nam "
-                    "(ví dụ: hôn nhân gia đình, đất đai, hình sự, giao thông, thuế doanh nghiệp, kiện đòi nợ, thủ tục doanh nghiệp, sở hữu trí tuệ). "
-                    "VietLabor AI chỉ hỗ trợ tra cứu các quy định về quan hệ lao động, tiền lương, "
-                    "hợp đồng, kỷ luật, bảo hiểm và thời giờ làm việc theo Bộ luật Lao động và các văn bản hướng dẫn thi hành."
-                ),
-                legal_findings=[],
-                cited_chunk_ids=[],
-                rejected_chunk_ids=[],
-                formatted_citations="",
-                needs_clarification=False,
-                clarification_question=None,
-                abstain=True,
-                abstain_reason=route_decision.reason,
-                is_fully_grounded=True,
-            )
-            return ChainExecutionResult(
-                query=question,
-                normalized_query=norm_q,
-                resolved_query=resolved_q,
-                route_decision=route_decision,
-                retrieval_method="None (Out-of-scope Abstained)",
-                retrieved_chunks=[],
-                formatted_context=self.context_builder.build_context([]),
-                raw_llm_output="",
-                validated_response=oos_resp,
-                retrieval_latency_ms=0.0,
-                llm_latency_ms=0.0,
-                total_latency_ms=0.0,
-            )
-
-        # Step 3b: Material Premise Gate (Phase 5F)
-        current_turn_facts = self.memory._extract_facts(colloquial_q)
-        effective_facts = {**self.memory.accumulated_facts, **current_turn_facts}
-        parsed_issue_gate = self.issue_parser.parse(
-            query=resolved_q,
-            issue_id="ISSUE_1",
-            context_facts=effective_facts,
+        """Stage 2: Return clarification when MaterialPremiseGate detects missing facts."""
+        clarify_text = premise_result.clarification_question or "Vui lòng cung cấp thêm thông tin chi tiết."
+        clarify_resp = ValidatedResponse(
+            raw_answer=clarify_text,
+            final_answer=clarify_text,
+            legal_findings=[],
+            cited_chunk_ids=[],
+            rejected_chunk_ids=[],
+            formatted_citations="",
+            needs_clarification=True,
+            clarification_question=clarify_text,
+            clarification_options=premise_result.clarification_options,
+            abstain=False,
+            is_fully_grounded=True,
         )
-        premise_result = self.premise_gate.evaluate(parsed_issue_gate, context_facts=effective_facts)
+        if update_memory:
+            self.memory.add_turn(user_query=norm_q, assistant_response=clarify_text)
+        t_end = time.perf_counter()
+        return ChainExecutionResult(
+            query=question,
+            normalized_query=norm_q,
+            resolved_query=resolved_q,
+            route_decision=route_decision,
+            retrieval_method="None (Material Premise Gate Clarification)",
+            retrieved_chunks=[],
+            formatted_context=self.context_builder.build_context([]),
+            raw_llm_output="",
+            validated_response=clarify_resp,
+            retrieval_latency_ms=0.0,
+            llm_latency_ms=0.0,
+            total_latency_ms=(t_end - t0) * 1000,
+            selection_latency_ms=0.0,
+            locked_chunk_ids=[],
+        )
 
-        if premise_result.needs_clarification:
-            clarify_text = premise_result.clarification_question or "Vui lòng cung cấp thêm thông tin chi tiết."
-            clarify_resp = ValidatedResponse(
-                raw_answer=clarify_text,
-                final_answer=clarify_text,
-                legal_findings=[],
-                cited_chunk_ids=[],
-                rejected_chunk_ids=[],
-                formatted_citations="",
-                needs_clarification=True,
-                clarification_question=clarify_text,
-                clarification_options=premise_result.clarification_options,
-                abstain=False,
-                is_fully_grounded=True,
-            )
-            if update_memory:
-                self.memory.add_turn(user_query=norm_q, assistant_response=clarify_text)
-            t_end = time.perf_counter()
-            return ChainExecutionResult(
-                query=question,
-                normalized_query=norm_q,
-                resolved_query=resolved_q,
-                route_decision=route_decision,
-                retrieval_method="None (Material Premise Gate Clarification)",
-                retrieved_chunks=[],
-                formatted_context=self.context_builder.build_context([]),
-                raw_llm_output="",
-                validated_response=clarify_resp,
-                retrieval_latency_ms=0.0,
-                llm_latency_ms=0.0,
-                total_latency_ms=(t_end - t0) * 1000,
-                selection_latency_ms=0.0,
-                locked_chunk_ids=[],
-            )
+    def _retrieve_and_select(
+        self,
+        norm_q: str,
+        resolved_q: str,
+        route_decision: RouteDecision,
+        premise_result: "PremiseGateResult",
+    ) -> Dict[str, Any]:
+        """Stage 3: Decompose, retrieve, filter, and select+lock canonical evidence.
 
-        # Step 4: Issue Decomposition & Multi-Issue Retrieval
+        Returns a dict with keys:
+            retrieval_method, combined_candidate_chunks, locked_chunks,
+            locked_chunk_ids, multi_issue_locked, decomposed_issues,
+            retrieval_latency_ms, selection_latency_ms.
+        """
+        # --- 3a. Issue Decomposition ---
         t_ret_start = time.perf_counter()
         query_for_retrieval = route_decision.augmented_query or resolved_q
         decomposed_issues = self.decomposer.decompose(resolved_q)
@@ -436,6 +435,7 @@ class VietLaborRAGChain:
 
         is_domestic = any(k in resolved_q.lower() for k in ["giúp việc", "người giúp việc", "gia đình"])
 
+        # --- 3b. Retrieval ---
         if route_decision.is_exact_reference():
             retrieval_method = "BM25 Lexical (Exact Reference)"
             raw_retrieved = self.bm25_retriever.retrieve(query_for_retrieval, top_k=self.top_k)
@@ -452,7 +452,7 @@ class VietLaborRAGChain:
                 retrieval_method = "Multi-Issue Hybrid RRF (BM25 + BGE-M3)"
                 for iss in decomposed_issues:
                     issue_retrieved = self.hybrid_retriever.retrieve(iss.retrieval_query, top_k=self.top_k // 2 + 5)
-                    
+
                     # Filter domestic worker provisions unless question is about domestic workers
                     if not is_domestic:
                         issue_retrieved = [c for c in issue_retrieved if str(c.get("metadata", {}).get("article_number")) not in ["161", "162", "165"]]
@@ -530,7 +530,7 @@ class VietLaborRAGChain:
         t_ret_end = time.perf_counter()
         retrieval_latency_ms = (t_ret_end - t_ret_start) * 1000
 
-        # Step 5: Deterministic Evidence Selection & Locking (Phase 5E)
+        # --- 3c. Evidence Selection & Locking ---
         t_sel_start = time.perf_counter()
         locked_chunks: List[Dict[str, Any]] = []
         locked_chunk_ids: List[str] = []
@@ -566,7 +566,34 @@ class VietLaborRAGChain:
         t_sel_end = time.perf_counter()
         selection_latency_ms = (t_sel_end - t_sel_start) * 1000
 
-        # Step 6: Build compact statutory evidence blocks ONLY from locked evidence
+        return {
+            "retrieval_method": retrieval_method,
+            "combined_candidate_chunks": combined_candidate_chunks,
+            "locked_chunks": locked_chunks,
+            "locked_chunk_ids": locked_chunk_ids,
+            "multi_issue_locked": multi_issue_locked,
+            "decomposed_issues": decomposed_issues,
+            "retrieval_latency_ms": retrieval_latency_ms,
+            "selection_latency_ms": selection_latency_ms,
+        }
+
+    def _generate_and_validate(
+        self,
+        norm_q: str,
+        resolved_q: str,
+        route_decision: RouteDecision,
+        premise_result: "PremiseGateResult",
+        locked_chunks: List[Dict[str, Any]],
+        locked_chunk_ids: List[str],
+        multi_issue_locked: Dict[str, List[Dict[str, Any]]],
+        decomposed_issues: list,
+    ) -> Dict[str, Any]:
+        """Stage 4: Build context, invoke LLM, parse JSON, validate citations.
+
+        Returns a dict with keys:
+            context, raw_llm_output, validated_resp, locked_chunk_ids, llm_latency_ms.
+        """
+        # Build compact statutory evidence blocks ONLY from locked evidence
         context = self.context_builder.build_context(
             retrieved_chunks=locked_chunks,
             multi_issue_candidates=multi_issue_locked if len(decomposed_issues) > 1 else None,
@@ -579,7 +606,7 @@ class VietLaborRAGChain:
             if cid not in locked_chunk_ids and any(k in cid for k in ["d35-k1-d", "ND_145_2020#d7"]):
                 locked_chunk_ids.append(cid)
 
-        # Step 7: Construct Prompt
+        # Construct Prompt
         conv_summary = self.memory.get_history_summary()
         user_prompt = build_user_prompt(
             query=norm_q,
@@ -595,18 +622,22 @@ class VietLaborRAGChain:
             HumanMessage(content=user_prompt),
         ]
 
-        # Step 8: Invoke Local Qwen LLM
+        # Invoke Local Qwen LLM
         t_llm_start = time.perf_counter()
-        llm = self.llm_manager.get_llm()
+        llm: Any = self.llm_manager.get_llm()
         llm_response = llm.invoke(messages)
-        raw_llm_output = llm_response.content if hasattr(llm_response, "content") else str(llm_response)
+        if hasattr(llm_response, "content"):
+            content_val = llm_response.content
+            raw_llm_output: str = content_val if isinstance(content_val, str) else str(content_val)
+        else:
+            raw_llm_output = str(llm_response)
         t_llm_end = time.perf_counter()
         llm_latency_ms = (t_llm_end - t_llm_start) * 1000
 
-        # Step 9: Parse structured JSON output
+        # Parse structured JSON output
         parsed_answer: LegalAnswer = self.validator.parse_llm_json(raw_llm_output)
 
-        # Step 9b: Enforce clarification flag only if query was ambiguous AND no clarification facts exist in memory
+        # Enforce clarification flag only if query was ambiguous AND no clarification facts exist in memory
         user_has_facts = self.memory.has_clarification_facts()
         if user_has_facts and premise_result.is_sufficient:
             # User provided explicit facts and premise is now sufficient -> MUST ANSWER, DO NOT CLARIFY AGAIN
@@ -621,7 +652,7 @@ class VietLaborRAGChain:
                     "người quản lý doanh nghiệp, cao đẳng trở lên, trung cấp/kỹ thuật hay nhóm công việc khác?"
                 )
 
-        # Step 10: Validate citations & Backend Citation Ownership using EvidenceMapper
+        # Validate citations & Backend Citation Ownership using EvidenceMapper
         validated_resp: ValidatedResponse = self.validator.validate_and_format(
             legal_answer=parsed_answer,
             available_chunk_ids=context.available_chunk_ids,
@@ -630,26 +661,99 @@ class VietLaborRAGChain:
             locked_chunk_ids=locked_chunk_ids,
         )
 
-        # Step 11: Commit to short-term conversation state
+        return {
+            "context": context,
+            "raw_llm_output": raw_llm_output,
+            "validated_resp": validated_resp,
+            "locked_chunk_ids": locked_chunk_ids,
+            "llm_latency_ms": llm_latency_ms,
+        }
+
+    # -------------------------------------------------------------------------
+    # Public orchestrator
+    # -------------------------------------------------------------------------
+
+    def run(
+        self,
+        question: str,
+        update_memory: bool = True,
+    ) -> ChainExecutionResult:
+        """Executes the full deterministic RAG pipeline.
+
+        Pipeline stages:
+            0. Normalize input → early return if empty.
+            1. Route → early return if out-of-scope.
+            2. Material Premise Gate → early return if clarification needed.
+            3. Retrieve & Select → decompose, retrieve, filter, score, lock evidence.
+            4. Generate & Validate → build context, invoke LLM, parse JSON, validate citations.
+
+        Args:
+            question: Raw user question string.
+            update_memory: Whether to commit this turn to short-term memory.
+
+        Returns:
+            ChainExecutionResult with validated legal answer and full telemetry.
+        """
+        t0 = time.perf_counter()
+
+        # Stage 0: Normalize
+        norm_q = normalize_query(question)
+        if not norm_q:
+            return self._handle_empty_query(question)
+
+        colloquial_q = normalize_colloquial_vietnamese(norm_q)
+        resolved_q = self.memory.resolve_context(colloquial_q)
+
+        # Stage 1: Route
+        route_decision = self.router.route(resolved_q)
+        if route_decision.strategy == "out_of_scope":
+            return self._handle_out_of_scope(question, norm_q, resolved_q, route_decision)
+
+        # Stage 2: Material Premise Gate
+        current_turn_facts = self.memory._extract_facts(colloquial_q)
+        effective_facts = {**self.memory.accumulated_facts, **current_turn_facts}
+        parsed_issue_gate = self.issue_parser.parse(
+            query=resolved_q, issue_id="ISSUE_1", context_facts=effective_facts,
+        )
+        premise_result = self.premise_gate.evaluate(parsed_issue_gate, context_facts=effective_facts)
+
+        if premise_result.needs_clarification:
+            return self._handle_premise_gate(
+                question, norm_q, resolved_q, route_decision, premise_result, update_memory, t0,
+            )
+
+        # Stage 3: Retrieve & Select
+        ret_sel = self._retrieve_and_select(norm_q, resolved_q, route_decision, premise_result)
+
+        # Stage 4: Generate & Validate
+        gen_val = self._generate_and_validate(
+            norm_q, resolved_q, route_decision, premise_result,
+            ret_sel["locked_chunks"], ret_sel["locked_chunk_ids"],
+            ret_sel["multi_issue_locked"], ret_sel["decomposed_issues"],
+        )
+
+        # Commit to short-term conversation state
         if update_memory:
-            self.memory.add_turn(user_query=norm_q, assistant_response=validated_resp.final_answer)
+            self.memory.add_turn(
+                user_query=norm_q,
+                assistant_response=gen_val["validated_resp"].final_answer,
+            )
 
         t_end = time.perf_counter()
-        total_latency_ms = (t_end - t0) * 1000
 
         return ChainExecutionResult(
             query=question,
             normalized_query=norm_q,
             resolved_query=resolved_q,
             route_decision=route_decision,
-            retrieval_method=retrieval_method,
-            retrieved_chunks=combined_candidate_chunks,
-            formatted_context=context,
-            raw_llm_output=raw_llm_output,
-            validated_response=validated_resp,
-            retrieval_latency_ms=retrieval_latency_ms,
-            llm_latency_ms=llm_latency_ms,
-            total_latency_ms=total_latency_ms,
-            selection_latency_ms=selection_latency_ms,
-            locked_chunk_ids=locked_chunk_ids,
+            retrieval_method=ret_sel["retrieval_method"],
+            retrieved_chunks=ret_sel["combined_candidate_chunks"],
+            formatted_context=gen_val["context"],
+            raw_llm_output=gen_val["raw_llm_output"],
+            validated_response=gen_val["validated_resp"],
+            retrieval_latency_ms=ret_sel["retrieval_latency_ms"],
+            llm_latency_ms=gen_val["llm_latency_ms"],
+            total_latency_ms=(t_end - t0) * 1000,
+            selection_latency_ms=ret_sel["selection_latency_ms"],
+            locked_chunk_ids=gen_val["locked_chunk_ids"],
         )

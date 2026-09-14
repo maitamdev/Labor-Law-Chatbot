@@ -32,8 +32,10 @@ if str(PROJECT_ROOT) not in sys.path:
 
 # Ensure Windows terminal prints Vietnamese UTF-8 cleanly with line buffering
 if sys.platform == "win32":
-    sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
-    sys.stderr.reconfigure(encoding="utf-8", line_buffering=True)
+    if hasattr(sys.stdout, "reconfigure"):
+        getattr(sys.stdout, "reconfigure")(encoding="utf-8", line_buffering=True)
+    if hasattr(sys.stderr, "reconfigure"):
+        getattr(sys.stderr, "reconfigure")(encoding="utf-8", line_buffering=True)
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from models.local_llm import LocalLLMManager

@@ -15,6 +15,8 @@ if str(PROJECT_ROOT) not in sys.path:
 
 import pymupdf
 from PIL import Image
+import io
+import numpy as np
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger("OCRBenchmark")
@@ -111,16 +113,12 @@ def run_benchmark():
         img_bytes = pix.tobytes("png")
         doc.close()
 
-        from PIL import Image
-        import io
-        import numpy as np
-
         img_pil = Image.open(io.BytesIO(img_bytes))
         img_np = np.array(img_pil)
 
         # Test PaddleOCR
         t0 = time.time()
-        p_res = list(paddle_engine.predict(img_np))
+        p_res = list(paddle_engine.predict(img_np)) if paddle_engine is not None else []
         p_time = time.time() - t0
 
         p_texts = []
@@ -133,7 +131,10 @@ def run_benchmark():
 
         # Test RapidOCR
         t1 = time.time()
-        r_res, _ = rapid_engine(img_bytes)
+        if rapid_engine is not None:
+            r_res, _ = rapid_engine(img_bytes)
+        else:
+            r_res, _ = [], None
         r_time = time.time() - t1
 
         r_texts = [x[1] for x in r_res] if r_res else []

@@ -7,10 +7,12 @@ using Reciprocal Rank Fusion (RRF) to avoid score scaling distortion.
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from rag.bm25_retriever import BM25Retriever
 from rag.dense_retriever import DenseRetriever
+from rag.vectorstore import LegalVectorStore
 
 logger = logging.getLogger(__name__)
 
@@ -27,9 +29,33 @@ class HybridRetriever:
         rrf_k: int = DEFAULT_RRF_K,
         bm25_weight: float = 1.0,
         dense_weight: float = 1.0,
+        index_version: str = "v2",
     ):
-        self.bm25_retriever = bm25_retriever or BM25Retriever()
-        self.dense_retriever = dense_retriever or DenseRetriever()
+        self.index_version = index_version
+        if bm25_retriever is not None:
+            self.bm25_retriever = bm25_retriever
+        else:
+            if index_version == "v2" and Path("storage/bm25_v2").exists():
+                self.bm25_retriever = BM25Retriever(
+                    persist_dir="storage/bm25_v2",
+                    corpus_path="data/processed/legal_documents_v2.jsonl",
+                )
+            else:
+                self.bm25_retriever = BM25Retriever()
+
+        if dense_retriever is not None:
+            self.dense_retriever = dense_retriever
+        else:
+            if index_version == "v2" and Path("storage/chroma_v2").exists():
+                self.dense_retriever = DenseRetriever(
+                    vectorstore=LegalVectorStore(
+                        persist_dir="storage/chroma_v2",
+                        corpus_path="data/processed/legal_documents_v2.jsonl",
+                    )
+                )
+            else:
+                self.dense_retriever = DenseRetriever()
+
         self.rrf_k = rrf_k
         self.bm25_weight = bm25_weight
         self.dense_weight = dense_weight

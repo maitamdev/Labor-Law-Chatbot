@@ -1,0 +1,389 @@
+# ==============================================================================
+# VietLabor AI - Evidence Scoring Configuration
+# ==============================================================================
+# This file externalizes all scoring rules from evidence_selector.py.
+# Each rule maps a (qualifier/topic/condition) to article-level score boosts/penalties.
+#
+# SCORE RATIONALE GUIDE:
+# ─────────────────────
+# +/- 1.0 ~ 2.0 : Minor preference / soft penalty (nudge toward correct sibling)
+# +/- 3.0 ~ 4.0 : Strong preference (confidently select clause/point level)
+# +/- 5.0 ~ 6.5 : Very strong (single authoritative provision for the issue)
+# +/- 8.0 ~10.0 : Dominant lock (there is exactly ONE correct provision; others are wrong)
+# -15.0         : Hard suppression (provision is categorically irrelevant)
+#
+# FIELD REFERENCE:
+#   doc_id         : Document identifier (e.g. VBHN_18_2026, ND_12_2022)
+#   article        : Article number (int)
+#   clause         : Clause number (int, optional)
+#   point          : Point letter (str, optional)
+#   boost          : Positive score added when matched
+#   penalty        : Negative score added when matched (use negative values)
+# ==============================================================================
+
+# ─────────────────────────────────────────────────────────
+# TOPIC-LEVEL SCORING (Signal 3: Topic Score)
+# Maps issue.topic → article ranges for base relevance.
+# ─────────────────────────────────────────────────────────
+topic_scores:
+  probation:
+    - { doc_id: VBHN_18_2026, articles: [24, 25, 26, 27], boost: 1.5 }
+    - { doc_id: ND_12_2022, article: 10, boost: 1.0 }
+  salary:
+    - { doc_id: VBHN_18_2026, article_range: [90, 104], boost: 1.0 }
+  overtime:
+    - { doc_id: VBHN_18_2026, article: 107, boost: 2.5,
+        rationale: "Điều 107 is the primary overtime hours regulation" }
+    - { doc_id: VBHN_18_2026, articles: [98, 109], boost: 1.0 }
+    - { doc_id: ND_145_2020, articles: [55, 60], boost: 1.0 }
+  annual_leave:
+    - { doc_id: VBHN_18_2026, articles: [111, 112, 113, 114, 115], boost: 1.5 }
+  discipline:
+    - { doc_id: VBHN_18_2026, article_range: [117, 128], boost: 1.5 }
+  contract:
+    - { doc_id: VBHN_18_2026, article_range: [13, 40], boost: 1.0 }
+
+# ─────────────────────────────────────────────────────────
+# ACTOR-LEVEL SCORING (Signal 4: Actor Score)
+# Distinguishes NLĐ (Đ.35) vs NSDLĐ (Đ.36) termination.
+# ─────────────────────────────────────────────────────────
+actor_scores:
+  EMPLOYER:
+    - { doc_id: VBHN_18_2026, article: 36, boost: 1.5,
+        rationale: "NSDLĐ đơn phương chấm dứt → Điều 36" }
+    - { doc_id: VBHN_18_2026, article: 35, penalty: -1.5,
+        rationale: "Suppress NLĐ article when actor is employer" }
+  EMPLOYEE:
+    - { doc_id: VBHN_18_2026, article: 35, boost: 1.5,
+        rationale: "NLĐ đơn phương chấm dứt → Điều 35" }
+    - { doc_id: VBHN_18_2026, article: 36, penalty: -1.5,
+        rationale: "Suppress NSDLĐ article when actor is employee" }
+
+# ─────────────────────────────────────────────────────────
+# INTENT-LEVEL SCORING (Signal 5: Intent Score)
+# Distinguishes BLLĐ (substantive rule) vs NĐ 12 (sanctions).
+# ─────────────────────────────────────────────────────────
+intent_scores:
+  SUBSTANTIVE_RULE:
+    - { doc_id: VBHN_18_2026, boost: 1.5,
+        rationale: "BLLĐ is the primary substantive code" }
+    - { doc_id: ND_12_2022, penalty: -1.0,
+        rationale: "Soft-suppress sanctions when user asks about the rule itself" }
+  SANCTION:
+    - { doc_id: ND_12_2022, boost: 2.0,
+        rationale: "NĐ 12 is the penalty decree" }
+    - { doc_id: VBHN_18_2026, penalty: -0.5,
+        rationale: "Soft-suppress substantive code when user asks about fine/penalty" }
+
+# ─────────────────────────────────────────────────────────
+# QUALIFIER-LEVEL SCORING (Signal 6: Qualifier Score)
+# Fine-grained clause/point selection within articles.
+#
+# Score scale rationale:
+#   +3.0 ~ +4.0 : Correct clause/point among 2-3 siblings
+#   +5.0 ~ +6.5 : Single authoritative provision (strong lock)
+#   +8.0 ~+10.0 : Absolute lock (there's exactly ONE correct answer)
+#   -2.0 ~ -4.0 : Suppress wrong sibling clause/point
+#  -10.0 ~-15.0 : Hard suppression (categorically wrong provision)
+# ─────────────────────────────────────────────────────────
+qualifier_rules:
+
+  # --- Hazard Category: 14 vs 16 days annual leave (Điều 113) ---
+  category_hazardous_normal:
+    match_text_boost:
+      - { keywords: ["nặng nhọc, độc hại", "nặng nhọc độc hại"], boost: 2.5,
+          rationale: "Favor Điểm b (14 ngày) for ordinary hazardous" }
+    match_text_penalty:
+      - { keywords: ["đặc biệt nặng nhọc"], penalty: -2.5,
+          rationale: "Penalize Điểm c (16 ngày) when user did NOT say 'đặc biệt'" }
+
+  category_especially_hazardous:
+    match_text_boost:
+      - { keywords: ["đặc biệt nặng nhọc"], boost: 3.0,
+          rationale: "Favor Điểm c (16 ngày) for especially hazardous" }
+
+  # --- Overtime temporal limits (Điều 107) ---
+  temporal_limit_day:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 107, point: "b", boost: 4.0,
+          rationale: "Point b = daily limit (01 ngày, 50%)" }
+      - { doc_id: VBHN_18_2026, article: 107, point: "a", penalty: -3.0,
+          rationale: "Suppress point a (employee consent) for day limit queries" }
+
+  temporal_limit_month:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 107, point: "b", boost: 4.0 }
+      - { doc_id: VBHN_18_2026, article: 107, point: "a", penalty: -3.0 }
+
+  temporal_limit_year:
+    match_text_boost:
+      - { keywords: ["01 năm", "200 giờ"], boost: 3.0 }
+
+  # --- Delayed salary (Điều 97) ---
+  delay_over_15_days:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 97, clause: 4, boost: 3.5,
+          rationale: "Khoản 4 = interest obligation after 15-day delay" }
+      - { doc_id: VBHN_18_2026, article: 97, clause: 1, penalty: -1.5 }
+
+  # --- Wage deductions (Điều 102) ---
+  wage_deduction:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 102, clause: 1, boost: 3.0 }
+      - { doc_id: VBHN_18_2026, article: 102, clause: 2, penalty: -1.5 }
+
+  wage_deduction_limit:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 102, clause: 3, boost: 4.5,
+          rationale: "Khoản 3 = maximum 30% deduction cap" }
+
+  # --- Probation cancellation (Điều 27k2) ---
+  probation_cancellation:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 27, clause: 2, boost: 4.0 }
+      - { doc_id: VBHN_18_2026, article: 35, penalty: -3.0 }
+
+  # --- Annual leave cashout (Điều 113k3, k6) ---
+  leave_cashout_on_termination:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 113, clauses: [3, 6], boost: 4.5 }
+      - { doc_id: VBHN_18_2026, article: 101, penalty: -3.0 }
+
+  # --- Prohibited deposit / document withholding (Điều 17) ---
+  prohibited_deposit_or_withholding:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 17, boost: 3.0 }
+
+  money_deposit_security:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 17, clause: 2, boost: 2.0 }
+
+  original_document_withholding:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 17, clause: 1, boost: 2.0 }
+
+  # --- Working hours reduction for hazardous work (Điều 105k3) ---
+  working_hours_reduction:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 105, clause: 3, boost: 6.5 }
+      - { doc_id: VBHN_18_2026, articles: [137, 219, 113], penalty: -3.5 }
+
+  # --- Special occupation flight crew ---
+  special_occupation_notice:
+    article_rules:
+      - { doc_id: ND_145_2020, article: 7, boost: 3.5 }
+      - { doc_id: VBHN_18_2026, article: 35, point: "d", boost: 3.5 }
+
+  # --- Probation duration 4 groups (Điều 25) ---
+  probation_enterprise_manager:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 25, clause: 1, boost: 4.5 }
+  probation_college_degree:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 25, clause: 2, boost: 4.5 }
+  probation_intermediate:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 25, clause: 3, boost: 4.5 }
+  probation_other_work:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 25, clause: 4, boost: 4.5 }
+
+  # --- Overtime pay rate (Điều 98) ---
+  overtime_pay_rate:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 98, boost: 3.5 }
+      - { doc_id: VBHN_18_2026, article: 107, penalty: -3.0 }
+  overtime_normal_day:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 98, point: "a", boost: 3.0 }
+  overtime_weekly_rest_day:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 98, point: "b", boost: 3.0 }
+  overtime_holiday_tet:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 98, point: "c", boost: 3.0 }
+
+  # --- Probation wage (Điều 26) ---
+  probation_salary:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 26, boost: 8.0,
+          rationale: "Dominant lock: THE provision for probation wage (>=85%)" }
+      - { doc_id: ND_293_2025, penalty: -10.0,
+          rationale: "Hard suppress: minimum wage decree irrelevant for probation salary" }
+
+  # --- Social insurance in probation (Điều 24k1) ---
+  probation_social_insurance:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 24, clause: 1, boost: 8.0 }
+      - { doc_id: VBHN_18_2026, articles: [25, 27], penalty: -4.0 }
+
+  # --- Probation conclusion (Điều 27k1) ---
+  probation_conclusion:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 27, clause: 1, boost: 10.0,
+          rationale: "Dominant lock: must sign HĐLĐ immediately if probation passes" }
+      - { doc_id: VBHN_18_2026, article: 27, boost: 2.0 }
+      - { doc_id: VBHN_18_2026, articles: [24, 25], penalty: -4.0 }
+
+  # --- Normal working hours (Điều 105) ---
+  normal_working_hours:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 105, boost: 3.5 }
+      - { doc_id: VBHN_18_2026, article: 107, penalty: -3.0 }
+  normal_hours_week_limit:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 105, clause: 2, boost: 5.0 }
+      - { doc_id: VBHN_18_2026, article: 105, clause: 1, penalty: -2.5 }
+  normal_hours_day_limit:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 105, clause: 1, boost: 4.0 }
+
+  # --- Night work hours (Điều 106) ---
+  night_work_hours:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 106, boost: 5.0 }
+      - { doc_id: VBHN_18_2026, article: 109, penalty: -2.0 }
+
+  # --- Contract definition vs types ---
+  contract_definition:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 13, clause: 1, boost: 8.5 }
+  contract_types:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 20, clause: 1, boost: 6.0 }
+  contract_auto_indefinite_b:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 20, clause: 2, point: "b", boost: 6.0 }
+      - { doc_id: VBHN_18_2026, article: 20, clause: 2, point: "c", penalty: -3.0 }
+
+  # --- Severance suppression ---
+  severance_hard_suppress:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 46, penalty: -15.0,
+          rationale: "Hard suppress: Điều 46 categorically wrong when not asking about severance" }
+
+  # --- Marriage leave (Điều 115) ---
+  marriage_leave_paid:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 115, clause: 1, point: "a", boost: 5.0 }
+
+  # --- Sanctions (NĐ 12) ---
+  sanction_withholding_diploma:
+    article_rules:
+      - { doc_id: ND_12_2022, article: 9, clause: 2, point: "a", boost: 5.0 }
+  sanction_probation_overtime:
+    article_rules:
+      - { doc_id: ND_12_2022, article: 10, clause: 2, point: "a", boost: 5.0 }
+  sanction_monetary_fine_discipline:
+    article_rules:
+      - { doc_id: ND_12_2022, article: 19, clause: 3, point: "b", boost: 5.0 }
+
+  # --- Prohibited monetary fine (Điều 127k2) ---
+  prohibited_monetary_fine:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 127, clause: 2, boost: 6.0 }
+      - { doc_id: VBHN_18_2026, articles: [122, 102], penalty: -2.0 }
+
+  # --- Public holiday leave (Điều 112) ---
+  public_holiday_leave:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 112, boost: 6.0 }
+      - { doc_id: VBHN_18_2026, articles: [98, 107], penalty: -3.0 }
+
+  # --- Bonus regulation (Điều 104) ---
+  bonus_regulation:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 104, clause: 1, boost: 6.0 }
+      - { doc_id: VBHN_18_2026, articles: [41, 168], penalty: -3.0 }
+
+  # --- Post-termination settlement (Điều 48) ---
+  termination_settlement_obligation:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 48, clause: 1, boost: 6.0 }
+      - { doc_id: VBHN_18_2026, articles: [20, 97], penalty: -2.5 }
+
+  # --- Probation under 1 month (Điều 24k3) ---
+  probation_under_1_month_prohibited:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 24, clause: 3, boost: 6.5 }
+      - { doc_id: VBHN_18_2026, article: 27, penalty: -4.0 }
+
+  # --- Night work salary rate (Điều 98k2) ---
+  night_work_salary_rate:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 98, clause: 2, boost: 6.5 }
+      - { doc_id: VBHN_18_2026, article: 106, penalty: -4.0 }
+
+  # --- Discipline forms (Điều 124) ---
+  discipline_forms_enumeration:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 124, boost: 6.5 }
+      - { doc_id: VBHN_18_2026, article: 125, penalty: -4.0 }
+
+  # --- Discipline principles (Điều 122k2) ---
+  discipline_principles:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 122, clause: 2, boost: 6.5 }
+      - { doc_id: VBHN_18_2026, article: 124, penalty: -4.0 }
+
+  # --- Job abandonment dismissal (Điều 125k4) ---
+  job_abandonment_dismissal:
+    article_rules:
+      - { doc_id: VBHN_18_2026, article: 125, clause: 4, boost: 6.5 }
+      - { doc_id: VBHN_18_2026, articles: [35, 36], penalty: -4.0 }
+
+# ─────────────────────────────────────────────────────────
+# CONTRACT TERM NOTICE PERIOD SCORING
+# ─────────────────────────────────────────────────────────
+notice_period_rules:
+  EMPLOYER:
+    contract_indefinite:
+      boost: { doc_id: VBHN_18_2026, article: 36, point: "a", score: 5.5 }
+      suppress: { doc_id: VBHN_18_2026, article: 35, penalty: -4.0 }
+    contract_definite_12_36_months:
+      boost: { doc_id: VBHN_18_2026, article: 36, point: "b", score: 5.5 }
+      suppress: { doc_id: VBHN_18_2026, article: 35, penalty: -4.0 }
+    contract_under_12_months:
+      boost: { doc_id: VBHN_18_2026, article: 36, point: "c", score: 5.5 }
+      suppress: { doc_id: VBHN_18_2026, article: 35, penalty: -4.0 }
+  EMPLOYEE:
+    contract_definite_12_36_months:
+      boost: { doc_id: VBHN_18_2026, article: 35, point: "b", score: 5.5 }
+      suppress: { doc_id: VBHN_18_2026, article: 36, penalty: -3.0 }
+    contract_indefinite:
+      boost: { doc_id: VBHN_18_2026, article: 35, point: "a", score: 5.5 }
+      suppress: { doc_id: VBHN_18_2026, article: 36, penalty: -3.0 }
+    contract_under_12_months:
+      boost: { doc_id: VBHN_18_2026, article: 35, point: "c", score: 5.5 }
+      suppress_sibling: { doc_id: VBHN_18_2026, article: 35, points: ["a", "b"], penalty: -3.0 }
+      suppress_other: { doc_id: VBHN_18_2026, article: 36, penalty: -3.0 }
+
+# ─────────────────────────────────────────────────────────
+# DE FACTO EMPLOYMENT SCORING
+# ─────────────────────────────────────────────────────────
+de_facto_employment_rules:
+  article_rules:
+    - { doc_id: VBHN_18_2026, article: 13, clause: 1, boost: 8.5 }
+    - { doc_id: VBHN_18_2026, article: 90, boost: 4.5 }
+    - { doc_id: VBHN_18_2026, articles: [115, 112, 105], penalty: -6.0 }
+
+# ─────────────────────────────────────────────────────────
+# SIGNAL WEIGHTS
+# ─────────────────────────────────────────────────────────
+signal_weights:
+  semantic: 1.0
+  lexical: 1.0
+  topic: 1.5
+  actor: 1.5
+  intent: 2.0
+  qualifier: 2.5
+  numeric: 3.0
+  specificity: 1.0
+
+# ─────────────────────────────────────────────────────────
+# THRESHOLDS
+# ─────────────────────────────────────────────────────────
+thresholds:
+  min_confidence: 0.5
+  min_margin: 0.1
+  sibling_winner_bonus: 1.0

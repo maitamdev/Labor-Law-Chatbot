@@ -36,9 +36,18 @@ class RouteDecision:
     actor: str = "UNKNOWN"  # "EMPLOYEE" | "EMPLOYER" | "BOTH" | "UNKNOWN"
     legal_intent: str = "SUBSTANTIVE_RULE"  # "SUBSTANTIVE_RULE" | "SANCTION" | "BOTH"
     augmented_query: Optional[str] = None
+    # Phase 5G Domain & Status-Aware flags:
+    domain: str = "CORE_LABOR"  # "CORE_LABOR" | "RETIREMENT" | "UNEMPLOYMENT_INSURANCE" | "FOREIGN_WORKER" | "CROSS_DOMAIN" | "UNKNOWN"
+    target_domains: List[str] = field(default_factory=lambda: ["CORE_LABOR"])
+    scope_tier: str = "core"  # "core" | "extended"
+    target_status: str = "CURRENT"  # "CURRENT" | "PARTIALLY_EFFECTIVE" | "ANY"
 
     def is_exact_reference(self) -> bool:
         return self.strategy == "exact_reference"
+
+    @property
+    def is_out_of_scope(self) -> bool:
+        return self.strategy == "out_of_scope"
 
 
 class QueryRouter:
@@ -68,7 +77,47 @@ class QueryRouter:
         "nghị định 337": "337/2025/NĐ-CP",
         "hợp đồng điện tử": "337/2025/NĐ-CP",
         "thông tư 08": "08/2026/TT-BLĐTBXH",
+        # Phase 5G Extended Document Aliases:
+        "nghị định 135": "135/2020/NĐ-CP",
+        "nd 135": "135/2020/NĐ-CP",
+        "tuổi nghỉ hưu": "135/2020/NĐ-CP",
+        "luật việc làm": "74/2025/QH15",
+        "luật việc làm 2025": "74/2025/QH15",
+        "nghị định 374": "374/2025/NĐ-CP",
+        "nd 374": "374/2025/NĐ-CP",
+        "nghị định 219": "219/2025/NĐ-CP",
+        "nd 219": "219/2025/NĐ-CP",
+        "lao động nước ngoài": "219/2025/NĐ-CP",
+        "giấy phép lao động": "219/2025/NĐ-CP",
     }
+
+    # Phase 5G Domain Signal Groups
+    RETIREMENT_SIGNALS = [
+        "nghỉ hưu", "tuổi nghỉ hưu", "hưu trí", "tuổi hưu", "bao giờ được nghỉ hưu",
+        "khi nào được nghỉ hưu", "bao giờ nghỉ hưu", "khi nào nghỉ hưu", "nghỉ hưu sớm",
+        "lộ trình nghỉ hưu", "lộ trình tăng tuổi hưu", "nghề nặng nhọc nghỉ hưu",
+        "suy giảm khả năng lao động nghỉ hưu", "thời điểm nghỉ hưu", "thời điểm hưởng lương hưu",
+        "135/2020", "nghị định 135", "nd 135",
+    ]
+
+    UNEMPLOYMENT_SIGNALS = [
+        "thất nghiệp", "trợ cấp thất nghiệp", "bảo hiểm thất nghiệp", "bhtn",
+        "hưởng thất nghiệp", "nộp hồ sơ thất nghiệp", "trung tâm dịch vụ việc làm",
+        "thời gian hưởng trợ cấp thất nghiệp", "mức hưởng trợ cấp thất nghiệp",
+        "điều kiện hưởng trợ cấp thất nghiệp", "chấm dứt hưởng trợ cấp thất nghiệp",
+        "bảo lưu thời gian đóng bảo hiểm thất nghiệp", "bảo lưu thời gian đóng bhtn",
+        "thông báo tìm kiếm việc làm", "luật việc làm", "nghị định 374", "74/2025", "374/2025",
+    ]
+
+    FOREIGN_WORKER_SIGNALS = [
+        "người nước ngoài", "lao động nước ngoài", "người lao động nước ngoài",
+        "quốc tịch nước ngoài", "work permit", "giấy phép lao động", "gplđ",
+        "miễn giấy phép lao động", "không thuộc diện cấp giấy phép lao động",
+        "chuyên gia nước ngoài", "lao động kỹ thuật nước ngoài", "giám đốc điều hành nước ngoài",
+        "thời hạn giấy phép lao động", "gia hạn giấy phép lao động", "cấp lại giấy phép lao động",
+        "thu hồi giấy phép lao động", "người hàn quốc", "người trung quốc", "người nhật", "người mỹ",
+        "người nước ngoài làm việc tại việt nam", "nghị định 219", "nd 219", "219/2025",
+    ]
 
     # Semantic keyword groups for labor law intent analysis
     SPECIAL_OCCUPATION_SIGNALS = [
@@ -191,14 +240,52 @@ class QueryRouter:
 
         norm_query = unicodedata.normalize("NFC", query).strip().lower()
 
-        # 0. Out-of-scope check
+        # 0. Out-of-scope check (with exemption for foreign marriage labor rights)
+        is_foreign_labor = any(k in norm_query for k in ["giấy phép lao động", "work permit", "làm việc", "lao động", "gplđ"])
         is_oos = any(k in norm_query for k in self.OUT_OF_SCOPE_SIGNALS)
-        if is_oos:
+        if is_oos and not (("người nước ngoài" in norm_query or "kết hôn với người nước ngoài" in norm_query) and is_foreign_labor):
             return RouteDecision(
                 strategy="out_of_scope",
                 reason="Câu hỏi nằm ngoài phạm vi pháp luật lao động Việt Nam",
                 needs_clarification=False,
+                domain="UNKNOWN",
+                target_domains=["UNKNOWN"],
+                scope_tier="core",
             )
+
+        # 0B. Domain & Status-Aware Classification (Phase 5G)
+        is_retirement = any(k in norm_query for k in self.RETIREMENT_SIGNALS)
+        is_unemployment = any(k in norm_query for k in self.UNEMPLOYMENT_SIGNALS)
+        is_foreign = any(k in norm_query for k in self.FOREIGN_WORKER_SIGNALS)
+        is_core_severance_or_notice = any(k in norm_query for k in ["thôi việc", "trợ cấp thôi việc", "trợ cấp mất việc", "báo trước", "đơn phương"])
+
+        is_cross_domain = is_unemployment and is_core_severance_or_notice
+
+        if is_cross_domain:
+            detected_domain = "CROSS_DOMAIN"
+            target_domains = ["CORE_LABOR", "UNEMPLOYMENT_INSURANCE"]
+            scope_tier = "extended"
+            target_status = "CURRENT"
+        elif is_retirement:
+            detected_domain = "RETIREMENT"
+            target_domains = ["RETIREMENT"]
+            scope_tier = "extended"
+            target_status = "PARTIALLY_EFFECTIVE"
+        elif is_unemployment:
+            detected_domain = "UNEMPLOYMENT_INSURANCE"
+            target_domains = ["UNEMPLOYMENT_INSURANCE"]
+            scope_tier = "extended"
+            target_status = "CURRENT"
+        elif is_foreign:
+            detected_domain = "FOREIGN_WORKER"
+            target_domains = ["FOREIGN_WORKER"]
+            scope_tier = "extended"
+            target_status = "CURRENT"
+        else:
+            detected_domain = "CORE_LABOR"
+            target_domains = ["CORE_LABOR"]
+            scope_tier = "core"
+            target_status = "CURRENT"
 
         # 1. Detect explicit Article number
         article_match = self.ARTICLE_PATTERN.search(norm_query)
@@ -377,6 +464,10 @@ class QueryRouter:
                 actor=actor,
                 legal_intent=legal_intent,
                 augmented_query=augmented_query,
+                domain=detected_domain,
+                target_domains=target_domains,
+                scope_tier=scope_tier,
+                target_status=target_status,
             )
 
         # Otherwise: standard natural language query -> Hybrid RRF
@@ -390,4 +481,8 @@ class QueryRouter:
             actor=actor,
             legal_intent=legal_intent,
             augmented_query=augmented_query,
+            domain=detected_domain,
+            target_domains=target_domains,
+            scope_tier=scope_tier,
+            target_status=target_status,
         )

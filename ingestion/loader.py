@@ -35,7 +35,8 @@ class PDFLoader:
                 try:
                     page = doc[page_idx]
                     # PyMuPDF get_text preserves UTF-8 Unicode
-                    text = page.get_text("text")
+                    raw_text = page.get_text("text")
+                    text: str = raw_text if isinstance(raw_text, str) else str(raw_text)
                     pages.append(
                         PageText(
                             doc_id=self.doc_id,

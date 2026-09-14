@@ -79,8 +79,8 @@ def main():
     doc_stats = {}
 
     for doc_cfg in DOCUMENTS:
-        doc_id = doc_cfg['doc_id']
-        file_paths = doc_cfg['file_paths']
+        doc_id: str = str(doc_cfg['doc_id'])
+        file_paths: List[str] = list(doc_cfg['file_paths'])
         filename = os.path.basename(file_paths[0])
         print(f"\nProcessing {doc_id} from {file_paths}...")
 
@@ -102,7 +102,8 @@ def main():
         for fp in file_paths:
             pdf_doc = fitz.open(fp)
             for pno in range(len(pdf_doc)):
-                page_txt = pdf_doc[pno].get_text()
+                raw_txt = pdf_doc[pno].get_text()
+                page_txt: str = raw_txt if isinstance(raw_txt, str) else str(raw_txt)
                 raw_pages.append(PageText(
                     doc_id=doc_id,
                     filename=filename,

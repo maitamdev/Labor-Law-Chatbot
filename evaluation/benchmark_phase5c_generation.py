@@ -19,7 +19,8 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stdout, "reconfigure"):
+    getattr(sys.stdout, "reconfigure")(encoding='utf-8')
 sys.path.insert(0, ".")
 
 from rag.chain import VietLaborRAGChain

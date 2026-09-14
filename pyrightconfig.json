@@ -6,5 +6,12 @@
     ".",
     ".venv/Lib/site-packages"
   ],
-  "reportMissingImports": "none"
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    ".venv",
+    "scratch"
+  ],
+  "reportMissingImports": "none",
+  "reportAttributeAccessIssue": "none"
 }

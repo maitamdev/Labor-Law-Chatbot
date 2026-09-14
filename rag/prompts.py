@@ -11,6 +11,8 @@ Defines strict system prompts forcing the local LLM to:
 """
 from __future__ import annotations
 
+from typing import Any, List, Optional
+
 SYSTEM_PROMPT = """Bạn là VietLabor AI – trợ lý pháp lý tra cứu pháp luật lao động Việt Nam.
 
 QUY TẮC BẮT BUỘC TUÂN THỦ TUYỆT ĐỐI:
