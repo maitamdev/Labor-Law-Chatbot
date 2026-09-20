@@ -7,25 +7,26 @@ from __future__ import annotations
 
 import streamlit as st
 from typing import Callable, Optional
+from ui.utils.branding import get_logo_base64
 
 SUGGESTED_PROMPTS = [
     {
-        "icon": "⏱",
+        "icon": ":material/schedule:",
         "title": "Thử việc tối đa bao nhiêu ngày?",
         "subtitle": "Quy định về thời gian thử việc theo từng trình độ chuyên môn kỹ thuật",
     },
     {
-        "icon": "📝",
+        "icon": ":material/description:",
         "title": "Tôi ký hợp đồng 2 năm, muốn nghỉ việc phải báo trước bao lâu?",
         "subtitle": "Thời hạn báo trước khi đơn phương chấm dứt hợp đồng xác định thời hạn",
     },
     {
-        "icon": "💰",
+        "icon": ":material/payments:",
         "title": "Làm thêm ngày lễ được trả lương thế nào?",
         "subtitle": "Mức tiền lương làm thêm giờ vào ngày nghỉ lễ, tết theo luật định",
     },
     {
-        "icon": "🎓",
+        "icon": ":material/policy:",
         "title": "Công ty có được giữ bằng đại học bản chính không?",
         "subtitle": "Quy định về các hành vi người sử dụng lao động không được làm khi ký HĐLĐ",
     },
@@ -34,8 +35,16 @@ SUGGESTED_PROMPTS = [
 
 def render_welcome_screen(on_card_click: Optional[Callable[[str], None]] = None) -> None:
     """Renders the clean, spacious centered empty-state welcome screen."""
-    st.markdown("""
+    logo_b64 = get_logo_base64()
+    logo_badge = (
+        f'<div class="welcome-logo-badge"><img src="data:image/png;base64,{logo_b64}" class="welcome-logo-img" alt="VietLabor AI Logo" /></div>'
+        if logo_b64
+        else ""
+    )
+
+    st.markdown(f"""
     <div class="welcome-container">
+        {logo_badge}
         <div class="welcome-title">Bạn cần tra cứu vấn đề lao động nào?</div>
         <div class="welcome-subtitle">
             Tôi có thể hỗ trợ bạn tìm kiếm và giải thích các quy định pháp luật lao động dựa trên văn bản chính thức.
@@ -50,11 +59,10 @@ def render_welcome_screen(on_card_click: Optional[Callable[[str], None]] = None)
         target_col = col1 if idx % 2 == 0 else col2
         with target_col:
             card_title = prompt_data["title"]
-            card_icon = prompt_data["icon"]
-            button_label = f"{card_icon}  {card_title}"
 
             if st.button(
-                button_label,
+                card_title,
+                icon=prompt_data["icon"],
                 key=f"welcome_card_{idx}",
                 use_container_width=True,
                 help=prompt_data["subtitle"],

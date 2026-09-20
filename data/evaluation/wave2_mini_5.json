@@ -1,0 +1,118 @@
+[
+  {
+    "id": "SI_01",
+    "question": "Những đối tượng nào bắt buộc phải tham gia bảo hiểm xã hội theo Văn bản hợp nhất 58/VBHN-VPQH?",
+    "query_type": "exact_reference",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "2"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d2",
+      "VBHN_58_2025#d2-k1"
+    ],
+    "expected_answer_facts": [
+      "Người làm việc theo HĐLĐ từ đủ 1 tháng trở lên",
+      "Cán bộ, công chức, viên chức",
+      "Người quản lý doanh nghiệp hưởng tiền lương"
+    ]
+  },
+  {
+    "id": "SI_03",
+    "question": "Người lao động làm việc theo hợp đồng lao động 1 tháng có phải đóng BHXH bắt buộc không?",
+    "query_type": "scenario",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025",
+      "ND_158_2025"
+    ],
+    "relevant_articles": [
+      "2"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d2",
+      "VBHN_58_2025#d2-k1",
+      "ND_158_2025#d2"
+    ],
+    "expected_answer_facts": [
+      "Có, người làm việc theo HĐLĐ có thời hạn từ đủ 1 tháng trở lên thuộc đối tượng tham gia BHXH bắt buộc"
+    ]
+  },
+  {
+    "id": "SI_10",
+    "question": "Thời gian nghỉ việc hưởng chế độ khi con ốm đau được quy định tối đa bao nhiêu ngày trong một năm?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "27"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d27"
+    ],
+    "expected_answer_facts": [
+      "Tối đa 20 ngày làm việc nếu con dưới 03 tuổi",
+      "Tối đa 15 ngày làm việc nếu con từ đủ 03 tuổi đến dưới 07 tuổi"
+    ]
+  },
+  {
+    "id": "OS_04",
+    "question": "Trách nhiệm của người sử dụng lao động đối với người lao động bị tai nạn lao động theo Điều 38 Luật ATVSLĐ?",
+    "query_type": "exact_reference",
+    "expected_domain": "OCCUPATIONAL_SAFETY",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "38",
+      "2"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "VBHN_06_BNV_2026#d2"
+    ],
+    "expected_answer_facts": [
+      "Kịp thời sơ cứu, cấp cứu",
+      "Thanh toán chi phí y tế phần đồng chi trả và không thuộc BHYT",
+      "Trả đủ tiền lương trong thời gian điều trị",
+      "Bồi thường tai nạn lao động"
+    ]
+  },
+  {
+    "id": "OS_12",
+    "question": "Người lao động tự ý vi phạm quy chuẩn an toàn bị tai nạn làm suy giảm 15% KNLĐ, lương 8 triệu đồng thì công ty trợ cấp bao nhiêu?",
+    "query_type": "calculation",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "38",
+      "39",
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "L_84_2015#d39",
+      "VBHN_06_BNV_2026#d3"
+    ],
+    "expected_answer_facts": [
+      "Hệ số bồi thường chuẩn = 1.5 + (15 - 10) x 0.4 = 3.5 tháng lương",
+      "Do lỗi của người lao động nên hưởng 40% = 3.5 x 40% = 1.4 tháng lương",
+      "Mức trợ cấp = 1.4 x 8.000.000 = 11.200.000 đồng"
+    ],
+    "calculation_inputs": {
+      "monthly_salary": 8000000,
+      "impairment_percent": 15,
+      "is_employee_fault": true
+    },
+    "expected_calculation": 11200000.0
+  }
+]

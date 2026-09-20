@@ -11,6 +11,7 @@ from typing import Any, Callable, Dict, Optional
 
 from ui.components.citation_card import render_citation_card
 from ui.components.clarification import render_clarification_chips
+from ui.utils.branding import get_logo_base64
 
 
 def render_user_message(content: str, timestamp: str = "") -> None:
@@ -36,12 +37,22 @@ def render_assistant_message(
     followups = data.get("suggested_followups", [])
 
     # Layout with left avatar icon and right message container
-    col_avatar, col_content = st.columns([0.06, 0.94], gap="small")
+    col_avatar, col_content = st.columns([0.08, 0.92], gap="small")
 
     with col_avatar:
-        st.markdown("""
-        <div class="assistant-avatar">⚖</div>
-        """, unsafe_allow_html=True)
+        logo_b64 = get_logo_base64()
+        if logo_b64:
+            avatar_markup = f'<img src="data:image/png;base64,{logo_b64}" class="assistant-avatar-img" alt="AI" />'
+        else:
+            avatar_markup = """<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                <path d="M7 21h10"/>
+                <path d="M12 3v18"/>
+                <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
+            </svg>"""
+
+        st.markdown(f'<div class="assistant-avatar">{avatar_markup}</div>', unsafe_allow_html=True)
 
     with col_content:
         # Render the full structured advisory answer

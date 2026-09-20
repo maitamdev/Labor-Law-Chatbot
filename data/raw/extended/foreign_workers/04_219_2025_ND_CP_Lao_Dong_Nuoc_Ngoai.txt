@@ -7,7 +7,7 @@ CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
 
 Số: 219/2025/NĐ-CP
 
-Hà Nội, ngày 15 tháng 9 năm 2025
+Hà Nội, ngày 07 tháng 8 năm 2025
 
 NGHỊ ĐỊNH
 Quy định về người lao động nước ngoài làm việc tại Việt Nam
@@ -21,12 +21,12 @@ CHƯƠNG I
 QUY ĐỊNH CHUNG
 
 Điều 1. Phạm vi điều chỉnh
-Nghị định này quy định về điều kiện, trình tự, thủ tục cấp, cấp lại, gia hạn, thu hồi giấy phép lao động và xác nhận người lao động nước ngoài không thuộc diện cấp giấy phép lao động; trục xuất người lao động nước ngoài làm việc tại Việt Nam không có giấy phép lao động.
+Nghị định này quy định về điều kiện, trình tự, thủ tục cấp, cấp lại, gia hạn, thu hồi giấy phép lao động và xác nhận người lao động nước ngoài không thuộc diện cấp giấy phép lao động; trách nhiệm của người sử dụng lao động và người lao động nước ngoài; trục xuất người lao động nước ngoài làm việc tại Việt Nam không có giấy phép lao động.
 
 Điều 2. Đối tượng áp dụng
 1. Người lao động nước ngoài vào làm việc tại Việt Nam theo các hình thức quy định tại khoản 1 Điều 151 của Bộ luật Lao động.
 2. Người sử dụng lao động theo quy định của pháp luật sử dụng người lao động nước ngoài.
-3. Cơ quan, tổ chức, cá nhân khác có liên quan.
+3. Cơ quan, tổ chức, cá nhân khác có liên quan đến việc quản lý và sử dụng người lao động nước ngoài tại Việt Nam.
 
 Điều 3. Giải thích từ ngữ
 1. Nhà quản lý là người quản lý doanh nghiệp theo quy định của Luật Doanh nghiệp hoặc là người đứng đầu, cấp phó của người đứng đầu của cơ quan, tổ chức.
@@ -34,41 +34,130 @@ Nghị định này quy định về điều kiện, trình tự, thủ tục c�
 3. Chuyên gia là người lao động nước ngoài thuộc một trong các trường hợp sau:
 a) Tốt nghiệp đại học trở lên hoặc tương đương và có ít nhất 03 năm kinh nghiệm làm việc phù hợp với vị trí công việc mà người lao động nước ngoài dự kiến làm việc tại Việt Nam;
 b) Có ít nhất 05 năm kinh nghiệm và có chứng chỉ hành nghề phù hợp với vị trí công việc mà người lao động nước ngoài dự kiến làm việc tại Việt Nam;
-c) Trường hợp đặc biệt do Thủ tướng Chính phủ quyết định theo đề nghị của Bộ Lao động - Thương binh và Xã hội.
+c) Trường hợp đặc biệt do Thủ tướng Chính phủ quyết định theo đề nghị của Bộ Lao động - Thương binh và Xã hội hoặc người làm việc trong các lĩnh vực công nghệ cao, đổi mới sáng tạo, chuyển đổi số quốc gia được ưu tiên phát triển.
 4. Lao động kỹ thuật là người lao động nước ngoài thuộc một trong các trường hợp sau:
 a) Được đào tạo ít nhất 01 năm và có ít nhất 03 năm kinh nghiệm làm việc phù hợp với vị trí công việc dự kiến làm việc tại Việt Nam;
 b) Có ít nhất 05 năm kinh nghiệm làm công việc phù hợp với vị trí công việc dự kiến làm việc tại Việt Nam.
 
 CHƯƠNG II
-CẤP GIẤY PHÉP LAO ĐỘNG VÀ XÁC NHẬN KHÔNG THUỘC DIỆN CẤP GIẤY PHÉP LAO ĐỘNG
+XÁC ĐỊNH NHU CẦU SỬ DỤNG NGƯỜI LAO ĐỘNG NƯỚC NGOÀI
+
+Điều 4. Thẩm quyền cấp, cấp lại, gia hạn, thu hồi giấy phép lao động
+1. Ủy ban nhân dân cấp tỉnh có thẩm quyền cấp, cấp lại, gia hạn, thu hồi giấy phép lao động và giấy xác nhận người lao động nước ngoài không thuộc diện cấp giấy phép lao động đối với người lao động nước ngoài làm việc cho người sử dụng lao động trên địa bàn.
+2. Ủy ban nhân dân cấp tỉnh quyết định việc phân cấp, ủy quyền cho Sở Lao động - Thương binh và Xã hội, Ban quản lý khu công nghiệp, khu chế xuất, khu kinh tế, khu công nghệ cao thực hiện các thẩm quyền quy định tại khoản 1 Điều này.
+3. Trường hợp người lao động nước ngoài làm việc cho một người sử dụng lao động tại nhiều tỉnh, thành phố trực thuộc trung ương thì cơ quan có thẩm quyền cấp giấy phép lao động là cơ quan nơi người sử dụng lao động đặt trụ sở chính.
+
+Điều 5. Báo cáo giải trình nhu cầu sử dụng người lao động nước ngoài
+1. Trước khi tuyển dụng người lao động nước ngoài, người sử dụng lao động có trách nhiệm xác định nhu cầu sử dụng người lao động nước ngoài đối với từng vị trí công việc mà người lao động Việt Nam chưa đáp ứng được và giải trình với cơ quan có thẩm quyền.
+2. Người sử dụng lao động thực hiện báo cáo giải trình nhu cầu sử dụng người lao động nước ngoài tích hợp đồng thời trong hồ sơ đề nghị cấp giấy phép lao động theo Mẫu số 03 ban hành kèm theo Nghị định này, không phải thực hiện thủ tục chấp thuận nhu cầu sử dụng lao động nước ngoài riêng biệt trước khi nộp hồ sơ cấp giấy phép.
+3. Các trường hợp không phải thực hiện báo cáo giải trình nhu cầu sử dụng người lao động nước ngoài bao gồm:
+a) Người lao động nước ngoài vào Việt Nam làm việc tại vị trí chuyên gia, nhà quản lý, giám đốc điều hành hoặc lao động kỹ thuật có thời gian làm việc dưới 90 ngày trong một năm dương lịch;
+b) Người lao động nước ngoài vào Việt Nam để xử lý sự cố khẩn cấp;
+c) Người nước ngoài kết hôn với người Việt Nam và sinh sống trên lãnh thổ Việt Nam;
+d) Các trường hợp khác theo quy định của Chính phủ và điều ước quốc tế mà Việt Nam là thành viên.
+
+Điều 6. Tuyển dụng người lao động Việt Nam vào vị trí dự kiến tuyển dụng người lao động nước ngoài
+1. Người sử dụng lao động có trách nhiệm thông báo tuyển dụng người lao động Việt Nam vào các vị trí dự kiến tuyển dụng người lao động nước ngoài trên Cổng thông tin điện tử của Trung tâm Dịch vụ việc làm hoặc Cổng Dịch vụ công quốc gia.
+2. Thời gian thông báo tuyển dụng người lao động Việt Nam được thực hiện trước ít nhất 15 ngày kể từ ngày nộp hồ sơ đề nghị cấp giấy phép lao động. Nội dung thông báo tuyển dụng bao gồm: vị trí công việc, chức danh, số lượng, yêu cầu về trình độ chuyên môn, kinh nghiệm, mức lương, thời gian và địa điểm làm việc.
+3. Sau thời hạn thông báo tuyển dụng mà không tuyển dụng được người lao động Việt Nam vào các vị trí tuyển dụng, người sử dụng lao động được tuyển dụng người lao động nước ngoài.
+
+CHƯƠNG III
+CẤP, CẤP LẠI, GIA HẠN, THU HỒI GIẤY PHÉP LAO ĐỘNG VÀ XÁC NHẬN KHÔNG THUỘC DIỆN CẤP GIẤY PHÉP LAO ĐỘNG
 
 Điều 7. Các trường hợp không thuộc diện cấp giấy phép lao động
 Người lao động nước ngoài không thuộc diện cấp giấy phép lao động theo quy định tại Điều 154 của Bộ luật Lao động và các trường hợp sau đây:
 1. Là chủ sở hữu hoặc thành viên góp vốn của công ty trách nhiệm hữu hạn có giá trị góp vốn từ 03 tỷ đồng trở lên.
 2. Là Chủ tịch Hội đồng quản trị hoặc thành viên Hội đồng quản trị của công ty cổ phần có giá trị góp vốn từ 03 tỷ đồng trở lên.
-3. Vào Việt Nam làm việc tại vị trí nhà quản lý, giám đốc điều hành, chuyên gia hoặc lao động kỹ thuật có thời gian làm việc dưới 30 ngày và không quá 03 lần trong 01 năm.
-4. Là thân nhân của thành viên cơ quan đại diện ngoại giao nước ngoài tại Việt Nam được phép làm việc theo quy định tại điều ước quốc tế mà nước Cộng hòa xã hội chủ nghĩa Việt Nam là thành viên.
-5. Người nước ngoài kết hôn với người Việt Nam và sinh sống trên lãnh thổ Việt Nam.
-6. Luật sư nước ngoài đã được cấp Giấy phép hành nghề luật sư tại Việt Nam theo quy định của Luật Luật sư.
-7. Vào Việt Nam để xử lý sự cố khẩn cấp, kỹ thuật phức tạp nảy sinh làm ảnh hưởng hoặc có nguy cơ ảnh hưởng đến sản xuất, kinh doanh mà các chuyên gia Việt Nam và các chuyên gia nước ngoài hiện đang ở Việt Nam không xử lý được.
+3. Vào Việt Nam làm việc tại vị trí nhà quản lý, giám đốc điều hành, chuyên gia hoặc lao động kỹ thuật có tổng thời gian làm việc dưới 90 ngày trong 01 năm dương lịch (tính từ ngày 01 tháng 01 đến hết ngày 31 tháng 12).
+4. Người nước ngoài kết hôn với người Việt Nam và sinh sống trên lãnh thổ Việt Nam.
+5. Là thân nhân của thành viên cơ quan đại diện ngoại giao nước ngoài tại Việt Nam được phép làm việc theo quy định tại điều ước quốc tế mà nước Cộng hòa xã hội chủ nghĩa Việt Nam là thành viên.
+6. Vào Việt Nam để xử lý sự cố khẩn cấp, kỹ thuật công nghệ phức tạp nảy sinh làm ảnh hưởng hoặc có nguy cơ ảnh hưởng đến sản xuất, kinh doanh mà các chuyên gia Việt Nam và các chuyên gia nước ngoài hiện đang ở Việt Nam không xử lý được.
+7. Luật sư nước ngoài đã được cấp Giấy phép hành nghề luật sư tại Việt Nam theo quy định của Luật Luật sư.
+8. Vào Việt Nam để cung cấp dịch vụ tư vấn chuyên môn, kỹ thuật hoặc thực hiện các nhiệm vụ nghiên cứu, phát triển trong lĩnh vực tài chính, khoa học công nghệ, bán dẫn, trí tuệ nhân tạo, chuyển đổi số quốc gia được cơ quan có thẩm quyền xác nhận.
 
 Điều 8. Điều kiện cấp giấy phép lao động
 1. Đủ 18 tuổi trở lên và có năng lực hành vi dân sự đầy đủ.
 2. Có trình độ chuyên môn, kỹ thuật, tay nghề, kinh nghiệm làm việc; có đủ sức khỏe theo quy định của Bộ trưởng Bộ Y tế.
 3. Không phải là người đang trong thời gian chấp hành hình phạt hoặc chưa được xóa án tích hoặc đang trong thời gian bị truy cứu trách nhiệm hình sự theo quy định của pháp luật nước ngoài hoặc pháp luật Việt Nam.
-4. Có văn bản chấp thuận nhu cầu sử dụng người lao động nước ngoài của cơ quan có thẩm quyền, trừ những trường hợp không phải giải trình nhu cầu sử dụng lao động theo quy định.
+4. Có văn bản giải trình nhu cầu sử dụng người lao động nước ngoài theo quy định tại Điều 5 Nghị định này, trừ các trường hợp không phải giải trình.
 
 Điều 9. Thời hạn của giấy phép lao động
-1. Thời hạn của giấy phép lao động được cấp theo thời hạn của một trong các trường hợp quy định nhưng tối đa không quá 02 năm.
+1. Thời hạn của giấy phép lao động được cấp theo thời hạn của hợp đồng lao động dự kiến ký kết, thời hạn của văn bản cử làm việc tại Việt Nam hoặc thời hạn của dự án nhưng tối đa không quá 02 năm.
 2. Giấy phép lao động chỉ được gia hạn 01 lần với thời hạn tối đa không quá 02 năm.
 
 Điều 10. Trình tự cấp giấy phép lao động
-1. Trước ít nhất 15 ngày làm việc kể từ ngày người lao động nước ngoài dự kiến bắt đầu làm việc tại Việt Nam, người nộp hồ sơ đề nghị cấp giấy phép lao động gửi Bộ Lao động - Thương binh và Xã hội hoặc Sở Lao động - Thương binh và Xã hội nơi người lao động nước ngoài dự kiến làm việc.
-2. Trong thời hạn 05 ngày làm việc kể từ ngày nhận đủ hồ sơ đề nghị cấp giấy phép lao động, cơ quan có thẩm quyền cấp giấy phép lao động cho người lao động nước ngoài. Trường hợp không cấp giấy phép lao động thì có văn bản trả lời và nêu rõ lý do.
+1. Trước ít nhất 15 ngày làm việc kể từ ngày người lao động nước ngoài dự kiến bắt đầu làm việc tại Việt Nam, người sử dụng lao động nộp hồ sơ đề nghị cấp giấy phép lao động đến cơ quan có thẩm quyền cấp giấy phép lao động nơi người lao động nước ngoài dự kiến làm việc.
+2. Hồ sơ nộp trực tiếp hoặc gửi qua đường bưu chính hoặc nộp trực tuyến qua Cổng Dịch vụ công quốc gia.
+3. Trong thời hạn 10 ngày làm việc kể từ ngày nhận đủ hồ sơ đề nghị cấp giấy phép lao động hợp lệ, cơ quan có thẩm quyền cấp giấy phép lao động cho người lao động nước ngoài theo Mẫu quy định. Trường hợp không cấp giấy phép lao động thì phải trả lời bằng văn bản và nêu rõ lý do.
+4. Đối với người lao động nước ngoài làm việc theo hình thức thực hiện hợp đồng lao động, sau khi được cấp giấy phép lao động thì người sử dụng lao động và người lao động nước ngoài phải ký kết hợp đồng lao động bằng văn bản trước ngày dự kiến làm việc. Người sử dụng lao động phải gửi bản sao hợp đồng lao động đã ký kết đến cơ quan đã cấp giấy phép lao động đó trong thời hạn 05 ngày làm việc kể từ ngày ký kết.
+
+Điều 11. Hồ sơ đề nghị cấp giấy phép lao động
+1. Văn bản đề nghị cấp giấy phép lao động và báo cáo giải trình nhu cầu sử dụng người lao động nước ngoài theo Mẫu số 03 ban hành kèm theo Nghị định này.
+2. Giấy chứng nhận sức khỏe hoặc giấy khám sức khỏe do cơ quan, tổ chức y tế có thẩm quyền của nước ngoài hoặc của Việt Nam cấp có giá trị trong thời hạn 12 tháng, kể từ ngày ký kết luận sức khỏe đến ngày nộp hồ sơ. Không yêu cầu nộp nếu dữ liệu sức khỏe đã được liên thông trên hệ thống thông tin quốc gia.
+3. Phiếu lý lịch tư pháp hoặc văn bản xác nhận người lao động nước ngoài không phải là người đang trong thời gian chấp hành hình phạt hoặc chưa được xóa án tích hoặc đang trong thời gian bị truy cứu trách nhiệm hình sự của nước ngoài hoặc của Việt Nam cấp, được cấp không quá 06 tháng kể từ ngày cấp đến ngày nộp hồ sơ. Trường hợp thực hiện liên thông trên Cổng Dịch vụ công quốc gia thì thực hiện theo quy trình liên thông.
+4. Văn bản, giấy tờ chứng minh là nhà quản lý, giám đốc điều hành, chuyên gia, lao động kỹ thuật theo quy định tại Điều 3 Nghị định này, bao gồm: bằng cấp đại học, chứng chỉ đào tạo, văn bản xác nhận kinh nghiệm làm việc của cơ quan, tổ chức, doanh nghiệp ở nước ngoài hoặc tại Việt Nam.
+5. 02 ảnh màu (kích thước 4 cm x 6 cm, phông nền trắng, mặt nhìn thẳng, đầu trần, không đeo kính màu), ảnh chụp không quá 06 tháng tính đến ngày nộp hồ sơ.
+6. Bản sao có chứng thực hộ chiếu hoặc bản sao hộ chiếu có xuất trình bản chính để đối chiếu còn giá trị theo quy định của pháp luật.
+7. Các giấy tờ liên quan đến người lao động nước ngoài tùy theo từng hình thức làm việc: văn bản cử làm việc của công ty mẹ ở nước ngoài, hợp đồng kinh tế, thỏa thuận hợp tác hoặc giấy phép hoạt động tại Việt Nam.
+8. Các giấy tờ quy định tại khoản 2, 3, 4 và 7 Điều này là 01 bản chính hoặc bản sao có chứng thực, nếu của nước ngoài thì phải được hợp pháp hóa lãnh sự, trừ trường hợp được miễn hợp pháp hóa lãnh sự theo điều ước quốc tế mà Việt Nam là thành viên hoặc theo nguyên tắc có đi có lại hoặc theo quy định của pháp luật; dịch ra tiếng Việt và chứng thực theo quy định của pháp luật Việt Nam.
+
+Điều 12. Các trường hợp cấp lại giấy phép lao động
+Giấy phép lao động được cấp lại trong các trường hợp sau đây:
+1. Giấy phép lao động còn thời hạn bị mất.
+2. Giấy phép lao động còn thời hạn bị hỏng, rách, mờ chữ không sử dụng được.
+3. Thay đổi một trong các thông tin sau: họ và tên, quốc tịch, số hộ chiếu, địa điểm làm việc ghi trong giấy phép lao động còn thời hạn.
+4. Doanh nghiệp, tổ chức sử dụng người lao động nước ngoài đổi tên nhưng không thay đổi mã số doanh nghiệp hoặc mã số thuế ghi trong giấy phép lao động còn thời hạn.
+
+Điều 13. Hồ sơ và trình tự cấp lại giấy phép lao động
+1. Hồ sơ đề nghị cấp lại giấy phép lao động bao gồm:
+a) Văn bản đề nghị cấp lại giấy phép lao động của người sử dụng lao động theo Mẫu quy định;
+b) 02 ảnh màu (kích thước 4 cm x 6 cm, phông nền trắng, chụp không quá 06 tháng);
+c) Giấy phép lao động đã được cấp còn thời hạn (trường hợp bị mất thì phải có văn bản xác nhận của cơ quan công an cấp xã nơi bị mất hoặc văn bản giải trình lý do mất của người sử dụng lao động);
+d) Giấy tờ chứng minh lý do cấp lại: văn bản xác nhận đổi tên doanh nghiệp, hộ chiếu mới có thay đổi thông tin hoặc giấy tờ chứng minh việc thay đổi địa điểm làm việc.
+2. Trình tự cấp lại giấy phép lao động:
+a) Người sử dụng lao động nộp hồ sơ đề nghị cấp lại giấy phép lao động đến cơ quan có thẩm quyền cấp giấy phép lao động;
+b) Trong thời hạn 03 ngày làm việc kể từ ngày nhận đủ hồ sơ đề nghị cấp lại giấy phép lao động hợp lệ, cơ quan có thẩm quyền thực hiện cấp lại giấy phép lao động. Trường hợp không cấp lại thì có văn bản trả lời và nêu rõ lý do;
+c) Thời hạn của giấy phép lao động cấp lại bằng thời hạn của giấy phép lao động đã được cấp trừ đi thời gian người lao động nước ngoài đã làm việc tính đến thời điểm đề nghị cấp lại.
+
+Điều 14. Điều kiện gia hạn giấy phép lao động
+Giấy phép lao động được gia hạn khi đáp ứng đầy đủ các điều kiện sau:
+1. Giấy phép lao động đã được cấp còn thời hạn ít nhất 05 ngày nhưng không quá 45 ngày trước ngày hết hạn.
+2. Được cơ quan có thẩm quyền chấp thuận nhu cầu sử dụng người lao động nước ngoài theo quy định tại Điều 5 Nghị định này, trừ trường hợp không phải giải trình nhu cầu.
+3. Giấy tờ chứng minh người lao động nước ngoài tiếp tục làm việc cho người sử dụng lao động theo nội dung giấy phép lao động đã được cấp.
+
+Điều 15. Hồ sơ đề nghị gia hạn giấy phép lao động
+1. Văn bản đề nghị gia hạn giấy phép lao động của người sử dụng lao động theo Mẫu quy định.
+2. 02 ảnh màu (kích thước 4 cm x 6 cm, phông nền trắng, chụp không quá 06 tháng tính đến ngày nộp hồ sơ).
+3. Giấy phép lao động đã được cấp còn thời hạn theo quy định tại khoản 1 Điều 14 Nghị định này.
+4. Giấy chứng nhận sức khỏe hoặc giấy khám sức khỏe theo quy định tại khoản 2 Điều 11 Nghị định này còn giá trị trong thời hạn 12 tháng.
+5. Văn bản giải trình nhu cầu sử dụng người lao động nước ngoài tích hợp hoặc văn bản chấp thuận nhu cầu theo quy định.
+6. Bản sao có chứng thực hộ chiếu còn giá trị theo quy định của pháp luật.
+7. Giấy tờ chứng minh người lao động nước ngoài tiếp tục làm việc cho người sử dụng lao động: văn bản cử tiếp tục làm việc, thỏa thuận gia hạn hợp đồng hoặc hợp đồng lao động dự kiến ký tiếp.
+
+Điều 16. Trình tự gia hạn giấy phép lao động
+1. Trước ít nhất 05 ngày làm việc nhưng không quá 45 ngày trước ngày giấy phép lao động hết hạn, người sử dụng lao động nộp hồ sơ đề nghị gia hạn giấy phép lao động đến cơ quan có thẩm quyền nơi người lao động nước ngoài làm việc.
+2. Trong thời hạn 05 ngày làm việc kể từ ngày nhận đủ hồ sơ đề nghị gia hạn giấy phép lao động hợp lệ, cơ quan có thẩm quyền thực hiện gia hạn giấy phép lao động. Trường hợp không gia hạn thì có văn bản trả lời và nêu rõ lý do.
+3. Đối với người lao động nước ngoài làm việc theo hình thức hợp đồng lao động, sau khi được gia hạn giấy phép lao động, người sử dụng lao động và người lao động nước ngoài phải ký kết hợp đồng lao động mới hoặc phụ lục gia hạn hợp đồng lao động và gửi bản sao đến cơ quan đã gia hạn giấy phép lao động trong thời hạn 05 ngày làm việc kể từ ngày ký.
+
+Điều 17. Thu hồi giấy phép lao động và trục xuất
+1. Giấy phép lao động hết hiệu lực và bị thu hồi trong các trường hợp sau đây:
+a) Giấy phép lao động hết thời hạn quy định tại Điều 9 Nghị định này;
+b) Hợp đồng lao động chấm dứt theo quy định của pháp luật lao động;
+c) Nội dung của hợp đồng lao động không đúng với nội dung của giấy phép lao động đã được cấp;
+d) Người lao động nước ngoài bị trục xuất theo bản án, quyết định của Tòa án hoặc quyết định của cơ quan có thẩm quyền;
+đ) Doanh nghiệp, tổ chức, đối tác phía Việt Nam hoặc tổ chức nước ngoài tại Việt Nam sử dụng người lao động nước ngoài chấm dứt hoạt động;
+e) Người sử dụng lao động hoặc người lao động nước ngoài không thực hiện đúng quy định tại Nghị định này hoặc có hành vi gian dối, giả mạo hồ sơ đề nghị cấp, cấp lại, gia hạn giấy phép lao động;
+g) Cơ quan có thẩm quyền cấp giấy phép lao động ra văn bản thu hồi do phát hiện không đủ điều kiện theo quy định.
+2. Trình tự thu hồi giấy phép lao động:
+a) Trong thời hạn 03 ngày làm việc kể từ ngày giấy phép lao động hết hiệu lực theo quy định tại các điểm a, b, c, d, đ và e khoản 1 Điều này, người sử dụng lao động thu hồi giấy phép lao động của người lao động nước ngoài và nộp lại cho cơ quan có thẩm quyền đã cấp kèm theo văn bản nêu rõ lý do;
+b) Trong thời hạn 05 ngày làm việc kể từ ngày nhận được giấy phép lao động bị thu hồi, cơ quan có thẩm quyền có văn bản xác nhận đã thu hồi giấy phép lao động gửi người sử dụng lao động và người lao động nước ngoài.
+3. Trục xuất người lao động nước ngoài:
+Người lao động nước ngoài làm việc tại Việt Nam không có giấy phép lao động hoặc không có giấy xác nhận không thuộc diện cấp giấy phép lao động theo quy định của Nghị định này bị trục xuất theo quy định của pháp luật xuất nhập cảnh và pháp luật lao động.
 
 CHƯƠNG IV
 ĐIỀU KHOẢN THI HÀNH
 
 Điều 18. Hiệu lực thi hành
-1. Nghị định này có hiệu lực thi hành từ ngày 01 tháng 11 năm 2025.
-2. Nghị định số 152/2020/NĐ-CP ngày 30 tháng 12 năm 2020 của Chính phủ và Nghị định số 70/2023/NĐ-CP ngày 18 tháng 9 năm 2023 của Chính phủ hết hiệu lực kể từ ngày Nghị định này có hiệu lực thi hành.
+1. Nghị định này có hiệu lực thi hành từ ngày 07 tháng 8 năm 2025.
+2. Nghị định số 152/2020/NĐ-CP ngày 30 tháng 12 năm 2020 của Chính phủ quy định về người lao động nước ngoài làm việc tại Việt Nam và tuyển dụng, quản lý người lao động Việt Nam làm việc cho tổ chức, cá nhân nước ngoài tại Việt Nam và Nghị định số 70/2023/NĐ-CP ngày 18 tháng 9 năm 2023 của Chính phủ sửa đổi, bổ sung một số điều của Nghị định số 152/2020/NĐ-CP hết hiệu lực kể từ ngày Nghị định này có hiệu lực thi hành.
+3. Các giấy phép lao động, văn bản xác nhận không thuộc diện cấp giấy phép lao động đã được cấp theo quy định tại Nghị định số 152/2020/NĐ-CP và Nghị định số 70/2023/NĐ-CP trước ngày Nghị định này có hiệu lực thi hành được tiếp tục sử dụng cho đến khi hết thời hạn ghi trên giấy phép hoặc văn bản xác nhận.

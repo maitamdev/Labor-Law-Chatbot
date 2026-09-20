@@ -28,7 +28,12 @@ def render_citation_card(citation: Dict[str, Any], key_prefix: str = "") -> None
     card_html = f"""
     <div class="citation-card">
         <div class="citation-doc-title">
-            <span>📘</span> <strong>{doc_title}</strong>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                <path d="M6 6h10"/>
+                <path d="M6 10h10"/>
+            </svg>
+            <strong>{doc_title}</strong>
         </div>
         <div class="citation-provision-badge">{provision_badge}</div>
         {f'<div class="citation-article-title">{article_title}</div>' if article_title else ''}
@@ -37,7 +42,7 @@ def render_citation_card(citation: Dict[str, Any], key_prefix: str = "") -> None
     st.markdown(card_html, unsafe_allow_html=True)
 
     # Expandable "Xem căn cứ" Detail Drawer
-    with st.expander("📖 Xem căn cứ pháp lý chi tiết", expanded=False):
+    with st.expander("Xem căn cứ pháp lý chi tiết", icon=":material/menu_book:", expanded=False):
         if doc_number:
             st.markdown(f"**Văn bản số:** `{doc_number}`")
         if article_title:

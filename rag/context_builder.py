@@ -37,20 +37,25 @@ class ContextBuilder:
 
     def __init__(
         self,
-        max_context_chars: int = 8000,
+        max_context_chars: int = 12000,
         max_chunks: int = 10,
         max_per_issue_blocks: int = 4,
-        corpus_path: Optional[str] = "data/processed/legal_documents.jsonl",
+        corpus_path: Optional[str] = None,
     ):
         self.max_context_chars = max_context_chars
         self.max_chunks = max_chunks
         self.max_per_issue_blocks = max_per_issue_blocks
+        if corpus_path is None:
+            if Path("data/processed/legal_documents_v3.jsonl").exists():
+                corpus_path = "data/processed/legal_documents_v3.jsonl"
+            else:
+                corpus_path = "data/processed/legal_documents.jsonl"
         self.corpus_path = corpus_path
         self._ensure_corpus_loaded()
 
     def _ensure_corpus_loaded(self) -> None:
         """Loads canonical legal documents corpus for hierarchy completion and statutory bridges."""
-        if ContextBuilder._corpus_cache is not None:
+        if ContextBuilder._corpus_cache is not None and len(ContextBuilder._corpus_cache.get("by_id", {})) >= 3500:
             return
 
         corpus_file = Path(self.corpus_path) if self.corpus_path else None
@@ -126,8 +131,8 @@ class ContextBuilder:
         meta = chunk.get("metadata") or chunk
 
         doc_id = meta.get("doc_id", "")
-        doc_no = meta.get("document_no", doc_id)
-        doc_title = meta.get("doc_title", doc_no)
+        doc_no = meta.get("document_no") or meta.get("doc_id", "")
+        doc_title = meta.get("doc_title") or meta.get("document_title") or doc_no
         art_num = meta.get("article_number")
         art_title = meta.get("article_title", "")
         cl_num = meta.get("clause_number")
@@ -267,6 +272,292 @@ class ContextBuilder:
                 if bridge_chunk:
                     selected_chunks.insert(0, (bridge_chunk, "statutory_bridge"))
                     seen_cids.add("VBHN_18_2026#d35-k1-d")
+
+            # 2b. Vocational training obligations (Điều 6k2c + Điều 60)
+            training_resp_issue_id = None
+            has_training_resp = False
+            for c, i_id in selected_chunks:
+                meta = c.get("metadata") or c
+                d_id = str(meta.get("doc_id", ""))
+                a_num = str(meta.get("article_number", ""))
+                pt_val = str(meta.get("point", "")).lower()
+                c_text = str(c.get("content", "")).lower()
+                if d_id == "VBHN_18_2026":
+                    if (a_num == "6" and pt_val == "c") or a_num == "60" or ("đào tạo" in c_text and a_num in ["6", "60"]):
+                        has_training_resp = True
+                        if i_id:
+                            training_resp_issue_id = i_id
+                            break
+
+            if has_training_resp:
+                target_iid = training_resp_issue_id or "statutory_bridge"
+                training_cids = ["VBHN_18_2026#d6-k2-c", "VBHN_18_2026#d60-k1", "VBHN_18_2026#d60-k2"]
+                selected_chunks = [(c, i_id) for c, i_id in selected_chunks if not (i_id == target_iid and c.get("chunk_id") in training_cids)]
+                for cid in training_cids:
+                    seen_cids.discard(cid)
+                canonical_resp_chunks = []
+                for cid in training_cids:
+                    b_chk = self._get_chunk_by_id(cid)
+                    if b_chk:
+                        canonical_resp_chunks.append((b_chk, target_iid))
+                        seen_cids.add(cid)
+                if target_iid in ["issue_1", "I1"]:
+                    selected_chunks = canonical_resp_chunks + [sc for sc in selected_chunks if sc[1] != target_iid]
+                else:
+                    selected_chunks.extend(canonical_resp_chunks)
+
+            # 2c. Vocational training contract, commitment & cost refund (Điều 62 + Điều 40k3)
+            training_contract_issue_id = None
+            has_training_contract = False
+            for c, i_id in selected_chunks:
+                meta = c.get("metadata") or c
+                d_id = str(meta.get("doc_id", ""))
+                a_num = str(meta.get("article_number", ""))
+                c_text = str(c.get("content", "")).lower()
+                if d_id == "VBHN_18_2026":
+                    if a_num == "62" or (a_num == "40" and "đào tạo" in c_text):
+                        has_training_contract = True
+                        if i_id:
+                            training_contract_issue_id = i_id
+                            break
+
+            if has_training_contract:
+                target_iid = training_contract_issue_id or "statutory_bridge"
+                contract_cids = ["VBHN_18_2026#d62-k1", "VBHN_18_2026#d62-k2-c", "VBHN_18_2026#d62-k2-d", "VBHN_18_2026#d62-k3", "VBHN_18_2026#d40-k3"]
+                selected_chunks = [(c, i_id) for c, i_id in selected_chunks if not (i_id == target_iid and c.get("chunk_id") in contract_cids)]
+                for cid in contract_cids:
+                    seen_cids.discard(cid)
+                canonical_contract_chunks = []
+                for cid in contract_cids:
+                    b_chk = self._get_chunk_by_id(cid)
+                    if b_chk:
+                        canonical_contract_chunks.append((b_chk, target_iid))
+                        seen_cids.add(cid)
+                selected_chunks.extend(canonical_contract_chunks)
+
+            # 2d. Statutory Employee Rights Bridge (VBHN_18_2026#d5-k1 toàn văn 7 điểm)
+            rights_issue_id = None
+            has_employee_rights = False
+            for c, i_id in selected_chunks:
+                meta = c.get("metadata") or c
+                d_id = str(meta.get("doc_id", ""))
+                a_num = str(meta.get("article_number", ""))
+                c_text = str(c.get("content", "")).lower()
+                if d_id == "VBHN_18_2026" and a_num == "5":
+                    if any(k in c_text for k in ["quyền của người lao động", "có các quyền sau đây", "quyền, nghĩa vụ của người lao động"]):
+                        has_employee_rights = True
+                        if i_id:
+                            rights_issue_id = i_id
+                            break
+
+            if has_employee_rights:
+                target_iid = rights_issue_id or "statutory_bridge"
+                d5_k1_chk = self._get_chunk_by_id("VBHN_18_2026#d5-k1")
+                if d5_k1_chk:
+                    # Remove partial point chunks of Điều 5 for this issue
+                    selected_chunks = [(c, i_id) for c, i_id in selected_chunks if not (i_id == target_iid and (c.get("metadata") or c).get("article_number") in [5, "5"])]
+                    selected_chunks.insert(0, (d5_k1_chk, target_iid))
+                    seen_cids.add("VBHN_18_2026#d5-k1")
+
+            # 2e. Safety Refusal & Discipline / Monetary Fine Bridge
+            has_safety_refusal = any(
+                str((c.get("metadata") or c).get("doc_id", "")) == "L_84_2015" and
+                str((c.get("metadata") or c).get("article_number", "")) == "6"
+                for c, _ in selected_chunks
+            )
+            if has_safety_refusal:
+                # Ensure issue_1 has BOTH L_84_2015#d6-k1-đ AND VBHN_18_2026#d5-k1-d
+                d5_d_chk = self._get_chunk_by_id("VBHN_18_2026#d5-k1-d")
+                if d5_d_chk and not any(c.get("chunk_id") == "VBHN_18_2026#d5-k1-d" and i_id in ["issue_1", "I1"] for c, i_id in selected_chunks):
+                    selected_chunks.insert(0, (d5_d_chk, "issue_1"))
+                    seen_cids.add("VBHN_18_2026#d5-k1-d")
+
+            has_discipline_issue = any(
+                i_id in ["issue_3", "I3"]
+                for _, i_id in selected_chunks
+            )
+            if has_safety_refusal and has_discipline_issue:
+                target_iid = "issue_3"
+                discipline_cids = ["VBHN_18_2026#d127-k2", "VBHN_18_2026#d124-k1", "L_84_2015#d6-k1-đ", "L_84_2015#d12-k4"]
+                for cid in discipline_cids:
+                    b_chk = self._get_chunk_by_id(cid)
+                    if b_chk:
+                        if not any(c.get("chunk_id") == cid and i_id == target_iid for c, i_id in selected_chunks):
+                            selected_chunks.append((b_chk, target_iid))
+                            seen_cids.add(cid)
+
+            # 2f. Mandatory Social Insurance Bridge (HĐLĐ >= 1 month)
+            mand_ins_issue_id = None
+            has_mand_ins = False
+            for c, i_id in selected_chunks:
+                meta = c.get("metadata") or c
+                d_id = str(meta.get("doc_id", ""))
+                a_num = str(meta.get("article_number", ""))
+                c_text = str(c.get("content", "")).lower()
+                if (d_id == "VBHN_18_2026" and a_num == "168") or (d_id == "VBHN_58_2025" and a_num in ["2", "21"]) or ("đóng bảo hiểm" in c_text and "01 tháng" in c_text):
+                    has_mand_ins = True
+                    if i_id:
+                        mand_ins_issue_id = i_id
+                        break
+
+            if has_mand_ins:
+                target_iid = mand_ins_issue_id or "issue_1"
+                # Hard purge d168-k3 from the entire selected_chunks
+                selected_chunks = [
+                    (c, i_id) for c, i_id in selected_chunks
+                    if not (c.get("chunk_id") == "VBHN_18_2026#d168-k3" or ((c.get("metadata") or c).get("doc_id") == "VBHN_18_2026" and str((c.get("metadata") or c).get("article_number")) == "168" and str((c.get("metadata") or c).get("clause_number")) == "3"))
+                ]
+                seen_cids.discard("VBHN_18_2026#d168-k3")
+
+                mand_cids = ["VBHN_18_2026#d168-k1", "VBHN_58_2025#d2-k1-a", "VBHN_58_2025#d21", "ND_12_2022#d39-k5"]
+                canonical_mand_chunks = []
+                for cid in mand_cids:
+                    existing = next((sc[0] for sc in selected_chunks if sc[0].get("chunk_id") == cid), None)
+                    b_chk = existing or self._get_chunk_by_id(cid)
+                    if b_chk:
+                        canonical_mand_chunks.append((b_chk, target_iid))
+                        seen_cids.add(cid)
+                other_chunks = [sc for sc in selected_chunks if sc[1] != target_iid and sc[0].get("chunk_id") not in mand_cids]
+                remaining_target = [sc for sc in selected_chunks if sc[1] == target_iid and sc[0].get("chunk_id") not in mand_cids]
+                selected_chunks = canonical_mand_chunks + remaining_target + other_chunks
+
+            # 2g. Uninsured Occupational Accident Bridge
+            uninsured_issue_id = None
+            has_uninsured_acc = False
+            for c, i_id in selected_chunks:
+                # Must not collide with mand_ins_issue_id if multi-issue exists
+                if mand_ins_issue_id and i_id == mand_ins_issue_id and len(set(x[1] for x in selected_chunks if x[1])) > 1:
+                    continue
+                meta = c.get("metadata") or c
+                d_id = str(meta.get("doc_id", ""))
+                a_num = str(meta.get("article_number", ""))
+                c_text = str(c.get("content", "")).lower()
+                if (d_id == "L_84_2015" and a_num in ["38", "39"]) or ("không đóng bảo hiểm" in c_text and "tai nạn" in c_text):
+                    has_uninsured_acc = True
+                    if i_id:
+                        uninsured_issue_id = i_id
+                        break
+
+            if has_uninsured_acc:
+                target_iid = uninsured_issue_id or "issue_2"
+                # Hard purge d168-k3 and d45
+                selected_chunks = [
+                    (c, i_id) for c, i_id in selected_chunks
+                    if not (c.get("chunk_id") == "VBHN_18_2026#d168-k3" or ((c.get("metadata") or c).get("doc_id") == "L_84_2015" and str((c.get("metadata") or c).get("article_number")) == "45"))
+                ]
+                seen_cids.discard("VBHN_18_2026#d168-k3")
+                seen_cids.discard("L_84_2015#d45")
+
+                uninsured_cids = ["L_84_2015#d39-k4", "L_84_2015#d38-k2", "L_84_2015#d38-k3", "L_84_2015#d38-k4", "ND_12_2022#d39-k5"]
+                canonical_uninsured_chunks = []
+                for cid in uninsured_cids:
+                    existing = next((sc[0] for sc in selected_chunks if sc[0].get("chunk_id") == cid), None)
+                    b_chk = existing or self._get_chunk_by_id(cid)
+                    if b_chk:
+                        canonical_uninsured_chunks.append((b_chk, target_iid))
+                        seen_cids.add(cid)
+                non_target = [sc for sc in selected_chunks if sc[1] != target_iid and sc[0].get("chunk_id") not in uninsured_cids]
+                selected_chunks = non_target + canonical_uninsured_chunks
+
+            # 2h. Delayed Wage Payment & Labour Complaint Bridge
+            wage_schedule_iid = None
+            delayed_wage_iid = None
+            complaint_iid = None
+
+            for c, i_id in selected_chunks:
+                c_text = str(c.get("content", "")).lower()
+                meta = c.get("metadata") or c
+                d_id = str(meta.get("doc_id", ""))
+                a_num = str(meta.get("article_number", ""))
+                cid = c.get("chunk_id", "")
+
+                if ("kỳ hạn trả lương" in c_text or "d97" in cid) and not wage_schedule_iid:
+                    if i_id in ["issue_1", "I1"]:
+                        wage_schedule_iid = i_id
+                if ("chậm trả lương" in c_text or "d97-k4" in cid) and not delayed_wage_iid:
+                    if i_id in ["issue_2", "I2"]:
+                        delayed_wage_iid = i_id
+                if ("khiếu nại" in c_text or "tạm ngừng làm việc" in c_text or "nd_24_2018" in cid.lower() or "d94" in cid) and not complaint_iid:
+                    if i_id in ["issue_3", "I3"]:
+                        complaint_iid = i_id
+
+            if wage_schedule_iid or delayed_wage_iid or complaint_iid:
+                # Purge irrelevant chunks like Điều 99 ngừng việc for delayed wage issues
+                selected_chunks = [
+                    (c, i_id) for c, i_id in selected_chunks
+                    if not (c.get("chunk_id", "").startswith("VBHN_18_2026#d99"))
+                ]
+
+                # 1. Issue 1: Canonical Article 97 BLLD 2019 (Clauses 1, 2, 3, 4)
+                target_w_iid = wage_schedule_iid or "issue_1"
+                d97_cids = ["VBHN_18_2026#d97-k1", "VBHN_18_2026#d97-k2", "VBHN_18_2026#d97-k3", "VBHN_18_2026#d97-k4"]
+                for cid in d97_cids:
+                    if not any(c.get("chunk_id") == cid and i_id == target_w_iid for c, i_id in selected_chunks):
+                        b_chk = self._get_chunk_by_id(cid)
+                        if b_chk:
+                            selected_chunks.append((b_chk, target_w_iid))
+                            seen_cids.add(cid)
+
+                # 2. Issue 2: Remedies for delayed wage: Article 97 Clause 4 + Article 35 Clause 2 Point b + ND 12 Article 17 Clause 2 & Clause 5a
+                target_d_iid = delayed_wage_iid or "issue_2"
+                d_remedy_cids = ["VBHN_18_2026#d97-k4", "VBHN_18_2026#d35-k2-b", "ND_12_2022#d17-k2", "ND_12_2022#d17-k5-a"]
+                for cid in d_remedy_cids:
+                    if not any(c.get("chunk_id") == cid and i_id == target_d_iid for c, i_id in selected_chunks):
+                        b_chk = self._get_chunk_by_id(cid)
+                        if b_chk:
+                            selected_chunks.append((b_chk, target_d_iid))
+                            seen_cids.add(cid)
+
+                # 3. Issue 3: Labour Complaint (Article 94 Clause 1, ND 24/2018 Articles 5, 7, 27, 10, Article 125 Clause 4)
+                target_c_iid = complaint_iid or "issue_3"
+                complaint_cids = ["VBHN_18_2026#d94-k1", "ND_24_2018#d7", "ND_24_2018#d27", "ND_24_2018#d10", "VBHN_18_2026#d125-k4"]
+                for cid in complaint_cids:
+                    if not any(c.get("chunk_id") == cid and i_id == target_c_iid for c, i_id in selected_chunks):
+                        b_chk = self._get_chunk_by_id(cid)
+                        if b_chk:
+                            selected_chunks.append((b_chk, target_c_iid))
+                            seen_cids.add(cid)
+
+            # 2i. De Facto Labor Contract & Prohibited ID Retention Bridge (Điều 13 & Điều 17 BLLĐ 2019)
+            de_facto_contract_iid = None
+            prohibited_id_iid = None
+
+            for c, i_id in selected_chunks:
+                c_text = str(c.get("content", "")).lower()
+                meta = c.get("metadata") or c
+                d_id = str(meta.get("doc_id", ""))
+                a_num = str(meta.get("article_number", ""))
+
+                if ("thỏa thuận bằng tên gọi khác" in c_text or "được coi là hợp đồng lao động" in c_text or (d_id == "VBHN_18_2026" and a_num == "13")) and not de_facto_contract_iid:
+                    de_facto_contract_iid = i_id or "issue_1"
+                if ("giữ bản chính giấy tờ tùy thân" in c_text or "giấy tờ tùy thân" in c_text or (d_id == "VBHN_18_2026" and a_num == "17") or (d_id == "ND_12_2022" and a_num == "9")) and not prohibited_id_iid:
+                    prohibited_id_iid = i_id or "issue_2"
+
+            if de_facto_contract_iid:
+                target_df_iid = de_facto_contract_iid
+                # Hard purge any irrelevant d35 chunks for de facto contract qualification
+                selected_chunks = [
+                    (c, i_id) for c, i_id in selected_chunks
+                    if not (i_id == target_df_iid and str((c.get("metadata") or c).get("doc_id")) == "VBHN_18_2026" and str((c.get("metadata") or c).get("article_number")) in ["35", 35])
+                ]
+                d13_cids = ["VBHN_18_2026#d13-k1", "VBHN_18_2026#d13-k2"]
+                canonical_df_chunks = []
+                for cid in d13_cids:
+                    b_chk = self._get_chunk_by_id(cid)
+                    if b_chk:
+                        canonical_df_chunks.append((b_chk, target_df_iid))
+                        seen_cids.add(cid)
+                selected_chunks = canonical_df_chunks + [sc for sc in selected_chunks if not (sc[1] == target_df_iid and sc[0].get("chunk_id") in d13_cids)]
+
+            if prohibited_id_iid:
+                target_pid_iid = prohibited_id_iid
+                d17_cids = ["VBHN_18_2026#d17-k1", "VBHN_18_2026#d17-k2", "VBHN_18_2026#d17-k3", "ND_12_2022#d9-k2", "ND_12_2022#d9-k3"]
+                for cid in d17_cids:
+                    if not any(c.get("chunk_id") == cid and i_id == target_pid_iid for c, i_id in selected_chunks):
+                        b_chk = self._get_chunk_by_id(cid)
+                        if b_chk:
+                            selected_chunks.append((b_chk, target_pid_iid))
+                            seen_cids.add(cid)
 
         # 3. Create Compact Evidence Blocks labeled [E1], [E2], ...
         evidence_blocks: List[EvidenceBlock] = []

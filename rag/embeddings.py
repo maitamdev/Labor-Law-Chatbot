@@ -9,14 +9,41 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import os
 from pathlib import Path
 from typing import Any, List, Optional, Union
+
+# Enforce 100% offline mode for Hugging Face Hub (zero external network requests, zero warnings, zero progress bars)
+os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["TRANSFORMERS_OFFLINE"] = "1"
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
 
 from sentence_transformers import SentenceTransformer
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_MODEL_NAME = "BAAI/bge-m3"
+FALLBACK_MODEL_NAME = "BAAI/bge-m3"
+
+
+def _detect_default_embedding_model() -> str:
+    """Detects available local embedding model.
+    Prioritizes explicit environment variable, then checks local cache for AITeamVN/Vietnamese_Embedding_v2,
+    and cleanly falls back to BAAI/bge-m3 if not downloaded yet.
+    """
+    explicit = os.environ.get("EMBEDDING_MODEL_NAME")
+    if explicit:
+        return explicit
+    try:
+        aiteam_path = LocalBGEEmbeddings._resolve_local_model_path("AITeamVN/Vietnamese_Embedding_v2")
+        if os.path.isdir(aiteam_path):
+            return "AITeamVN/Vietnamese_Embedding_v2"
+    except Exception:
+        pass
+    return FALLBACK_MODEL_NAME
+
+
+DEFAULT_MODEL_NAME = _detect_default_embedding_model()
 DEFAULT_EMBEDDING_DIM = 1024
 
 _PARENT_CLAUSE_CACHE: Optional[dict[tuple[str, str, str], str]] = None
@@ -148,18 +175,90 @@ class LocalBGEEmbeddings:
         self.device = device
         self.normalize_embeddings = normalize_embeddings
         self.cache_folder = cache_folder
-        self._ensure_model_loaded()
+
+    @staticmethod
+    def _resolve_local_model_path(model_name: str, cache_folder: Optional[str] = None) -> str:
+        """Resolves local snapshot directory for model to guarantee 100% offline loading without HF Hub checks."""
+        if os.path.isdir(model_name):
+            return model_name
+
+        sanitized = "models--" + model_name.replace("/", "--")
+        search_dirs = []
+        if cache_folder and os.path.isdir(cache_folder):
+            search_dirs.append(cache_folder)
+
+        hf_home = os.environ.get("HF_HOME")
+        if hf_home and os.path.isdir(hf_home):
+            search_dirs.append(os.path.join(hf_home, "hub"))
+        search_dirs.append(os.path.expanduser("~/.cache/huggingface/hub"))
+
+        for base in search_dirs:
+            snap_dir = os.path.join(base, sanitized, "snapshots")
+            if os.path.isdir(snap_dir):
+                snapshots = [
+                    os.path.join(snap_dir, s)
+                    for s in os.listdir(snap_dir)
+                    if os.path.isdir(os.path.join(snap_dir, s))
+                ]
+                # Filter for valid SentenceTransformer snapshots (must contain modules.json)
+                valid_snapshots = [
+                    s for s in snapshots if os.path.isfile(os.path.join(s, "modules.json"))
+                ]
+                if not valid_snapshots:
+                    valid_snapshots = [
+                        s for s in snapshots if os.path.isfile(os.path.join(s, "config.json"))
+                    ]
+                if valid_snapshots:
+                    valid_snapshots.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+                    return valid_snapshots[0]
+
+        return model_name
+
     def _ensure_model_loaded(self):
         if LocalBGEEmbeddings._model is None:
-            logger.info(f"Loading local embedding model: {self.model_name} on {self.device}...")
+            os.environ["HF_HUB_OFFLINE"] = "1"
+            os.environ["TRANSFORMERS_OFFLINE"] = "1"
+            os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+            os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+
+            target_path = self._resolve_local_model_path(self.model_name, self.cache_folder)
+
+            # If target model path is not a local folder on disk, seamlessly use verified fallback
+            if not os.path.isdir(target_path) and self.model_name != FALLBACK_MODEL_NAME:
+                fallback_path = self._resolve_local_model_path(FALLBACK_MODEL_NAME, self.cache_folder)
+                if os.path.isdir(fallback_path):
+                    logger.info(f"Primary model '{self.model_name}' not cached locally; seamlessly using local model: {fallback_path}")
+                    target_path = fallback_path
+
+            logger.info(f"Loading local embedding model: {target_path} on {self.device}...")
             import torch
             if torch.get_num_threads() < 8:
                 torch.set_num_threads(min(8, torch.get_num_threads() * 2))
-            LocalBGEEmbeddings._model = SentenceTransformer(
-                self.model_name,
-                device=self.device,
-                cache_folder=self.cache_folder,
-            )
+            try:
+                LocalBGEEmbeddings._model = SentenceTransformer(
+                    target_path,
+                    device=self.device,
+                    cache_folder=self.cache_folder,
+                    local_files_only=True,
+                )
+            except Exception as e:
+                # Attempt to fall back to BAAI/bge-m3
+                fallback_path = self._resolve_local_model_path(FALLBACK_MODEL_NAME, self.cache_folder)
+                logger.info(f"Falling back to local model: {fallback_path}...")
+                try:
+                    LocalBGEEmbeddings._model = SentenceTransformer(
+                        fallback_path,
+                        device=self.device,
+                        cache_folder=self.cache_folder,
+                        local_files_only=True,
+                    )
+                except Exception as e2:
+                    logger.warning(f"Local fallback {fallback_path} failed: {e2}. Attempting standard load...")
+                    LocalBGEEmbeddings._model = SentenceTransformer(
+                        FALLBACK_MODEL_NAME,
+                        device=self.device,
+                        cache_folder=self.cache_folder,
+                    )
             LocalBGEEmbeddings._model.max_seq_length = 1024
             logger.info("Local embedding model loaded successfully.")
 

@@ -28,14 +28,7 @@ class EvidenceBlock:
 
     def format_for_llm(self) -> str:
         """Formats the evidence block with statutory hierarchy and content."""
-        if self.issue_id:
-            m_iss = re.match(r"issue_(\d+)", self.issue_id, re.IGNORECASE)
-            if m_iss:
-                parts = [f"[{self.evidence_id}] (Căn cứ cho Vấn đề {m_iss.group(1)})"]
-            else:
-                parts = [f"[{self.evidence_id}]"]
-        else:
-            parts = [f"[{self.evidence_id}]"]
+        parts = [f"[{self.evidence_id}]"]
         
         # Statutory header
         header_parts = [self.document_title or self.document_no]
@@ -243,15 +236,22 @@ class EvidenceMapper:
             if not block:
                 return ""
 
-            doc_title = block.document_title or "Bộ luật Lao động 2019"
-            if "bộ luật lao động" in doc_title.lower():
+            doc_title = block.document_title or block.document_no or ""
+            dt_low = f"{doc_title} {block.document_no or ''} {block.chunk_id}".lower()
+            if "bộ luật lao động" in dt_low or "18/vbhn" in dt_low or "vbhn_18" in dt_low:
                 doc_short = "Bộ luật Lao động 2019"
-            elif "nghị định 145" in doc_title.lower():
+            elif "nghị định 145" in dt_low or "145/2020" in dt_low or "nd_145" in dt_low:
                 doc_short = "Nghị định 145/2020/NĐ-CP"
-            elif "nghị định 12" in doc_title.lower():
+            elif "nghị định 12" in dt_low or "12/2022" in dt_low or "nd_12" in dt_low:
                 doc_short = "Nghị định 12/2022/NĐ-CP"
+            elif "an toàn, vệ sinh lao động" in dt_low or "84/2015" in dt_low or "l_84" in dt_low or "atvslđ" in dt_low:
+                doc_short = "Luật An toàn, vệ sinh lao động 2015"
+            elif "bảo hiểm xã hội" in dt_low or "58/vbhn" in dt_low or "vbhn_58" in dt_low:
+                doc_short = "Luật Bảo hiểm xã hội"
+            elif "việc làm" in dt_low or "74/2025" in dt_low or "lvl_74" in dt_low:
+                doc_short = "Luật Việc làm 2025"
             else:
-                doc_short = doc_title
+                doc_short = doc_title or "Bộ luật Lao động 2019"
 
             parts = []
             if block.point:
@@ -269,3 +269,53 @@ class EvidenceMapper:
         pattern = re.compile(r"\[\s*E(\d+)\s*\]|\(\s*E(\d+)\s*\)", re.IGNORECASE)
         res = pattern.sub(_repl, text)
         return res
+
+
+@dataclass
+class PhantomCitation:
+    raw_reference: str
+    article_number: str
+    document_hint: Optional[str] = None
+    action_taken: str = "STRIPPED"  # "STRIPPED" | "REPLACED"
+
+
+class CitationSanitizer:
+    """Enforces Backend-Owned Citations and eliminates phantom statutory references."""
+
+    STATUTORY_PATTERN = re.compile(
+        r"(?:(?:Điểm\s+[a-zđ]\s+)?(?:Khoản\s+\d+\s+)?Điều\s+(\d+)(?:\s+của)?(?:\s+(?:Bộ luật Lao động(?: 2019)?|Luật Bảo hiểm xã hội|Luật An toàn, vệ sinh lao động|Luật ATVSLĐ|Nghị định\s+\d+/\d+/[A-ZĐ-]+|BLLĐ)(?:\s+\d{4})?)?)",
+        re.IGNORECASE,
+    )
+
+    @classmethod
+    def sanitize(
+        cls,
+        text: str,
+        allowed_article_numbers: Set[str],
+        evidence_mapper: Optional[EvidenceMapper] = None,
+    ) -> Tuple[str, List[PhantomCitation]]:
+        """Scans text for raw statutory citations. Any Article not in allowed_article_numbers
+        is flagged as a phantom citation and sanitized (replaced or stripped).
+        """
+        phantoms: List[PhantomCitation] = []
+        if not text:
+            return text, phantoms
+
+        allowed_norm = {str(a).strip() for a in allowed_article_numbers if str(a).strip()}
+
+        def _repl(match: re.Match) -> str:
+            full_ref = match.group(0)
+            art_num = match.group(1)
+            if art_num not in allowed_norm:
+                phantoms.append(
+                    PhantomCitation(
+                        raw_reference=full_ref,
+                        article_number=art_num,
+                        action_taken="STRIPPED",
+                    )
+                )
+                return "quy định pháp luật"
+            return full_ref
+
+        sanitized_text = cls.STATUTORY_PATTERN.sub(_repl, text)
+        return sanitized_text, phantoms

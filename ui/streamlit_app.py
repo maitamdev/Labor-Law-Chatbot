@@ -5,28 +5,54 @@ Official user interface matching the approved mockup.
 """
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
+
+# Enforce 100% offline mode for Hugging Face Hub (zero external network requests, zero warnings, zero progress bars)
+os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["TRANSFORMERS_OFFLINE"] = "1"
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+
+# Silence Windows-specific asyncio ProactorEventLoop connection lost errors (WinError 10054 on page refresh/close)
+if sys.platform == "win32":
+    try:
+        from asyncio.proactor_events import _ProactorBasePipeTransport
+
+        _orig_call_connection_lost = _ProactorBasePipeTransport._call_connection_lost
+
+        def _silenced_call_connection_lost(self, exc):
+            try:
+                _orig_call_connection_lost(self, exc)
+            except (ConnectionResetError, ConnectionAbortedError, BrokenPipeError, OSError):
+                pass
+
+        _ProactorBasePipeTransport._call_connection_lost = _silenced_call_connection_lost
+    except Exception:
+        pass
 
 # Ensure project root is on sys.path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+import threading
 import streamlit as st
 
-from app.chat_service import ChatService
 from ui.components.chat_message import render_assistant_message, render_user_message
 from ui.components.composer import render_composer
 from ui.components.right_panel import render_right_panel
 from ui.components.sidebar import render_sidebar
 from ui.components.welcome import render_welcome_screen
+from ui.utils.branding import get_logo_path
 from ui.utils.session import SessionManager
 
 # 1. Streamlit Page Configuration
+logo_path = get_logo_path()
 st.set_page_config(
     page_title="VietLabor AI - Trợ lý pháp luật lao động",
-    page_icon="⚖",
+    page_icon=str(logo_path) if logo_path.exists() else "§",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -38,13 +64,28 @@ if CSS_PATH.exists():
     st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
 
 
-# 3. Cache ChatService Singleton
+# 3. Cache ChatService Singleton (Lazy-loaded on first query with background pre-warming)
+APP_BUILD_VERSION = "2026.09.17.v3.7_de_facto_contract"
+
 @st.cache_resource(show_spinner=False)
-def get_chat_service() -> ChatService:
+def get_chat_service(build_version: str = APP_BUILD_VERSION):
+    from app.chat_service import ChatService
     return ChatService()
 
 
-chat_service = get_chat_service()
+# Background pre-warming: pre-loads heavy AI/RAG modules without blocking the UI
+def _background_warmup():
+    try:
+        get_chat_service()
+    except Exception:
+        pass
+
+
+if "warmup_started" not in st.session_state:
+    st.session_state["warmup_started"] = True
+    threading.Thread(target=_background_warmup, daemon=True).start()
+
+
 session_mgr = SessionManager()
 
 # 4. Initialize Active Conversation State
@@ -61,19 +102,22 @@ if "active_conv_id" not in st.session_state or not st.session_state["active_conv
 def handle_new_chat():
     new_c = session_mgr.create_conversation("Cuộc trò chuyện mới")
     st.session_state["active_conv_id"] = new_c["id"]
-    chat_service.reset_conversation()
+    if "chat_service_initialized" in st.session_state:
+        get_chat_service().reset_conversation()
     st.rerun()
 
 
 def handle_switch_conv(conv_id: str):
     st.session_state["active_conv_id"] = conv_id
-    chat_service.reset_conversation()
-    # Replay previous turn facts if needed into memory
-    active_conv = session_mgr.get_conversation(conv_id)
-    if active_conv and active_conv.get("messages"):
-        for m in active_conv["messages"][-3:]:
-            if m["role"] == "user":
-                chat_service.chain.memory._extract_facts(m["content"])
+    if "chat_service_initialized" in st.session_state:
+        cs = get_chat_service()
+        cs.reset_conversation()
+        # Replay previous turn facts if needed into memory
+        active_conv = session_mgr.get_conversation(conv_id)
+        if active_conv and active_conv.get("messages"):
+            for m in active_conv["messages"][-3:]:
+                if m["role"] == "user":
+                    cs.chain.memory._extract_facts(m["content"])
     st.rerun()
 
 
@@ -128,10 +172,15 @@ with col_chat:
 
     # If this run was triggered by a new query, run assistant inference right below the user message
     if user_query:
-        with st.spinner("Đang tra cứu căn cứ pháp lý..."):
+        with st.status("Đang tra cứu và đối soát căn cứ pháp lý...", expanded=True) as status_box:
+            st.session_state["chat_service_initialized"] = True
+            chat_service = get_chat_service()
+            st.write("Đang tra cứu cơ sở dữ liệu luật lao động...")
             try:
                 resp_data = chat_service.ask(user_query, update_memory=True)
+                status_box.update(label="Hoàn tất tra cứu căn cứ pháp lý!", state="complete", expanded=False)
             except Exception as e:
+                status_box.update(label="Có lỗi phát sinh trong quá trình tra cứu", state="error", expanded=False)
                 resp_data = {
                     "answer": f"Đã xảy ra lỗi khi tra cứu: {str(e)}",
                     "findings": [],
@@ -145,7 +194,7 @@ with col_chat:
         session_mgr.append_message(
             conv_id=active_id,
             role="assistant",
-            content=resp_data["answer"],
+            content=str(resp_data.get("answer", "")),
             structured_data=resp_data,
         )
 

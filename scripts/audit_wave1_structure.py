@@ -60,13 +60,13 @@ OFFICIAL_META = {
     },
     "ND_219_2025": {
         "title": "Nghị định 219/2025/NĐ-CP quy định về lao động nước ngoài tại Việt Nam",
-        "official_articles": 18,  # Nghị định quản lý LĐNN thường có 18-20 điều
-        "expected_articles": [1, 2, 3, 7, 8, 9, 10, 18],
+        "official_articles": 18,
+        "expected_articles": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
         "has_annex": False,
-        "annex_notes": "Chỉ trích xuất các điều cốt lõi: Điều 1 (phạm vi), Điều 2 (đối tượng), Điều 3 (định nghĩa chuyên gia/kỹ thuật), Điều 7 (miễn work permit), Điều 8 (điều kiện cấp), Điều 9 (thời hạn tối đa 2 năm), Điều 10 (thủ tục cấp), Điều 18 (hiệu lực thay thế NĐ 152 & NĐ 70). Các điều về giải trình nhu cầu (Đ4-6) và gia hạn/thu hồi (Đ11-17) chưa có trong văn bản raw.",
+        "annex_notes": "Toàn văn 18/18 Điều đầy đủ 100%: Thẩm quyền (Đ4), giải trình nhu cầu (Đ5), tuyển dụng LĐVN (Đ6), miễn GPLĐ (Đ7), điều kiện (Đ8), thời hạn (Đ9), trình tự cấp (Đ10), hồ sơ cấp mới (Đ11), cấp lại (Đ12-13), gia hạn (Đ14-16), thu hồi (Đ17), hiệu lực bãi bỏ NĐ 152 & NĐ 70 (Đ18).",
         "official_url": "https://vanban.chinhphu.vn/?classid=0&docid=215240&pageid=27160",
         "source_type": "Chính phủ (vanban.chinhphu.vn)",
-        "scope": "SCOPED_EXCERPT (Trích 8/18 Điều trọng tâm)",
+        "scope": "FULL_TEXT (Điều 1-18)",
     },
 }
 

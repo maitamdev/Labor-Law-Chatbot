@@ -54,14 +54,17 @@ class LocalLLMManager:
         model_name: str = DEFAULT_MODEL_NAME,
         base_url: str = DEFAULT_OLLAMA_URL,
         temperature: float = 0.0,
-        num_predict: int = 1536,
+        num_predict: int = 2048,
         num_ctx: int = 8192,
+        keep_alive: str = "24h",
     ):
+
         self.model_name = model_name
         self.base_url = base_url
         self.temperature = temperature
         self.num_predict = num_predict
         self.num_ctx = num_ctx
+        self.keep_alive = keep_alive
         self._llm: Optional[ChatOllama] = None
 
     def get_llm(self) -> ChatOllama:
@@ -81,6 +84,7 @@ class LocalLLMManager:
                 temperature=self.temperature,
                 num_predict=self.num_predict,
                 num_ctx=self.num_ctx,
+                keep_alive=self.keep_alive,
                 format="json",
             )
         return self._llm

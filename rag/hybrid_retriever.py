@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional
 
 from rag.bm25_retriever import BM25Retriever
 from rag.dense_retriever import DenseRetriever
+from rag.reranker import CrossEncoderReranker
 from rag.vectorstore import LegalVectorStore
 
 logger = logging.getLogger(__name__)
@@ -20,22 +21,31 @@ DEFAULT_RRF_K = 60
 
 
 class HybridRetriever:
-    """Hybrid legal retriever combining BM25 and Dense retrieval via RRF."""
+    """Hybrid legal retriever combining BM25 and Dense retrieval via RRF, with optional Cross-Encoder reranking."""
 
     def __init__(
         self,
         bm25_retriever: Optional[BM25Retriever] = None,
         dense_retriever: Optional[DenseRetriever] = None,
+        reranker: Optional[CrossEncoderReranker] = None,
+        use_reranker: bool = False,
         rrf_k: int = DEFAULT_RRF_K,
         bm25_weight: float = 1.0,
         dense_weight: float = 1.0,
-        index_version: str = "v2",
+        index_version: str = "v3",
     ):
         self.index_version = index_version
+        self.use_reranker = use_reranker
+        self.reranker = reranker
         if bm25_retriever is not None:
             self.bm25_retriever = bm25_retriever
         else:
-            if index_version == "v2" and Path("storage/bm25_v2").exists():
+            if index_version == "v3" and Path("storage/bm25_v3").exists():
+                self.bm25_retriever = BM25Retriever(
+                    persist_dir="storage/bm25_v3",
+                    corpus_path="data/processed/legal_documents_v3.jsonl",
+                )
+            elif index_version == "v2" and Path("storage/bm25_v2").exists():
                 self.bm25_retriever = BM25Retriever(
                     persist_dir="storage/bm25_v2",
                     corpus_path="data/processed/legal_documents_v2.jsonl",
@@ -46,10 +56,19 @@ class HybridRetriever:
         if dense_retriever is not None:
             self.dense_retriever = dense_retriever
         else:
-            if index_version == "v2" and Path("storage/chroma_v2").exists():
+            if index_version == "v3" and Path("storage/chroma_v3").exists():
+                self.dense_retriever = DenseRetriever(
+                    vectorstore=LegalVectorStore(
+                        persist_dir="storage/chroma_v3",
+                        collection_name="vietlabor_chunks_v3",
+                        corpus_path="data/processed/legal_documents_v3.jsonl",
+                    )
+                )
+            elif index_version == "v2" and Path("storage/chroma_v2").exists():
                 self.dense_retriever = DenseRetriever(
                     vectorstore=LegalVectorStore(
                         persist_dir="storage/chroma_v2",
+                        collection_name="vietlabor_chunks_v2",
                         corpus_path="data/processed/legal_documents_v2.jsonl",
                     )
                 )
@@ -140,7 +159,26 @@ class HybridRetriever:
         fused_results = list(fused_pool.values())
         fused_results.sort(key=lambda x: x["rrf_score"], reverse=True)
 
-        # Format output items
+        # 5. Optional Cross-Encoder reranking for precision enhancement
+        if self.use_reranker and self.reranker is not None:
+            rerank_pool = [
+                {
+                    "chunk_id": r["chunk_id"],
+                    "score": r["rrf_score"],
+                    "rrf_score": r["rrf_score"],
+                    "bm25_rank": r["bm25_rank"],
+                    "bm25_score": r["bm25_score"],
+                    "dense_rank": r["dense_rank"],
+                    "dense_score": r["dense_score"],
+                    "content": r["content"],
+                    "retrieval_text": r["retrieval_text"],
+                    "metadata": r["metadata"],
+                }
+                for r in fused_results[:max(top_k * 3, 20)]
+            ]
+            return self.reranker.rerank(clean_query, rerank_pool, top_k=top_k)
+
+        # Format standard output items
         output: List[Dict[str, Any]] = []
         for r in fused_results[:top_k]:
             output.append({

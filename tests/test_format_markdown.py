@@ -26,7 +26,7 @@ def test_format_answer_markdown_continuous_text():
     # Specific sections must be broken into separate paragraphs
     assert any("Quyết định sa thải" in p for p in paragraphs)
     assert any("Nếu công ty" in p or "trách nhiệm pháp lý" in p for p in paragraphs)
-    assert any("💡 **Lời khuyên" in p for p in paragraphs)
+    assert any("**Lời khuyên" in p for p in paragraphs)
 
 
 def test_format_answer_markdown_single_newlines():

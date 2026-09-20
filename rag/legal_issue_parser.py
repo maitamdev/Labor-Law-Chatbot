@@ -23,12 +23,18 @@ class LegalIssue:
     actor: str  # "EMPLOYEE" | "EMPLOYER" | "BOTH" | "UNKNOWN"
     intent: str  # "SUBSTANTIVE_RULE" | "SANCTION" | "BOTH" | "CLARIFICATION"
     domain: str = "CORE_LABOR"  # "CORE_LABOR" | "RETIREMENT" | "UNEMPLOYMENT_INSURANCE" | "FOREIGN_WORKER"
+    question_specificity: str = "GENERAL_PRINCIPLE"  # "GENERAL_PRINCIPLE" | "ELIGIBILITY" | "NUMERIC_THRESHOLD" | "DEADLINE" | "PROCEDURE" | "DOSSIER" | "EXEMPTION" | "DURATION" | "CALCULATION" | "CURRENT_STATUS"
     action: Optional[str] = None
     object: Optional[str] = None
     qualifiers: List[str] = field(default_factory=list)
     numbers: List[int] = field(default_factory=list)
     units: List[str] = field(default_factory=list)
     special_conditions: List[str] = field(default_factory=list)
+
+    # Legal Event Model (Phase 5H.3)
+    legal_event: str = "UNKNOWN"
+    legal_events: List[str] = field(default_factory=list)
+    required_evidence_roles: List[str] = field(default_factory=list)
 
     # Factual state & premise fields (Phase 5F)
     relationship_type: str = "UNKNOWN"  # "EMPLOYMENT" | "PROBATION" | "INTERNSHIP" | "APPRENTICESHIP_TRAINING" | "SERVICE_COLLABORATOR" | "UNKNOWN"
@@ -49,6 +55,10 @@ class LegalIssue:
             "raw_query": self.raw_query,
             "topic": self.topic,
             "domain": self.domain,
+            "legal_event": self.legal_event,
+            "legal_events": self.legal_events,
+            "required_evidence_roles": self.required_evidence_roles,
+            "question_specificity": self.question_specificity,
             "actor": self.actor,
             "intent": self.intent,
             "action": self.action,
@@ -71,6 +81,179 @@ class LegalIssue:
         }
 
 
+def detect_legal_events(query: str) -> List[str]:
+    """Detects discrete legal events from a Vietnamese legal query.
+
+    Supported events:
+        OCCUPATIONAL_ACCIDENT
+        WORKPLACE_INJURY
+        OCCUPATIONAL_DISEASE
+        ORDINARY_SICKNESS
+        INSURANCE_CONTRIBUTION
+        UNPAID_INSURANCE
+        MATERNITY
+        TERMINATION
+        VOCATIONAL_TRAINING
+        RETIREMENT
+        UNEMPLOYMENT
+        UNKNOWN
+    """
+    if not query or not isinstance(query, str):
+        return ["UNKNOWN"]
+
+    q_norm = unicodedata.normalize("NFC", query).lower()
+    events: List[str] = []
+
+    # 1. Unpaid / Arrears / Insurance Contribution
+    has_unpaid_ins = any(k in q_norm for k in [
+        "chưa đóng bhxh", "không đóng bhxh", "ko đóng bhxh", "chưa đóng bảo hiểm",
+        "không đóng bảo hiểm", "ko đóng bảo hiểm", "trốn đóng bhxh", "trốn đóng bảo hiểm",
+        "nợ bhxh", "nợ bảo hiểm", "chậm đóng bhxh", "chậm đóng bảo hiểm",
+        "chưa tham gia bhxh", "không tham gia bhxh", "ko tham gia bảo hiểm",
+        "không đóng bảo hiểm tai nạn", "chưa đóng bhxh tai nạn", "chưa được đóng bhxh"
+    ])
+    has_ins_contrib = has_unpaid_ins or any(k in q_norm for k in [
+        "đóng bhxh", "đóng bảo hiểm", "tham gia bhxh", "tham gia bảo hiểm xã hội",
+        "nghĩa vụ đóng", "bắt buộc phải đóng", "đối tượng tham gia bhxh",
+        "sổ bhxh", "chốt sổ bhxh", "chốt sổ bảo hiểm"
+    ])
+    if has_unpaid_ins:
+        events.append("UNPAID_INSURANCE")
+        events.append("INSURANCE_CONTRIBUTION")
+    elif has_ins_contrib:
+        events.append("INSURANCE_CONTRIBUTION")
+
+    # 2. Occupational Accident & Workplace Injury
+    is_workplace_accident = any(k in q_norm for k in [
+        "tai nạn lao động", "tnlđ", "tai nạn khi đang làm", "tai nạn lúc đang làm",
+        "tai nạn trong ca", "tai nạn ở công ty", "tai nạn tại nơi làm việc",
+        "bị máy kẹp", "bị máy ép", "ngã giàn giáo", "đi làm bị tai nạn",
+        "tai nạn trên đường đi làm", "tai nạn rủi ro trong lúc làm", "chấn thương khi đang làm",
+        "tai nạn giao thông trên tuyến đường đi và về", "tai nạn rủi ro",
+        "bảo hiểm tai nạn", "bảo hiểm tnlđ", "tai nạn xe nâng",
+        "từ nơi ở đến nơi làm việc", "từ nơi làm việc về nơi ở", "trên tuyến đường đi và về"
+    ]) or (
+        any(k in q_norm for k in ["gãy chân", "gãy tay", "đứt tay", "bỏng", "ngã", "chấn thương", "máy dập", "máy chém", "máy cuốn", "máy khâu", "máy may", "đâm vào tay", "kẹp tay", "đâm vào", "kẹp"])
+        and any(k in q_norm for k in ["đang làm", "khi làm việc", "trong giờ làm", "trong ca", "tại xưởng", "ở xưởng", "ở công ty", "công ty", "doanh nghiệp", "người lao động", "lúc làm việc", "chỗ làm", "làm việc", "công trình", "xí nghiệp"])
+    ) or (
+        "tai nạn" in q_norm and any(k in q_norm for k in ["ở xưởng", "tại xưởng", "nhà xưởng", "công trình", "công ty", "doanh nghiệp", "nơi làm việc", "xe nâng", "trong giờ làm việc", "trong ca làm việc"])
+    )
+    if is_workplace_accident:
+        events.append("OCCUPATIONAL_ACCIDENT")
+        events.append("WORKPLACE_INJURY")
+
+    # 3. Occupational Disease
+    if any(k in q_norm for k in ["bệnh nghề nghiệp", "bnn", "nhiễm độc chì", "bụi phổi", "điếc nghề nghiệp"]):
+        events.append("OCCUPATIONAL_DISEASE")
+
+    # 4. Ordinary Sickness (Must not trigger if only workplace accident happened)
+    is_sick = any(k in q_norm for k in [
+        "nghỉ ốm", "chế độ ốm đau", "trợ cấp ốm đau", "ốm đau dài ngày",
+        "con ốm", "chăm con ốm", "chăm con", "con bị sốt", "con bị ốm", "con ốm đau",
+        "ốm đau", "cảm cúm", "nằm viện do bệnh", "bệnh thông thường"
+    ]) or any(k in q_norm for k in ["có phải ốm đau", "hay ốm đau", "hưởng ốm đau"]) or (
+        any(k in q_norm for k in ["con", "con nhỏ", "cháu"]) and any(k in q_norm for k in ["sốt", "ốm", "bệnh", "chăm sóc"])
+    )
+    if is_sick:
+        events.append("ORDINARY_SICKNESS")
+
+    # 5. Maternity
+    if any(k in q_norm for k in ["thai sản", "sinh con", "nghỉ sinh", "mang thai", "khám thai", "nuôi con dưới 12 tháng"]):
+        events.append("MATERNITY")
+
+    # 6. Termination
+    if any(k in q_norm for k in ["sa thải", "đuổi việc", "chấm dứt hợp đồng", "hết hạn hợp đồng", "hết hợp đồng", "đơn phương chấm dứt", "thôi việc", "nghỉ việc", "bị cho thôi việc", "cho thôi việc", "cho nghỉ việc"]):
+        events.append("TERMINATION")
+
+    # 7. Vocational Training
+    if any(k in q_norm for k in ["đào tạo", "học nghề", "tập nghề", "bồi dưỡng", "chi phí đào tạo", "bồi hoàn chi phí", "cử đi học", "cử đi đào tạo", "đền tiền", "đền bù chi phí"]):
+        events.append("VOCATIONAL_TRAINING")
+
+    # 8. Retirement
+    if any(k in q_norm for k in ["nghỉ hưu", "tuổi hưu", "hưu trí", "lương hưu", "135/2020"]):
+        events.append("RETIREMENT")
+
+    # 9. Unemployment
+    if any(k in q_norm for k in ["thất nghiệp", "bhtn", "trợ cấp thất nghiệp", "mất việc làm"]):
+        events.append("UNEMPLOYMENT")
+
+    # 10. Safety Work Refusal & Imminent Danger
+    if any(k in q_norm for k in [
+        "từ chối làm việc", "từ chối tiếp tục làm việc", "rời khỏi khu vực",
+        "rời khỏi nơi làm việc", "đe dọa tính mạng", "đe dọa sức khỏe",
+        "nguy cơ đe dọa", "sạt lở", "nguy cơ tai nạn"
+    ]):
+        events.append("SAFETY_WORK_REFUSAL")
+
+    if not events:
+        events.append("UNKNOWN")
+
+    # Deduplicate preserving order
+    seen: Set[str] = set()
+    deduped: List[str] = []
+    for ev in events:
+        if ev not in seen:
+            seen.add(ev)
+            deduped.append(ev)
+    return deduped
+
+
+def determine_required_evidence_roles(events: List[str], query_lower: str) -> List[str]:
+    """Deterministically identifies mandatory evidence roles required to substantiate an answer."""
+    roles: List[str] = []
+    if "OCCUPATIONAL_ACCIDENT" in events or "WORKPLACE_INJURY" in events:
+        # Check if question concerns employer's responsibilities or unpaid insurance
+        if any(k in query_lower for k in [
+            "công ty", "người sử dụng lao động", "doanh nghiệp", "chi phí", "y tế",
+            "tiền lương", "bồi thường", "chưa đóng", "không đóng", "ko đóng", "trả tiền", "viện phí"
+        ]):
+            roles.extend([
+                "EMPLOYER_MEDICAL_RESPONSIBILITY",
+                "EMPLOYER_WAGE_RESPONSIBILITY",
+                "EMPLOYER_ACCIDENT_COMPENSATION",
+            ])
+            if "UNPAID_INSURANCE" in events or any(k in query_lower for k in ["chưa đóng", "không đóng", "ko đóng", "chưa tham gia"]):
+                roles.append("UNINSURED_ACCIDENT_SUBSTITUTION")
+        # Only require direct insurance fund entitlement when query is NOT about employer evasion/uninsured accident
+        if ("UNPAID_INSURANCE" not in events and not any(k in query_lower for k in ["chưa đóng", "không đóng", "ko đóng", "trốn đóng"])) and any(k in query_lower for k in ["quỹ", "cơ quan bhxh", "bhxh chi trả", "hưởng từ bhxh", "trợ cấp một lần", "trợ cấp hàng tháng"]):
+            roles.append("INSURANCE_FUND_ENTITLEMENT")
+
+    if "INSURANCE_CONTRIBUTION" in events or "UNPAID_INSURANCE" in events:
+        roles.append("EMPLOYER_INSURANCE_OBLIGATION")
+
+    if "ORDINARY_SICKNESS" in events:
+        roles.extend(["SICKNESS_BENEFIT_DURATION", "SICKNESS_BENEFIT_RATE"])
+
+    if "MATERNITY" in events:
+        roles.append("MATERNITY_BENEFIT")
+
+    if "VOCATIONAL_TRAINING" in events:
+        if any(k in query_lower for k in ["nghĩa vụ", "kế hoạch", "kinh phí", "trách nhiệm"]):
+            roles.append("EMPLOYER_TRAINING_OBLIGATION")
+        if any(k in query_lower for k in ["bồi hoàn", "hoàn trả", "chi phí", "cam kết", "nghỉ việc"]):
+            roles.append("TRAINING_COST_REFUND")
+
+    if "TERMINATION" in events:
+        if any(k in query_lower for k in ["trợ cấp thôi việc", "thôi việc"]):
+            roles.append("TERMINATION_SEVERANCE_ALLOWANCE")
+        elif any(k in query_lower for k in ["trái luật", "bồi thường"]):
+            roles.append("UNLAWFUL_TERMINATION_COMPENSATION")
+
+    if "SAFETY_WORK_REFUSAL" in events or any(k in query_lower for k in ["từ chối làm việc", "đe dọa tính mạng", "nguy cơ đe dọa"]):
+        roles.extend([
+            "EMPLOYEE_SAFETY_REFUSAL_RIGHT",
+            "PROHIBITED_SAFETY_DISCIPLINE",
+        ])
+
+    seen: Set[str] = set()
+    deduped: List[str] = []
+    for r in roles:
+        if r not in seen:
+            seen.add(r)
+            deduped.append(r)
+    return deduped
+
+
 class LegalIssueParser:
     """Deterministic parser extracting fine-grained legal qualifiers and numeric thresholds."""
 
@@ -82,10 +265,16 @@ class LegalIssueParser:
         query: str,
         issue_id: str = "I1",
         context_facts: Optional[Dict[str, str]] = None,
+        forced_domain: Optional[str] = None,
     ) -> LegalIssue:
         """Parses a query into a structured LegalIssue."""
         norm_q = unicodedata.normalize("NFC", query).strip()
         q_lower = norm_q.lower()
+
+        # Step 0: Legal Event Detection (Phase 5H.3)
+        legal_events = detect_legal_events(norm_q)
+        legal_event = legal_events[0] if legal_events else "UNKNOWN"
+        required_evidence_roles = determine_required_evidence_roles(legal_events, q_lower)
 
         # Step 1: Route analysis for high-level actor and intent
         route = self.router.route(norm_q)
@@ -101,8 +290,10 @@ class LegalIssueParser:
         numbers: List[int] = []
         units: List[str] = []
 
-        # Find numbers
-        num_matches = re.findall(r"\b(\d+)\b", q_lower)
+        # Find numbers, filtering out dates (dd/mm/yyyy or dd-mm-yyyy) and question numbering (1. 2. 3.)
+        q_no_dates = re.sub(r"\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b", "", q_lower)
+        q_no_dates = re.sub(r"(?:^|\s)\d+[\.\)]\s+", " ", q_no_dates)
+        num_matches = re.findall(r"\b(\d+)\b", q_no_dates)
         for m in num_matches:
             try:
                 numbers.append(int(m))
@@ -130,22 +321,58 @@ class LegalIssueParser:
         qualifiers: List[str] = []
         special_conditions: List[str] = []
 
-        # Phase 5G Domain extraction
-        issue_domain = getattr(route, "domain", "CORE_LABOR")
-        if issue_domain == "CROSS_DOMAIN":
-            if any(k in q_lower for k in ["thất nghiệp", "bhtn", "việc làm", "374/2025", "74/2025"]):
-                issue_domain = "UNEMPLOYMENT_INSURANCE"
-            elif any(k in q_lower for k in ["hưu", "nghỉ hưu", "tuổi hưu", "135/2020"]):
-                issue_domain = "RETIREMENT"
-            elif any(k in q_lower for k in ["nước ngoài", "work permit", "giấy phép lao động", "219/2025"]):
-                issue_domain = "FOREIGN_WORKER"
-            else:
-                issue_domain = "CORE_LABOR"
+        # Phase 5G & 5H.2 Domain extraction: strictly respect forced_domain if provided
+        if forced_domain:
+            issue_domain = forced_domain
+        else:
+            issue_domain = getattr(route, "domain", "CORE_LABOR")
+            # If query has occupational accident / workplace injury, do NOT fall into ordinary social insurance
+            if any(ev in ["OCCUPATIONAL_ACCIDENT", "WORKPLACE_INJURY"] for ev in legal_events) and not any(k in q_lower for k in ["nghỉ ốm", "chăm con ốm", "chế độ ốm đau"]):
+                if any(k in q_lower for k in ["công ty", "doanh nghiệp", "nsdlđ", "trách nhiệm", "bồi thường", "chi phí", "y tế", "tiền lương", "chưa đóng", "không đóng", "ko đóng", "viện phí", "trả tiền"]):
+                    issue_domain = "OCCUPATIONAL_SAFETY"
+                else:
+                    issue_domain = "OCCUPATIONAL_ACCIDENT_DISEASE"
+            elif issue_domain == "CROSS_DOMAIN":
+                if any(k in q_lower for k in ["thất nghiệp", "bhtn", "việc làm", "374/2025", "74/2025"]):
+                    if any(k in q_lower for k in ["bhxh", "bảo hiểm xã hội", "rút bhxh", "một lần"]):
+                        issue_domain = "CROSS_DOMAIN"
+                    else:
+                        issue_domain = "UNEMPLOYMENT_INSURANCE"
+                elif any(k in q_lower for k in ["tai nạn", "tnlđ", "bnn", "gãy chân", "máy kẹp"]):
+                    issue_domain = "OCCUPATIONAL_ACCIDENT_DISEASE"
+                elif any(k in q_lower for k in ["bhxh", "bảo hiểm xã hội", "thai sản", "ốm đau"]):
+                    issue_domain = "SOCIAL_INSURANCE"
+                elif any(k in q_lower for k in ["hưu", "nghỉ hưu", "tuổi hưu", "135/2020"]):
+                    issue_domain = "RETIREMENT"
+                elif any(k in q_lower for k in ["nước ngoài", "work permit", "giấy phép lao động", "219/2025"]):
+                    issue_domain = "FOREIGN_WORKER"
+                elif "SAFETY_WORK_REFUSAL" in legal_events or any(k in q_lower for k in ["từ chối làm việc", "đe dọa tính mạng", "sạt lở", "an toàn lao động"]):
+                    issue_domain = "CROSS_DOMAIN"
+                else:
+                    issue_domain = "CROSS_DOMAIN"
+
+        # Phase 5G.3: Question Specificity Classification
+        question_specificity = self._detect_question_specificity(q_lower, numbers, units)
+
+        # Occupational Safety & Accident/Disease Topics (Checked BEFORE generic social insurance!)
+        if issue_domain in ["OCCUPATIONAL_SAFETY", "OCCUPATIONAL_ACCIDENT_DISEASE"] or (not forced_domain and (any(ev in ["OCCUPATIONAL_ACCIDENT", "WORKPLACE_INJURY", "OCCUPATIONAL_DISEASE"] for ev in legal_events) or any(k in q_lower for k in ["tai nạn lao động", "tnlđ", "bệnh nghề nghiệp", "bnn", "atvslđ", "an toàn lao động", "vệ sinh lao động"]))):
+            topic = "occupational_safety"
+            if not forced_domain and issue_domain not in ["OCCUPATIONAL_SAFETY", "OCCUPATIONAL_ACCIDENT_DISEASE"]:
+                issue_domain = "OCCUPATIONAL_SAFETY"
+            obj = "occupational_safety"
+            qualifiers.append("occupational_safety")
+            if any(k in q_lower for k in ["bồi thường", "trợ cấp", "tiền lương trong thời gian điều trị", "chi phí y tế", "viện phí"]):
+                qualifiers.append("accident_compensation")
+            if any(k in q_lower for k in ["quỹ", "bảo hiểm tai nạn", "giám định", "suy giảm khả năng lao động"]):
+                qualifiers.append("fund_accident_benefit")
+            if any(k in q_lower for k in ["trang bị phương tiện", "huấn luyện", "khám sức khỏe"]):
+                qualifiers.append("safety_duty")
 
         # Retirement Topics
-        if issue_domain == "RETIREMENT" or any(k in q_lower for k in ["nghỉ hưu", "tuổi hưu", "hưu trí", "135/2020"]):
+        elif issue_domain == "RETIREMENT" or (not forced_domain and any(k in q_lower for k in ["nghỉ hưu", "tuổi hưu", "hưu trí", "135/2020"])):
             topic = "retirement"
-            issue_domain = "RETIREMENT"
+            if not forced_domain:
+                issue_domain = "RETIREMENT"
             obj = "retirement_age"
             qualifiers.append("retirement")
             if any(k in q_lower for k in ["sớm", "nặng nhọc", "độc hại", "suy giảm"]):
@@ -154,9 +381,10 @@ class LegalIssueParser:
                 qualifiers.append("retirement_roadmap")
 
         # Unemployment Insurance Topics
-        elif issue_domain == "UNEMPLOYMENT_INSURANCE" or any(k in q_lower for k in ["thất nghiệp", "bhtn", "trợ cấp thất nghiệp"]):
+        elif issue_domain == "UNEMPLOYMENT_INSURANCE" or (not forced_domain and any(k in q_lower for k in ["thất nghiệp", "bhtn", "trợ cấp thất nghiệp"])):
             topic = "unemployment_insurance"
-            issue_domain = "UNEMPLOYMENT_INSURANCE"
+            if not forced_domain:
+                issue_domain = "UNEMPLOYMENT_INSURANCE"
             obj = "unemployment_allowance"
             qualifiers.append("unemployment_insurance")
             if any(k in q_lower for k in ["hồ sơ", "thủ tục", "nộp"]):
@@ -167,9 +395,10 @@ class LegalIssueParser:
                 qualifiers.append("unemployment_conditions")
 
         # Foreign Worker Topics
-        elif issue_domain == "FOREIGN_WORKER" or any(k in q_lower for k in ["người nước ngoài", "work permit", "giấy phép lao động", "gplđ", "219/2025"]):
+        elif issue_domain == "FOREIGN_WORKER" or (not forced_domain and any(k in q_lower for k in ["người nước ngoài", "work permit", "giấy phép lao động", "gplđ", "219/2025"])):
             topic = "foreign_worker"
-            issue_domain = "FOREIGN_WORKER"
+            if not forced_domain:
+                issue_domain = "FOREIGN_WORKER"
             obj = "work_permit"
             qualifiers.append("foreign_worker")
             if any(k in q_lower for k in ["miễn", "không thuộc diện", "kết hôn"]):
@@ -178,6 +407,24 @@ class LegalIssueParser:
                 qualifiers.append("work_permit_duration")
             if any(k in q_lower for k in ["chuyên gia", "lao động kỹ thuật", "giám đốc"]):
                 qualifiers.append("foreign_worker_qualifications")
+
+        # Social Insurance Topics (Phase 5H - Wave 2)
+        elif issue_domain == "SOCIAL_INSURANCE" or (not forced_domain and any(k in q_lower for k in ["bhxh", "bảo hiểm xã hội", "thai sản", "ốm đau", "tử tuất", "hưu trí xã hội", "sổ bhxh"])):
+            topic = "social_insurance"
+            if not forced_domain:
+                issue_domain = "SOCIAL_INSURANCE"
+            obj = "social_insurance_benefit"
+            qualifiers.append("social_insurance")
+            if any(k in q_lower for k in ["thai sản", "sinh con", "nghỉ sinh", "nuôi con nuôi"]):
+                qualifiers.append("maternity_benefit")
+            elif any(k in q_lower for k in ["ốm đau", "nghỉ ốm", "chăm con ốm"]):
+                qualifiers.append("sickness_benefit")
+            elif any(k in q_lower for k in ["một lần", "1 lần", "rút bhxh"]):
+                qualifiers.append("lump_sum_bhxh")
+            elif any(k in q_lower for k in ["tử tuất", "mai táng"]):
+                qualifiers.append("survivorship_benefit")
+            elif any(k in q_lower for k in ["tự nguyện"]):
+                qualifiers.append("voluntary_social_insurance")
 
         # Probation Topics
         elif any(k in q_lower for k in ["thử việc", "thu viec", "hợp đồng thử việc"]):
@@ -395,10 +642,50 @@ class LegalIssueParser:
             qualifiers.append("discipline_principles")
         if any(k in q_lower for k in ["tự ý bỏ việc", "tu y bo viec"]):
             qualifiers.append("job_abandonment_dismissal")
-        if any(k in q_lower for k in ["phạt tiền", "trừ lương thay kỷ luật", "cắt lương thay"]):
+        if any(k in q_lower for k in ["phạt tiền", "trừ lương thay kỷ luật", "cắt lương thay", "cắt thưởng", "không xét thưởng", "trừ thưởng", "không thưởng"]):
             topic = "discipline"
             action = "prohibited_monetary_fine"
             qualifiers.append("prohibited_monetary_fine")
+
+        # Safety work refusal, imminent danger & statutory employee rights
+        if any(k in q_lower for k in [
+            "từ chối làm việc", "từ chối tiếp tục làm việc", "rời khỏi khu vực",
+            "rời khỏi nơi làm việc", "đe dọa tính mạng", "đe dọa sức khỏe",
+            "nguy cơ đe dọa", "sạt lở", "nguy cơ tai nạn", "nguy hiểm đe dọa"
+        ]):
+            qualifiers.append("refusal_imminent_danger")
+            if any(k in q_lower for k in ["kỷ luật", "khiển trách", "cắt thưởng", "xét thưởng", "phạt tiền", "cắt lương", "không xét thưởng"]):
+                qualifiers.append("prohibited_discipline_safety")
+                if "prohibited_monetary_fine" not in qualifiers:
+                    qualifiers.append("prohibited_monetary_fine")
+        if any(k in q_lower for k in [
+            "quyền của người lao động", "quyền người lao động", "có những quyền gì",
+            "các quyền của người lao động", "quyền của nld", "quyền của nlđ"
+        ]):
+            qualifiers.append("statutory_employee_rights")
+
+        # Mandatory social insurance for contracts >= 1 month (BLLĐ Điều 168k1, Luật BHXH Điều 2k1a, Điều 21)
+        if any(k in q_lower for k in ["đóng bảo hiểm", "tham gia bảo hiểm", "trách nhiệm như nào trong việc đóng bảo hiểm", "trách nhiệm trong việc đóng bảo hiểm", "trách nhiệm đóng bảo hiểm"]) and any(k in q_lower for k in ["01 tháng", "1 tháng", "từ 1 tháng", "từ 01 tháng"]):
+            qualifiers.append("mandatory_insurance_1_month")
+            if "EMPLOYER_INSURANCE_OBLIGATION" not in required_evidence_roles:
+                required_evidence_roles.append("EMPLOYER_INSURANCE_OBLIGATION")
+
+        # Uninsured occupational accident (Luật ATVSLĐ Điều 38, Điều 39k4, NĐ 12 Điều 39)
+        if any(k in q_lower for k in ["tai nạn", "tnlđ", "tai nạn lao động"]) and any(k in q_lower for k in ["chưa đóng bảo hiểm", "không đóng bảo hiểm", "trốn đóng", "chưa tham gia", "không tham gia", "nợ bảo hiểm"]):
+            qualifiers.append("uninsured_accident")
+            for role in ["EMPLOYER_MEDICAL_RESPONSIBILITY", "EMPLOYER_WAGE_RESPONSIBILITY", "EMPLOYER_ACCIDENT_COMPENSATION", "UNINSURED_ACCIDENT_SUBSTITUTION"]:
+                if role not in required_evidence_roles:
+                    required_evidence_roles.append(role)
+
+        # Vocational training & training contracts / cost refund (Điều 6k2c, 60, 61, 62, 40k3)
+        if any(k in q_lower for k in ["đào tạo", "dao tao", "bồi dưỡng", "nâng cao trình độ", "kỹ năng nghề", "nâng cao tay nghề", "chuyển đổi nghề nghiệp"]):
+            topic = "vocational_training"
+            if any(k in q_lower for k in ["nghĩa vụ", "trách nhiệm", "kế hoạch", "kinh phí", "duy trì", "chuyển đổi", "như thế nào về việc đào tạo", "đáp ứng kỹ năng"]):
+                qualifiers.append("employer_training_responsibility")
+            if any(k in q_lower for k in ["cam kết", "nghỉ việc", "xin nghỉ", "chuyển sang", "bỏ việc", "hoàn trả", "chi phí", "cử đi học", "bỏ ra", "bồi hoàn", "công ty đã bỏ ra"]):
+                qualifiers.append("training_commitment_refund")
+            if any(k in q_lower for k in ["hợp đồng đào tạo", "ký kết", "chi phí đào tạo"]):
+                qualifiers.append("training_contract_obligation")
 
         # Step 4: Context facts enrichment
         if context_facts:
@@ -547,4 +834,81 @@ class LegalIssueParser:
             internship_status=internship_status,
             payment_issue=payment_issue,
             material_facts=material_facts,
+            question_specificity=question_specificity,
+            legal_event=legal_event,
+            legal_events=legal_events,
+            required_evidence_roles=required_evidence_roles,
         )
+
+    def _detect_question_specificity(self, q_lower: str, numbers: List[int], units: List[str]) -> str:
+        """Deterministically classifies query specificity according to legal inquiry depth."""
+        # 1. CURRENT_STATUS: Validity, repeal, replacement laws
+        if any(k in q_lower for k in [
+            "còn hiệu lực không", "còn áp dụng không", "hết hiệu lực", "bị bãi bỏ",
+            "thay thế bằng", "thay thế bởi", "thay thế chưa", "văn bản nào thay thế", "áp dụng quy định nào"
+        ]):
+            return "CURRENT_STATUS"
+
+        # 2. DEADLINE: Exact timing, filing window, cutoffs (must check before DOSSIER because queries like "nộp hồ sơ trước bao nhiêu ngày" are deadline queries)
+        if any(k in q_lower for k in [
+            "trước bao nhiêu ngày", "thời hạn nộp", "hạn chót", "nộp trễ", "trong thời hạn bao lâu",
+            "trước ít nhất bao nhiêu ngày", "bao nhiêu ngày trước khi", "chậm nhất bao nhiêu ngày",
+            "hạn nộp", "thời điểm hưởng", "ngày nào theo điều", "khi nào phải nộp"
+        ]):
+            return "DEADLINE"
+
+        # 3. DURATION: Caps on validity, lengths of contract, extension limits
+        if any(k in q_lower for k in [
+            "thời hạn tối đa bao lâu", "thời gian tối đa bao lâu", "kéo dài bao lâu", "tối đa kéo dài bao lâu",
+            "thời gian hưởng tối đa", "được gia hạn mấy lần", "có thời hạn bao lâu",
+            "thời hạn của giấy phép", "thời hạn giấy phép lao động", "thời hạn hợp đồng"
+        ]) or (("thời hạn" in q_lower or "thời gian" in q_lower) and ("bao lâu" in q_lower or "mấy năm" in q_lower)):
+            return "DURATION"
+
+        # 4. DOSSIER: Application files, documents, records
+        if any(k in q_lower for k in [
+            "hồ sơ", "giấy tờ", "thành phần hồ sơ", "văn bản đề nghị", "gồm những giấy tờ gì",
+            "cần giấy tờ gì", "cần những gì", "hồ sơ gồm", "bộ hồ sơ"
+        ]) and any(k in q_lower for k in ["hồ sơ", "giấy tờ", "xin cấp", "đề nghị", "hưởng", "gia hạn", "cấp lại"]):
+            return "DOSSIER"
+
+        # 5. NUMERIC_THRESHOLD: Age tables, quotas, capital sums, year-specific increments
+        if any(k in q_lower for k in [
+            "bao nhiêu tuổi", "bao nhiêu năm", "mỗi năm tăng thêm bao nhiêu", "tăng thêm bao nhiêu tháng",
+            "vốn góp tối thiểu bao nhiêu", "số vốn góp tối thiểu", "dưới bao nhiêu ngày",
+            "không quá mấy lần trong năm", "kinh nghiệm bao lâu", "thời gian đào tạo",
+            "mất sức bao nhiêu %", "mất sức 65%", "đủ 15 năm"
+        ]) or ("năm 2026" in q_lower and "bao nhiêu" in q_lower):
+            return "NUMERIC_THRESHOLD"
+
+        # 6. CALCULATION: Formula, percentage of salary, benefit calculation
+        if any(k in q_lower for k in [
+            "bằng bao nhiêu %", "mức hưởng bằng bao nhiêu", "cách tính", "tính như thế nào",
+            "tối đa không quá bao nhiêu lần lương", "được mấy tháng", "hưởng bao nhiêu tháng",
+            "tính tuổi nghỉ hưu thế nào", "xác định ngày tính"
+        ]):
+            return "CALCULATION"
+
+        # 7. EXEMPTION: Exemption categories, no permit needed
+        if any(k in q_lower for k in [
+            "được miễn", "miễn giấy phép", "không cần giấy phép", "không phải xin", "không phải làm",
+            "trường hợp không phải", "không thuộc diện", "không cần làm giấy phép"
+        ]):
+            return "EXEMPTION"
+
+        # 8. PROCEDURE: Jurisdiction, steps, submission channels, reporting
+        if any(k in q_lower for k in [
+            "thủ tục", "trình tự", "các bước", "nộp ở đâu", "cơ quan nào", "thẩm quyền",
+            "cấp lại", "thu hồi", "báo cáo giải trình", "thông báo tuyển dụng",
+            "làm việc tại chi nhánh", "nộp hồ sơ ở đâu", "quy định chi tiết điều nào"
+        ]):
+            return "PROCEDURE"
+
+        # 9. ELIGIBILITY: Statutory conditions, qualification to participate
+        if any(k in q_lower for k in [
+            "điều kiện", "tiêu chuẩn", "được hưởng", "được về hưu sớm", "có được",
+            "có bắt buộc phải", "bắt buộc phải đóng", "phải đóng", "thuộc đối tượng"
+        ]):
+            return "ELIGIBILITY"
+
+        return "GENERAL_PRINCIPLE"

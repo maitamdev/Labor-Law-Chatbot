@@ -1,0 +1,76 @@
+{
+  "summary": {
+    "timestamp": "2026-09-17T13:05:03.323775",
+    "total_queries": 5,
+    "hit_rate_at_1": 0.6,
+    "hit_rate_at_5": 0.8,
+    "mrr": 0.6667,
+    "faithfulness": 1.0,
+    "answer_relevancy": 0.5,
+    "total_phantom_citations": 0,
+    "avg_latency_ms": 976.4,
+    "use_reranker": true
+  },
+  "records": [
+    {
+      "query": "Hợp đồng lao động là gì theo Bộ luật Lao động?",
+      "hit_at_1": false,
+      "hit_at_5": true,
+      "reciprocal_rank": 0.3333333333333333,
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.5,
+      "phantom_citations": [],
+      "cited_chunk_count": 0,
+      "latency_ms": 4091.626599999927,
+      "answer_excerpt": ""
+    },
+    {
+      "query": "Có mấy loại hợp đồng lao động theo Bộ luật Lao động 2019?",
+      "hit_at_1": true,
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.5,
+      "phantom_citations": [],
+      "cited_chunk_count": 0,
+      "latency_ms": 191.17320000032123,
+      "answer_excerpt": ""
+    },
+    {
+      "query": "Khi hợp đồng xác định thời hạn hết hạn mà người lao động vẫn tiếp tục làm việc thì xử lý thế nào?",
+      "hit_at_1": true,
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.5,
+      "phantom_citations": [],
+      "cited_chunk_count": 0,
+      "latency_ms": 193.1058000000121,
+      "answer_excerpt": ""
+    },
+    {
+      "query": "Công ty giữ bằng đại học gốc của tôi có được không?",
+      "hit_at_1": true,
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.5,
+      "phantom_citations": [],
+      "cited_chunk_count": 0,
+      "latency_ms": 184.21410000019023,
+      "answer_excerpt": ""
+    },
+    {
+      "query": "Công ty bắt tôi nộp tiền đặt cọc 5 triệu đồng để đảm bảo thực hiện hợp đồng lao động có đúng luật không?",
+      "hit_at_1": false,
+      "hit_at_5": false,
+      "reciprocal_rank": 0.0,
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.5,
+      "phantom_citations": [],
+      "cited_chunk_count": 0,
+      "latency_ms": 221.7782999996416,
+      "answer_excerpt": ""
+    }
+  ]
+}

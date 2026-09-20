@@ -74,21 +74,34 @@ section[data-testid="stSidebar"] .block-container {
     border-bottom: 1px solid #F1F5F9;
 }
 .brand-logo-box {
-    width: 42px;
-    height: 42px;
-    background: #2563EB;
-    border-radius: 10px;
+    width: 64px;
+    height: 54px;
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #FFFFFF;
-    font-size: 20px;
-    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
     flex-shrink: 0;
+    overflow: hidden;
+    padding: 3px 5px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.brand-logo-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.18);
+    border-color: #93C5FD;
+}
+.brand-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 .brand-text-title {
-    font-size: 19px;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 800;
     color: #0F172A !important;
     line-height: 1.2;
 }
@@ -96,7 +109,8 @@ section[data-testid="stSidebar"] .block-container {
     font-size: 12px;
     color: #64748B !important;
     line-height: 1.2;
-    margin-top: 2px;
+    margin-top: 3px;
+    font-weight: 500;
 }
 
 /* Section Titles */
@@ -182,6 +196,37 @@ section[data-testid="stSidebar"] .block-container {
     font-size: 13px !important;
 }
 
+/* Material Symbols Icon Styling */
+[data-testid="stIconMaterial"] {
+    font-family: "Material Symbols Rounded", "Material Symbols Outlined", sans-serif !important;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 19px !important;
+    line-height: 1;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    color: #2563EB !important;
+    margin-right: 4px;
+}
+.new-chat-btn [data-testid="stIconMaterial"] {
+    color: #FFFFFF !important;
+}
+[data-testid="stSidebar"] [data-testid="stExpander"] summary [data-testid="stIconMaterial"] {
+    color: #3B82F6 !important;
+    font-size: 18px !important;
+    margin-right: 6px;
+}
+[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"] [data-testid="stIconMaterial"] {
+    color: #64748B !important;
+    font-size: 16px !important;
+}
+[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] [data-testid="stIconMaterial"] {
+    color: #2563EB !important;
+    font-size: 16px !important;
+}
+
 /* 3. Center Chat Area */
 .chat-header {
     display: flex;
@@ -200,9 +245,35 @@ section[data-testid="stSidebar"] .block-container {
 /* Welcome Center Screen */
 .welcome-container {
     text-align: center;
-    padding: 40px 20px;
+    padding: 36px 20px;
     max-width: 680px;
     margin: 0 auto;
+}
+.welcome-logo-badge {
+    width: 220px;
+    height: 165px;
+    margin: 0 auto 24px auto;
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 24px;
+    box-shadow: 0 14px 40px rgba(37, 99, 235, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.welcome-logo-badge:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 22px 50px rgba(37, 99, 235, 0.2), 0 8px 20px rgba(0, 0, 0, 0.06);
+    border-color: #60A5FA;
+}
+.welcome-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.03));
 }
 .welcome-title {
     font-size: 24px;
@@ -276,17 +347,25 @@ section[data-testid="stSidebar"] .block-container {
     margin-bottom: 28px;
 }
 .assistant-avatar {
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background-color: #2563EB;
-    color: #FFFFFF;
+    background-color: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 17px;
     flex-shrink: 0;
-    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+    padding: 3px;
+}
+.assistant-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+    display: block;
 }
 .assistant-msg-card {
     background-color: #FFFFFF !important;

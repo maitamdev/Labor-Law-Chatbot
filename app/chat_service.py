@@ -12,6 +12,7 @@ import unicodedata
 from typing import Any, Dict, List, Optional
 
 from rag.chain import VietLaborRAGChain, ChainExecutionResult
+from rag.evidence_mapper import CitationSanitizer
 from rag.output_validator import format_answer_markdown
 
 logger = logging.getLogger(__name__)
@@ -25,6 +26,10 @@ OFFICIAL_DOC_URLS = {
     "145/2020/NĐ-CP": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-145-2020-ND-CP-huong-dan-Bo-luat-Lao-dong-ve-dieu-kien-lao-dong-quan-he-lao-dong-460987.aspx",
     "ND_12_2022": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-12-2022-ND-CP-xu-phat-vi-pham-hanh-chinh-linh-vuc-lao-dong-bao-hiem-xa-hoi-500735.aspx",
     "12/2022/NĐ-CP": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-12-2022-ND-CP-xu-phat-vi-pham-hanh-chinh-linh-vuc-lao-dong-bao-hiem-xa-hoi-500735.aspx",
+    "L_84_2015": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Luat-an-toan-ve-sinh-lao-dong-2015-282436.aspx",
+    "84/2015/QH13": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Luat-an-toan-ve-sinh-lao-dong-2015-282436.aspx",
+    "VBHN_58_2025": "https://thuvienphapluat.vn/van-ban/Bao-hiem/Luat-Bao-hiem-xa-hoi-2014-259711.aspx",
+    "58/VBHN-VPQH": "https://thuvienphapluat.vn/van-ban/Bao-hiem/Luat-Bao-hiem-xa-hoi-2014-259711.aspx",
 }
 
 # Standard Friendly Titles
@@ -36,6 +41,10 @@ FRIENDLY_DOC_TITLES = {
     "145/2020/NĐ-CP": "Nghị định 145/2020/NĐ-CP",
     "ND_12_2022": "Nghị định 12/2022/NĐ-CP",
     "12/2022/NĐ-CP": "Nghị định 12/2022/NĐ-CP",
+    "L_84_2015": "Luật An toàn, vệ sinh lao động 2015",
+    "84/2015/QH13": "Luật An toàn, vệ sinh lao động 2015",
+    "VBHN_58_2025": "Luật Bảo hiểm xã hội",
+    "58/VBHN-VPQH": "Luật Bảo hiểm xã hội",
 }
 
 
@@ -138,6 +147,26 @@ class ChatService:
         if len(parts) > 1:
             clean_answer = parts[0].strip()
 
+        # Defensive safety net: if clean_answer still looks like raw JSON, synthesize from findings
+        if clean_answer.strip().startswith("{") and (
+            '"findings"' in clean_answer or '"issue"' in clean_answer or '"conclusion"' in clean_answer
+        ):
+            if findings_data:
+                synth_parts = []
+                for idx, fd in enumerate(findings_data, 1):
+                    iss = fd.get("issue", "").strip()
+                    txt = fd.get("text", "").strip()
+                    heading = f"### {iss}" if iss else f"### Vấn đề {idx}"
+                    synth_parts.append(f"{heading}\n{txt}")
+                clean_answer = "\n\n".join(synth_parts)
+            else:
+                try:
+                    re_parsed = self.chain.validator.parse_llm_json(clean_answer)
+                    if re_parsed.answer and not re_parsed.answer.strip().startswith("{"):
+                        clean_answer = re_parsed.answer
+                except Exception:
+                    pass
+
         # Guarantee no raw tokens like [E1], (E1) ever reach the user
         def _replace_token_with_citation(match):
             tok_num = match.group(1) or match.group(2)
@@ -157,7 +186,12 @@ class ChatService:
         clean_answer = format_answer_markdown(clean_answer)
         for fd in findings_data:
             fd["text"] = re.sub(r"\[\s*E(\d+)\s*\]|\(\s*E(\d+)\s*\)", _replace_token_with_citation, fd.get("text", ""))
-            fd["text"] = format_answer_markdown(fd.get("text", ""))
+        # Phase 5H.3: CitationSanitizer - Sanitize any remaining phantom citations on UI boundary
+        allowed_arts = {str(c.get("article")).strip() for c in enriched_citations if c.get("article")}
+        clean_answer, _ = CitationSanitizer.sanitize(clean_answer, allowed_arts)
+        for fd in findings_data:
+            if fd.get("text"):
+                fd["text"], _ = CitationSanitizer.sanitize(fd["text"], allowed_arts)
 
         return {
             "answer": clean_answer,

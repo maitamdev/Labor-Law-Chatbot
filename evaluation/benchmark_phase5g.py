@@ -188,7 +188,7 @@ def evaluate_extended_retrieval(
     recall5_list = []
     latencies = []
 
-    domain_hits: Dict[str, Dict[str, int]] = {}
+    domain_hits: Dict[str, Dict[str, float]] = {}
 
     for q in queries:
         qid = q["id"]

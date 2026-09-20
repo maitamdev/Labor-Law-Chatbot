@@ -1,0 +1,1625 @@
+[
+  {
+    "id": "SI_01",
+    "question": "Những đối tượng nào bắt buộc phải tham gia bảo hiểm xã hội theo Văn bản hợp nhất 58/VBHN-VPQH?",
+    "query_type": "exact_reference",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "2"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d2",
+      "VBHN_58_2025#d2-k1"
+    ],
+    "expected_answer_facts": [
+      "Người làm việc theo HĐLĐ từ đủ 1 tháng trở lên",
+      "Cán bộ, công chức, viên chức",
+      "Người quản lý doanh nghiệp hưởng tiền lương"
+    ]
+  },
+  {
+    "id": "SI_02",
+    "question": "Điều 2 Văn bản hợp nhất 58/VBHN-VPQH",
+    "query_type": "exact_reference",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "2"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d2"
+    ],
+    "expected_answer_facts": [
+      "Quy định đối tượng áp dụng bảo hiểm xã hội bắt buộc và bảo hiểm xã hội tự nguyện"
+    ]
+  },
+  {
+    "id": "SI_03",
+    "question": "Người lao động làm việc theo hợp đồng lao động 1 tháng có phải đóng BHXH bắt buộc không?",
+    "query_type": "scenario",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025",
+      "ND_158_2025"
+    ],
+    "relevant_articles": [
+      "2"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d2",
+      "VBHN_58_2025#d2-k1",
+      "ND_158_2025#d2"
+    ],
+    "expected_answer_facts": [
+      "Có, người làm việc theo HĐLĐ có thời hạn từ đủ 1 tháng trở lên thuộc đối tượng tham gia BHXH bắt buộc"
+    ]
+  },
+  {
+    "id": "SI_04",
+    "question": "Mức đóng BHXH bắt buộc hằng tháng của người lao động và người sử dụng lao động là bao nhiêu phần trăm?",
+    "query_type": "numeric_rate",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "85",
+      "86"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d85",
+      "VBHN_58_2025#d86"
+    ],
+    "expected_answer_facts": [
+      "Người lao động đóng 8% vào quỹ hưu trí và tử tuất",
+      "Người sử dụng lao động đóng 14% quỹ hưu trí - tử tuất, 3% quỹ ốm đau - thai sản"
+    ]
+  },
+  {
+    "id": "SI_05",
+    "question": "Tiền lương làm căn cứ đóng BHXH bắt buộc được quy định như thế nào tại Nghị định 158/2025/NĐ-CP?",
+    "query_type": "exact_reference",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "ND_158_2025"
+    ],
+    "relevant_articles": [
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "ND_158_2025#d3"
+    ],
+    "expected_answer_facts": [
+      "Tiền lương tháng đóng BHXH gồm mức lương, phụ cấp lương và các khoản bổ sung khác theo quy định"
+    ]
+  },
+  {
+    "id": "SI_06",
+    "question": "Điều kiện hưởng chế độ ốm đau theo Điều 25 Luật BHXH là gì?",
+    "query_type": "exact_reference",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "25"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d25"
+    ],
+    "expected_answer_facts": [
+      "Bị ốm đau, tai nạn mà không phải là tai nạn lao động phải nghỉ việc và có xác nhận của cơ sở y tế",
+      "Phải nghỉ việc để chăm sóc con dưới 7 tuổi bị ốm"
+    ]
+  },
+  {
+    "id": "SI_07",
+    "question": "Mức hưởng chế độ ốm đau một ngày được tính bằng bao nhiêu phần trăm tiền lương?",
+    "query_type": "numeric_rate",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025",
+      "TT_12_2025"
+    ],
+    "relevant_articles": [
+      "28",
+      "6"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d28",
+      "TT_12_2025#d6"
+    ],
+    "expected_answer_facts": [
+      "Mức hưởng bằng 75% mức tiền lương đóng BHXH của tháng liền kề trước khi nghỉ",
+      "Mức hưởng một ngày bằng mức hưởng theo tháng chia cho 24 ngày"
+    ]
+  },
+  {
+    "id": "SI_08",
+    "question": "Nghỉ ốm 10 ngày thì BHXH trả bao nhiêu tiền nếu mức lương đóng BHXH tháng trước là 12 triệu đồng?",
+    "query_type": "calculation",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "TT_12_2025",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "28",
+      "29",
+      "6"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d28",
+      "TT_12_2025#d6"
+    ],
+    "expected_answer_facts": [
+      "Mức hưởng 1 ngày = (12.000.000 x 75%) / 24 = 375.000 đồng/ngày",
+      "Tổng số tiền nhận được cho 10 ngày = 375.000 x 10 = 3.750.000 đồng"
+    ],
+    "calculation_inputs": {
+      "preceding_salary": 12000000,
+      "sick_days": 10
+    },
+    "expected_calculation": 3750000.0
+  },
+  {
+    "id": "SI_09",
+    "question": "Nghỉ ốm được bao nhiêu tiền?",
+    "query_type": "ambiguous_premise",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "28"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d28"
+    ],
+    "needs_clarification": true,
+    "expected_answer_facts": [
+      "Yêu cầu người dùng cung cấp mức tiền lương đóng BHXH tháng liền kề và số ngày nghỉ ốm cụ thể"
+    ]
+  },
+  {
+    "id": "SI_10",
+    "question": "Thời gian nghỉ việc hưởng chế độ khi con ốm đau được quy định tối đa bao nhiêu ngày trong một năm?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "27"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d27"
+    ],
+    "expected_answer_facts": [
+      "Tối đa 20 ngày làm việc nếu con dưới 03 tuổi",
+      "Tối đa 15 ngày làm việc nếu con từ đủ 03 tuổi đến dưới 07 tuổi"
+    ]
+  },
+  {
+    "id": "SI_11",
+    "question": "Em đóng BHXH 7 tháng rồi nghỉ sinh có được thai sản không?",
+    "query_type": "scenario",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "31",
+      "34"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d31"
+    ],
+    "expected_answer_facts": [
+      "Được hưởng chế độ thai sản",
+      "Điều kiện là phải đóng BHXH từ đủ 06 tháng trở lên trong thời gian 12 tháng trước khi sinh con"
+    ]
+  },
+  {
+    "id": "SI_12",
+    "question": "Lao động nữ sinh con được nghỉ việc hưởng chế độ thai sản trong thời gian bao lâu?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "34"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d34"
+    ],
+    "expected_answer_facts": [
+      "Thời gian nghỉ việc hưởng chế độ thai sản trước và sau khi sinh con là 06 tháng",
+      "Trường hợp sinh đôi trở lên, tính từ con thứ hai, cứ mỗi con người mẹ được nghỉ thêm 01 tháng"
+    ]
+  },
+  {
+    "id": "SI_13",
+    "question": "Trợ cấp một lần khi sinh con được tính bằng bao nhiêu lần mức tham chiếu theo Điều 38 Luật BHXH?",
+    "query_type": "numeric_rate",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "38"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d38"
+    ],
+    "expected_answer_facts": [
+      "Trợ cấp một lần cho mỗi con bằng 2,0 lần mức tham chiếu tại tháng lao động nữ sinh con"
+    ]
+  },
+  {
+    "id": "SI_14",
+    "question": "Mức hưởng chế độ thai sản hàng tháng được tính bằng bao nhiêu phần trăm lương bình quân?",
+    "query_type": "numeric_rate",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "39"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d39"
+    ],
+    "expected_answer_facts": [
+      "Mức hưởng một tháng bằng 100% mức bình quân tiền lương tháng đóng BHXH của 6 tháng trước khi nghỉ việc hưởng chế độ thai sản"
+    ]
+  },
+  {
+    "id": "SI_15",
+    "question": "Lao động nữ nghỉ sinh con 6 tháng, lương bình quân 6 tháng đóng BHXH là 10 triệu đồng thì được nhận tổng bao nhiêu tiền thai sản?",
+    "query_type": "calculation",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "38",
+      "39"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d38",
+      "VBHN_58_2025#d39"
+    ],
+    "expected_answer_facts": [
+      "Tiền trợ cấp thai sản 6 tháng = 10.000.000 x 6 = 60.000.000 đồng",
+      "Trợ cấp một lần khi sinh = 2.0 x 2.340.000 = 4.680.000 đồng",
+      "Tổng số tiền nhận được = 64.680.000 đồng"
+    ],
+    "calculation_inputs": {
+      "avg_salary_6m": 10000000,
+      "leave_months": 6,
+      "children_count": 1
+    },
+    "expected_calculation": 64680000.0
+  },
+  {
+    "id": "SI_16",
+    "question": "Thai sản được bao nhiêu tiền?",
+    "query_type": "ambiguous_premise",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "38",
+      "39"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d38",
+      "VBHN_58_2025#d39"
+    ],
+    "needs_clarification": true,
+    "expected_answer_facts": [
+      "Cần làm rõ mức bình quân tiền lương 6 tháng liền kề đóng BHXH và thời gian đóng BHXH trước khi sinh"
+    ]
+  },
+  {
+    "id": "SI_17",
+    "question": "Lao động nam có vợ sinh con được nghỉ việc hưởng chế độ thai sản mấy ngày?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "ND_158_2025",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "34",
+      "5"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d34"
+    ],
+    "expected_answer_facts": [
+      "05 ngày làm việc khi sinh thường",
+      "07 ngày làm việc khi vợ sinh con phải phẫu thuật hoặc sinh con dưới 32 tuần tuổi",
+      "10 ngày làm việc trường hợp sinh đôi"
+    ]
+  },
+  {
+    "id": "SI_18",
+    "question": "Hiện nay điều kiện hưởng lương hưu theo Điều 64 Văn bản hợp nhất 58/VBHN-VPQH là gì?",
+    "query_type": "exact_reference",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "64"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d64-k1",
+      "VBHN_58_2025#d64-k2"
+    ],
+    "expected_answer_facts": [
+      "Có thời gian đóng bảo hiểm xã hội bắt buộc từ đủ 15 năm trở lên",
+      "Đủ tuổi nghỉ hưu theo quy định tại Điều 169 Bộ luật Lao động",
+      "Quy định hiện hành áp dụng Điều 64 (thay thế Điều 54 Luật 2014 cũ với mốc giảm từ 20 năm xuống 15 năm đóng BHXH)"
+    ]
+  },
+  {
+    "id": "SI_19",
+    "question": "Mức lương hưu hàng tháng được tính bằng tỷ lệ bao nhiêu phần trăm mức bình quân tiền lương tháng đóng BHXH?",
+    "query_type": "numeric_rate",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "66"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d66-k1",
+      "VBHN_58_2025#d66-k2"
+    ],
+    "expected_answer_facts": [
+      "Theo Điều 66 Văn bản hợp nhất 58/VBHN-VPQH, mức lương hưu hàng tháng của nữ bằng 45% tương ứng 15 năm đóng BHXH, nam bằng 45% tương ứng 20 năm đóng BHXH (hoặc 40% cho 15 năm với nam đóng 15-20 năm), sau đó mỗi năm tăng thêm 2% (hoặc 2.25%), tối đa 75%"
+    ]
+  },
+  {
+    "id": "SI_20",
+    "question": "Đóng BHXH bao nhiêu năm thì được hưởng mức lương hưu tối đa 75% đối với lao động nam và lao động nữ?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "ND_158_2025",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "66"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d66-k1"
+    ],
+    "expected_answer_facts": [
+      "Lao động nam đóng đủ 35 năm",
+      "Lao động nữ đóng đủ 30 năm"
+    ]
+  },
+  {
+    "id": "SI_21",
+    "question": "Các trường hợp người lao động được hưởng bảo hiểm xã hội một lần theo Điều 70 Luật BHXH hiện hành?",
+    "query_type": "exact_reference",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "70"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d70-k1"
+    ],
+    "expected_answer_facts": [
+      "Đủ tuổi hưởng lương hưu mà chưa đủ năm đóng BHXH",
+      "Ra nước ngoài để định cư",
+      "Mắc bệnh hiểm nghèo như ung thư, bại liệt...",
+      "Sau 12 tháng nghỉ việc không tiếp tục đóng BHXH và chưa đủ 20 năm đóng"
+    ]
+  },
+  {
+    "id": "SI_22",
+    "question": "Đóng BHXH 18 năm có được rút một lần không sau khi nghỉ việc 1 năm?",
+    "query_type": "scenario",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025",
+      "ND_158_2025"
+    ],
+    "relevant_articles": [
+      "70",
+      "7"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d70-k1",
+      "ND_158_2025#d7"
+    ],
+    "expected_answer_facts": [
+      "Có, người lao động sau 1 năm nghỉ việc không tiếp tục đóng BHXH mà chưa đủ 20 năm đóng BHXH có quyền yêu cầu nhận BHXH một lần"
+    ]
+  },
+  {
+    "id": "SI_23",
+    "question": "Mức hưởng BHXH một lần được tính như thế nào cho thời gian đóng trước 2014 và từ năm 2014 trở đi?",
+    "query_type": "numeric_rate",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "ND_158_2025",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "70",
+      "69",
+      "7",
+      "77"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d70-k1",
+      "ND_158_2025#d7"
+    ],
+    "expected_answer_facts": [
+      "1,5 tháng mức bình quân tiền lương cho những năm đóng trước năm 2014",
+      "2,0 tháng mức bình quân tiền lương cho những năm đóng từ năm 2014 trở đi"
+    ]
+  },
+  {
+    "id": "SI_24",
+    "question": "Người lao động có 3 năm đóng trước 2014 và 7 năm đóng từ năm 2014, lương bình quân 8 triệu đồng thì rút BHXH một lần được bao nhiêu?",
+    "query_type": "calculation",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "ND_158_2025",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "70",
+      "69",
+      "7",
+      "77"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d70-k1",
+      "ND_158_2025#d7"
+    ],
+    "expected_answer_facts": [
+      "Trước 2014 (3 năm): 3 x 1.5 = 4.5 tháng lương",
+      "Từ 2014 (7 năm): 7 x 2.0 = 14.0 tháng lương",
+      "Tổng hệ số = 18.5 tháng lương",
+      "Số tiền BHXH một lần = 18.5 x 8.000.000 = 148.000.000 đồng"
+    ],
+    "calculation_inputs": {
+      "avg_salary": 8000000,
+      "years_before_2014": 3,
+      "years_from_2014": 7
+    },
+    "expected_calculation": 148000000.0
+  },
+  {
+    "id": "SI_25",
+    "question": "Rút BHXH một lần được bao nhiêu tiền?",
+    "query_type": "ambiguous_premise",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "70"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d70-k1"
+    ],
+    "needs_clarification": true,
+    "expected_answer_facts": [
+      "Cần cung cấp số năm đóng BHXH (trước 2014 và từ 2014 trở đi) cùng mức bình quân tiền lương đóng BHXH"
+    ]
+  },
+  {
+    "id": "SI_26",
+    "question": "Trợ cấp mai táng khi người lao động đang đóng BHXH qua đời được tính bằng bao nhiêu lần mức tham chiếu?",
+    "query_type": "numeric_rate",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "ND_159_2025",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "66",
+      "7"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d66"
+    ],
+    "expected_answer_facts": [
+      "Trợ cấp mai táng bằng 10 lần mức tham chiếu tại tháng mà người lao động qua đời"
+    ]
+  },
+  {
+    "id": "SI_27",
+    "question": "Điều kiện để thân nhân được hưởng trợ cấp tuất hàng tháng là gì theo Điều 67 Luật BHXH?",
+    "query_type": "exact_reference",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "67"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d67"
+    ],
+    "expected_answer_facts": [
+      "Người lao động đã đóng BHXH đủ 15 năm trở lên hoặc đang hưởng lương hưu",
+      "Con chưa đủ 18 tuổi, vợ/chồng/cha mẹ hết tuổi lao động hoặc suy giảm khả năng lao động từ 81% trở lên"
+    ]
+  },
+  {
+    "id": "SI_28",
+    "question": "Mức trợ cấp tuất hàng tháng cho mỗi thân nhân đủ điều kiện là bao nhiêu phần trăm mức tham chiếu?",
+    "query_type": "numeric_rate",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "69"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d69"
+    ],
+    "expected_answer_facts": [
+      "Mức trợ cấp tuất hằng tháng đối với mỗi thân nhân bằng 50% mức tham chiếu",
+      "Trường hợp thân nhân không có người trực tiếp nuôi dưỡng thì mức trợ cấp bằng 70% mức tham chiếu"
+    ]
+  },
+  {
+    "id": "SI_29",
+    "question": "Đối tượng nào được tham gia bảo hiểm xã hội tự nguyện theo Nghị định 159/2025/NĐ-CP?",
+    "query_type": "exact_reference",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "ND_159_2025"
+    ],
+    "relevant_articles": [
+      "2"
+    ],
+    "relevant_chunk_ids": [
+      "ND_159_2025#d2"
+    ],
+    "expected_answer_facts": [
+      "Công dân Việt Nam từ đủ 15 tuổi trở lên không thuộc đối tượng tham gia BHXH bắt buộc"
+    ]
+  },
+  {
+    "id": "SI_30",
+    "question": "Phương thức đóng bảo hiểm xã hội tự nguyện bao gồm những hình thức nào tại Nghị định 159/2025/NĐ-CP?",
+    "query_type": "exact_reference",
+    "expected_domain": "SOCIAL_INSURANCE",
+    "relevant_documents": [
+      "ND_159_2025"
+    ],
+    "relevant_articles": [
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "ND_159_2025#d3"
+    ],
+    "expected_answer_facts": [
+      "Đóng hằng tháng, 03 tháng một lần, 06 tháng một lần, 12 tháng một lần hoặc đóng một lần cho nhiều năm"
+    ]
+  },
+  {
+    "id": "OS_01",
+    "question": "Tai nạn lao động được định nghĩa như thế nào theo Luật An toàn, vệ sinh lao động 84/2015/QH13?",
+    "query_type": "exact_reference",
+    "expected_domain": "OCCUPATIONAL_SAFETY",
+    "relevant_documents": [
+      "L_84_2015"
+    ],
+    "relevant_articles": [
+      "12",
+      "3",
+      "38"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d3"
+    ],
+    "expected_answer_facts": [
+      "Là tai nạn gây tổn thương cho bất kỳ bộ phận, chức năng nào của cơ thể hoặc gây tử vong cho người lao động, xảy ra trong quá trình lao động, gắn liền với việc thực hiện công việc, nhiệm vụ lao động"
+    ]
+  },
+  {
+    "id": "OS_02",
+    "question": "Tôi bị tai nạn trên đường đi làm về có được tính là tai nạn lao động không?",
+    "query_type": "scenario",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_04_BNV_2026"
+    ],
+    "relevant_articles": [
+      "45",
+      "2"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d45",
+      "VBHN_04_BNV_2026#d2"
+    ],
+    "expected_answer_facts": [
+      "Có, nếu tai nạn xảy ra trên tuyến đường đi và về từ nơi ở đến nơi làm việc trong khoảng thời gian và tuyến đường hợp lý và bị suy giảm KNLĐ từ 5% trở lên"
+    ]
+  },
+  {
+    "id": "OS_03",
+    "question": "Các hành vi bị nghiêm cấm trong an toàn, vệ sinh lao động theo Điều 12 Luật 84/2015/QH13?",
+    "query_type": "exact_reference",
+    "expected_domain": "OCCUPATIONAL_SAFETY",
+    "relevant_documents": [
+      "L_84_2015"
+    ],
+    "relevant_articles": [
+      "12"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d12"
+    ],
+    "expected_answer_facts": [
+      "Che giấu, khai báo không trung thực về tai nạn lao động, bệnh nghề nghiệp",
+      "Không thực hiện các biện pháp an toàn vệ sinh lao động theo quy định"
+    ]
+  },
+  {
+    "id": "OS_04",
+    "question": "Trách nhiệm của người sử dụng lao động đối với người lao động bị tai nạn lao động theo Điều 38 Luật ATVSLĐ?",
+    "query_type": "exact_reference",
+    "expected_domain": "OCCUPATIONAL_SAFETY",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "38",
+      "2"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "VBHN_06_BNV_2026#d2"
+    ],
+    "expected_answer_facts": [
+      "Kịp thời sơ cứu, cấp cứu",
+      "Thanh toán chi phí y tế phần đồng chi trả và không thuộc BHYT",
+      "Trả đủ tiền lương trong thời gian điều trị",
+      "Bồi thường tai nạn lao động"
+    ]
+  },
+  {
+    "id": "OS_05",
+    "question": "Công ty có phải trả nguyên lương cho người lao động trong thời gian điều trị tai nạn lao động không?",
+    "query_type": "scenario",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015"
+    ],
+    "relevant_articles": [
+      "38"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38"
+    ],
+    "expected_answer_facts": [
+      "Có, NSDLĐ có trách nhiệm trả đủ tiền lương theo hợp đồng lao động cho người lao động bị TNLĐ trong thời gian điều trị, phục hồi chức năng"
+    ]
+  },
+  {
+    "id": "OS_06",
+    "question": "Chi phí y tế cấp cứu và điều trị tai nạn lao động do ai thanh toán?",
+    "query_type": "scenario",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015"
+    ],
+    "relevant_articles": [
+      "38"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38"
+    ],
+    "expected_answer_facts": [
+      "NSDLĐ có trách nhiệm thanh toán phần chi phí đồng chi trả và những chi phí không nằm trong danh mục do BHYT chi trả"
+    ]
+  },
+  {
+    "id": "OS_07",
+    "question": "Mức bồi thường tai nạn lao động của người sử dụng lao động cho người bị suy giảm từ 5% đến 10% khả năng lao động là bao nhiêu tháng lương?",
+    "query_type": "numeric_rate",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "38",
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "VBHN_06_BNV_2026#d3"
+    ],
+    "expected_answer_facts": [
+      "Ít nhất 1,5 tháng tiền lương nếu bị suy giảm từ 5,0% đến 10% khả năng lao động"
+    ]
+  },
+  {
+    "id": "OS_08",
+    "question": "Công thức tính mức bồi thường tai nạn lao động khi người lao động bị suy giảm từ 11% đến 80% KNLĐ theo Điều 38 Luật 84?",
+    "query_type": "exact_reference",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "38",
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "VBHN_06_BNV_2026#d3"
+    ],
+    "expected_answer_facts": [
+      "Tbt = 1,5 + (P - 10) x 0,4 tháng tiền lương (với P là tỷ lệ % suy giảm KNLĐ)"
+    ]
+  },
+  {
+    "id": "OS_09",
+    "question": "Người lao động bị tai nạn lao động suy giảm 25% khả năng lao động, mức lương hợp đồng 10 triệu đồng thì công ty phải bồi thường bao nhiêu?",
+    "query_type": "calculation",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "2",
+      "3",
+      "38"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "VBHN_06_BNV_2026#d3"
+    ],
+    "expected_answer_facts": [
+      "Hệ số bồi thường = 1.5 + (25 - 10) x 0.4 = 1.5 + 6.0 = 7.5 tháng lương",
+      "Mức tiền bồi thường = 7.5 x 10.000.000 = 75.000.000 đồng"
+    ],
+    "calculation_inputs": {
+      "monthly_salary": 10000000,
+      "impairment_percent": 25,
+      "is_employee_fault": false
+    },
+    "expected_calculation": 75000000.0
+  },
+  {
+    "id": "OS_10",
+    "question": "Mức bồi thường tai nạn lao động tối thiểu khi người lao động bị suy giảm từ 81% trở lên hoặc bị chết là bao nhiêu tháng lương?",
+    "query_type": "numeric_rate",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "38",
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "VBHN_06_BNV_2026#d3"
+    ],
+    "expected_answer_facts": [
+      "Ít nhất 30 tháng tiền lương cho người lao động bị suy giảm khả năng lao động từ 81% trở lên hoặc cho thân nhân người bị chết do TNLĐ"
+    ]
+  },
+  {
+    "id": "OS_11",
+    "question": "Trường hợp tai nạn lao động xảy ra hoàn toàn do lỗi của chính người lao động thì công ty phải trả bao nhiêu tiền theo Điều 39 Luật 84?",
+    "query_type": "numeric_rate",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015"
+    ],
+    "relevant_articles": [
+      "39"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d39"
+    ],
+    "expected_answer_facts": [
+      "Người sử dụng lao động phải trợ cấp một khoản tiền ít nhất bằng 40% mức bồi thường tương ứng"
+    ]
+  },
+  {
+    "id": "OS_12",
+    "question": "Người lao động tự ý vi phạm quy chuẩn an toàn bị tai nạn làm suy giảm 15% KNLĐ, lương 8 triệu đồng thì công ty trợ cấp bao nhiêu?",
+    "query_type": "calculation",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "38",
+      "39",
+      "2",
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "L_84_2015#d39",
+      "VBHN_06_BNV_2026#d2",
+      "VBHN_06_BNV_2026#d3"
+    ],
+    "expected_answer_facts": [
+      "Hệ số bồi thường chuẩn = 1.5 + (15 - 10) x 0.4 = 3.5 tháng lương",
+      "Do lỗi của người lao động nên hưởng 40% = 3.5 x 40% = 1.4 tháng lương",
+      "Mức trợ cấp = 1.4 x 8.000.000 = 11.200.000 đồng"
+    ],
+    "calculation_inputs": {
+      "monthly_salary": 8000000,
+      "impairment_percent": 15,
+      "is_employee_fault": true
+    },
+    "expected_calculation": 11200000.0
+  },
+  {
+    "id": "OS_13",
+    "question": "Bị tai nạn lao động công ty bồi thường bao nhiêu tiền?",
+    "query_type": "ambiguous_premise",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015"
+    ],
+    "relevant_articles": [
+      "38"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38"
+    ],
+    "needs_clarification": true,
+    "expected_answer_facts": [
+      "Cần cung cấp tỷ lệ % suy giảm khả năng lao động có kết luận giám định y khoa và mức tiền lương hợp đồng"
+    ]
+  },
+  {
+    "id": "OS_14",
+    "question": "Điều kiện để người lao động được hưởng chế độ bảo hiểm TNLĐ từ Quỹ bảo hiểm TNLĐ-BNN là gì?",
+    "query_type": "exact_reference",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_04_BNV_2026"
+    ],
+    "relevant_articles": [
+      "45",
+      "2"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d45",
+      "VBHN_04_BNV_2026#d2"
+    ],
+    "expected_answer_facts": [
+      "Bị tai nạn tại nơi làm việc và trong giờ làm việc hoặc trên đường đi làm về hợp lý",
+      "Bị suy giảm khả năng lao động từ 5% trở lên"
+    ]
+  },
+  {
+    "id": "OS_15",
+    "question": "Mức trợ cấp một lần từ Quỹ TNLĐ-BNN cho người suy giảm từ 5% đến 30% KNLĐ được tính như thế nào theo Điều 48 Luật 84?",
+    "query_type": "exact_reference",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_04_BNV_2026"
+    ],
+    "relevant_articles": [
+      "48",
+      "5"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d48",
+      "VBHN_04_BNV_2026#d5"
+    ],
+    "expected_answer_facts": [
+      "Suy giảm 5% được hưởng 05 lần mức tham chiếu, sau đó cứ mỗi 1% tăng thêm được hưởng thêm 0,5 lần mức tham chiếu",
+      "Ngoài ra được thêm khoản trợ cấp theo thời gian đóng BHXH"
+    ]
+  },
+  {
+    "id": "OS_16",
+    "question": "Người lao động suy giảm 10% KNLĐ do tai nạn lao động thì được Quỹ TNLĐ chi trả trợ cấp một lần tính theo mức tham chiếu là bao nhiêu lần?",
+    "query_type": "numeric_rate",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "2",
+      "48"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d48"
+    ],
+    "expected_answer_facts": [
+      "Hệ số hưởng = 5 + (10 - 5) x 0.5 = 7.5 lần mức tham chiếu"
+    ]
+  },
+  {
+    "id": "OS_17",
+    "question": "Người lao động bị suy giảm khả năng lao động bao nhiêu phần trăm thì được chuyển sang hưởng trợ cấp hàng tháng từ Quỹ TNLĐ?",
+    "query_type": "numeric_rate",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_04_BNV_2026"
+    ],
+    "relevant_articles": [
+      "49",
+      "6"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d49",
+      "VBHN_04_BNV_2026#d6"
+    ],
+    "expected_answer_facts": [
+      "Suy giảm từ 31% khả năng lao động trở lên"
+    ]
+  },
+  {
+    "id": "OS_18",
+    "question": "Công thức tính trợ cấp hàng tháng từ Quỹ TNLĐ theo Điều 49 Luật 84/2015/QH13?",
+    "query_type": "exact_reference",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_04_BNV_2026"
+    ],
+    "relevant_articles": [
+      "49",
+      "6"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d49",
+      "VBHN_04_BNV_2026#d6"
+    ],
+    "expected_answer_facts": [
+      "Suy giảm 31% hưởng 30% mức tham chiếu/tháng, cứ thêm 1% thì tăng thêm 2% mức tham chiếu/tháng"
+    ]
+  },
+  {
+    "id": "OS_19",
+    "question": "Người lao động bị tai nạn lao động suy giảm 40% KNLĐ thì mức trợ cấp hàng tháng tính theo mức tham chiếu là bao nhiêu phần trăm?",
+    "query_type": "numeric_rate",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "1",
+      "49"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d49"
+    ],
+    "expected_answer_facts": [
+      "Tỷ lệ hưởng = 30% + (40 - 31) x 2% = 30% + 18% = 48% mức tham chiếu mỗi tháng"
+    ]
+  },
+  {
+    "id": "OS_20",
+    "question": "Mức đóng vào Quỹ bảo hiểm tai nạn lao động, bệnh nghề nghiệp bắt buộc của người sử dụng lao động là bao nhiêu theo Văn bản hợp nhất 05/VBHN-BNV?",
+    "query_type": "numeric_rate",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "VBHN_05_BNV_2026"
+    ],
+    "relevant_articles": [
+      "1",
+      "2",
+      "3"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_05_BNV_2026#d2"
+    ],
+    "expected_answer_facts": [
+      "Mức đóng bình thường là 0,5% quỹ tiền lương làm căn cứ đóng BHXH của người lao động"
+    ]
+  },
+  {
+    "id": "OS_21",
+    "question": "Doanh nghiệp có thể được giảm mức đóng vào Quỹ bảo hiểm TNLĐ-BNN xuống mức bao nhiêu phần trăm?",
+    "query_type": "numeric_rate",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_05_BNV_2026"
+    ],
+    "relevant_articles": [
+      "3",
+      "49"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_05_BNV_2026#d3"
+    ],
+    "expected_answer_facts": [
+      "Được áp dụng mức đóng giảm xuống 0,3% quỹ tiền lương nếu đáp ứng đủ các điều kiện an toàn và không xảy ra tai nạn nặng trong 3 năm liền kề"
+    ]
+  },
+  {
+    "id": "OS_22",
+    "question": "Điều kiện để doanh nghiệp được áp dụng mức đóng giảm 0,3% vào quỹ TNLĐ-BNN là gì?",
+    "query_type": "exact_reference",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_05_BNV_2026"
+    ],
+    "relevant_articles": [
+      "3",
+      "49"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_05_BNV_2026#d3"
+    ],
+    "expected_answer_facts": [
+      "Không để xảy ra tai nạn lao động chết người hoặc tai nạn nặng trong 3 năm liền kề",
+      "Thực hiện tốt báo cáo công tác ATVSLĐ định kỳ"
+    ]
+  },
+  {
+    "id": "OS_23",
+    "question": "Thời hạn khai báo tai nạn lao động chết người hoặc làm bị thương nặng từ 2 người trở lên được quy định như thế nào tại Nghị định 39/2016/NĐ-CP?",
+    "query_type": "exact_reference",
+    "expected_domain": "OCCUPATIONAL_SAFETY",
+    "relevant_documents": [
+      "ND_39_2016"
+    ],
+    "relevant_articles": [
+      "34"
+    ],
+    "relevant_chunk_ids": [
+      "ND_39_2016#d34"
+    ],
+    "expected_answer_facts": [
+      "NSDLĐ phải khai báo bằng cách nhanh nhất (điện thoại, fax, thư điện tử) đến Thanh tra Sở LĐTBXH nơi xảy ra tai nạn"
+    ]
+  },
+  {
+    "id": "OS_24",
+    "question": "Thành phần Đoàn điều tra tai nạn lao động cấp cơ sở theo Điều 35 Nghị định 39/2016/NĐ-CP gồm những ai?",
+    "query_type": "exact_reference",
+    "expected_domain": "OCCUPATIONAL_SAFETY",
+    "relevant_documents": [
+      "ND_39_2016"
+    ],
+    "relevant_articles": [
+      "35"
+    ],
+    "relevant_chunk_ids": [
+      "ND_39_2016#d35"
+    ],
+    "expected_answer_facts": [
+      "Người sử dụng lao động hoặc người đại diện làm Trưởng đoàn",
+      "Đại diện Ban chấp hành công đoàn cơ sở",
+      "Người làm công tác an toàn lao động, người làm công tác y tế"
+    ]
+  },
+  {
+    "id": "OS_25",
+    "question": "Tôi bị máy ép vào tay trong ca làm việc làm đứt lìa một ngón tay, công ty phải bồi thường gì?",
+    "query_type": "scenario",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "3",
+      "38",
+      "39"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "VBHN_06_BNV_2026#d3"
+    ],
+    "expected_answer_facts": [
+      "Công ty phải trả chi phí y tế không được BHYT chi trả, trả đủ lương trong thời gian điều trị và bồi thường theo tỷ lệ suy giảm KNLĐ sau giám định"
+    ]
+  },
+  {
+    "id": "OS_26",
+    "question": "Tai nạn làm suy giảm 25% khả năng lao động thì được hưởng gì từ bảo hiểm xã hội?",
+    "query_type": "scenario",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_04_BNV_2026",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "2",
+      "48",
+      "5"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d48",
+      "VBHN_04_BNV_2026#d5"
+    ],
+    "expected_answer_facts": [
+      "Được hưởng trợ cấp một lần từ Quỹ TNLĐ-BNN bằng 15 lần mức tham chiếu cộng thêm trợ cấp theo thời gian đóng BHXH"
+    ]
+  },
+  {
+    "id": "OS_27",
+    "question": "Sau khi điều trị tai nạn lao động, người lao động được nghỉ dưỡng sức, phục hồi sức khỏe tối đa bao nhiêu ngày theo Điều 52 Luật 84?",
+    "query_type": "numeric_deadline",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015"
+    ],
+    "relevant_articles": [
+      "52"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d52"
+    ],
+    "expected_answer_facts": [
+      "Tối đa 10 ngày đối với suy giảm từ 51% trở lên",
+      "Tối đa 07 ngày đối với suy giảm từ 31% đến 50%",
+      "Tối đa 05 ngày đối với suy giảm từ 15% đến 30%"
+    ]
+  },
+  {
+    "id": "OS_28",
+    "question": "Mức tiền hưởng dưỡng sức phục hồi sức khỏe sau tai nạn lao động một ngày bằng bao nhiêu phần trăm mức tham chiếu?",
+    "query_type": "numeric_rate",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015"
+    ],
+    "relevant_articles": [
+      "49",
+      "52"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d52"
+    ],
+    "expected_answer_facts": [
+      "Mức hưởng một ngày bằng 30% mức tham chiếu"
+    ]
+  },
+  {
+    "id": "OS_29",
+    "question": "Thời điểm giới thiệu người lao động đi giám định y khoa xác định mức suy giảm KNLĐ là khi nào?",
+    "query_type": "scenario",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "38",
+      "4"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "VBHN_06_BNV_2026#d4"
+    ],
+    "expected_answer_facts": [
+      "Sau khi thương tật, bệnh tật đã được điều trị ổn định, người sử dụng lao động có trách nhiệm giới thiệu đi giám định y khoa"
+    ]
+  },
+  {
+    "id": "OS_30",
+    "question": "Chi phí khám giám định mức suy giảm khả năng lao động do ai chi trả theo Điều 38 và Điều 42 Luật 84?",
+    "query_type": "exact_reference",
+    "expected_domain": "OCCUPATIONAL_ACCIDENT_DISEASE",
+    "relevant_documents": [
+      "L_84_2015"
+    ],
+    "relevant_articles": [
+      "38"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38"
+    ],
+    "expected_answer_facts": [
+      "Người sử dụng lao động trả phí khám giám định nếu kết quả suy giảm dưới 5%, Quỹ bảo hiểm TNLĐ chi trả nếu kết luận suy giảm từ đủ 5% trở lên"
+    ]
+  },
+  {
+    "id": "CD_01",
+    "question": "Tôi bị tai nạn tại công ty và phải nghỉ điều trị, công ty phải trả gì và BHXH giải quyết gì?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_04_BNV_2026",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "3",
+      "38",
+      "39",
+      "45",
+      "48"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "L_84_2015#d48",
+      "VBHN_04_BNV_2026#d2",
+      "VBHN_06_BNV_2026#d2"
+    ],
+    "expected_answer_facts": [
+      "Công ty phải thanh toán chi phí y tế không thuộc BHYT, trả đủ lương điều trị và tiền bồi thường TNLĐ theo Điều 38 Luật 84",
+      "Cơ quan BHXH chi trả trợ cấp TNLĐ một lần hoặc hàng tháng từ Quỹ bảo hiểm TNLĐ nếu suy giảm KNLĐ từ 5% trở lên"
+    ]
+  },
+  {
+    "id": "CD_02",
+    "question": "Tôi nghỉ sinh con thì công ty trả lương hay BHXH trả?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "VBHN_18_2026",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "139",
+      "34",
+      "39"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d39",
+      "VBHN_18_2026#d139"
+    ],
+    "expected_answer_facts": [
+      "Công ty không phải trả lương trong thời gian người lao động nghỉ sinh con",
+      "Cơ quan BHXH sẽ chi trả 100% trợ cấp thai sản theo mức bình quân lương đóng BHXH 6 tháng liền kề và trợ cấp một lần"
+    ]
+  },
+  {
+    "id": "CD_03",
+    "question": "Tôi nghỉ việc rồi muốn nhận BHTN và BHXH một lần cùng lúc được không?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "LVL_74_2025",
+      "ND_374_2025",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "70",
+      "62",
+      "81",
+      "9"
+    ],
+    "relevant_chunk_ids": [
+      "LVL_74_2025#d81",
+      "VBHN_58_2025#d70-k1",
+      "ND_374_2025#d9"
+    ],
+    "expected_answer_facts": [
+      "Được, hai chế độ này độc lập với nhau",
+      "BHTN nộp hồ sơ trong vòng 3 tháng kể từ ngày chấm dứt HĐLĐ",
+      "BHXH một lần thường nộp sau 12 tháng nghỉ việc không tiếp tục tham gia BHXH"
+    ]
+  },
+  {
+    "id": "CD_04",
+    "question": "Nghỉ việc thì được nhận trợ cấp thôi việc của công ty hay nhận trợ cấp thất nghiệp từ quỹ BHTN?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "VBHN_18_2026",
+      "LVL_74_2025"
+    ],
+    "relevant_articles": [
+      "46",
+      "81"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_18_2026#d46",
+      "LVL_74_2025#d81"
+    ],
+    "expected_answer_facts": [
+      "Thời gian đã tham gia BHTN thì được quỹ BHTN chi trả trợ cấp thất nghiệp",
+      "Công ty chỉ trả trợ cấp thôi việc cho thời gian người lao động làm việc thực tế mà không tham gia BHTN"
+    ]
+  },
+  {
+    "id": "CD_05",
+    "question": "Người lao động đủ tuổi nghỉ hưu theo Nghị định 135/2020 nhưng chưa đủ 20 năm đóng BHXH thì công ty giải quyết chấm dứt hợp đồng thế nào và BHXH giải quyết gì?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "ND_135_2020",
+      "VBHN_18_2026",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "169",
+      "34",
+      "4",
+      "70"
+    ],
+    "relevant_chunk_ids": [
+      "ND_135_2020#d4",
+      "VBHN_58_2025#d70-k1",
+      "VBHN_18_2026#d34"
+    ],
+    "expected_answer_facts": [
+      "Công ty chấm dứt HĐLĐ theo Điều 34 BLLĐ do người lao động đủ tuổi nghỉ hưu",
+      "Về phía BHXH, người lao động có thể lựa chọn rút BHXH một lần hoặc tiếp tục đóng BHXH tự nguyện để đủ điều kiện nhận lương hưu"
+    ]
+  },
+  {
+    "id": "CD_06",
+    "question": "Tai nạn giao thông khi đi từ công ty về nhà: công ty có phải bồi thường không và bảo hiểm giải quyết ra sao?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_04_BNV_2026",
+      "VBHN_06_BNV_2026"
+    ],
+    "relevant_articles": [
+      "2",
+      "38",
+      "39",
+      "45"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "L_84_2015#d39",
+      "L_84_2015#d45",
+      "VBHN_06_BNV_2026#d2"
+    ],
+    "expected_answer_facts": [
+      "Nếu do lỗi của người khác hoặc bất khả kháng thì công ty trợ cấp ít nhất bằng 40% mức bồi thường",
+      "Nếu đủ điều kiện tuyến đường và thời gian hợp lý, Quỹ TNLĐ-BNN chi trả trợ cấp từ 5% suy giảm KNLĐ"
+    ]
+  },
+  {
+    "id": "CD_07",
+    "question": "Công ty nợ tiền bảo hiểm xã hội 6 tháng thì người lao động có được chốt sổ để hưởng trợ cấp thất nghiệp không?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "LVL_74_2025",
+      "ND_374_2025",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "2",
+      "62",
+      "81",
+      "9"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d2",
+      "LVL_74_2025#d81",
+      "ND_374_2025#d9"
+    ],
+    "expected_answer_facts": [
+      "Cơ quan BHXH thực hiện xác nhận thời gian đóng BHXH, BHTN đến thời điểm công ty đã đóng đủ tiền để kịp làm thủ tục hưởng trợ cấp thất nghiệp",
+      "Số tiền còn nợ sẽ được ghi nhận và chốt bổ sung sau khi công ty khắc phục nợ"
+    ]
+  },
+  {
+    "id": "CD_08",
+    "question": "Bị công ty sa thải trái luật thì có được nhận tiền bồi thường của công ty và có được hưởng trợ cấp thất nghiệp không?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "LVL_74_2025",
+      "ND_374_2025",
+      "VBHN_18_2026"
+    ],
+    "relevant_articles": [
+      "4",
+      "41",
+      "81"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_18_2026#d41",
+      "LVL_74_2025#d81"
+    ],
+    "expected_answer_facts": [
+      "Công ty phải nhận lại làm việc, trả tiền lương những ngày không được làm việc và bồi thường ít nhất 02 tháng tiền lương theo Điều 41 BLLĐ",
+      "Nếu chấm dứt HĐLĐ và không tiếp tục làm việc thì vẫn có quyền nộp hồ sơ hưởng trợ cấp thất nghiệp nếu đủ điều kiện"
+    ]
+  },
+  {
+    "id": "CD_09",
+    "question": "Người lao động nước ngoài làm việc tại Việt Nam có phải tham gia BHXH bắt buộc và BHTN không?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "LVL_74_2025",
+      "ND_219_2025",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "2",
+      "59",
+      "75"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d2",
+      "LVL_74_2025#d75",
+      "ND_219_2025#d2"
+    ],
+    "expected_answer_facts": [
+      "Người lao động nước ngoài có GPLĐ hoặc chứng chỉ hành nghề và HĐLĐ từ 1 năm trở lên phải tham gia BHXH bắt buộc",
+      "Người lao động nước ngoài KHÔNG thuộc đối tượng tham gia bảo hiểm thất nghiệp theo Luật Việc làm"
+    ]
+  },
+  {
+    "id": "CD_10",
+    "question": "Lao động nữ mang thai bị công ty chấm dứt hợp đồng trái luật thì được bồi thường hợp đồng thế nào và chế độ thai sản giải quyết ra sao?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "VBHN_18_2026",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "31",
+      "37",
+      "41"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_18_2026#d37",
+      "VBHN_18_2026#d41",
+      "VBHN_58_2025#d31"
+    ],
+    "expected_answer_facts": [
+      "Công ty vi phạm điều cấm sa thải/chấm dứt HĐLĐ với lao động nữ mang thai và phải bồi thường theo Điều 41 BLLĐ",
+      "Nếu người lao động đã đóng BHXH đủ 6 tháng trong 12 tháng trước sinh thì vẫn được cơ quan BHXH chi trả chế độ thai sản dù đã chấm dứt HĐLĐ"
+    ]
+  },
+  {
+    "id": "CD_11",
+    "question": "Người lao động bị ốm đau dài ngày quá 12 tháng thì công ty có quyền đơn phương chấm dứt hợp đồng không và chế độ BHXH thế nào?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "VBHN_18_2026",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "26",
+      "36"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_18_2026#d36",
+      "VBHN_58_2025#d26"
+    ],
+    "expected_answer_facts": [
+      "Công ty có quyền đơn phương chấm dứt HĐLĐ nếu người làm việc theo HĐLĐ KXDTH đã điều trị 12 tháng liên tục mà khả năng lao động chưa hồi phục (Điều 36 BLLĐ)",
+      "Người lao động vẫn được hưởng chế độ ốm đau dài ngày từ quỹ BHXH theo Điều 26 Luật BHXH"
+    ]
+  },
+  {
+    "id": "CD_12",
+    "question": "Tiền trợ cấp thai sản có phải chịu thuế thu nhập cá nhân và có phải trích đóng BHXH không?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "ND_158_2025",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "39",
+      "5"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_58_2025#d39"
+    ],
+    "expected_answer_facts": [
+      "Tiền trợ cấp thai sản do quỹ BHXH chi trả không phải đóng BHXH và thuộc diện thu nhập miễn thuế TNCN theo quy định"
+    ]
+  },
+  {
+    "id": "CD_13",
+    "question": "Công ty trả tiền trợ cấp thôi việc cho người lao động nghỉ việc thì tiền đó công ty trả hay cơ quan BHXH trả?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "VBHN_18_2026",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "46",
+      "70"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_18_2026#d46",
+      "VBHN_58_2025#d70-k1"
+    ],
+    "expected_answer_facts": [
+      "Trợ cấp thôi việc là trách nhiệm chi trả trực tiếp của người sử dụng lao động theo Điều 46 Bộ luật Lao động",
+      "Cơ quan BHXH không chi trả trợ cấp thôi việc mà chỉ chi trả trợ cấp thất nghiệp hoặc BHXH một lần nếu người lao động đủ điều kiện yêu cầu"
+    ]
+  },
+  {
+    "id": "CD_14",
+    "question": "Thời gian thử việc có phải đóng bảo hiểm xã hội bắt buộc và bảo hiểm thất nghiệp không?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "LVL_74_2025",
+      "VBHN_18_2026",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "2",
+      "24",
+      "59",
+      "75",
+      "85"
+    ],
+    "relevant_chunk_ids": [
+      "VBHN_18_2026#d24",
+      "VBHN_58_2025#d2",
+      "LVL_74_2025#d75"
+    ],
+    "expected_answer_facts": [
+      "Nếu ký hợp đồng thử việc riêng thì không thuộc đối tượng tham gia BHXH bắt buộc và BHTN",
+      "Nếu thỏa thuận thử việc trong hợp đồng lao động thì phải tham gia BHXH bắt buộc và BHTN ngay từ thời gian thử việc"
+    ]
+  },
+  {
+    "id": "CD_15",
+    "question": "Người lao động qua đời do tai nạn lao động tại công ty thì thân nhân được nhận những khoản tiền nào từ công ty và từ BHXH?",
+    "query_type": "cross_domain",
+    "expected_domain": "CROSS_DOMAIN",
+    "relevant_documents": [
+      "L_84_2015",
+      "VBHN_06_BNV_2026",
+      "VBHN_58_2025"
+    ],
+    "relevant_articles": [
+      "3",
+      "38",
+      "66",
+      "67"
+    ],
+    "relevant_chunk_ids": [
+      "L_84_2015#d38",
+      "VBHN_58_2025#d66",
+      "VBHN_58_2025#d67",
+      "VBHN_06_BNV_2026#d3"
+    ],
+    "expected_answer_facts": [
+      "Từ công ty: Bồi thường ít nhất 30 tháng tiền lương và thanh toán chi phí cứu chữa",
+      "Từ cơ quan BHXH: Trợ cấp mai táng (10 lần mức tham chiếu), trợ cấp một lần khi chết do TNLĐ (36 lần mức tham chiếu) và trợ cấp tuất hàng tháng hoặc một lần"
+    ]
+  }
+]

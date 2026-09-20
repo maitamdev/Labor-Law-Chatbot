@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 import logging
 import re
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
@@ -32,12 +32,14 @@ from rag.context_builder import ContextBuilder, FormattedContext
 from rag.evidence_selector import EvidenceSelector, EvidenceSelectionResult
 from rag.hybrid_retriever import HybridRetriever
 from rag.issue_decomposer import IssueDecomposer
+from rag.legal_calculator import BenefitCalculator, CalculationResult
 from rag.legal_issue_parser import LegalIssue, LegalIssueParser
 from rag.material_premise_gate import MaterialPremiseGate, PremiseGateResult
 from rag.output_validator import LegalAnswer, OutputValidator, ValidatedResponse
 from rag.prompts import SYSTEM_PROMPT, build_user_prompt
 from rag.query_expander import QueryExpander
 from rag.query_processor import normalize_query, normalize_colloquial_vietnamese
+from rag.query_rewriter import AdaptiveQueryRewriter, RelevanceGrader
 from rag.query_router import QueryRouter, RouteDecision
 
 logger = logging.getLogger(__name__)
@@ -49,6 +51,18 @@ class Turn:
     user_query: str
     assistant_response: str
     facts: Dict[str, str] = field(default_factory=dict)
+
+
+DOMAIN_PRIMARY_DOCS: Dict[str, Set[str]] = {
+    "SOCIAL_INSURANCE": {"VBHN_58_2025", "ND_158_2025", "ND_159_2025", "TT_12_2025", "ND_176_2025"},
+    "OCCUPATIONAL_SAFETY": {"L_84_2015", "VBHN_04_BNV_2026", "VBHN_05_BNV_2026", "VBHN_06_BNV_2026", "ND_39_2016"},
+    "OCCUPATIONAL_ACCIDENT_DISEASE": {"L_84_2015", "VBHN_04_BNV_2026", "VBHN_05_BNV_2026", "VBHN_06_BNV_2026", "ND_39_2016"},
+    "UNEMPLOYMENT_INSURANCE": {"LVL_74_2025", "LUAT_74_2025", "ND_374_2025"},
+    "FOREIGN_WORKER": {"ND_219_2025", "VBHN_18_2026"},
+    "RETIREMENT": {"ND_135_2020", "VBHN_18_2026", "VBHN_58_2025"},
+    "CORE_LABOR": {"VBHN_18_2026", "ND_145_2020"},
+    "CROSS_DOMAIN": {"VBHN_58_2025", "L_84_2015", "LVL_74_2025", "LUAT_74_2025", "VBHN_18_2026", "ND_158_2025", "VBHN_06_BNV_2026", "ND_135_2020", "ND_374_2025"},
+}
 
 
 class ConversationMemory:
@@ -254,7 +268,7 @@ class VietLaborRAGChain:
         max_context_chars: int = 8000,
         max_chunks: int = 10,
         max_per_issue_blocks: int = 4,
-        index_version: str = "v2",
+        index_version: str = "v3",
     ):
         self.top_k = top_k
         self.index_version = index_version
@@ -288,6 +302,10 @@ class VietLaborRAGChain:
 
         # Local LLM manager
         self.llm_manager = llm_manager or LocalLLMManager()
+
+        # Self-reflective relevance grading and adaptive query rewriter
+        self.grader = RelevanceGrader()
+        self.query_rewriter = AdaptiveQueryRewriter(llm_manager=self.llm_manager)
 
     # -------------------------------------------------------------------------
     # Out-of-scope response message (DRY: used in run() and tests)
@@ -437,15 +455,42 @@ class VietLaborRAGChain:
 
         # --- 3b. Retrieval ---
         if route_decision.is_exact_reference():
-            retrieval_method = "BM25 Lexical (Exact Reference)"
-            raw_retrieved = self.bm25_retriever.retrieve(query_for_retrieval, top_k=self.top_k)
+            doc_no = (route_decision.detected_doc_no or "").lower()
+
+            def doc_matches(c):
+                meta = c.get("metadata", {})
+                c_doc = str(meta.get("doc_id", "")).lower()
+                c_no = str(meta.get("document_no", "")).lower()
+                if doc_no and (doc_no in c_doc or doc_no in c_no):
+                    return True
+                for num_key in ["58", "158", "159", "176", "84", "39", "04", "05", "06", "18", "145", "135", "74", "374", "219"]:
+                    if doc_no and num_key in doc_no and num_key in c_doc:
+                        return True
+                return False
+
             if route_decision.detected_article is not None:
+                retrieval_method = "BM25 Lexical (Exact Reference)"
+                raw_retrieved = self.bm25_retriever.retrieve(query_for_retrieval, top_k=50)
                 art_target = str(route_decision.detected_article)
-                matching = [c for c in raw_retrieved if str(c.get("metadata", {}).get("article_number")) == art_target]
-                non_matching = [c for c in raw_retrieved if str(c.get("metadata", {}).get("article_number")) != art_target]
-                combined_candidate_chunks = (matching + non_matching)[: self.top_k]
+                exact_art_doc = [
+                    c for c in raw_retrieved
+                    if str(c.get("metadata", {}).get("article_number")) == art_target and doc_matches(c)
+                ]
+                art_only = [
+                    c for c in raw_retrieved
+                    if str(c.get("metadata", {}).get("article_number")) == art_target and c not in exact_art_doc
+                ]
+                other_chunks = [
+                    c for c in raw_retrieved
+                    if c not in exact_art_doc and c not in art_only
+                ]
+                combined_candidate_chunks = (exact_art_doc + art_only + other_chunks)[: self.top_k]
             else:
-                combined_candidate_chunks = raw_retrieved[: self.top_k]
+                retrieval_method = "Hybrid Document Lookup"
+                raw_retrieved = self.hybrid_retriever.retrieve(query_for_retrieval, top_k=50)
+                doc_matching = [c for c in raw_retrieved if doc_matches(c)]
+                other_chunks = [c for c in raw_retrieved if c not in doc_matching]
+                combined_candidate_chunks = (doc_matching + other_chunks)[: self.top_k]
         else:
             # Multi-issue or single-issue Hybrid retrieval
             if len(decomposed_issues) > 1:
@@ -457,12 +502,14 @@ class VietLaborRAGChain:
                     if not is_domestic:
                         issue_retrieved = [c for c in issue_retrieved if str(c.get("metadata", {}).get("article_number")) not in ["161", "162", "165"]]
 
-                    # If intent is SUBSTANTIVE_RULE, prioritize BLLĐ substantive provisions over NĐ 12 sanctions
+                    # If intent is SUBSTANTIVE_RULE, prioritize canonical substantive provisions over sanctions
+                    issue_dom = getattr(iss, "domain", route_decision.domain)
+                    issue_pri_docs = DOMAIN_PRIMARY_DOCS.get(issue_dom, DOMAIN_PRIMARY_DOCS.get(route_decision.domain, {"VBHN_18_2026"}))
                     if route_decision.legal_intent == "SUBSTANTIVE_RULE":
-                        blld_cands = [c for c in issue_retrieved if c.get("metadata", {}).get("doc_id") == "VBHN_18_2026"]
-                        other_cands = [c for c in issue_retrieved if c.get("metadata", {}).get("doc_id") != "VBHN_18_2026" and c.get("metadata", {}).get("doc_id") != "ND_12_2022"]
+                        pri_cands = [c for c in issue_retrieved if c.get("metadata", {}).get("doc_id") in issue_pri_docs]
+                        other_cands = [c for c in issue_retrieved if c.get("metadata", {}).get("doc_id") not in issue_pri_docs and c.get("metadata", {}).get("doc_id") != "ND_12_2022"]
                         sanction_cands = [c for c in issue_retrieved if c.get("metadata", {}).get("doc_id") == "ND_12_2022"]
-                        issue_retrieved = blld_cands + other_cands + sanction_cands
+                        issue_retrieved = pri_cands + other_cands + sanction_cands
 
                     multi_issue_candidates[iss.issue_id] = issue_retrieved
                     for c in issue_retrieved:
@@ -474,14 +521,36 @@ class VietLaborRAGChain:
                 raw_retrieved = self.hybrid_retriever.retrieve(single_query, top_k=50)
 
                 # Prioritize substantive rules over sanctions if intent is SUBSTANTIVE_RULE
-                if route_decision.legal_intent == "SUBSTANTIVE_RULE":
-                    blld_cands = [c for c in raw_retrieved if c.get("metadata", {}).get("doc_id") == "VBHN_18_2026"]
-                    other_cands = [c for c in raw_retrieved if c.get("metadata", {}).get("doc_id") != "VBHN_18_2026" and c.get("metadata", {}).get("doc_id") != "ND_12_2022"]
-                    sanction_cands = [c for c in raw_retrieved if c.get("metadata", {}).get("doc_id") == "ND_12_2022"]
-                    raw_retrieved = blld_cands + other_cands + sanction_cands
+                primary_docs = DOMAIN_PRIMARY_DOCS.get(route_decision.domain, {"VBHN_18_2026"})
 
-                # Actor-aware and statutory intent filtering
-                if route_decision.intent == "termination_notice":
+                # Self-reflective Relevance Grading & Adaptive Query Rewriting (ViLeXa CRAG style)
+                grade_res = self.grader.grade(
+                    single_query,
+                    raw_retrieved,
+                    primary_docs=primary_docs,
+                    expected_intent=route_decision.legal_intent,
+                )
+                if not grade_res.is_relevant:
+                    rewritten_query = self.query_rewriter.rewrite(
+                        single_query,
+                        domain=route_decision.domain,
+                        reason=grade_res.reason,
+                    )
+                    if rewritten_query != single_query:
+                        logger.info(f"Self-reflective query rewrite: '{single_query}' -> '{rewritten_query}' (Reason: {grade_res.reason})")
+                        retry_retrieved = self.hybrid_retriever.retrieve(rewritten_query, top_k=50)
+                        if retry_retrieved:
+                            seen_cids = {c["chunk_id"] for c in retry_retrieved}
+                            raw_retrieved = retry_retrieved + [c for c in raw_retrieved if c["chunk_id"] not in seen_cids]
+
+                if route_decision.legal_intent == "SUBSTANTIVE_RULE":
+                    pri_cands = [c for c in raw_retrieved if c.get("metadata", {}).get("doc_id") in primary_docs]
+                    other_cands = [c for c in raw_retrieved if c.get("metadata", {}).get("doc_id") not in primary_docs and c.get("metadata", {}).get("doc_id") != "ND_12_2022"]
+                    sanction_cands = [c for c in raw_retrieved if c.get("metadata", {}).get("doc_id") == "ND_12_2022"]
+                    raw_retrieved = pri_cands + other_cands + sanction_cands
+
+                # Actor-aware and statutory intent filtering (strictly for CORE_LABOR contract termination)
+                if route_decision.intent == "termination_notice" and route_decision.domain == "CORE_LABOR":
                     is_domestic = any(k in resolved_q.lower() for k in ["giúp việc", "người giúp việc", "gia đình"])
                     candidates = raw_retrieved
                     if not is_domestic:
@@ -521,7 +590,7 @@ class VietLaborRAGChain:
                     combined_candidate_chunks = raw_retrieved[: 35]
 
         # Enforce forbidden provisions from premise gate (prevent premature statutory anchoring)
-        if premise_result.forbidden_provisions:
+        if premise_result and premise_result.forbidden_provisions:
             combined_candidate_chunks = [
                 c for c in combined_candidate_chunks
                 if not any(fb in c.get("chunk_id", "") for fb in premise_result.forbidden_provisions)
@@ -536,13 +605,25 @@ class VietLaborRAGChain:
         locked_chunk_ids: List[str] = []
         multi_issue_locked: Dict[str, List[Dict[str, Any]]] = {}
 
-        if len(decomposed_issues) > 1:
+        if route_decision.is_exact_reference() and len(combined_candidate_chunks) > 0:
+            locked_chunks = combined_candidate_chunks[:3]
+            locked_chunk_ids = [c["chunk_id"] for c in locked_chunks]
+        elif len(decomposed_issues) > 1:
             for iss in decomposed_issues:
+                parse_q = iss.raw_issue_text if getattr(iss, "raw_issue_text", None) else iss.retrieval_query
                 parsed_iss = self.issue_parser.parse(
-                    query=iss.retrieval_query,
+                    query=parse_q,
                     issue_id=iss.issue_id,
                     context_facts=self.memory.accumulated_facts,
+                    forced_domain=getattr(iss, "domain", None),
                 )
+                if getattr(iss, "legal_event", "UNKNOWN") != "UNKNOWN":
+                    parsed_iss.legal_event = iss.legal_event
+                if getattr(iss, "legal_events", []):
+                    parsed_iss.legal_events = iss.legal_events
+                if getattr(iss, "required_evidence_roles", []):
+                    parsed_iss.required_evidence_roles = list(set(parsed_iss.required_evidence_roles + iss.required_evidence_roles))
+
                 cands = multi_issue_candidates.get(iss.issue_id, combined_candidate_chunks)
                 sel_res = self.evidence_selector.select_evidence(parsed_iss, cands)
                 issue_locked = [sc.raw_chunk for sc in sel_res.locked_evidence_blocks]
@@ -587,6 +668,7 @@ class VietLaborRAGChain:
         locked_chunk_ids: List[str],
         multi_issue_locked: Dict[str, List[Dict[str, Any]]],
         decomposed_issues: list,
+        calculation_result: Optional[CalculationResult] = None,
     ) -> Dict[str, Any]:
         """Stage 4: Build context, invoke LLM, parse JSON, validate citations.
 
@@ -603,7 +685,7 @@ class VietLaborRAGChain:
 
         # Synchronize statutory bridges added by ContextBuilder into locked_chunk_ids
         for cid in context.available_chunk_ids:
-            if cid not in locked_chunk_ids and any(k in cid for k in ["d35-k1-d", "ND_145_2020#d7"]):
+            if cid not in locked_chunk_ids:
                 locked_chunk_ids.append(cid)
 
         # Construct Prompt
@@ -615,6 +697,7 @@ class VietLaborRAGChain:
             needs_clarification_hint=route_decision.needs_clarification,
             clarification_reason_hint=route_decision.clarification_reason or "",
             decomposed_issues=decomposed_issues if len(decomposed_issues) > 1 else None,
+            calculation_result=calculation_result,
         )
 
         messages = [
@@ -638,9 +721,11 @@ class VietLaborRAGChain:
         parsed_answer: LegalAnswer = self.validator.parse_llm_json(raw_llm_output)
 
         # Enforce clarification flag only if query was ambiguous AND no clarification facts exist in memory
+        from rag.query_processor import is_scenario_or_legal_consultation
+        is_scenario = is_scenario_or_legal_consultation(norm_q, raw_query=resolved_q)
         user_has_facts = self.memory.has_clarification_facts()
-        if user_has_facts and premise_result.is_sufficient:
-            # User provided explicit facts and premise is now sufficient -> MUST ANSWER, DO NOT CLARIFY AGAIN
+        if is_scenario or (user_has_facts and premise_result.is_sufficient) or route_decision.is_exact_reference() or (premise_result.is_sufficient and not route_decision.needs_clarification and not premise_result.needs_clarification):
+            # Scenario/consultation, exact reference, or sufficient premise -> MUST ANSWER, DO NOT CLARIFY
             parsed_answer.needs_clarification = False
             parsed_answer.clarification_question = None
         elif route_decision.needs_clarification and not user_has_facts and not parsed_answer.needs_clarification and not parsed_answer.abstain:
@@ -651,6 +736,7 @@ class VietLaborRAGChain:
                     "Nếu biết, hãy cho tôi biết vị trí đó yêu cầu trình độ chuyên môn ở mức nào: "
                     "người quản lý doanh nghiệp, cao đẳng trở lên, trung cấp/kỹ thuật hay nhóm công việc khác?"
                 )
+
 
         # Validate citations & Backend Citation Ownership using EvidenceMapper
         validated_resp: ValidatedResponse = self.validator.validate_and_format(
@@ -717,6 +803,22 @@ class VietLaborRAGChain:
         )
         premise_result = self.premise_gate.evaluate(parsed_issue_gate, context_facts=effective_facts)
 
+        from rag.query_processor import is_scenario_or_legal_consultation
+        is_scenario = is_scenario_or_legal_consultation(resolved_q, raw_query=question)
+        if is_scenario:
+            premise_result.needs_clarification = False
+            premise_result.clarification_question = None
+            premise_result.clarification_options = []
+            premise_result.is_sufficient = True
+
+        calc_result = BenefitCalculator.extract_and_calculate(resolved_q, effective_facts)
+        if calc_result and calc_result.needs_clarification:
+            if is_scenario:
+                calc_result = None
+            else:
+                premise_result.needs_clarification = True
+                premise_result.clarification_question = calc_result.explanation
+
         if premise_result.needs_clarification:
             return self._handle_premise_gate(
                 question, norm_q, resolved_q, route_decision, premise_result, update_memory, t0,
@@ -730,7 +832,9 @@ class VietLaborRAGChain:
             norm_q, resolved_q, route_decision, premise_result,
             ret_sel["locked_chunks"], ret_sel["locked_chunk_ids"],
             ret_sel["multi_issue_locked"], ret_sel["decomposed_issues"],
+            calculation_result=calc_result,
         )
+
 
         # Commit to short-term conversation state
         if update_memory:

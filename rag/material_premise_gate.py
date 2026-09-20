@@ -41,6 +41,22 @@ class MaterialPremiseGate:
         facts = context_facts or {}
         q_lower = issue.raw_query.lower()
 
+        # Anti-Interruption Guardrail: Scenarios & complex consultations must NEVER be interrupted.
+        from rag.query_processor import is_scenario_or_legal_consultation
+        if is_scenario_or_legal_consultation(issue.raw_query):
+            forbidden_provisions = []
+            is_explicit_severance = any(k in q_lower for k in ["trợ cấp thôi việc", "tiền thôi việc"])
+            if not is_explicit_severance:
+                forbidden_provisions.append("18/VBHN-VPQH#d46")
+                forbidden_provisions.append("VBHN_18_2026#d46")
+            return PremiseGateResult(
+                is_sufficient=True,
+                needs_clarification=False,
+                category="SCENARIO_LEGAL_CONSULTATION_SUFFICIENT",
+                forbidden_provisions=forbidden_provisions,
+                reason="Real-world scenario / legal consultation bypassed clarification gate for comprehensive advisory generation",
+            )
+
         # -------------------------------------------------------------
         # CATEGORY 1: Relationship Ambiguity (Internship / Training / De Facto Employee)
         # -------------------------------------------------------------
@@ -440,6 +456,110 @@ class MaterialPremiseGate:
                     ],
                     forbidden_provisions=[],
                     reason="Severance allowance under Điều 46 requires employment duration >= 12 months and valid termination ground",
+                )
+
+        # -------------------------------------------------------------
+        # CATEGORY 11: Wave 2 Benefit Calculation Ambiguity (Phase 5H)
+        # -------------------------------------------------------------
+        # A. Maternity Calculation (Thai sản được bao nhiêu tiền?)
+        is_calc_maternity = any(k in q_lower for k in ["thai sản được bao nhiêu", "tiền thai sản", "được bao nhiêu tiền thai sản", "tính tiền thai sản"])
+        if is_calc_maternity:
+            has_salary = bool(facts.get("avg_salary_6m")) or (any(k in q_lower for k in ["lương", "triệu", "đồng", "tháng"]) and any(c.isdigit() for c in q_lower))
+            if not has_salary:
+                return PremiseGateResult(
+                    is_sufficient=False,
+                    needs_clarification=True,
+                    category="MATERNITY_CALCULATION_MISSING_PREMISE",
+                    missing_facts=["avg_salary_6m", "qualifying_period"],
+                    clarification_question=(
+                        "Để tính chính xác số tiền trợ cấp thai sản theo Điều 38, 39 Luật BHXH, bạn vui lòng cung cấp thêm:\n"
+                        "1. Mức bình quân tiền lương tháng đóng BHXH của 6 tháng liền kề trước khi nghỉ sinh là bao nhiêu?\n"
+                        "2. Bạn đã đóng BHXH được bao nhiêu tháng trong vòng 12 tháng trước khi sinh con (đã đủ từ 6 tháng trở lên chưa)?"
+                    ),
+                    clarification_options=[
+                        "Đã đóng đủ từ 6 tháng trở lên trong 12 tháng trước sinh",
+                        "Đóng dưới 6 tháng",
+                        "Tôi chưa rõ mức lương bình quân đóng BHXH",
+                    ],
+                    forbidden_provisions=[],
+                    reason="Maternity benefit calculation requires 6-month average salary and qualifying contribution period under Điều 38, 39 Luật BHXH",
+                )
+
+        # B. Sickness Calculation (Nghỉ ốm được bao nhiêu tiền?)
+        is_calc_sickness = any(k in q_lower for k in ["nghỉ ốm được bao nhiêu", "tiền ốm đau", "ốm đau được bao nhiêu", "tính tiền ốm"])
+        if is_calc_sickness:
+            has_salary = bool(facts.get("preceding_salary")) or (any(k in q_lower for k in ["lương", "triệu", "đồng"]) and any(c.isdigit() for c in q_lower))
+            has_days = bool(facts.get("sick_days")) or (any(k in q_lower for k in ["ngày", "hôm"]) and any(c.isdigit() for c in q_lower))
+            if not (has_salary and has_days):
+                return PremiseGateResult(
+                    is_sufficient=False,
+                    needs_clarification=True,
+                    category="SICKNESS_CALCULATION_MISSING_PREMISE",
+                    missing_facts=["preceding_salary", "sick_days"],
+                    clarification_question=(
+                        "Để tính số tiền trợ cấp ốm đau theo Điều 28 Luật BHXH và Thông tư 12/2025/TT-BNV, bạn vui lòng cho biết:\n"
+                        "1. Mức tiền lương đóng BHXH của tháng liền kề trước khi bạn nghỉ ốm là bao nhiêu?\n"
+                        "2. Bạn có chỉ định nghỉ ốm của cơ sở y tế trong bao nhiêu ngày làm việc?"
+                    ),
+                    clarification_options=[
+                        "Đã có chỉ định nghỉ ốm và biết mức lương tháng liền kề",
+                        "Nghỉ ốm không có giấy chứng nhận của bệnh viện",
+                        "Tôi không rõ",
+                    ],
+                    forbidden_provisions=[],
+                    reason="Sickness benefit calculation requires preceding salary and number of sick days under Điều 28 Luật BHXH",
+                )
+
+        # C. Lump-sum Social Insurance (Rút BHXH một lần được bao nhiêu tiền?)
+        is_calc_lump_sum = any(k in q_lower for k in ["rút bhxh một lần được bao nhiêu", "bhxh một lần được bao nhiêu", "tính bhxh một lần", "tiền một lần được bao nhiêu"])
+        if is_calc_lump_sum:
+            has_salary = bool(facts.get("avg_salary")) or (any(k in q_lower for k in ["lương", "triệu", "đồng"]) and any(c.isdigit() for c in q_lower))
+            has_years = bool(facts.get("years_insured")) or (any(k in q_lower for k in ["năm", "tháng"]) and any(c.isdigit() for c in q_lower))
+            if not (has_salary and has_years):
+                return PremiseGateResult(
+                    is_sufficient=False,
+                    needs_clarification=True,
+                    category="LUMP_SUM_BHXH_MISSING_PREMISE",
+                    missing_facts=["avg_salary", "years_insured"],
+                    clarification_question=(
+                        "Để tính số tiền BHXH một lần theo Điều 60 Luật BHXH và Nghị định 158/2025/NĐ-CP, bạn vui lòng cho biết:\n"
+                        "1. Tổng thời gian bạn đã tham gia đóng BHXH là bao nhiêu năm (cụ thể trước 2014 và từ 2014 trở đi)?\n"
+                        "2. Mức bình quân tiền lương tháng đóng BHXH toàn bộ quá trình của bạn là bao nhiêu?"
+                    ),
+                    clarification_options=[
+                        "Toàn bộ thời gian đóng từ năm 2014 trở đi",
+                        "Có cả thời gian đóng trước 2014 và sau 2014",
+                        "Tôi không rõ mức lương bình quân đóng BHXH",
+                    ],
+                    forbidden_provisions=[],
+                    reason="Lump sum social insurance calculation requires contribution duration breakdown and average salary under Điều 60 Luật BHXH",
+                )
+
+        # D. Workplace Accident Employer Compensation (Bồi thường tai nạn lao động)
+        is_calc_accident = any(k in q_lower for k in ["bồi thường tai nạn bao nhiêu", "công ty bồi thường bao nhiêu", "tai nạn lao động được bao nhiêu tiền"])
+        if is_calc_accident:
+            has_salary = bool(facts.get("monthly_salary")) or (any(k in q_lower for k in ["lương", "triệu", "đồng"]) and any(c.isdigit() for c in q_lower))
+            has_impairment = bool(facts.get("impairment_percent")) or ("%" in q_lower and any(c.isdigit() for c in q_lower))
+            if not (has_salary and has_impairment):
+                return PremiseGateResult(
+                    is_sufficient=False,
+                    needs_clarification=True,
+                    category="ACCIDENT_COMPENSATION_MISSING_PREMISE",
+                    missing_facts=["monthly_salary", "impairment_percent"],
+                    clarification_question=(
+                        "Để tính chính xác số tiền bồi thường tai nạn lao động theo Điều 38 Luật An toàn, vệ sinh lao động và 06/VBHN-BNV, bạn vui lòng cho biết:\n"
+                        "1. Kết luận của Hội đồng giám định y khoa về tỷ lệ suy giảm khả năng lao động của bạn là bao nhiêu %?\n"
+                        "2. Mức tiền lương theo hợp đồng lao động làm căn cứ bồi thường là bao nhiêu?\n"
+                        "3. Tai nạn xảy ra do lỗi của người sử dụng lao động hay do lỗi của người lao động?"
+                    ),
+                    clarification_options=[
+                        "Đã có kết quả giám định y khoa về tỷ lệ suy giảm %",
+                        "Chưa đi giám định y khoa",
+                        "Tai nạn hoàn toàn do lỗi của công ty hoặc không do lỗi của NLĐ",
+                        "Tôi không rõ",
+                    ],
+                    forbidden_provisions=[],
+                    reason="Workplace accident compensation calculation requires impairment percentage and contractual wage under Điều 38 Luật 84/2015",
                 )
 
         # -------------------------------------------------------------

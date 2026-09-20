@@ -1,0 +1,152 @@
+[
+  {
+    "id": "FW_PROC_01",
+    "domain": "FOREIGN_WORKER",
+    "type": "exact",
+    "question": "Hồ sơ đề nghị cấp mới giấy phép lao động cho chuyên gia nước ngoài theo Nghị định 219/2025/NĐ-CP bao gồm những tài liệu gì?",
+    "gold_articles": ["11"],
+    "gold_chunks": ["ND_219_2025#d11", "ND_219_2025#d11-k1", "ND_219_2025#d11-k2", "ND_219_2025#d11-k3"],
+    "expected_facts": ["Mẫu số 03", "giấy khám sức khỏe 12 tháng", "phiếu lý lịch tư pháp", "bằng đại học", "kinh nghiệm 3 năm", "02 ảnh màu 4x6"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_02",
+    "domain": "FOREIGN_WORKER",
+    "type": "numeric/deadline",
+    "question": "Trước khi người lao động nước ngoài dự kiến bắt đầu làm việc bao nhiêu ngày thì người sử dụng lao động phải nộp hồ sơ đề nghị cấp giấy phép lao động?",
+    "gold_articles": ["10"],
+    "gold_chunks": ["ND_219_2025#d10", "ND_219_2025#d10-k1"],
+    "expected_facts": ["ít nhất 15 ngày làm việc", "trước ngày bắt đầu làm việc"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_03",
+    "domain": "FOREIGN_WORKER",
+    "type": "numeric/deadline",
+    "question": "Thời hạn cơ quan có thẩm quyền cấp mới giấy phép lao động kể từ ngày nhận đủ hồ sơ hợp lệ theo Nghị định 219/2025 là bao nhiêu ngày làm việc?",
+    "gold_articles": ["10"],
+    "gold_chunks": ["ND_219_2025#d10", "ND_219_2025#d10-k3"],
+    "expected_facts": ["10 ngày làm việc", "kể từ ngày nhận đủ hồ sơ hợp lệ"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_04",
+    "domain": "FOREIGN_WORKER",
+    "type": "exact",
+    "question": "Giấy phép lao động còn thời hạn bị mất thì có được cấp lại không và hồ sơ xin cấp lại giấy phép lao động gồm những gì?",
+    "gold_articles": ["12", "13"],
+    "gold_chunks": ["ND_219_2025#d12", "ND_219_2025#d13"],
+    "expected_facts": ["được cấp lại", "văn bản đề nghị cấp lại", "xác nhận của công an hoặc giải trình lý do mất", "02 ảnh màu 4x6"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_05",
+    "domain": "FOREIGN_WORKER",
+    "type": "numeric/deadline",
+    "question": "Thời hạn giải quyết thủ tục cấp lại giấy phép lao động bị mất hoặc hỏng là bao nhiêu ngày làm việc theo Nghị định 219/2025?",
+    "gold_articles": ["13"],
+    "gold_chunks": ["ND_219_2025#d13", "ND_219_2025#d13-k2-b"],
+    "expected_facts": ["03 ngày làm việc", "kể từ ngày nhận đủ hồ sơ hợp lệ"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_06",
+    "domain": "FOREIGN_WORKER",
+    "type": "scenario",
+    "question": "Công ty đổi tên doanh nghiệp nhưng không thay đổi mã số thuế thì giấy phép lao động của các chuyên gia nước ngoài có phải làm thủ tục cấp lại không?",
+    "gold_articles": ["12", "13"],
+    "gold_chunks": ["ND_219_2025#d12", "ND_219_2025#d12-k4"],
+    "expected_facts": ["phải làm thủ tục cấp lại", "đổi tên người sử dụng lao động", "không thay đổi mã số"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_07",
+    "domain": "FOREIGN_WORKER",
+    "type": "scenario",
+    "question": "Giấy phép lao động của tôi sắp hết hạn vào tháng tới, tôi cần đáp ứng điều kiện gì để được gia hạn và giấy phép được gia hạn tối đa mấy lần?",
+    "gold_articles": ["9", "14"],
+    "gold_chunks": ["ND_219_2025#d9", "ND_219_2025#d14"],
+    "expected_facts": ["còn thời hạn ít nhất 05 ngày nhưng không quá 45 ngày", "chấp thuận nhu cầu", "chứng minh tiếp tục làm việc", "gia hạn 01 lần", "tối đa 02 năm"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_08",
+    "domain": "FOREIGN_WORKER",
+    "type": "numeric/deadline",
+    "question": "Thời hạn nộp hồ sơ gia hạn giấy phép lao động là trước bao nhiêu ngày trước khi giấy phép lao động hết hạn và thời gian xử lý là bao lâu?",
+    "gold_articles": ["16"],
+    "gold_chunks": ["ND_219_2025#d16", "ND_219_2025#d16-k1", "ND_219_2025#d16-k2"],
+    "expected_facts": ["ít nhất 05 ngày làm việc nhưng không quá 45 ngày", "thời hạn giải quyết 05 ngày làm việc"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_09",
+    "domain": "FOREIGN_WORKER",
+    "type": "exact",
+    "question": "Hồ sơ đề nghị gia hạn giấy phép lao động theo Nghị định 219/2025 gồm những giấy tờ gì?",
+    "gold_articles": ["15"],
+    "gold_chunks": ["ND_219_2025#d15", "ND_219_2025#d15-k1"],
+    "expected_facts": ["văn bản đề nghị gia hạn", "02 ảnh màu", "giấy phép lao động đã cấp", "giấy khám sức khỏe", "giấy tờ chứng minh tiếp tục làm việc"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_10",
+    "domain": "FOREIGN_WORKER",
+    "type": "exact",
+    "question": "Những trường hợp nào giấy phép lao động của người nước ngoài bị chấm dứt hiệu lực và phải thu hồi?",
+    "gold_articles": ["17"],
+    "gold_chunks": ["ND_219_2025#d17", "ND_219_2025#d17-k1"],
+    "expected_facts": ["hết thời hạn", "chấm dứt hợp đồng lao động", "nội dung HĐLĐ không đúng", "bị trục xuất", "doanh nghiệp chấm dứt hoạt động", "bị thu hồi do vi phạm"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_11",
+    "domain": "FOREIGN_WORKER",
+    "type": "scenario",
+    "question": "Sau khi chấm dứt hợp đồng lao động với chuyên gia nước ngoài, trong thời hạn bao lâu người sử dụng lao động phải thu hồi và nộp lại giấy phép lao động?",
+    "gold_articles": ["17"],
+    "gold_chunks": ["ND_219_2025#d17", "ND_219_2025#d17-k2"],
+    "expected_facts": ["trong thời hạn 03 ngày làm việc", "kể từ ngày hết hiệu lực", "nộp lại cho cơ quan có thẩm quyền"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_12",
+    "domain": "FOREIGN_WORKER",
+    "type": "colloquial",
+    "question": "Sếp nước ngoài sang công ty hỗ trợ kỹ thuật có dưới 90 ngày trong năm thì có cần làm giấy phép lao động không và cần báo trước mấy ngày?",
+    "gold_articles": ["5", "7"],
+    "gold_chunks": ["ND_219_2025#d5", "ND_219_2025#d7", "ND_219_2025#d7-k3"],
+    "expected_facts": ["dưới 90 ngày trong 01 năm dương lịch", "không thuộc diện cấp giấy phép lao động", "miễn giải trình"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_13",
+    "domain": "FOREIGN_WORKER",
+    "type": "exact",
+    "question": "Thủ tục báo cáo giải trình nhu cầu sử dụng lao động nước ngoài theo Nghị định 219/2025 có phải làm riêng trước như quy định cũ không?",
+    "gold_articles": ["5"],
+    "gold_chunks": ["ND_219_2025#d5", "ND_219_2025#d5-k2"],
+    "expected_facts": ["không phải làm thủ tục riêng", "tích hợp đồng thời trong hồ sơ đề nghị cấp GPLĐ", "Mẫu số 03"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_14",
+    "domain": "FOREIGN_WORKER",
+    "type": "numeric/deadline",
+    "question": "Doanh nghiệp phải thông báo tuyển dụng người lao động Việt Nam vào vị trí dự kiến tuyển lao động nước ngoài trước ít nhất bao nhiêu ngày?",
+    "gold_articles": ["6"],
+    "gold_chunks": ["ND_219_2025#d6", "ND_219_2025#d6-k2"],
+    "expected_facts": ["trước ít nhất 15 ngày", "Cổng thông tin việc làm hoặc Cổng Dịch vụ công quốc gia"],
+    "is_procedural": true
+  },
+  {
+    "id": "FW_PROC_15",
+    "domain": "FOREIGN_WORKER",
+    "type": "scenario",
+    "question": "Doanh nghiệp có trụ sở tại Hà Nội nhưng cử người lao động nước ngoài làm việc tại chi nhánh ở Đà Nẵng và TP.HCM thì nộp hồ sơ xin cấp GPLĐ ở đâu?",
+    "gold_articles": ["4"],
+    "gold_chunks": ["ND_219_2025#d4", "ND_219_2025#d4-k3"],
+    "expected_facts": ["nơi người sử dụng lao động đặt trụ sở chính", "Hà Nội", "UBND cấp tỉnh hoặc cơ quan được phân cấp"],
+    "is_procedural": true
+  }
+]

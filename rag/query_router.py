@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 import re
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 import unicodedata
 
 
@@ -89,14 +89,38 @@ class QueryRouter:
         "nd 219": "219/2025/NĐ-CP",
         "lao động nước ngoài": "219/2025/NĐ-CP",
         "giấy phép lao động": "219/2025/NĐ-CP",
+        # Phase 5H Wave 2 Document Aliases:
+        "58/vbhn": "58/VBHN-VPQH",
+        "58/vbhn-vpqh": "58/VBHN-VPQH",
+        "luật bảo hiểm xã hội": "58/VBHN-VPQH",
+        "luật bhxh": "58/VBHN-VPQH",
+        "nghị định 158": "158/2025/NĐ-CP",
+        "nd 158": "158/2025/NĐ-CP",
+        "nghị định 159": "159/2025/NĐ-CP",
+        "nd 159": "159/2025/NĐ-CP",
+        "thông tư 12": "12/2025/TT-BNV",
+        "tt 12": "12/2025/TT-BNV",
+        "nghị định 176": "176/2025/NĐ-CP",
+        "nd 176": "176/2025/NĐ-CP",
+        "luật 84": "84/2015/QH13",
+        "luật an toàn vệ sinh lao động": "84/2015/QH13",
+        "luật atvslđ": "84/2015/QH13",
+        "nghị định 39": "39/2016/NĐ-CP",
+        "nd 39": "39/2016/NĐ-CP",
+        "04/vbhn": "04/VBHN-BNV",
+        "04/vbhn-bnv": "04/VBHN-BNV",
+        "05/vbhn": "05/VBHN-BNV",
+        "05/vbhn-bnv": "05/VBHN-BNV",
+        "06/vbhn": "06/VBHN-BNV",
+        "06/vbhn-bnv": "06/VBHN-BNV",
     }
 
     # Phase 5G Domain Signal Groups
     RETIREMENT_SIGNALS = [
-        "nghỉ hưu", "tuổi nghỉ hưu", "hưu trí", "tuổi hưu", "bao giờ được nghỉ hưu",
+        "nghỉ hưu", "tuổi nghỉ hưu", "tuổi hưu", "bao giờ được nghỉ hưu",
         "khi nào được nghỉ hưu", "bao giờ nghỉ hưu", "khi nào nghỉ hưu", "nghỉ hưu sớm",
         "lộ trình nghỉ hưu", "lộ trình tăng tuổi hưu", "nghề nặng nhọc nghỉ hưu",
-        "suy giảm khả năng lao động nghỉ hưu", "thời điểm nghỉ hưu", "thời điểm hưởng lương hưu",
+        "suy giảm khả năng lao động nghỉ hưu", "thời điểm nghỉ hưu",
         "135/2020", "nghị định 135", "nd 135",
     ]
 
@@ -117,6 +141,36 @@ class QueryRouter:
         "thời hạn giấy phép lao động", "gia hạn giấy phép lao động", "cấp lại giấy phép lao động",
         "thu hồi giấy phép lao động", "người hàn quốc", "người trung quốc", "người nhật", "người mỹ",
         "người nước ngoài làm việc tại việt nam", "nghị định 219", "nd 219", "219/2025",
+    ]
+
+    # Phase 5H Wave 2 Domain Signal Groups
+    SOCIAL_INSURANCE_SIGNALS = [
+        "bảo hiểm xã hội", "bhxh", "bhxh bắt buộc", "bhxh tự nguyện", "rút bhxh",
+        "bhxh một lần", "rút một lần", "rút bảo hiểm một lần", "thai sản", "nghỉ thai sản",
+        "sinh con", "ốm đau", "chế độ ốm đau", "nghỉ ốm", "tiền ốm đau", "lương hưu",
+        "tỷ lệ lương hưu", "điều kiện hưởng lương hưu", "tử tuất", "mai táng phí",
+        "tuất hàng tháng", "tuất một lần", "sổ bhxh", "mức đóng bhxh", "đóng bhxh",
+        "58/vbhn", "nghị định 158", "nghị định 159", "thông tư 12", "158/2025",
+        "159/2025", "12/2025", "nghị định 176", "176/2025", "hưu trí xã hội",
+        "trợ cấp hưu trí xã hội",
+    ]
+
+    OCCUPATIONAL_SAFETY_SIGNALS = [
+        "an toàn lao động", "vệ sinh lao động", "an toàn, vệ sinh lao động", "atvslđ",
+        "trang thiết bị bảo hộ", "phương tiện bảo vệ cá nhân", "huấn luyện an toàn",
+        "huấn luyện an toàn vệ sinh lao động", "khám sức khỏe định kỳ", "điều kiện an toàn",
+        "nghĩa vụ an toàn", "quyền an toàn", "luật 84", "84/2015", "nghị định 39", "39/2016",
+        "từ chối làm việc", "từ chối tiếp tục làm việc", "nguy cơ đe dọa tính mạng", "đe dọa trực tiếp đến tính mạng",
+        "nguy cơ sạt lở", "sạt lở", "rời khỏi nơi làm việc", "rời khỏi khu vực", "nguy cơ tai nạn",
+    ]
+
+    OCCUPATIONAL_ACCIDENT_SIGNALS = [
+        "tai nạn lao động", "tnlđ", "tnld", "bệnh nghề nghiệp", "bnn", "tnlđ-bnn",
+        "bị tai nạn tại", "tai nạn khi đang làm", "tai nạn trên đường", "máy ép vào tay",
+        "ngã giàn giáo", "điều trị tai nạn", "bồi thường tai nạn", "trợ cấp tai nạn",
+        "suy giảm khả năng lao động", "giám định y khoa", "chi phí y tế tai nạn",
+        "quỹ bảo hiểm tai nạn", "mức đóng quỹ tai nạn", "04/vbhn", "05/vbhn", "06/vbhn",
+        "04/vbhn-bnv", "05/vbhn-bnv", "06/vbhn-bnv",
     ]
 
     # Semantic keyword groups for labor law intent analysis
@@ -253,30 +307,125 @@ class QueryRouter:
                 scope_tier="core",
             )
 
-        # 0B. Domain & Status-Aware Classification (Phase 5G)
-        is_retirement = any(k in norm_query for k in self.RETIREMENT_SIGNALS)
-        is_unemployment = any(k in norm_query for k in self.UNEMPLOYMENT_SIGNALS)
-        is_foreign = any(k in norm_query for k in self.FOREIGN_WORKER_SIGNALS)
-        is_core_severance_or_notice = any(k in norm_query for k in ["thôi việc", "trợ cấp thôi việc", "trợ cấp mất việc", "báo trước", "đơn phương"])
+        # 0B. Domain & Status-Aware Classification (Phase 5G & Phase 5H)
+        has_accident = any(k in norm_query for k in self.OCCUPATIONAL_ACCIDENT_SIGNALS) or any(k in norm_query for k in [
+            "tai nạn", "bị tai nạn", "tnlđ", "tnld", "bệnh nghề nghiệp", "suy giảm khả năng lao động", "knlđ", "suy giảm knlđ", "quy chuẩn an toàn"
+        ])
+        has_safety = (any(k in norm_query for k in self.OCCUPATIONAL_SAFETY_SIGNALS) or "an toàn vệ sinh" in norm_query) and not has_accident
+        has_social_ins = any(k in norm_query for k in self.SOCIAL_INSURANCE_SIGNALS) or any(k in norm_query for k in [
+            "bảo hiểm xã hội", "bhxh", "thai sản", "nghỉ sinh", "ốm đau", "hưu trí xã hội", "rút một lần", "mai táng"
+        ])
+        has_unemployment = any(k in norm_query for k in self.UNEMPLOYMENT_SIGNALS)
+        has_retirement = (any(k in norm_query for k in self.RETIREMENT_SIGNALS) or "135/2020" in norm_query) and not ("đóng bhxh" in norm_query or "năm đóng" in norm_query)
+        has_foreign = any(k in norm_query for k in self.FOREIGN_WORKER_SIGNALS)
+        has_core_labor = any(k in norm_query for k in [
+            "chấm dứt hợp đồng", "chấm dứt hđlđ", "hết hạn hợp đồng", "hết hạn hđlđ",
+            "sa thải", "bồi thường hợp đồng", "đơn phương", "thôi việc", "mất việc",
+            "trợ cấp thôi việc", "trợ cấp mất việc", "hợp đồng lao động", "hợp đồng lao động mới",
+            "thử việc", "ca đêm", "nghỉ không hưởng lương", "công ty trả lương",
+            "công ty có phải trả lương", "thuế thu nhập cá nhân", "thuế tncn"
+        ])
 
-        is_cross_domain = is_unemployment and is_core_severance_or_notice
+        # Distinguish retirement age/timing (ND 135) from pension eligibility/contributions (BHXH)
+        is_retirement_timing = any(k in norm_query for k in [
+            "tuổi nghỉ hưu", "tuổi hưu", "lộ trình nghỉ hưu", "lộ trình tăng tuổi hưu",
+            "thời điểm nghỉ hưu", "thời điểm hưởng lương hưu", "135/2020", "nghị định 135", "nd 135", "nghỉ hưu sớm"
+        ])
+        if is_retirement_timing and not any(k in norm_query for k in ["đóng bhxh", "mức đóng", "năm đóng", "bhxh tự nguyện", "rút một lần", "thai sản", "ốm đau"]):
+            has_social_ins = False
+            has_retirement = True
+
+        # Dual-intent / Cross-domain conditions:
+        is_cross_domain = False
+        target_domains = []
+
+        # 1. Unemployment + (Social Insurance or Core Labor or Foreign)
+        if has_unemployment and (has_social_ins or has_core_labor or has_foreign):
+            is_cross_domain = True
+            target_domains = ["UNEMPLOYMENT_INSURANCE"]
+            if has_social_ins:
+                target_domains.append("SOCIAL_INSURANCE")
+            if has_core_labor:
+                target_domains.append("CORE_LABOR")
+            if has_foreign:
+                target_domains.append("FOREIGN_WORKER")
+
+        # 2. Accident + (Core Labor or distinct Social Insurance)
+        elif has_accident and (
+            "công ty trả gì và bhxh" in norm_query
+            or "công ty phải trả gì và bhxh" in norm_query
+            or ("công ty" in norm_query and "bhxh giải quyết" in norm_query)
+            or ("công ty" in norm_query and "bảo hiểm giải quyết" in norm_query)
+            or "qua đời do tai nạn" in norm_query
+            or "chết do tai nạn" in norm_query
+            or "tai nạn giao thông" in norm_query
+            or "ca đêm" in norm_query
+            or "hết hạn hợp đồng" in norm_query
+        ):
+            is_cross_domain = True
+            target_domains = ["OCCUPATIONAL_ACCIDENT_DISEASE", "CORE_LABOR"]
+            if has_social_ins:
+                target_domains.append("SOCIAL_INSURANCE")
+
+        # 3. Social Insurance + Core Labor
+        elif has_social_ins and (
+            "công ty trả lương hay bhxh" in norm_query
+            or "công ty trả hay bhxh" in norm_query
+            or "công ty có phải trả lương" in norm_query
+            or "công ty trả tiền trợ cấp thôi việc" in norm_query
+            or "hợp đồng lao động mới" in norm_query
+            or "chăm sóc vợ sinh mổ" in norm_query
+            or "thuế thu nhập cá nhân" in norm_query
+            or "thuế tncn" in norm_query
+            or "nghỉ không hưởng lương" in norm_query
+            or ("thử việc" in norm_query and ("bhxh" in norm_query or "bảo hiểm" in norm_query))
+            or (("chấm dứt" in norm_query or "sa thải" in norm_query) and ("thai sản" in norm_query or "mang thai" in norm_query or "ốm đau" in norm_query or "bhxh" in norm_query or "hưu" in norm_query or "135" in norm_query))
+        ):
+            is_cross_domain = True
+            target_domains = ["SOCIAL_INSURANCE", "CORE_LABOR"]
+
+        # 4. Retirement Age + BHXH
+        elif has_retirement and ("đóng bhxh" in norm_query or "chấm dứt hợp đồng" in norm_query or "hợp đồng" in norm_query):
+            is_cross_domain = True
+            target_domains = ["RETIREMENT", "SOCIAL_INSURANCE", "CORE_LABOR"]
+
+        # 5. Occupational Safety Refusal / Hazard + Core Labor Discipline / Rights
+        elif (has_safety or any(k in norm_query for k in ["từ chối làm việc", "đe dọa tính mạng", "sạt lở", "nguy cơ tai nạn"])) and (
+            has_core_labor or any(k in norm_query for k in ["kỷ luật", "khiển trách", "cắt thưởng", "xét thưởng", "phạt tiền", "cắt lương", "quyền của người lao động", "quyền người lao động"])
+        ):
+            is_cross_domain = True
+            target_domains = ["OCCUPATIONAL_SAFETY", "CORE_LABOR"]
 
         if is_cross_domain:
             detected_domain = "CROSS_DOMAIN"
-            target_domains = ["CORE_LABOR", "UNEMPLOYMENT_INSURANCE"]
-            scope_tier = "extended"
+            scope_tier = "extended_wave2"
             target_status = "CURRENT"
-        elif is_retirement:
+        elif has_accident:
+            detected_domain = "OCCUPATIONAL_ACCIDENT_DISEASE"
+            target_domains = ["OCCUPATIONAL_ACCIDENT_DISEASE"]
+            scope_tier = "extended_wave2"
+            target_status = "CURRENT"
+        elif has_safety:
+            detected_domain = "OCCUPATIONAL_SAFETY"
+            target_domains = ["OCCUPATIONAL_SAFETY"]
+            scope_tier = "extended_wave2"
+            target_status = "PARTIALLY_EFFECTIVE"
+        elif has_social_ins:
+            detected_domain = "SOCIAL_INSURANCE"
+            target_domains = ["SOCIAL_INSURANCE"]
+            scope_tier = "extended_wave2"
+            target_status = "CURRENT"
+        elif has_retirement:
             detected_domain = "RETIREMENT"
             target_domains = ["RETIREMENT"]
             scope_tier = "extended"
             target_status = "PARTIALLY_EFFECTIVE"
-        elif is_unemployment:
+        elif has_unemployment:
             detected_domain = "UNEMPLOYMENT_INSURANCE"
             target_domains = ["UNEMPLOYMENT_INSURANCE"]
             scope_tier = "extended"
             target_status = "CURRENT"
-        elif is_foreign:
+        elif has_foreign:
             detected_domain = "FOREIGN_WORKER"
             target_domains = ["FOREIGN_WORKER"]
             scope_tier = "extended"
@@ -310,16 +459,20 @@ class QueryRouter:
         is_special = any(k in norm_query for k in self.SPECIAL_OCCUPATION_SIGNALS)
         is_probation = any(k in norm_query for k in self.PROBATION_SIGNALS)
 
-        # Exclusions for termination notice: annual leave cashout, salary advance, severance pay
+        # Exclusions for termination notice: annual leave cashout, salary advance, severance pay, social insurance / medical leave
         is_leave_cashout = any(k in norm_query for k in ["phép", "ngày nghỉ", "chưa nghỉ", "nghỉ hàng năm", "nghỉ hằng năm"])
         is_wage_advance = any(k in norm_query for k in ["tạm ứng", "nghĩa vụ công dân"])
         is_severance = any(k in norm_query for k in ["trợ cấp thôi việc", "trợ cấp mất việc"])
+        is_benefit_leave = any(k in norm_query for k in [
+            "thai sản", "sinh con", "ốm đau", "con ốm", "tai nạn", "hưởng chế độ", "dưỡng sức", "chế độ bhxh", "chế độ bảo hiểm"
+        ])
 
         is_termination = (
             any(k in norm_query for k in self.TERMINATION_NOTICE_SIGNALS)
             and not is_leave_cashout
             and not is_wage_advance
             and not is_severance
+            and not is_benefit_leave
         )
 
         intent = None

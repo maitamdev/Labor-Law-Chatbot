@@ -18,7 +18,7 @@ from typing import Any, Dict, List, Optional, Set, Union
 
 from pydantic import BaseModel, Field
 
-from rag.evidence_mapper import EvidenceMapper, EvidenceMappingResult
+from rag.evidence_mapper import CitationSanitizer, EvidenceMapper, EvidenceMappingResult
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +69,23 @@ def format_answer_markdown(text: str) -> str:
     t = re.sub(r"(###+\s+[^\n]+)\n(?!\n)", r"\1\n\n", t)
 
     # 5. Clean up advice line if it starts with "Lời khuyên"
-    t = re.sub(r"(?m)^(Lời khuyên(?: cho [^:\n]+?)?\s*(?::|là|:?\s*[-–—]))\s*", r"💡 **\1** ", t)
+    t = re.sub(r"(?m)^(Lời khuyên(?: cho [^:\n]+?)?\s*(?::|là|:?\s*[-–—]))\s*", r"**\1** ", t)
+
+    # 5b. Strip emoji characters (safety net: LLM may still generate them)
+    # Remove common emoji ranges: Emoticons, Dingbats, Symbols, Transport, Misc
+    t = re.sub(
+        r"[\U0001F300-\U0001F9FF"   # Misc Symbols, Emoticons, etc.
+        r"\U00002600-\U000027BF"     # Misc symbols, Dingbats
+        r"\U0000FE00-\U0000FE0F"     # Variation Selectors
+        r"\U0000200D"                # Zero Width Joiner
+        r"\U00002702-\U000027B0"     # Dingbats
+        r"\U0000E000-\U0000F8FF"     # Private Use Area
+        r"\U0001FA00-\U0001FA6F"     # Chess Symbols
+        r"\U0001FA70-\U0001FAFF"     # Symbols Extended-A
+        r"]+",
+        "",
+        t,
+    )
 
     # 6. Clean up excess newlines (max 2 consecutive newlines)
     t = re.sub(r"\n{3,}", "\n\n", t)
@@ -113,6 +129,7 @@ class ValidatedResponse(BaseModel):
     abstain_reason: Optional[str] = None
     is_fully_grounded: bool = True
     raw_evidence_validity: float = 1.0
+    phantom_citations: List[str] = Field(default_factory=list)
 
 
 class OutputValidator:
@@ -128,8 +145,127 @@ class OutputValidator:
         "Câu hỏi của bạn nằm ngoài phạm vi tư vấn của hệ thống."
     )
 
+    @staticmethod
+    def synthesize_answer_from_findings(findings: List[LegalFinding]) -> str:
+        """Synthesizes structured Markdown advisory from discrete legal findings when top-level answer is missing or raw JSON."""
+        if not findings:
+            return ""
+        sections: List[str] = []
+        for idx, f in enumerate(findings, 1):
+            f_issue = (f.issue or "").strip()
+            f_conclusion = (f.finding or "").strip()
+            if not f_conclusion:
+                continue
+
+            # Add clean Markdown heading if issue exists
+            if f_issue:
+                heading = f"### {f_issue}" if not f_issue.startswith("#") else f_issue
+                sections.append(f"{heading}\n{f_conclusion}")
+            else:
+                sections.append(f"### Vấn đề {idx}\n{f_conclusion}")
+
+        return "\n\n".join(sections).strip()
+
+    @staticmethod
+    def _extract_balanced_bracket(text: str, start_char: str = "[", end_char: str = "]") -> str:
+        """Extracts text between balanced brackets, correctly handling nested brackets and quotes."""
+        start_pos = text.find(start_char)
+        if start_pos == -1:
+            return ""
+        depth = 0
+        in_str = False
+        escape = False
+        for i in range(start_pos, len(text)):
+            ch = text[i]
+            if escape:
+                escape = False
+                continue
+            if ch == "\\":
+                escape = True
+                continue
+            if ch == '"':
+                in_str = not in_str
+                continue
+            if not in_str:
+                if ch == start_char:
+                    depth += 1
+                elif ch == end_char:
+                    depth -= 1
+                    if depth == 0:
+                        return text[start_pos : i + 1]
+        return text[start_pos:]
+
+    @classmethod
+    def _repair_and_extract_llm_json(cls, text: str) -> Dict[str, Any]:
+        """Robust multi-pattern recovery for malformed LLM JSON.
+        Handles:
+        1. Unescaped double quotes inside strings (e.g. quoting statutory articles).
+        2. Truncated output (e.g. generation limit reached before closing quotes/braces).
+        3. Raw unescaped control characters inside string values.
+        """
+        data: Dict[str, Any] = {}
+
+        # 1. Extract answer field
+        ans_start = re.search(r'"(?:answer|noi_dung|ket_qua)"\s*:\s*"', text)
+        if ans_start:
+            rem = text[ans_start.end():]
+            next_key_match = re.search(
+                r'"\s*,\s*"(?:findings|legal_findings|evidence_ids|supporting_evidence|needs_clarification|out_of_scope|clarification_question)"',
+                rem,
+            )
+            if next_key_match:
+                extracted_ans = rem[: next_key_match.start()]
+            else:
+                last_brace = rem.rfind("}")
+                if last_brace != -1:
+                    cand = rem[:last_brace].rstrip()
+                    if cand.endswith('"'):
+                        cand = cand[:-1]
+                    extracted_ans = cand
+                else:
+                    extracted_ans = rem.rstrip('"\n\r\t ')
+
+            extracted_ans = extracted_ans.replace('\\"', '"').replace('\\n', '\n').replace('\\t', '\t')
+            data["answer"] = extracted_ans.strip()
+
+        # 2. Extract findings array
+        findings_key = re.search(r'"(?:findings|legal_findings)"\s*:\s*(\[)', text)
+        if findings_key:
+            findings_raw = cls._extract_balanced_bracket(text[findings_key.start(1):], "[", "]")
+            if findings_raw:
+                try:
+                    data["findings"] = json.loads(findings_raw, strict=False)
+                except Exception:
+                    f_objs = re.findall(
+                        r'\{\s*"issue"\s*:\s*"([^"]*)"\s*,\s*"conclusion"\s*:\s*"([^"]*)"(?:\s*,\s*"evidence_ids"\s*:\s*(\[[^\]]*\]))?\s*\}',
+                        findings_raw,
+                    )
+                    repaired_f = []
+                    for iss, conc, eids in f_objs:
+                        try:
+                            e_list = json.loads(eids) if eids else []
+                        except Exception:
+                            e_list = [f"E{m}" for m in re.findall(r"E(\d+)", eids or "")]
+                        repaired_f.append({"issue": iss, "conclusion": conc, "evidence_ids": e_list})
+                    if repaired_f:
+                        data["findings"] = repaired_f
+
+        # 3. Extract flags
+        if re.search(r'"needs_clarification"\s*:\s*true', text, re.IGNORECASE):
+            data["needs_clarification"] = True
+            cq_m = re.search(r'"clarification_question"\s*:\s*"([^"]*)"', text)
+            if cq_m:
+                data["clarification_question"] = cq_m.group(1)
+        elif re.search(r'"needs_clarification"\s*:\s*false', text, re.IGNORECASE):
+            data["needs_clarification"] = False
+
+        if re.search(r'"out_of_scope"\s*:\s*true', text, re.IGNORECASE):
+            data["out_of_scope"] = True
+
+        return data
+
     def parse_llm_json(self, raw_text: str) -> LegalAnswer:
-        """Parses LLM generation into LegalAnswer, handling optional markdown formatting and alternate keys."""
+        """Parses LLM generation into LegalAnswer, handling optional markdown formatting, duplicate keys, and missing answers."""
         if not raw_text or not raw_text.strip():
             return LegalAnswer(
                 answer=self.STANDARD_ABSTAIN_MSG,
@@ -154,21 +290,40 @@ class OutputValidator:
         if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
             text = text[start_idx : end_idx + 1]
 
+        def _custom_pairs_hook(pairs: List[tuple]) -> Dict[str, Any]:
+            """Aggregates duplicate keys like multiple 'findings' or 'issue' blocks at root level."""
+            d: Dict[str, Any] = {}
+            all_findings: List[Any] = []
+            for k, v in pairs:
+                if k in ("findings", "legal_findings"):
+                    if isinstance(v, list):
+                        all_findings.extend(v)
+                    elif isinstance(v, dict):
+                        all_findings.append(v)
+                elif k in d and isinstance(d[k], list) and isinstance(v, list):
+                    d[k].extend(v)
+                else:
+                    d[k] = v
+            if all_findings:
+                d["findings"] = all_findings
+            return d
+
         try:
-            data = json.loads(text)
+            try:
+                data = json.loads(text, object_pairs_hook=_custom_pairs_hook, strict=False)
+            except Exception:
+                try:
+                    data = json.loads(text, strict=False)
+                except Exception as ex_strict:
+                    logger.info(f"Standard json.loads failed ({ex_strict}). Attempting robust recovery for LLM JSON...")
+                    data = self._repair_and_extract_llm_json(text)
+                    if not data or (not data.get("answer") and not data.get("findings")):
+                        raise ex_strict
+
             if not isinstance(data, dict):
                 return LegalAnswer(answer=str(data), cited_chunk_ids=[], abstain=False)
 
-            # Answer extraction
-            if "answer" not in data or not data["answer"]:
-                if "ket_qua" in data:
-                    data["answer"] = str(data["ket_qua"])
-                elif "noi_dung" in data:
-                    data["answer"] = str(data["noi_dung"])
-                else:
-                    data["answer"] = text
-
-            # Parse findings
+            # Parse findings first so we can synthesize answer if needed
             raw_findings = data.get("findings") or data.get("legal_findings") or []
             parsed_findings: List[LegalFinding] = []
             collected_eids: List[str] = []
@@ -181,8 +336,8 @@ class OutputValidator:
                         f_eids = f_item.get("evidence_ids") or f_item.get("supporting_evidence") or f_item.get("supporting_chunk_ids") or []
                         if isinstance(f_eids, str):
                             f_eids = [f_eids]
-                        
-                        clean_eids = [str(e).strip().strip("[]") for e in f_eids]
+
+                        clean_eids = [str(e).strip().strip("[]") for e in f_eids if str(e).strip()]
                         collected_eids.extend(clean_eids)
 
                         parsed_findings.append(
@@ -195,11 +350,41 @@ class OutputValidator:
                         )
             data["findings"] = parsed_findings
 
+            # Answer extraction & defensive validation
+            raw_ans = data.get("answer")
+            if not raw_ans:
+                if "ket_qua" in data:
+                    raw_ans = str(data["ket_qua"])
+                elif "noi_dung" in data:
+                    raw_ans = str(data["noi_dung"])
+
+            # Check if answer is missing or is raw JSON (e.g., model put JSON string inside answer)
+            needs_synthesis = False
+            if not raw_ans or not str(raw_ans).strip():
+                needs_synthesis = True
+            else:
+                s_ans = str(raw_ans).strip()
+                if (s_ans.startswith("{") and s_ans.endswith("}")) or (
+                    s_ans.startswith("{") and ('"findings"' in s_ans or '"issue"' in s_ans or '"conclusion"' in s_ans)
+                ):
+                    needs_synthesis = True
+
+            if needs_synthesis:
+                if parsed_findings:
+                    data["answer"] = self.synthesize_answer_from_findings(parsed_findings)
+                else:
+                    if not text.strip().startswith("{"):
+                        data["answer"] = text
+                    else:
+                        data["answer"] = self.STANDARD_ABSTAIN_MSG
+            else:
+                data["answer"] = str(raw_ans)
+
             # Merge top-level evidence_ids or supporting_evidence if provided
             top_eids = data.get("evidence_ids") or data.get("supporting_evidence") or []
             if isinstance(top_eids, str):
                 top_eids = [top_eids]
-            collected_eids.extend([str(e).strip().strip("[]") for e in top_eids])
+            collected_eids.extend([str(e).strip().strip("[]") for e in top_eids if str(e).strip()])
 
             # Extract any [En] tokens mentioned in raw text
             text_eids = re.findall(r"\[?E(\d+)\]?", raw_text, re.IGNORECASE)
@@ -221,8 +406,22 @@ class OutputValidator:
         except Exception as e:
             logger.warning(f"Failed to parse LLM JSON: {e}. Raw text snippet: {text[:200]}")
             text_eids = [f"E{m}" for m in re.findall(r"\[?E(\d+)\]?", raw_text, re.IGNORECASE)]
+
+            # Defensive answer fallback: extract answer or conclusions if raw_text is JSON
+            fallback_ans = text
+            if fallback_ans.strip().startswith("{"):
+                ans_m = re.search(r'"(?:answer|noi_dung|ket_qua)"\s*:\s*"(.*?)(?:",\s*"|\}\s*$)', text, re.DOTALL)
+                if ans_m:
+                    fallback_ans = ans_m.group(1).replace('\\"', '"').replace('\\n', '\n')
+                else:
+                    conclusions = re.findall(r'"(?:conclusion|finding|ket_luan)":\s*"([^"]+)"', fallback_ans)
+                    if conclusions:
+                        fallback_ans = "\n\n".join(conclusions)
+                    else:
+                        fallback_ans = self.STANDARD_ABSTAIN_MSG
+
             return LegalAnswer(
-                answer=text,
+                answer=fallback_ans,
                 evidence_ids=text_eids,
                 abstain=False,
             )
@@ -254,7 +453,7 @@ class OutputValidator:
 
             # Check document match
             if expected_doc_id is not None:
-                exp_doc = str(expected_doc_id).strip()
+                exp_doc = expected_doc_id.strip()
                 if exp_doc not in c_doc and exp_doc not in c_doc_no:
                     continue
 
@@ -268,13 +467,13 @@ class OutputValidator:
                     continue
 
             # Check point match if specified
-            if expected_point is not None and str(expected_point).strip():
+            if expected_point is not None and expected_point.strip():
                 # Equivalence: In BLLĐ 2019 Điều 107 Khoản 2, Point b is the substantive provision for
                 # daily overtime limits (Point a is employee consent). If benchmark expected point a for daily limit,
                 # recognize Point b as satisfying the requirement.
-                if c_art == "107" and c_cl == "2" and {c_pt.lower(), str(expected_point).strip().lower()} == {"a", "b"}:
+                if c_art == "107" and c_cl == "2" and {c_pt.lower(), expected_point.strip().lower()} == {"a", "b"}:
                     pass
-                elif c_pt.lower() != str(expected_point).strip().lower():
+                elif c_pt.lower() != expected_point.strip().lower():
                     continue
 
             return True
@@ -397,7 +596,7 @@ class OutputValidator:
         # Fallback path: If model emitted raw chunk IDs instead of En tokens
         if not valid_cids and legal_answer.cited_chunk_ids:
             for cid in legal_answer.cited_chunk_ids:
-                clean_cid = str(cid).strip()
+                clean_cid = cid.strip()
                 if clean_cid in available_chunk_ids and clean_cid in chunk_registry:
                     if clean_cid not in valid_cids:
                         valid_cids.append(clean_cid)
@@ -469,7 +668,7 @@ class OutputValidator:
 
         if needs_clarification and clarification_question:
             if clarification_question not in final_answer:
-                final_answer += f"\n\n👉 Để tư vấn chính xác nhất cho trường hợp của bạn, vui lòng cho biết thêm: {clarification_question}"
+                final_answer += f"\n\nĐể tư vấn chính xác nhất cho trường hợp của bạn, vui lòng cho biết thêm: {clarification_question}"
 
         # Replace technical tokens like [E1], (E1) with user-friendly statutory citations
         if evidence_mapper:
@@ -483,6 +682,36 @@ class OutputValidator:
                 if f.finding:
                     f.finding = re.sub(r"\[\s*E\d+\s*\]|\(\s*E\d+\s*\)", "", f.finding)
 
+        # Phase 5H.3: CitationSanitizer - Enforce Backend-Owned Citations
+        allowed_articles: Set[str] = set()
+        for cid in valid_cids:
+            meta = chunk_registry.get(cid, {})
+            art = meta.get("article_number")
+            if art is not None:
+                allowed_articles.add(str(art).strip())
+        for cid in available_chunk_ids:
+            meta = chunk_registry.get(cid, {})
+            art = meta.get("article_number")
+            if art is not None:
+                allowed_articles.add(str(art).strip())
+
+        sanitized_final, phantoms = CitationSanitizer.sanitize(
+            text=final_answer,
+            allowed_article_numbers=allowed_articles,
+            evidence_mapper=evidence_mapper,
+        )
+        final_answer = sanitized_final
+        phantom_list = [p.raw_reference for p in phantoms]
+
+        for f in findings:
+            if f.finding:
+                f_sanitized, _ = CitationSanitizer.sanitize(
+                    text=f.finding,
+                    allowed_article_numbers=allowed_articles,
+                    evidence_mapper=evidence_mapper,
+                )
+                f.finding = f_sanitized
+
         # Apply clean Markdown paragraph formatting defensively
         final_answer = format_answer_markdown(final_answer)
         raw_answer = format_answer_markdown(raw_answer)
@@ -492,7 +721,6 @@ class OutputValidator:
 
         if formatted_citations:
             final_answer = final_answer.rstrip() + "\n\n" + formatted_citations.strip()
-
 
         return ValidatedResponse(
             raw_answer=raw_answer,
@@ -507,4 +735,5 @@ class OutputValidator:
             abstain_reason=None,
             is_fully_grounded=len(rejected_cids) == 0 and (len(valid_cids) > 0 or needs_clarification),
             raw_evidence_validity=raw_validity,
+            phantom_citations=phantom_list,
         )

@@ -66,9 +66,61 @@ class QueryExpander:
         (["không trả lương tháng cuối", "chậm trả lương tháng cuối", "thanh toán tiền lương khi chấm dứt", "trả lương tháng cuối", "lương tháng cuối"],
          "trách nhiệm của hai bên khi chấm dứt hợp đồng lao động thanh toán đầy đủ các khoản tiền trong thời hạn 14 ngày Điều 48"),
 
-        # Article 10 NĐ 12/2022: Penalties for probation violations
-        (["thử việc quá thời gian quy định bị phạt", "yêu cầu thử việc quá thời gian"],
-         "xử phạt hành vi yêu cầu thử việc quá thời gian quy định Điều 10 Nghị định 12/2022"),
+        # Unemployment Insurance: Illegal termination
+        (["tự ý nghỉ việc không báo trước", "đơn phương chấm dứt trái luật có được lấy bảo hiểm thất nghiệp", "đơn phương chấm dứt trái luật có được", "nghỉ việc trái luật bảo hiểm thất nghiệp"],
+         "điều kiện hưởng trợ cấp thất nghiệp không áp dụng đối với người lao động đơn phương chấm dứt hợp đồng lao động trái pháp luật Điều 85 Luật Việc làm"),
+
+        # Article 6k2c, 60, 61, 62, 40k3: Vocational Training & Training Costs
+        (["đào tạo nâng cao trình độ", "đào tạo lại", "duy trì, chuyển đổi nghề nghiệp", "kỹ năng nghề", "kế hoạch hằng năm và dành kinh phí cho việc đào tạo", "trách nhiệm đào tạo của người sử dụng lao động", "duy trì chuyển đổi nghề nghiệp", "kế hoạch đào tạo nghề"],
+         "đào tạo đào tạo lại bồi dưỡng nâng cao trình độ kỹ năng nghề duy trì chuyển đổi nghề nghiệp Điều 6 Khoản 2 Điểm c Điều 60 Điều 61 Bộ luật Lao động"),
+        (["cam kết làm việc sau đào tạo", "chưa hết cam kết", "hoàn trả chi phí đào tạo", "chi phí cử đi học", "nghỉ việc sau đào tạo", "chuyển sang làm cho công ty khác khi chưa hết cam kết", "xử lý chi phí đào tạo", "chuyển sang công ty khác sau đào tạo", "chưa hết thời hạn cam kết"],
+         "hợp đồng đào tạo nghề thời hạn cam kết làm việc hoàn trả chi phí đào tạo Điều 62 Điều 40 Khoản 3 Bộ luật Lao động"),
+
+        # =========================================================================
+        # Wave 2: Social Insurance (58/VBHN-VPQH & Implementing Decrees)
+        # =========================================================================
+        (["nghỉ ốm 10 ngày", "ốm đau 10 ngày", "nghỉ ốm được bao nhiêu"],
+         "mức hưởng chế độ ốm đau 75% mức tiền lương đóng BHXH tháng liền kề chia cho 24 ngày Điều 28"),
+        (["nghỉ việc do ốm đau nửa tháng", "nghỉ ốm nửa tháng"],
+         "nghỉ việc hưởng trợ cấp ốm đau từ 14 ngày làm việc trở lên trong tháng không phải đóng BHXH Điều 28"),
+        (["đóng bhxh 7 tháng rồi nghỉ sinh", "đóng bhxh 7 tháng", "nghỉ sinh có được thai sản không"],
+         "điều kiện hưởng chế độ thai sản đóng BHXH từ đủ 06 tháng trở lên trong thời gian 12 tháng trước khi sinh con Điều 31"),
+        (["nghỉ sinh con 6 tháng", "lương bình quân 6 tháng đóng bhxh", "nhận tổng bao nhiêu tiền thai sản"],
+         "mức hưởng chế độ thai sản 100% mức bình quân tiền lương 6 tháng và trợ cấp một lần 2 lần mức tham chiếu Điều 38 Điều 39"),
+        (["đóng bhxh 18 năm có được rút một lần", "đóng bhxh 18 năm"],
+         "bảo hiểm xã hội một lần sau 12 tháng không tiếp tục đóng BHXH và chưa đủ 20 năm đóng Điều 60"),
+        (["3 năm đóng trước 2014 và 7 năm đóng từ năm 2014", "rút bhxh một lần được bao nhiêu"],
+         "mức hưởng bảo hiểm xã hội một lần 1.5 tháng mức bình quân trước 2014 và 2.0 tháng từ 2014 Điều 60"),
+        (["vừa có thời gian đóng bhxh bắt buộc vừa có thời gian đóng bhxh tự nguyện", "bắt buộc vừa tự nguyện"],
+         "thời gian đóng BHXH bắt buộc và tự nguyện được cộng dồn Điều 74 Điều 6 Nghị định 159/2025"),
+        (["trợ cấp mai táng", "mai táng phí"],
+         "trợ cấp mai táng bằng 10 lần mức tham chiếu Điều 66"),
+        (["trợ cấp tuất hàng tháng", "tuất hằng tháng"],
+         "mức trợ cấp tuất hằng tháng đối với mỗi thân nhân bằng 50% mức tham chiếu Điều 67 Điều 69"),
+        (["trợ cấp hưu trí xã hội", "hưu trí xã hội"],
+         "trợ cấp hưu trí xã hội từ đủ 75 tuổi trở lên Nghị định 176/2025"),
+
+        # =========================================================================
+        # Wave 2: Occupational Safety & Accident/Disease (Luật 84 & 04, 05, 06/VBHN)
+        # =========================================================================
+        (["tai nạn trên đường đi làm về", "tai nạn trên đường đi và về", "tai nạn giao thông khi đi từ công ty về nhà"],
+         "tai nạn trên tuyến đường đi và về từ nơi ở đến nơi làm việc trong khoảng thời gian và tuyến đường hợp lý Điều 45"),
+        (["máy ép vào tay trong ca làm việc", "máy ép vào tay", "đứt lìa một ngón tay"],
+         "trách nhiệm của người sử dụng lao động đối với người lao động bị tai nạn lao động trả viện phí và tiền lương điều trị bồi thường Điều 38"),
+        (["suy giảm 25% khả năng lao động", "suy giảm 25%"],
+         "bồi thường tai nạn lao động 1.5 + (P - 10) x 0.4 tháng tiền lương Điều 38 trợ cấp một lần Quỹ TNLĐ Điều 48"),
+        (["vi phạm quy chuẩn an toàn bị tai nạn", "lỗi của chính người lao động", "lỗi hoàn toàn do người lao động"],
+         "tai nạn do lỗi của người lao động trợ cấp ít nhất 40% mức bồi thường Điều 39"),
+        (["trả nguyên lương trong thời gian điều trị tai nạn", "nguyên lương trong thời gian điều trị"],
+         "trả đủ tiền lương theo hợp đồng lao động trong thời gian điều trị tai nạn lao động Điều 38"),
+        (["nghỉ dưỡng sức, phục hồi sức khỏe sau tai nạn", "dưỡng sức phục hồi sức khỏe sau tai nạn"],
+         "nghỉ dưỡng sức phục hồi sức khỏe sau khi điều trị thương tật Điều 52"),
+        (["mức đóng vào quỹ bảo hiểm tai nạn lao động", "mức đóng quỹ bảo hiểm tai nạn", "mức đóng quỹ tnld"],
+         "mức đóng vào Quỹ bảo hiểm tai nạn lao động bệnh nghề nghiệp 0.5% hoặc 0.3% Điều 2 Điều 3 Văn bản hợp nhất 05/VBHN-BNV"),
+        (["văn bản hợp nhất 06/vbhn-bnv", "06/vbhn-bnv"],
+         "chế độ đối với người lao động bị tai nạn lao động bệnh nghề nghiệp Văn bản hợp nhất 06/VBHN-BNV"),
+        (["văn bản hợp nhất 04/vbhn-bnv", "04/vbhn-bnv"],
+         "bảo hiểm tai nạn lao động bệnh nghề nghiệp bắt buộc Văn bản hợp nhất 04/VBHN-BNV"),
     ]
 
     def expand(self, query: str) -> str:
