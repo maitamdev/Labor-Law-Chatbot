@@ -432,62 +432,15 @@ CHẾ ĐỘ HƯU TRÍ VÀ TỬ TUẤT
 # ==============================================================================
 # 4. THÔNG TƯ 12/2025/TT-BNV - HƯỚNG DẪN MỘT SỐ CHẾ ĐỘ BHXH BẮT BUỘC
 # ==============================================================================
-TT_12_TEXT = """BỘ NỘI VỤ
--------
-
-CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
-Độc lập - Tự do - Hạnh phúc
----------------
-
-Số: 12/2025/TT-BNV
-
-Hà Nội, ngày 30 tháng 6 năm 2025
-
-THÔNG TƯ
-Quy định chi tiết và hướng dẫn thi hành một số điều của Luật Bảo hiểm xã hội về bảo hiểm xã hội bắt buộc
-
-Căn cứ Luật Bảo hiểm xã hội ngày 20 tháng 11 năm 2014 và Luật sửa đổi, bổ sung một số điều của Luật Bảo hiểm xã hội;
-Căn cứ Nghị định số 158/2025/NĐ-CP ngày 25 tháng 6 năm 2025 của Chính phủ;
-Bộ trưởng Bộ Nội vụ ban hành Thông tư hướng dẫn thực hiện một số chế độ bảo hiểm xã hội bắt buộc.
-
-CHƯƠNG I
-HƯỚNG DẪN CHẾ ĐỘ ỐM ĐAU
-
-Điều 1. Cách tính mức hưởng trợ cấp ốm đau
-1. Mức hưởng trợ cấp ốm đau theo quy định tại khoản 1 Điều 28 Luật Bảo hiểm xã hội được tính theo công thức:
-Mức hưởng trợ cấp ốm đau = (Tiền lương tháng đóng BHXH của tháng liền kề trước khi nghỉ việc / 24 ngày) x 75% x Số ngày nghỉ việc hưởng chế độ ốm đau.
-2. Số ngày nghỉ việc hưởng chế độ ốm đau được tính theo ngày làm việc, không bao gồm ngày nghỉ lễ, nghỉ Tết, ngày nghỉ hằng tuần theo quy định của pháp luật lao động và nội quy của đơn vị.
-3. Trường hợp người lao động bị ốm đau dài ngày theo danh mục của Bộ Y tế, từ ngày thứ 181 trở đi mức hưởng được tính theo tỷ lệ 65%, 55% hoặc 50% theo quy định tại khoản 2 Điều 28 Luật Bảo hiểm xã hội và được tính cả ngày nghỉ lễ, Tết, nghỉ hằng tuần.
-
-Điều 2. Chế độ dưỡng sức, phục hồi sức khỏe sau ốm đau
-1. Trong khoảng thời gian 30 ngày đầu làm việc kể từ ngày hết thời hạn hưởng chế độ ốm đau (cả đợt ốm thông thường hoặc ốm dài ngày), nếu sức khỏe chưa phục hồi thì người lao động được nghỉ dưỡng sức, phục hồi sức khỏe.
-2. Mức hưởng chế độ dưỡng sức sau ốm đau một ngày = 30% x Mức lương cơ sở (hoặc mức tham chiếu).
-3. Thời gian nghỉ dưỡng sức tối đa 10 ngày (đối với bệnh dài ngày), 07 ngày (do phẫu thuật) và 05 ngày (trường hợp khác).
-
-CHƯƠNG II
-HƯỚNG DẪN CHẾ ĐỘ THAI SẢN
-
-Điều 3. Mức hưởng chế độ thai sản khi sinh con
-1. Mức hưởng trợ cấp thai sản một tháng của lao động nữ sinh con bằng 100% mức bình quân tiền lương tháng đóng bảo hiểm xã hội của 06 tháng trước khi nghỉ việc.
-2. Tổng số tiền trợ cấp thai sản trong 06 tháng nghỉ sinh con = Mức bình quân tiền lương tháng đóng BHXH 6 tháng x 6 tháng.
-3. Ngoài trợ cấp thai sản hằng tháng, lao động nữ sinh con được nhận Trợ cấp một lần khi sinh con bằng 02 lần mức lương cơ sở (hoặc mức tham chiếu) cho mỗi con sinh ra.
-4. Trường hợp sinh con nhưng chỉ có cha tham gia bảo hiểm xã hội và đáp ứng đủ điều kiện đóng từ đủ 06 tháng trong 12 tháng trước khi sinh con thì cha được hưởng trợ cấp một lần bằng 02 lần mức lương cơ sở cho mỗi con.
-
-Điều 4. Cách tính ngày nghỉ thai sản của lao động nam khi vợ sinh con
-1. Mức trợ cấp một ngày của lao động nam khi nghỉ chăm vợ sinh con được tính bằng:
-Mức trợ cấp 1 ngày = (Tiền lương tháng đóng BHXH của tháng liền kề trước khi nghỉ việc / 24 ngày) x Số ngày được nghỉ theo quy định tại khoản 2 Điều 34 Luật Bảo hiểm xã hội.
-2. Thời gian nghỉ hưởng chế độ của lao động nam được tính theo ngày làm việc, trong vòng 30 ngày đầu kể từ ngày vợ sinh con.
-
-Điều 5. Dưỡng sức, phục hồi sức khỏe sau thai sản
-1. Lao động nữ sau thời gian nghỉ hết chế độ thai sản quy định, trong vòng 30 ngày đầu làm việc mà sức khỏe chưa hồi phục thì được nghỉ dưỡng sức sau thai sản từ 05 đến 10 ngày.
-2. Mức hưởng một ngày bằng 30% mức lương cơ sở.
-
-CHƯƠNG III
-ĐIỀU KHOẢN THI HÀNH
-
-Điều 6. Hiệu lực thi hành
-Thông tư này có hiệu lực thi hành kể từ ngày 01 tháng 7 năm 2025.
-"""
+TT_12_OFFICIAL_TEXT_PATH = (
+    SI_DIR / "04_12_2025_TT_BNV_Huong_Dan_BHXH.txt"
+)
+if not TT_12_OFFICIAL_TEXT_PATH.exists():
+    raise FileNotFoundError(
+        "Missing official TT 12/2025 text. Run scripts/refresh_tt12_official.py first; "
+        "the previous embedded six-article summary was not the full legal text."
+    )
+TT_12_TEXT = TT_12_OFFICIAL_TEXT_PATH.read_text(encoding="utf-8")
 
 # ==============================================================================
 # 5. NGHỊ ĐỊNH 176/2025/NĐ-CP - TRỢ CẤP HƯU TRÍ XÃ HỘI
@@ -920,12 +873,12 @@ DOCUMENTS = [
     },
     {
         "doc_id": "TT_12_2025",
-        "title": "Thông tư 12/2025/TT-BNV hướng dẫn chế độ bảo hiểm xã hội bắt buộc",
+        "title": "Thông tư 12/2025/TT-BNV quy định chi tiết một số điều của Luật Bảo hiểm xã hội về bảo hiểm xã hội bắt buộc",
         "document_number": "12/2025/TT-BNV",
         "document_type": "Thông tư",
         "domain": "SOCIAL_INSURANCE",
         "scope_tier": "extended_wave2",
-        "official_url": "https://moha.gov.vn/van-ban/12-2025-tt-bnv.html",
+        "official_url": "https://xaydungchinhsach.chinhphu.vn/toan-van-thong-tu-12-2025-tt-bnv-quy-dinh-chi-tiet-mot-so-dieu-cua-luat-bhxh-ve-bhxh-bat-buoc-11925070415595016.htm",
         "issued_date": "2025-06-30",
         "effective_from": "2025-07-01",
         "effective_to": "",
@@ -1071,7 +1024,7 @@ OFFICIAL_TOTALS = {
     "VBHN_58_2025": 141,
     "ND_158_2025": 52,
     "ND_159_2025": 32,
-    "TT_12_2025": 28,
+    "TT_12_2025": 21,
     "ND_176_2025": 16,
     "L_84_2015": 93,
     "ND_39_2016": 42,
@@ -1170,4 +1123,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
