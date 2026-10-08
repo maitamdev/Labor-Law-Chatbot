@@ -297,3 +297,21 @@ def test_provenance_and_metadata():
     assert c.text_source_url == "https://vbpl.vn"
     assert c.extraction_timestamp == "2026-09-11T00:00:00Z"
     assert c.status == "Còn hiệu lực"
+
+
+def test_bld_2019_article_139_superscript_is_not_clause_number():
+    page = PageText(
+        doc_id="VBHN_18_2026",
+        filename="01_18_VBHN_VPQH_2026.pdf",
+        page_number=1,
+        text=(
+            "Điều 139. Nghỉ thai sản\n"
+            "1.44 Lao động nữ được nghỉ thai sản trước và sau khi sinh con là 06 tháng.\n"
+            "2. Trong thời gian nghỉ thai sản, lao động nữ được hưởng chế độ theo luật."
+        ),
+    )
+    chunks = LegalParser({"doc_id": "VBHN_18_2026"}).parse_pages([page])
+    clause_one = next(chunk for chunk in chunks if chunk.chunk_id.endswith("#d139-k1"))
+    assert clause_one.clause_number == "1"
+    assert "1. Lao động nữ" in clause_one.content
+    assert "1.44 Lao động nữ" not in clause_one.content
