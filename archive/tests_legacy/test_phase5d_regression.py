@@ -192,6 +192,7 @@ def test_statutory_bridge_enforcement():
 # ==============================================================================
 # 5. End-to-End Zero Phantom Citations Guarantee
 # ==============================================================================
+@pytest.mark.ollama
 def test_zero_phantom_citations_end_to_end():
     chain = VietLaborRAGChain()
     chain.memory.clear()
