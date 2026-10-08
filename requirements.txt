@@ -1,13 +1,21 @@
 requests>=2.31.0
 pymupdf>=1.24.0
 pydantic>=2.0.0
+langchain-core>=1.0.0,<2.0.0
+langchain-ollama>=1.0.0,<2.0.0
 pytest>=8.0.0
 chromadb>=0.4.0
 sentence-transformers>=3.0.0
 bm25s>=0.1.10
 pyvi>=0.1.1
 underthesea>=6.0.0
-streamlit>=1.35.0
+streamlit>=1.51.0
 torch>=2.0.0
 beautifulsoup4>=4.12.0
+PyYAML>=6.0.0
 deepeval>=1.0.0
+neo4j>=5.15.0
+
+
+# Safe markdown rendering in the approved interactive UI
+markdown-it-py>=3.0.0
