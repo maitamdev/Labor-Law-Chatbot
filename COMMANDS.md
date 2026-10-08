@@ -13,7 +13,7 @@ Nếu máy đã cài sẵn môi trường và đã tải model Ollama, bạn ch�
 .\.venv\Scripts\Activate.ps1
 
 # 2. Khởi chạy giao diện Web (Streamlit)
-streamlit run ui/streamlit_app.py
+python -m app.main
 ```
 > Trình duyệt sẽ tự động mở trang web tại địa chỉ: `http://localhost:8501`
 
@@ -52,11 +52,14 @@ ollama list
 
 ### 3.2. Tải và chạy mô hình ngôn ngữ khuyến nghị
 ```powershell
-# Mô hình chuẩn mặc định của dự án:
-ollama run qwen2.5:7b
+# Mô hình chuẩn mặc định của dự án (khớp với config/settings.py):
+ollama pull qwen2.5:7b-instruct-q4_0
 
-# Hoặc mô hình chuyên xuất JSON và định dạng:
-ollama run qwen2.5-coder:7b
+# Đã có sẵn qwen2.5:7b? Hệ thống tự dùng bản Qwen 2.5 7B đã cài (có cảnh báo trong log).
+
+# Dùng mô hình khác (ví dụ qwen2.5-coder:7b) thì chỉ định qua biến môi trường:
+ollama pull qwen2.5-coder:7b
+$env:OLLAMA_MODEL="qwen2.5-coder:7b"
 ```
 
 ---
@@ -65,11 +68,12 @@ ollama run qwen2.5-coder:7b
 
 ### 4.1. Giao diện Web (Streamlit UI)
 ```powershell
-streamlit run ui/streamlit_app.py
+python -m app.main
 ```
 *Tùy chọn chỉ định cổng nếu cổng 8501 bị chiếm:*
 ```powershell
-streamlit run ui/streamlit_app.py --server.port 8502
+$env:VIETLABOR_PORT=8502
+python -m app.main
 ```
 
 ### 4.2. Giao diện Chat trực tiếp trong Terminal (CLI)
@@ -107,22 +111,39 @@ python scripts/run_ingestion.py
 ### 5.3. Kiểm tra tính hợp lệ của dữ liệu đã xử lý
 ```powershell
 python scripts/validate_processed_data.py
+
+# Đồng bộ và xác minh Chroma index với corpus production
+python scripts/sync_index_v3.py
 ```
 
 ### 5.4. Xây dựng chỉ mục tìm kiếm (BM25 + ChromaDB)
 ```powershell
 # Xây dựng cả 2 chỉ mục (BM25 và Chroma Vectorstore)
-python scripts/build_index.py
+python scripts/build_index_v3.py
 
 # Bắt buộc xây dựng lại từ đầu (Force Rebuild)
-python scripts/build_index.py --force
+python scripts/build_index_v3.py --force
 
 # Chỉ xây dựng lại chỉ mục BM25
-python scripts/build_index.py --target bm25 --force
+python scripts/build_index_v3.py --target bm25 --force
 
 # Chỉ xây dựng lại chỉ mục Vector ChromaDB
-python scripts/build_index.py --target chroma --force
+python scripts/build_index_v3.py --target chroma
 ```
+
+Chroma được đồng bộ tăng dần và có thể tiếp tục sau khi bị ngắt. Trong lúc
+chưa đồng bộ xong, chatbot dùng chỉ mục BM25 đã cập nhật và không đọc vector
+cũ hoặc thiếu. Để kiểm tra riêng bộ 1.000 câu:
+
+```powershell
+python scripts/prepare_qa_bank.py
+python scripts/audit_qa_bank.py --bank data/evaluation/labor_qa_corrected.jsonl --report data/evaluation/labor_qa_audit.json
+python scripts/semantic_review_qa_bank.py --limit 50
+```
+
+Lệnh cuối tạo hàng đợi rà soát bằng Ollama và tự tiếp tục từ dòng chưa chạy.
+Nhãn PASS/FAIL/UNCLEAR của model chỉ là gợi ý; đối chiếu văn bản gốc trước khi
+sửa Sheet hoặc đưa đáp án vào dữ liệu huấn luyện.
 
 ---
 
@@ -137,45 +158,39 @@ pytest
 *Chạy hiển thị chi tiết tên từng bài test:*
 ```powershell
 pytest -v
+
+# Bao gồm các bài end-to-end cần Ollama đang chạy
+pytest --run-ollama
 ```
 
 ### 6.2. Chạy từng nhóm bài kiểm thử cụ thể
 ```powershell
-# Kiểm thử giao diện và định dạng Markdown (xuống dòng, tiêu đề)
-pytest tests/test_ui_service.py tests/test_format_markdown.py
+# Kiểm thử 15 ca chuẩn theo Rubric Đại học (Fast Unit Tests)
+pytest tests/test_rubric_15_cases.py -v
 
-# Kiểm thử chống ảo giác trích dẫn (Zero Phantom Citations)
-pytest tests/test_phase5d_regression.py
+# Kiểm thử trải nghiệm hội thoại thực tế (Colloquial & Edge Cases)
+pytest tests/test_chatbot_experience.py -v
 
-# Kiểm thử bộ chọn căn cứ pháp lý then chốt (Evidence Selector)
-pytest tests/test_phase5e_evidence_selector.py
+# Kiểm thử giao diện và tương tác UI
+pytest tests/test_ui_service.py -v
 
-# Kiểm thử hồi quy các giai đoạn trước
-pytest tests/test_phase5b_regression.py tests/test_phase5c_regression.py
+# Kiểm thử toàn diện RAG Chain & Ingestion
+pytest tests/test_chain.py tests/test_ingestion.py
 ```
 
 ---
 
 ## 📊 7. Đánh Giá & Đo Đạc Hiệu Năng (Benchmark & Evaluation)
 
-### 7.1. Đánh giá chất lượng truy hồi (Retrieval Benchmark)
+### 7.1. Chạy đánh giá toàn diện 15 ca kiểm thử theo Rubric Chấm điểm Đại học (Mục IV & Tiêu chí E2)
 ```powershell
-python evaluation/benchmark_phase5c_retrieval.py
+python scripts/run_rubric_evaluation.py
 ```
+> Kết quả đánh giá chi tiết và tỷ lệ đạt sẽ được tự động xuất ra file Markdown tại: `reports/rubric_15_test_cases.md`.
 
-### 7.2. Đánh giá chất lượng sinh văn bản & độ chính xác trích dẫn (Generation Benchmark)
+### 7.2. Đánh giá chất lượng truy hồi và cắt giảm độ trễ (Ablation Benchmark)
 ```powershell
-python evaluation/benchmark_phase5d_generation.py
-```
-
-### 7.3. Đánh giá kịch bản thực tế phức tạp (Real-World Benchmark)
-```powershell
-python evaluation/benchmark_phase5f_realworld.py
-```
-
-### 7.4. Kiểm thử các tình huống thực tế mẫu
-```powershell
-python scripts/test_real_cases.py
+python scripts/evaluate_ablation.py
 ```
 
 ---
@@ -186,5 +201,5 @@ python scripts/test_real_cases.py
 | :--- | :--- | :--- |
 | **`Execution_Policies` khi bật `.venv`** | Windows chặn chạy script PowerShell chưa ký | Chạy lệnh: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` |
 | **`ConnectionRefusedError` hoặc lỗi kết nối Ollama** | Ollama chưa được bật trên máy | Mở ứng dụng Ollama hoặc chạy lệnh: `ollama serve` |
-| **`Model 'qwen2.5:7b' not found`** | Chưa tải mô hình về máy | Chạy lệnh: `ollama pull qwen2.5:7b` |
+| **`Ollama model 'qwen2.5:7b-instruct-q4_0' is not installed`** | Chưa tải mô hình Qwen 2.5 7B nào về máy | Chạy lệnh: `ollama pull qwen2.5:7b-instruct-q4_0` hoặc đặt `OLLAMA_MODEL` sang mô hình đã cài |
 | **Lỗi cổng `8501` bị chiếm khi chạy Streamlit** | Tiến trình Streamlit cũ chưa tắt | Đổi cổng: `streamlit run ui/streamlit_app.py --server.port 8502` |
