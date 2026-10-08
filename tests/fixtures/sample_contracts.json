@@ -1,0 +1,16 @@
+[
+  {
+    "id": "contract_indefinite_sample",
+    "contract_type": "không xác định thời hạn",
+    "salary_vnd": 18000000,
+    "probation_days": 60,
+    "position": "Kỹ sư phần mềm"
+  },
+  {
+    "id": "contract_definite_1yr_sample",
+    "contract_type": "xác định thời hạn 12 tháng",
+    "salary_vnd": 12000000,
+    "probation_days": 30,
+    "position": "Chuyên viên nhân sự"
+  }
+]
