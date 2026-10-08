@@ -11,7 +11,9 @@ import re
 import unicodedata
 from typing import Any, Dict, List, Optional
 
-from rag.chain import VietLaborRAGChain, ChainExecutionResult
+from config.metadata_registry import get_verified_metadata
+from rag.chain import VietLaborRAGChain, ChainExecutionResult, StageCallback, TokenCallback
+from rag.conversational import detect_smalltalk
 from rag.evidence_mapper import CitationSanitizer
 from rag.output_validator import format_answer_markdown
 
@@ -19,17 +21,39 @@ logger = logging.getLogger(__name__)
 
 # Canonical Official Document URLs for Vietnam Labor Law
 OFFICIAL_DOC_URLS = {
-    "VBHN_18_2026": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Bo-luat-Lao-dong-2019-333670.aspx",
-    "18/VBHN-VPQH": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Bo-luat-Lao-dong-2019-333670.aspx",
-    "45/2019/QH14": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Bo-luat-Lao-dong-2019-333670.aspx",
-    "ND_145_2020": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-145-2020-ND-CP-huong-dan-Bo-luat-Lao-dong-ve-dieu-kien-lao-dong-quan-he-lao-dong-460987.aspx",
-    "145/2020/NĐ-CP": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-145-2020-ND-CP-huong-dan-Bo-luat-Lao-dong-ve-dieu-kien-lao-dong-quan-he-lao-dong-460987.aspx",
+    "VBHN_18_2026": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-18-vbhn-vpqh-468971.htm",
+    "18/VBHN-VPQH": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-18-vbhn-vpqh-468971.htm",
+    "45/2019/QH14": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-18-vbhn-vpqh-468971.htm",
+    "ND_145_2020": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-145-2020-nd-cp-32732.htm",
+    "145/2020/NĐ-CP": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-145-2020-nd-cp-32732.htm",
     "ND_12_2022": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-12-2022-ND-CP-xu-phat-vi-pham-hanh-chinh-linh-vuc-lao-dong-bao-hiem-xa-hoi-500735.aspx",
     "12/2022/NĐ-CP": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-12-2022-ND-CP-xu-phat-vi-pham-hanh-chinh-linh-vuc-lao-dong-bao-hiem-xa-hoi-500735.aspx",
-    "L_84_2015": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Luat-an-toan-ve-sinh-lao-dong-2015-282436.aspx",
-    "84/2015/QH13": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Luat-an-toan-ve-sinh-lao-dong-2015-282436.aspx",
-    "VBHN_58_2025": "https://thuvienphapluat.vn/van-ban/Bao-hiem/Luat-Bao-hiem-xa-hoi-2014-259711.aspx",
-    "58/VBHN-VPQH": "https://thuvienphapluat.vn/van-ban/Bao-hiem/Luat-Bao-hiem-xa-hoi-2014-259711.aspx",
+    "ND_283_2026": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-283-2026-nd-cp-470103.htm",
+    "283/2026/NĐ-CP": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-283-2026-nd-cp-470103.htm",
+    "L_84_2015": "https://congbao.chinhphu.vn/van-ban/luat-so-84-2015-qh13-15356.htm",
+    "84/2015/QH13": "https://congbao.chinhphu.vn/van-ban/luat-so-84-2015-qh13-15356.htm",
+    "VBHN_58_2025": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-19-vbhn-vpqh-468972.htm",
+    "19/VBHN-VPQH": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-19-vbhn-vpqh-468972.htm",
+}
+
+# Direct HTML Document URLs on Thư Viện Pháp Luật (supports direct #dieu_X anchor auto-scroll)
+TVPL_DOC_URLS = {
+    "VBHN_18_2026": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Bo-Luat-lao-dong-2019-333670.aspx",
+    "18/VBHN-VPQH": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Bo-Luat-lao-dong-2019-333670.aspx",
+    "45/2019/QH14": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Bo-Luat-lao-dong-2019-333670.aspx",
+    "ND_145_2020": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-145-2020-ND-CP-huong-dan-Bo-luat-Lao-dong-ve-dieu-kien-lao-dong-quan-he-lao-dong-459400.aspx",
+    "145/2020/NĐ-CP": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-145-2020-ND-CP-huong-dan-Bo-luat-Lao-dong-ve-dieu-kien-lao-dong-quan-he-lao-dong-459400.aspx",
+    "ND_12_2022": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-12-2022-ND-CP-xu-phat-vi-pham-hanh-chinh-lao-dong-bao-hiem-nguoi-lam-viec-nuoc-ngoai-479312.aspx",
+    "12/2022/NĐ-CP": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-12-2022-ND-CP-xu-phat-vi-pham-hanh-chinh-lao-dong-bao-hiem-nguoi-lam-viec-nuoc-ngoai-479312.aspx",
+    "L_84_2015": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Luat-an-toan-ve-sinh-lao-dong-2015-281961.aspx",
+    "84/2015/QH13": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Luat-an-toan-ve-sinh-lao-dong-2015-281961.aspx",
+    "VBHN_58_2025": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-19-vbhn-vpqh-468972.htm",
+    "58/VBHN-VPQH": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-19-vbhn-vpqh-468972.htm",
+    "19/VBHN-VPQH": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-19-vbhn-vpqh-468972.htm",
+    "TT_10_2020": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Thong-tu-10-2020-TT-BLDTBXH-noi-dung-hop-dong-lao-dong-hoi-dong-thuong-luong-tap-the-458145.aspx",
+    "10/2020/TT-BLĐTBXH": "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Thong-tu-10-2020-TT-BLDTBXH-noi-dung-hop-dong-lao-dong-hoi-dong-thuong-luong-tap-the-458145.aspx",
+    "ND_283_2026": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-283-2026-nd-cp-470103.htm",
+    "283/2026/NĐ-CP": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-283-2026-nd-cp-470103.htm",
 }
 
 # Standard Friendly Titles
@@ -41,11 +65,45 @@ FRIENDLY_DOC_TITLES = {
     "145/2020/NĐ-CP": "Nghị định 145/2020/NĐ-CP",
     "ND_12_2022": "Nghị định 12/2022/NĐ-CP",
     "12/2022/NĐ-CP": "Nghị định 12/2022/NĐ-CP",
+    "ND_283_2026": "Nghị định 283/2026/NĐ-CP",
+    "283/2026/NĐ-CP": "Nghị định 283/2026/NĐ-CP",
     "L_84_2015": "Luật An toàn, vệ sinh lao động 2015",
     "84/2015/QH13": "Luật An toàn, vệ sinh lao động 2015",
     "VBHN_58_2025": "Luật Bảo hiểm xã hội",
     "58/VBHN-VPQH": "Luật Bảo hiểm xã hội",
 }
+
+
+def answer_smalltalk(question: str, has_history: bool = False) -> Optional[Dict[str, Any]]:
+    """Instant UI response for greetings/thanks/identity, or None for real questions.
+
+    Needs no retriever, embedding model or Ollama, so the first "Xin chào" of a
+    session answers immediately instead of waiting for the RAG stack to load.
+    """
+    reply = detect_smalltalk(unicodedata.normalize("NFC", question or ""), has_history=has_history)
+    if reply is None:
+        return None
+    return {
+        "answer": reply.answer,
+        "raw_answer": reply.answer,
+        "final_answer": reply.answer,
+        "findings": [],
+        "citations": [],
+        "needs_clarification": False,
+        "clarification_question": None,
+        "clarification_options": [],
+        "out_of_scope": False,
+        "is_smalltalk": True,
+        "smalltalk_intent": reply.intent,
+        "suggested_followups": list(reply.suggestions),
+        "latency_ms": 0.0,
+        "locked_chunk_ids": [],
+        "graph_expanded_chunk_ids": [],
+        "retrieval_method": "None (Conversational fast-track)",
+        "evidence_coverage": {},
+        "unresolved_issue_ids": [],
+        "is_fully_grounded": True,
+    }
 
 
 class ChatService:
@@ -58,10 +116,51 @@ class ChatService:
         """Clears conversational working memory for a new session."""
         self.chain.memory.clear()
 
-    def ask(self, question: str, update_memory: bool = True) -> Dict[str, Any]:
-        """Executes RAG inference and maps output to clean UI response schema."""
+    def restore_conversation(self, messages: List[Dict[str, Any]]) -> None:
+        """Rebuilds this service's private short-term memory from one chat.
+
+        The UI keeps a separate ChatService per Streamlit session.  Replaying
+        messages here prevents facts from the previously selected conversation
+        from leaking into the newly selected one.
+        """
+        self.chain.memory.clear()
+        pending_user: Optional[str] = None
+        for message in messages:
+            role = str(message.get("role") or "")
+            content = str(message.get("content") or "")
+            if role == "user":
+                if pending_user is not None:
+                    self.chain.memory.add_turn(pending_user, "")
+                pending_user = content
+            elif role == "assistant" and pending_user is not None:
+                if (message.get("structured_data") or {}).get("is_smalltalk"):
+                    pending_user = None  # greetings/thanks carry no legal facts
+                    continue
+                self.chain.memory.add_turn(pending_user, content)
+                pending_user = None
+        if pending_user is not None:
+            self.chain.memory.add_turn(pending_user, "")
+
+    def ask(
+        self,
+        question: str,
+        update_memory: bool = True,
+        on_stage: Optional[StageCallback] = None,
+        on_token: Optional[TokenCallback] = None,
+    ) -> Dict[str, Any]:
+        """Executes RAG inference and maps output to clean UI response schema.
+
+        on_stage / on_token are optional real-time callbacks (see VietLaborRAGChain.run).
+        """
         norm_q = unicodedata.normalize("NFC", question).strip()
-        result: ChainExecutionResult = self.chain.run(norm_q, update_memory=update_memory)
+        result: ChainExecutionResult = self.chain.run(
+            norm_q, update_memory=update_memory, on_stage=on_stage, on_token=on_token,
+        )
+        if result.is_smalltalk:
+            fast = answer_smalltalk(norm_q, has_history=bool(self.chain.memory.history))
+            if fast is not None:
+                fast["latency_ms"] = result.total_latency_ms
+                return fast
 
         val_resp = result.validated_response
         registry = result.formatted_context.chunk_metadata_registry
@@ -93,18 +192,40 @@ class ChatService:
             if len(excerpt) > 400:
                 excerpt = excerpt[:400].strip() + "..."
 
-            source_url = meta.get("source_url") or OFFICIAL_DOC_URLS.get(doc_id) or OFFICIAL_DOC_URLS.get(doc_no) or ""
+            verified_meta = get_verified_metadata(doc_id)
+            source_url = (
+                meta.get("official_source")
+                or meta.get("source_url")
+                or verified_meta.get("official_source")
+                or OFFICIAL_DOC_URLS.get(doc_id)
+                or OFFICIAL_DOC_URLS.get(doc_no)
+                or ""
+            )
+
+            # Deep link directly to the specific article on TVPL (with #dieu_X anchor)
+            tvpl_base = TVPL_DOC_URLS.get(doc_id) or TVPL_DOC_URLS.get(doc_no)
+            deep_link_url = ""
+            if tvpl_base:
+                if art_num is not None and "thuvienphapluat.vn" in tvpl_base:
+                    deep_link_url = f"{tvpl_base}#dieu_{art_num}"
+                else:
+                    deep_link_url = tvpl_base
+            elif source_url:
+                deep_link_url = source_url
 
             enriched_citations.append({
                 "chunk_id": cid,
                 "document_title": doc_title,
                 "document_number": doc_no,
                 "article": str(art_num) if art_num is not None else "",
+                "article_number": str(art_num) if art_num is not None else "",
                 "clause": str(cl_num) if cl_num is not None else "",
+                "clause_number": str(cl_num) if cl_num is not None else "",
                 "point": str(pt) if pt is not None else "",
                 "article_title": art_title,
                 "excerpt": excerpt,
                 "source_url": source_url,
+                "deep_link_url": deep_link_url,
             })
 
         # Build Per-Finding Citations for Compound Issues
@@ -118,9 +239,12 @@ class ChatService:
                     if matching_c:
                         f_cites.append(matching_c)
                 findings_data.append({
+                    "issue_id": f.issue_id or "",
                     "issue": f.issue or "",
                     "text": f.finding,
                     "citations": f_cites,
+                    "grounding_status": f.grounding_status,
+                    "grounding_reason": f.grounding_reason or "",
                 })
 
         # Determine out_of_scope status
@@ -177,7 +301,12 @@ class ChatService:
                     art_str = f"Điều {c['article']}" if c.get('article') else ""
                     cl_str = f"Khoản {c['clause']} " if c.get('clause') else ""
                     doc_str = c.get('document_title') or "Bộ luật Lao động 2019"
-                    return f"{cl_str}{art_str} {doc_str}".strip()
+                    cite_label = f"{cl_str}{art_str} {doc_str}".strip()
+                    start_pos = match.start()
+                    prefix_text = clean_answer[:start_pos].rstrip()
+                    if not prefix_text or prefix_text.endswith(('.', '!', '?', '\n', ':', '-')):
+                        return f"Theo {cite_label},"
+                    return cite_label
             except Exception:
                 pass
             return ""
@@ -206,6 +335,13 @@ class ChatService:
             "suggested_followups": suggested_followups,
             "latency_ms": result.total_latency_ms,
             "locked_chunk_ids": result.locked_chunk_ids,
+            "case_analysis": val_resp.case_analysis,
+            "evidence_coverage": val_resp.evidence_coverage,
+            "unresolved_issue_ids": val_resp.unresolved_issue_ids,
+            "is_fully_grounded": val_resp.is_fully_grounded,
+            "is_smalltalk": False,
+            "retrieval_method": result.retrieval_method,
+            "graph_expanded_chunk_ids": result.graph_expanded_chunk_ids,
         }
 
     def _generate_followups(
@@ -263,6 +399,30 @@ class ChatService:
             ]
 
         # Contextual related questions for regular answers
+        if any(k in q_lower for k in ["nguyên tắc giao kết", "nguyên tắc nền tảng khi giao kết", "giao kết hđlđ dựa trên"]):
+            return [
+                "Người sử dụng lao động phải cung cấp những thông tin gì?",
+                "Người lao động phải cung cấp những thông tin gì?",
+                "Hành vi nào bị cấm khi giao kết HĐLĐ?",
+            ]
+        if any(k in q_lower for k in ["đi làm trước", "vào làm trước", "làm chính thức rồi", "mới ký hđlđ", "chưa ký hợp đồng", "chưa có hợp đồng", "hẹn ký sau", "ký hợp đồng sau"]):
+            return [
+                "Không ký hợp đồng bằng văn bản bị xử phạt thế nào?",
+                "Quyền lợi những ngày làm trước khi ký được tính ra sao?",
+                "Hợp đồng dưới 01 tháng có cần lập thành văn bản không?",
+            ]
+        if any(k in q_lower for k in ["sếp đấm", "sếp đánh", "sếp tát", "hành hung", "đánh đập", "ngược đãi"]):
+            return [
+                "Tôi cần thu thập chứng cứ gì?",
+                "Tôi có được nghỉ việc ngay không cần báo trước?",
+                "Khi nào tôi nên trình báo Công an?",
+            ]
+        if any(k in q_lower for k in ["thỏa thuận công việc", "thoả thuận công việc", "không phải hợp đồng lao động", "giữ giấy tờ", "giấy tờ tùy thân"]):
+            return [
+                "Thủ tục yêu cầu hòa giải tranh chấp tiền công?",
+                "Thời hiệu khởi kiện tranh chấp lao động là bao lâu?",
+                "Mức phạt khi giữ giấy tờ tùy thân của người lao động?",
+            ]
         if any(k in q_lower for k in ["thử việc"]):
             return [
                 "Tiền lương trong thời gian thử việc?",
@@ -275,7 +435,7 @@ class ChatService:
                 "Bao lâu sau khi nghỉ việc thì công ty phải thanh toán tiền?",
                 "Chưa nghỉ hết phép năm có được thanh toán tiền không?",
             ]
-        if any(k in q_lower for k in ["làm thêm", "tăng ca"]):
+        if any(k in q_lower for k in ["làm thêm giờ", "làm thêm ngày", "lương làm thêm", "tiền lương làm thêm", "tăng ca", "làm ngoài giờ"]):
             return [
                 "Làm việc vào ban đêm được trả thêm bao nhiêu %?",
                 "Làm thêm ngày lễ được trả bao nhiêu % lương?",
