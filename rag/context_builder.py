@@ -174,6 +174,7 @@ class ContextBuilder:
         multi_issue_candidates: Optional[Dict[str, List[Dict[str, Any]]]] = None,
         enforce_statutory_bridge: bool = True,
         expand_siblings: bool = True,
+        allow_repealed: bool = False,
     ) -> FormattedContext:
         """Builds organized, compact legal evidence blocks labeled [E1], [E2], ...
         
@@ -301,10 +302,7 @@ class ContextBuilder:
                     if b_chk:
                         canonical_resp_chunks.append((b_chk, target_iid))
                         seen_cids.add(cid)
-                if target_iid in ["issue_1", "I1"]:
-                    selected_chunks = canonical_resp_chunks + [sc for sc in selected_chunks if sc[1] != target_iid]
-                else:
-                    selected_chunks.extend(canonical_resp_chunks)
+                selected_chunks.extend(canonical_resp_chunks)
 
             # 2c. Vocational training contract, commitment & cost refund (Điều 62 + Điều 40k3)
             training_contract_issue_id = None
@@ -360,24 +358,30 @@ class ContextBuilder:
                     seen_cids.add("VBHN_18_2026#d5-k1")
 
             # 2e. Safety Refusal & Discipline / Monetary Fine Bridge
-            has_safety_refusal = any(
-                str((c.get("metadata") or c).get("doc_id", "")) == "L_84_2015" and
-                str((c.get("metadata") or c).get("article_number", "")) == "6"
-                for c, _ in selected_chunks
-            )
-            if has_safety_refusal:
-                # Ensure issue_1 has BOTH L_84_2015#d6-k1-đ AND VBHN_18_2026#d5-k1-d
+            safety_issue_id = next((
+                i_id for c, i_id in selected_chunks
+                if str((c.get("metadata") or c).get("doc_id", "")) == "L_84_2015"
+                and str((c.get("metadata") or c).get("article_number", "")) == "6"
+                and i_id
+            ), None)
+            has_safety_refusal = safety_issue_id is not None
+            if safety_issue_id:
+                # Attach the BLLĐ rights bridge to the issue that actually owns
+                # the safety-refusal provision, regardless of question order.
                 d5_d_chk = self._get_chunk_by_id("VBHN_18_2026#d5-k1-d")
-                if d5_d_chk and not any(c.get("chunk_id") == "VBHN_18_2026#d5-k1-d" and i_id in ["issue_1", "I1"] for c, i_id in selected_chunks):
-                    selected_chunks.insert(0, (d5_d_chk, "issue_1"))
+                if d5_d_chk and not any(c.get("chunk_id") == "VBHN_18_2026#d5-k1-d" and i_id == safety_issue_id for c, i_id in selected_chunks):
+                    selected_chunks.insert(0, (d5_d_chk, safety_issue_id))
                     seen_cids.add("VBHN_18_2026#d5-k1-d")
 
-            has_discipline_issue = any(
-                i_id in ["issue_3", "I3"]
-                for _, i_id in selected_chunks
-            )
-            if has_safety_refusal and has_discipline_issue:
-                target_iid = "issue_3"
+            discipline_issue_id = next((
+                i_id for c, i_id in selected_chunks
+                if i_id and (
+                    str((c.get("metadata") or c).get("article_number", "")) in {"124", "127"}
+                    or any(k in str(c.get("content", "")).lower() for k in ["kỷ luật", "khiển trách", "cắt lương", "phạt tiền"])
+                )
+            ), None)
+            if has_safety_refusal and discipline_issue_id:
+                target_iid = discipline_issue_id
                 discipline_cids = ["VBHN_18_2026#d127-k2", "VBHN_18_2026#d124-k1", "L_84_2015#d6-k1-đ", "L_84_2015#d12-k4"]
                 for cid in discipline_cids:
                     b_chk = self._get_chunk_by_id(cid)
@@ -401,7 +405,7 @@ class ContextBuilder:
                         break
 
             if has_mand_ins:
-                target_iid = mand_ins_issue_id or "issue_1"
+                target_iid = mand_ins_issue_id or "statutory_bridge"
                 # Hard purge d168-k3 from the entire selected_chunks
                 selected_chunks = [
                     (c, i_id) for c, i_id in selected_chunks
@@ -409,7 +413,7 @@ class ContextBuilder:
                 ]
                 seen_cids.discard("VBHN_18_2026#d168-k3")
 
-                mand_cids = ["VBHN_18_2026#d168-k1", "VBHN_58_2025#d2-k1-a", "VBHN_58_2025#d21", "ND_12_2022#d39-k5"]
+                mand_cids = ["VBHN_18_2026#d168-k1", "VBHN_58_2025#d2-k1-a", "VBHN_58_2025#d21", "ND_283_2026#d44-k3"]
                 canonical_mand_chunks = []
                 for cid in mand_cids:
                     existing = next((sc[0] for sc in selected_chunks if sc[0].get("chunk_id") == cid), None)
@@ -439,7 +443,7 @@ class ContextBuilder:
                         break
 
             if has_uninsured_acc:
-                target_iid = uninsured_issue_id or "issue_2"
+                target_iid = uninsured_issue_id or "statutory_bridge"
                 # Hard purge d168-k3 and d45
                 selected_chunks = [
                     (c, i_id) for c, i_id in selected_chunks
@@ -448,7 +452,7 @@ class ContextBuilder:
                 seen_cids.discard("VBHN_18_2026#d168-k3")
                 seen_cids.discard("L_84_2015#d45")
 
-                uninsured_cids = ["L_84_2015#d39-k4", "L_84_2015#d38-k2", "L_84_2015#d38-k3", "L_84_2015#d38-k4", "ND_12_2022#d39-k5"]
+                uninsured_cids = ["L_84_2015#d39-k4", "L_84_2015#d38-k2", "L_84_2015#d38-k3", "L_84_2015#d38-k4", "ND_283_2026#d44-k3"]
                 canonical_uninsured_chunks = []
                 for cid in uninsured_cids:
                     existing = next((sc[0] for sc in selected_chunks if sc[0].get("chunk_id") == cid), None)
@@ -472,14 +476,11 @@ class ContextBuilder:
                 cid = c.get("chunk_id", "")
 
                 if ("kỳ hạn trả lương" in c_text or "d97" in cid) and not wage_schedule_iid:
-                    if i_id in ["issue_1", "I1"]:
-                        wage_schedule_iid = i_id
+                    wage_schedule_iid = i_id
                 if ("chậm trả lương" in c_text or "d97-k4" in cid) and not delayed_wage_iid:
-                    if i_id in ["issue_2", "I2"]:
-                        delayed_wage_iid = i_id
-                if ("khiếu nại" in c_text or "tạm ngừng làm việc" in c_text or "nd_24_2018" in cid.lower() or "d94" in cid) and not complaint_iid:
-                    if i_id in ["issue_3", "I3"]:
-                        complaint_iid = i_id
+                    delayed_wage_iid = i_id
+                if ("khiếu nại" in c_text or "tạm ngừng làm việc" in c_text or "nd_24_2018" in cid.lower()) and not complaint_iid:
+                    complaint_iid = i_id
 
             if wage_schedule_iid or delayed_wage_iid or complaint_iid:
                 # Purge irrelevant chunks like Điều 99 ngừng việc for delayed wage issues
@@ -489,38 +490,143 @@ class ContextBuilder:
                 ]
 
                 # 1. Issue 1: Canonical Article 97 BLLD 2019 (Clauses 1, 2, 3, 4)
-                target_w_iid = wage_schedule_iid or "issue_1"
-                d97_cids = ["VBHN_18_2026#d97-k1", "VBHN_18_2026#d97-k2", "VBHN_18_2026#d97-k3", "VBHN_18_2026#d97-k4"]
-                for cid in d97_cids:
-                    if not any(c.get("chunk_id") == cid and i_id == target_w_iid for c, i_id in selected_chunks):
-                        b_chk = self._get_chunk_by_id(cid)
-                        if b_chk:
-                            selected_chunks.append((b_chk, target_w_iid))
-                            seen_cids.add(cid)
+                if wage_schedule_iid:
+                    target_w_iid = wage_schedule_iid
+                    d97_cids = ["VBHN_18_2026#d97-k1", "VBHN_18_2026#d97-k2", "VBHN_18_2026#d97-k3", "VBHN_18_2026#d97-k4"]
+                    for cid in d97_cids:
+                        if not any(c.get("chunk_id") == cid and i_id == target_w_iid for c, i_id in selected_chunks):
+                            b_chk = self._get_chunk_by_id(cid)
+                            if b_chk:
+                                selected_chunks.append((b_chk, target_w_iid))
+                                seen_cids.add(cid)
 
-                # 2. Issue 2: Remedies for delayed wage: Article 97 Clause 4 + Article 35 Clause 2 Point b + ND 12 Article 17 Clause 2 & Clause 5a
-                target_d_iid = delayed_wage_iid or "issue_2"
-                d_remedy_cids = ["VBHN_18_2026#d97-k4", "VBHN_18_2026#d35-k2-b", "ND_12_2022#d17-k2", "ND_12_2022#d17-k5-a"]
-                for cid in d_remedy_cids:
-                    if not any(c.get("chunk_id") == cid and i_id == target_d_iid for c, i_id in selected_chunks):
-                        b_chk = self._get_chunk_by_id(cid)
-                        if b_chk:
-                            selected_chunks.append((b_chk, target_d_iid))
-                            seen_cids.add(cid)
+                # 2. Delayed-wage remedies. Điều 35k2b belongs to a separate
+                # termination issue when the employee also asks about quitting.
+                if delayed_wage_iid:
+                    target_d_iid = delayed_wage_iid
+                    d_remedy_cids = ["VBHN_18_2026#d97-k4", "ND_283_2026#d23-k2", "ND_283_2026#d23-k5-a"]
+                    for cid in d_remedy_cids:
+                        if not any(c.get("chunk_id") == cid and i_id == target_d_iid for c, i_id in selected_chunks):
+                            b_chk = self._get_chunk_by_id(cid)
+                            if b_chk:
+                                selected_chunks.append((b_chk, target_d_iid))
+                                seen_cids.add(cid)
 
                 # 3. Issue 3: Labour Complaint (Article 94 Clause 1, ND 24/2018 Articles 5, 7, 27, 10, Article 125 Clause 4)
-                target_c_iid = complaint_iid or "issue_3"
-                complaint_cids = ["VBHN_18_2026#d94-k1", "ND_24_2018#d7", "ND_24_2018#d27", "ND_24_2018#d10", "VBHN_18_2026#d125-k4"]
-                for cid in complaint_cids:
-                    if not any(c.get("chunk_id") == cid and i_id == target_c_iid for c, i_id in selected_chunks):
-                        b_chk = self._get_chunk_by_id(cid)
-                        if b_chk:
-                            selected_chunks.append((b_chk, target_c_iid))
-                            seen_cids.add(cid)
+                if complaint_iid:
+                    target_c_iid = complaint_iid
+                    complaint_cids = ["VBHN_18_2026#d94-k1", "ND_24_2018#d7", "ND_24_2018#d27", "ND_24_2018#d10", "VBHN_18_2026#d125-k4"]
+                    for cid in complaint_cids:
+                        if not any(c.get("chunk_id") == cid and i_id == target_c_iid for c, i_id in selected_chunks):
+                            b_chk = self._get_chunk_by_id(cid)
+                            if b_chk:
+                                selected_chunks.append((b_chk, target_c_iid))
+                                seen_cids.add(cid)
 
-            # 2i. De Facto Labor Contract & Prohibited ID Retention Bridge (Điều 13 & Điều 17 BLLĐ 2019)
+            # 2i. Contract-formation principles: Article 15 only.  Article 16
+            # is a separate information-duty issue and is removed here.
+            principles_owner: Optional[str] = None
+            principles_raw_owner: Optional[str] = None
+            for c, i_id in selected_chunks:
+                meta = c.get("metadata") or c
+                if (
+                    str(meta.get("doc_id", "")) == "VBHN_18_2026"
+                    and str(meta.get("article_number", "")) == "15"
+                ):
+                    principles_raw_owner = i_id
+                    principles_owner = i_id or "statutory_bridge"
+                    break
+
+            if principles_owner:
+                selected_chunks = [
+                    (c, i_id) for c, i_id in selected_chunks
+                    if i_id != principles_raw_owner
+                ]
+                for cid in ["VBHN_18_2026#d15-k1", "VBHN_18_2026#d15-k2"]:
+                    b_chk = self._get_chunk_by_id(cid)
+                    if b_chk:
+                        selected_chunks.append((b_chk, principles_owner))
+                        seen_cids.add(cid)
+
+            # 2j. Starting work before signing: lock the timing rule, legal
+            # relationship definition, written form and oral exception.
+            contract_timing_owner: Optional[str] = None
+            contract_timing_raw_owner: Optional[str] = None
+            for c, i_id in selected_chunks:
+                meta = c.get("metadata") or c
+                d_id = str(meta.get("doc_id", ""))
+                a_num = str(meta.get("article_number", ""))
+                cl_num = str(meta.get("clause_number", ""))
+                c_text = str(c.get("content", "")).lower()
+                if d_id == "VBHN_18_2026" and a_num == "13" and cl_num == "2":
+                    contract_timing_raw_owner = i_id
+                    contract_timing_owner = i_id or "statutory_bridge"
+                    break
+
+            if contract_timing_owner:
+                selected_chunks = [
+                    (c, i_id) for c, i_id in selected_chunks
+                    if i_id != contract_timing_raw_owner
+                ]
+                contract_timing_cids = [
+                    "VBHN_18_2026#d13-k2",
+                    "VBHN_18_2026#d13-k1",
+                    "VBHN_18_2026#d14-k1",
+                    "VBHN_18_2026#d14-k2",
+                ]
+                canonical_contract_timing = []
+                for cid in contract_timing_cids:
+                    b_chk = self._get_chunk_by_id(cid)
+                    if b_chk:
+                        canonical_contract_timing.append((b_chk, contract_timing_owner))
+                        seen_cids.add(cid)
+                selected_chunks = canonical_contract_timing + selected_chunks
+
+            # 2k. Workplace violence: replace disciplinary noise with the exact
+            # prohibition, immediate-exit right and administrative sanction.
+            violence_owner: Optional[str] = None
+            violence_raw_owner: Optional[str] = None
+            for c, i_id in selected_chunks:
+                meta = c.get("metadata") or c
+                d_id = str(meta.get("doc_id", ""))
+                a_num = str(meta.get("article_number", ""))
+                cid_str = str(c.get("chunk_id") or "")
+                pt_str = str(meta.get("point") or "").lower()
+                c_text = str(c.get("content", "")).lower()
+                is_violence_rule = (
+                    (d_id == "VBHN_18_2026" and a_num == "8" and any(k in c_text for k in ["ngược đãi", "đánh đập"]))
+                    or (d_id == "VBHN_18_2026" and a_num == "35" and (pt_str == "c" or cid_str.endswith("#d35-k2-c") or "điểm c" in cid_str))
+                    or (d_id == "ND_283_2026" and a_num == "17" and any(k in c_text for k in ["ngược đãi", "đánh đập"]))
+                )
+                if is_violence_rule:
+                    violence_raw_owner = i_id
+                    violence_owner = i_id or "statutory_bridge"
+                    break
+
+            if violence_owner:
+                selected_chunks = [
+                    (c, i_id) for c, i_id in selected_chunks
+                    if i_id != violence_raw_owner
+                ]
+                violence_cids = [
+                    "VBHN_18_2026#d8-k2",
+                    "VBHN_18_2026#d35-k2-c",
+                    "ND_283_2026#d17-k4",
+                    "ND_283_2026#d17-k4-a",
+                    "ND_283_2026#d7-k1",
+                ]
+                canonical_violence_chunks = []
+                for cid in violence_cids:
+                    b_chk = self._get_chunk_by_id(cid)
+                    if b_chk:
+                        canonical_violence_chunks.append((b_chk, violence_owner))
+                        seen_cids.add(cid)
+                selected_chunks = canonical_violence_chunks + selected_chunks
+
+            # 2l. De Facto Labor Contract & Prohibited ID Retention Bridge (Điều 13 & Điều 17 BLLĐ 2019)
             de_facto_contract_iid = None
             prohibited_id_iid = None
+            dispute_procedure_iids: Set[str] = set()
 
             for c, i_id in selected_chunks:
                 c_text = str(c.get("content", "")).lower()
@@ -528,36 +634,118 @@ class ContextBuilder:
                 d_id = str(meta.get("doc_id", ""))
                 a_num = str(meta.get("article_number", ""))
 
-                if ("thỏa thuận bằng tên gọi khác" in c_text or "được coi là hợp đồng lao động" in c_text or (d_id == "VBHN_18_2026" and a_num == "13")) and not de_facto_contract_iid:
-                    de_facto_contract_iid = i_id or "issue_1"
-                if ("giữ bản chính giấy tờ tùy thân" in c_text or "giấy tờ tùy thân" in c_text or (d_id == "VBHN_18_2026" and a_num == "17") or (d_id == "ND_12_2022" and a_num == "9")) and not prohibited_id_iid:
-                    prohibited_id_iid = i_id or "issue_2"
+                if (
+                    not contract_timing_owner
+                    and ("thỏa thuận bằng tên gọi khác" in c_text or "được coi là hợp đồng lao động" in c_text or (d_id == "VBHN_18_2026" and a_num == "13"))
+                    and not de_facto_contract_iid
+                ):
+                    de_facto_contract_iid = i_id or "statutory_bridge"
+                if ("giữ bản chính giấy tờ tùy thân" in c_text or "giấy tờ tùy thân" in c_text or (d_id == "VBHN_18_2026" and a_num == "17") or (d_id == "ND_283_2026" and a_num == "15")) and not prohibited_id_iid:
+                    prohibited_id_iid = i_id or "statutory_bridge"
+                if d_id == "VBHN_18_2026" and a_num in {"188", "190"} and i_id:
+                    dispute_procedure_iids.add(str(i_id))
 
             if de_facto_contract_iid:
                 target_df_iid = de_facto_contract_iid
-                # Hard purge any irrelevant d35 chunks for de facto contract qualification
-                selected_chunks = [
-                    (c, i_id) for c, i_id in selected_chunks
-                    if not (i_id == target_df_iid and str((c.get("metadata") or c).get("doc_id")) == "VBHN_18_2026" and str((c.get("metadata") or c).get("article_number")) in ["35", 35])
-                ]
-                d13_cids = ["VBHN_18_2026#d13-k1", "VBHN_18_2026#d13-k2"]
+                # Replace the issue's noisy retrieval tail with the exact legal
+                # test and, when litigation is asked, the required procedure.
+                selected_chunks = [(c, i_id) for c, i_id in selected_chunks if i_id != target_df_iid]
+                d13_cids = ["VBHN_18_2026#d13-k1"]
+                if str(target_df_iid) in dispute_procedure_iids:
+                    d13_cids.extend([
+                        "VBHN_18_2026#d188-k1",
+                        "VBHN_18_2026#d188-k1-a",
+                        "VBHN_18_2026#d188-k7-b",
+                        "VBHN_18_2026#d190-k3",
+                    ])
                 canonical_df_chunks = []
                 for cid in d13_cids:
                     b_chk = self._get_chunk_by_id(cid)
                     if b_chk:
                         canonical_df_chunks.append((b_chk, target_df_iid))
                         seen_cids.add(cid)
-                selected_chunks = canonical_df_chunks + [sc for sc in selected_chunks if not (sc[1] == target_df_iid and sc[0].get("chunk_id") in d13_cids)]
+                selected_chunks = canonical_df_chunks + selected_chunks
 
             if prohibited_id_iid:
                 target_pid_iid = prohibited_id_iid
-                d17_cids = ["VBHN_18_2026#d17-k1", "VBHN_18_2026#d17-k2", "VBHN_18_2026#d17-k3", "ND_12_2022#d9-k2", "ND_12_2022#d9-k3"]
+                selected_chunks = [(c, i_id) for c, i_id in selected_chunks if i_id != target_pid_iid]
+                d17_cids = [
+                    "VBHN_18_2026#d17-k1",
+                    "ND_283_2026#d15-k2",
+                    "ND_283_2026#d15-k2-a",
+                    "ND_283_2026#d15-k3-d",
+                ]
                 for cid in d17_cids:
-                    if not any(c.get("chunk_id") == cid and i_id == target_pid_iid for c, i_id in selected_chunks):
-                        b_chk = self._get_chunk_by_id(cid)
-                        if b_chk:
-                            selected_chunks.append((b_chk, target_pid_iid))
-                            seen_cids.add(cid)
+                    b_chk = self._get_chunk_by_id(cid)
+                    if b_chk:
+                        selected_chunks.append((b_chk, target_pid_iid))
+                        seen_cids.add(cid)
+
+            # 2m. Misassigned Work & Unlawful Termination Bridge (Điều 35k2a, Điều 29, Điều 40 BLLĐ 2019)
+            misassigned_work_iid = None
+            for c, i_id in selected_chunks:
+                c_text = str(c.get("content", "")).lower()
+                meta = c.get("metadata") or c
+                d_id = str(meta.get("doc_id", ""))
+                a_num = str(meta.get("article_number", ""))
+                cid_str = str(c.get("chunk_id") or "")
+                if (
+                    (d_id == "VBHN_18_2026" and a_num == "29")
+                    or any(k in c_text for k in ["chuyển người lao động làm công việc khác so với hợp đồng", "không được bố trí theo đúng công việc"])
+                ) and not misassigned_work_iid:
+                    misassigned_work_iid = i_id or "statutory_bridge"
+                    break
+
+            if misassigned_work_iid:
+                target_mw_iid = misassigned_work_iid
+                # Filter out noisy chunks for this issue (especially false 30-day notice d35-k1-b or employer exit d36/d41)
+                selected_chunks = [
+                    (c, i_id) for c, i_id in selected_chunks
+                    if not (i_id == target_mw_iid and (c.get("chunk_id") or "") in ["VBHN_18_2026#d35-k1-b", "VBHN_18_2026#d36-k1-b", "VBHN_18_2026#d41-k1"])
+                ]
+                mw_cids = [
+                    "VBHN_18_2026#d35-k2-a",
+                    "VBHN_18_2026#d29-k1",
+                    "VBHN_18_2026#d40-k1",
+                    "VBHN_18_2026#d40-k2",
+                ]
+                canonical_mw_chunks = []
+                for cid in mw_cids:
+                    b_chk = self._get_chunk_by_id(cid)
+                    if b_chk:
+                        canonical_mw_chunks.append((b_chk, target_mw_iid))
+                        seen_cids.add(cid)
+                selected_chunks = canonical_mw_chunks + selected_chunks
+
+        # Fair-share ordering: put the first block of every issue before any
+        # issue receives its second block. This prevents the final issue in a
+        # long scenario from being starved by the character budget.
+        if multi_issue_candidates:
+            issue_order = list(multi_issue_candidates.keys())
+            grouped: Dict[str, List[Tuple[Dict[str, Any], Optional[str]]]] = {
+                issue_id: [] for issue_id in issue_order
+            }
+            ungrouped: List[Tuple[Dict[str, Any], Optional[str]]] = []
+            for item in selected_chunks:
+                if item[1] in grouped:
+                    grouped[str(item[1])].append(item)
+                else:
+                    ungrouped.append(item)
+            fair_order: List[Tuple[Dict[str, Any], Optional[str]]] = []
+            max_depth = max((len(items) for items in grouped.values()), default=0)
+            for depth in range(max_depth):
+                for issue_id in issue_order:
+                    if depth < len(grouped[issue_id]):
+                        fair_order.append(grouped[issue_id][depth])
+            selected_chunks = fair_order + ungrouped
+
+        # Never expose the repealed 12/2022 sanction schedule as present law.
+        # Explicit historical lookups may opt in from the chain.
+        if not allow_repealed:
+            selected_chunks = [
+                item for item in selected_chunks
+                if (item[0].get("metadata") or item[0]).get("doc_id") != "ND_12_2022"
+            ]
 
         # 3. Create Compact Evidence Blocks labeled [E1], [E2], ...
         evidence_blocks: List[EvidenceBlock] = []
@@ -594,6 +782,12 @@ class ContextBuilder:
                 "point": block.point,
                 "source_url": block.source_url,
                 "page_number": block.page_number,
+                "issue_id": issue_id,
+                "status": (chk.get("metadata") or chk).get("status", "CURRENT"),
+                "rule_type": (chk.get("metadata") or chk).get("rule_type", "GENERAL_RULE"),
+                "evidence_roles": (chk.get("metadata") or chk).get("evidence_roles", []),
+                "official_source": (chk.get("metadata") or chk).get("official_source", ""),
+                "content": block.content,
             }
 
             # If block has a parent clause chunk, also register parent in available_ids and registry
