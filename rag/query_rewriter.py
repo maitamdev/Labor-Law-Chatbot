@@ -35,6 +35,9 @@ COLLOQUIAL_LEGAL_MAP: Dict[str, str] = {
     "bầu bì bị đuổi": "đơn phương chấm dứt hợp đồng lao động lao động nữ mang thai nuôi con dưới 12 tháng Điều 137",
     "nghỉ đẻ": "chế độ thai sản thời gian nghỉ thai sản lao động nữ",
     "tai nạn đi làm": "tai nạn lao động bồi thường tai nạn lao động Luật an toàn vệ sinh lao động",
+    "bị té": "tai nạn lao động bị tai nạn ngã chấn thương trong giờ làm việc bồi thường chi phí y tế tiền lương trợ cấp Điều 38 Điều 39 Luật An toàn vệ sinh lao động",
+    "té ngã": "tai nạn lao động bồi thường chi phí y tế tiền lương trợ cấp Điều 38 Điều 39 Luật An toàn vệ sinh lao động",
+    "bị ngã": "tai nạn lao động bị ngã ngã giàn giáo chấn thương bồi thường chi phí y tế tiền lương Điều 38 Điều 39 Luật An toàn vệ sinh lao động",
     "đóng bảo hiểm thiếu": "trách nhiệm đóng bảo hiểm xã hội trốn đóng bảo hiểm bắt buộc",
     "không có bảo hiểm": "người lao động không thuộc đối tượng tham gia bảo hiểm xã hội bắt buộc chi trả cùng lúc tiền lương",
     "hết hạn hợp đồng": "chấm dứt hợp đồng lao động khi hết hạn hợp đồng Điều 34",
@@ -45,6 +48,46 @@ COLLOQUIAL_LEGAL_MAP: Dict[str, str] = {
     "cắt thưởng": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật Điều 127",
     "không xét thưởng": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật Điều 127",
     "bỏ vị trí làm việc": "rời bỏ nơi làm việc quyền từ chối làm việc không bị coi là vi phạm kỷ luật lao động Điều 6",
+    # Trả sổ BHXH & giữ giấy tờ khi chấm dứt HĐLĐ (Điều 48 BLLĐ)
+    "trả sổ bảo hiểm": "trách nhiệm của người sử dụng lao động khi chấm dứt hợp đồng lao động hoàn thành thủ tục xác nhận thời gian đóng bảo hiểm xã hội bảo hiểm thất nghiệp trả lại sổ bảo hiểm xã hội cùng giấy tờ khác Điều 48",
+    "trả sổ bhxh": "trách nhiệm của người sử dụng lao động khi chấm dứt hợp đồng lao động hoàn thành thủ tục xác nhận thời gian đóng bảo hiểm xã hội bảo hiểm thất nghiệp trả lại sổ bảo hiểm xã hội cùng giấy tờ khác Điều 48",
+    "không chịu trả sổ": "trách nhiệm của người sử dụng lao động khi chấm dứt hợp đồng lao động hoàn thành thủ tục xác nhận thời gian đóng bảo hiểm xã hội bảo hiểm thất nghiệp trả lại sổ bảo hiểm xã hội cùng giấy tờ khác Điều 48",
+    "không trả sổ": "trách nhiệm của người sử dụng lao động khi chấm dứt hợp đồng lao động hoàn thành thủ tục xác nhận thời gian đóng bảo hiểm xã hội bảo hiểm thất nghiệp trả lại sổ bảo hiểm xã hội cùng giấy tờ khác Điều 48",
+    "chưa trả sổ": "trách nhiệm của người sử dụng lao động khi chấm dứt hợp đồng lao động hoàn thành thủ tục xác nhận thời gian đóng bảo hiểm xã hội bảo hiểm thất nghiệp trả lại sổ bảo hiểm xã hội cùng giấy tờ khác Điều 48",
+    "giữ sổ bảo hiểm": "trách nhiệm của người sử dụng lao động khi chấm dứt hợp đồng lao động hoàn thành thủ tục xác nhận thời gian đóng bảo hiểm xã hội bảo hiểm thất nghiệp trả lại sổ bảo hiểm xã hội cùng giấy tờ khác Điều 48",
+    "giữ sổ bhxh": "trách nhiệm của người sử dụng lao động khi chấm dứt hợp đồng lao động hoàn thành thủ tục xác nhận thời gian đóng bảo hiểm xã hội bảo hiểm thất nghiệp trả lại sổ bảo hiểm xã hội cùng giấy tờ khác Điều 48",
+    "chây ì không chịu trả sổ": "trách nhiệm của người sử dụng lao động khi chấm dứt hợp đồng lao động hoàn thành thủ tục xác nhận thời gian đóng bảo hiểm xã hội bảo hiểm thất nghiệp trả lại sổ bảo hiểm xã hội cùng giấy tờ khác Điều 48",
+    # Phạt tiền trừ vào lương / trừ lương đi trễ thay xử lý kỷ luật (Điều 127 BLLĐ)
+    "phạt tiền trừ vào lương": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật lao động Điều 127",
+    "phạt tiền trừ lương": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật lao động Điều 127",
+    "phạt tiền khi đi làm trễ": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật lao động Điều 127",
+    "trừ lương khi đi làm trễ": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật lao động Điều 127",
+    "trừ lương đi làm trễ": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật lao động Điều 127",
+    "trừ lương đi trễ": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật lao động Điều 127",
+    "phạt tiền đi trễ": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật lao động Điều 127",
+    "phạt tiền đi làm muộn": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật lao động Điều 127",
+    "trừ lương thay kỷ luật": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật lao động Điều 127",
+    "phạt tiền thay kỷ luật": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật lao động Điều 127",
+    "phạt tiền thay cho xử lý kỷ luật": "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật lao động Điều 127",
+    # Ép tăng ca / bắt tăng ca / làm thêm giờ không đồng ý (Điều 107 BLLĐ)
+    "ép nhân viên tăng ca": "thời giờ làm thêm làm thêm giờ phải được sự đồng ý của người lao động Điều 107",
+    "bắt nhân viên tăng ca": "thời giờ làm thêm làm thêm giờ phải được sự đồng ý của người lao động Điều 107",
+    "bắt tăng ca": "thời giờ làm thêm làm thêm giờ phải được sự đồng ý của người lao động Điều 107",
+    "ép làm thêm": "thời giờ làm thêm làm thêm giờ phải được sự đồng ý của người lao động Điều 107",
+    "bắt làm thêm": "thời giờ làm thêm làm thêm giờ phải được sự đồng ý của người lao động Điều 107",
+    "ép làm thêm giờ": "thời giờ làm thêm làm thêm giờ phải được sự đồng ý của người lao động Điều 107",
+    "bắt làm thêm giờ": "thời giờ làm thêm làm thêm giờ phải được sự đồng ý của người lao động Điều 107",
+    "không đồng ý tăng ca": "thời giờ làm thêm làm thêm giờ phải được sự đồng ý của người lao động Điều 107",
+    # Hư hỏng dụng cụ thiết bị, rơi vỡ máy tính, khấu trừ bồi thường tối đa (Điều 130 BLLĐ)
+    "làm rơi vỡ": "xử lý bồi thường thiệt hại làm hư hỏng dụng cụ thiết bị tài sản bồi thường nhiều nhất là 03 tháng tiền lương khấu trừ vào tiền lương Điều 130",
+    "làm rơi vỡ máy": "xử lý bồi thường thiệt hại làm hư hỏng dụng cụ thiết bị tài sản bồi thường nhiều nhất là 03 tháng tiền lương khấu trừ vào tiền lương Điều 130",
+    "làm vỡ máy": "xử lý bồi thường thiệt hại làm hư hỏng dụng cụ thiết bị tài sản bồi thường nhiều nhất là 03 tháng tiền lương khấu trừ vào tiền lương Điều 130",
+    "làm hỏng máy": "xử lý bồi thường thiệt hại làm hư hỏng dụng cụ thiết bị tài sản bồi thường nhiều nhất là 03 tháng tiền lương khấu trừ vào tiền lương Điều 130",
+    "hư hỏng máy": "xử lý bồi thường thiệt hại làm hư hỏng dụng cụ thiết bị tài sản bồi thường nhiều nhất là 03 tháng tiền lương khấu trừ vào tiền lương Điều 130",
+    "hư hỏng thiết bị": "xử lý bồi thường thiệt hại làm hư hỏng dụng cụ thiết bị tài sản bồi thường nhiều nhất là 03 tháng tiền lương khấu trừ vào tiền lương Điều 130",
+    "trừ lương bồi thường": "xử lý bồi thường thiệt hại làm hư hỏng dụng cụ thiết bị tài sản bồi thường nhiều nhất là 03 tháng tiền lương khấu trừ vào tiền lương Điều 130",
+    "bồi thường tối đa bao nhiêu tháng": "xử lý bồi thường thiệt hại làm hư hỏng dụng cụ thiết bị tài sản bồi thường nhiều nhất là 03 tháng tiền lương khấu trừ vào tiền lương Điều 130",
+    "bồi thường nhiều nhất bao nhiêu tháng": "xử lý bồi thường thiệt hại làm hư hỏng dụng cụ thiết bị tài sản bồi thường nhiều nhất là 03 tháng tiền lương khấu trừ vào tiền lương Điều 130",
 }
 
 
@@ -180,7 +223,9 @@ class AdaptiveQueryRewriter:
         )
 
         try:
-            llm = self.llm_manager.get_llm()
+            # get_llm() forces the legal-answer JSON schema; a rewrite needs plain text.
+            get_aux = getattr(self.llm_manager, "get_aux_llm", None)
+            llm = get_aux(json_schema=None, num_predict=80) if callable(get_aux) else self.llm_manager.get_llm()
             messages = [
                 SystemMessage(content="Bạn là chuyên gia tra cứu thuật ngữ Bộ luật Lao động Việt Nam. Nhiệm vụ của bạn là chuẩn hóa ngôn ngữ đời thường thành thuật ngữ pháp lý chính thức."),
                 HumanMessage(content=prompt_text),
