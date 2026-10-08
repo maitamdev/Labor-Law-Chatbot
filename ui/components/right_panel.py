@@ -17,9 +17,9 @@ POPULAR_TOPICS = [
 ]
 
 MAIN_DOCS = [
-    ("Bộ luật Lao động 2019", "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Bo-luat-Lao-dong-2019-333670.aspx"),
-    ("Nghị định 145/2020/NĐ-CP", "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-145-2020-ND-CP-huong-dan-Bo-luat-Lao-dong-ve-dieu-kien-lao-dong-quan-he-lao-dong-460987.aspx"),
-    ("Nghị định 12/2022/NĐ-CP", "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-12-2022-ND-CP-xu-phat-vi-pham-hanh-chinh-linh-vuc-lao-dong-bao-hiem-xa-hoi-500735.aspx"),
+    ("Bộ luật Lao động 2019", "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-18-vbhn-vpqh-468971.htm"),
+    ("Nghị định 145/2020/NĐ-CP", "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-145-2020-nd-cp-32732.htm"),
+    ("Nghị định 283/2026/NĐ-CP", "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-283-2026-nd-cp-470103.htm"),
 ]
 
 
