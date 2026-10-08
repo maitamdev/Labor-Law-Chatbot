@@ -104,6 +104,7 @@ def test_hierarchy_expansion_bounds_and_budget(context_builder):
 # ==============================================================================
 # 2. Multi-turn Clarification End-to-End
 # ==============================================================================
+@pytest.mark.ollama
 def test_multiturn_probation_end_to_end(rag_chain):
     """Turn 1: ambiguous 3 months -> needs clarification.
     Turn 2: user provides job/qualification -> answers with Điều 25 Khoản 2 (max 60 days)."""
@@ -130,6 +131,7 @@ def test_multiturn_probation_end_to_end(rag_chain):
     assert "25" in cited_articles, f"Must cite Điều 25, got: {cited_articles}"
 
 
+@pytest.mark.ollama
 def test_multiturn_general_resignation_end_to_end(rag_chain):
     """Turn 1: I want to quit -> needs clarification on contract type.
     Turn 2: 2-year contract -> at least 30 days (Điểm b Khoản 1 Điều 35 BLLĐ)."""
@@ -159,6 +161,7 @@ def test_multiturn_general_resignation_end_to_end(rag_chain):
     assert "7" not in cited_articles, "Must NOT cite NĐ 145 Điều 7 for ordinary employee"
 
 
+@pytest.mark.ollama
 def test_multiturn_special_occupation_resignation_end_to_end(rag_chain):
     """Turn 1: I want to quit -> needs clarification.
     Turn 2: Flight crew member, 2-year contract -> at least 120 days (Điều 7 NĐ 145)."""
@@ -185,6 +188,7 @@ def test_multiturn_special_occupation_resignation_end_to_end(rag_chain):
 # ==============================================================================
 # 3. Mandatory Critical Cases (Direct Single Turn)
 # ==============================================================================
+@pytest.mark.ollama
 def test_mandatory_case_a_general_employee(rag_chain):
     """Case A: Office employee, 2-year contract -> 30 days, Điều 35 BLLĐ, NOT Điều 7 NĐ 145."""
     rag_chain.memory.clear()
@@ -201,6 +205,7 @@ def test_mandatory_case_a_general_employee(rag_chain):
         assert str(meta.get("article_number")) == "35", "Must cite Điều 35 BLLĐ"
 
 
+@pytest.mark.ollama
 def test_mandatory_case_b_flight_crew(rag_chain):
     """Case B: Flight crew member, 2-year contract -> 120 days, Điều 7 NĐ 145."""
     rag_chain.memory.clear()
