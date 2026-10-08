@@ -29,6 +29,8 @@ class EvidenceBlock:
     def format_for_llm(self) -> str:
         """Formats the evidence block with statutory hierarchy and content."""
         parts = [f"[{self.evidence_id}]"]
+        if self.issue_id and self.issue_id != "statutory_bridge":
+            parts.append(f"Nhóm căn cứ độc quyền: {self.issue_id}")
         
         # Statutory header
         header_parts = [self.document_title or self.document_no]
@@ -261,9 +263,20 @@ class EvidenceMapper:
             if block.article_number is not None:
                 parts.append(f"Điều {block.article_number}")
 
-            if parts:
-                return f"{' '.join(parts)} {doc_short}"
-            return doc_short
+            label = f"{' '.join(parts)} {doc_short}" if parts else doc_short
+            start_pos = m.start()
+            prefix_text = text[:start_pos].rstrip()
+            if re.search(r"(?:đòi lại|yêu cầu thanh toán|yêu cầu bồi thường)\s*$", prefix_text, re.IGNORECASE):
+                return f"số tiền lương bị khấu trừ (căn cứ {label})"
+            elif re.search(r"(?:căn cứ|theo|quy định tại|áp dụng|chiếu theo)\s*$", prefix_text, re.IGNORECASE):
+                return label
+            elif not prefix_text or prefix_text.endswith(('.', '!', '?', '\n', ':', '-')):
+                return f"Theo {label},"
+            elif re.search(r"(?:phạt|xử phạt|chế tài)\s*$", prefix_text, re.IGNORECASE):
+                return f"theo quy định tại {label}"
+            elif re.search(r"(?:quyền|nghĩa vụ|trách nhiệm)\s*$", prefix_text, re.IGNORECASE):
+                return f"theo {label}"
+            return label
 
         # Match [E1], [E2], (E1), (E2)
         pattern = re.compile(r"\[\s*E(\d+)\s*\]|\(\s*E(\d+)\s*\)", re.IGNORECASE)
