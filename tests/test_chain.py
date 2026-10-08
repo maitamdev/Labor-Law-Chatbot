@@ -215,6 +215,7 @@ def test_conversation_memory_sliding_window_and_context():
 # ---------------------------------------------------------------------------
 # 6. Local Ollama Integration Health Test
 # ---------------------------------------------------------------------------
+@pytest.mark.ollama
 def test_ollama_local_health():
     health = check_ollama_health()
     assert health["online"] is True, f"Ollama local daemon must be running. Error: {health.get('error')}"
