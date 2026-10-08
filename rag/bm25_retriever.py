@@ -20,12 +20,13 @@ import unicodedata
 import bm25s
 from pyvi import ViTokenizer
 
+from config.settings import BM25_INDEX_DIR, PRODUCTION_CORPUS_PATH
 from rag.embeddings import format_retrieval_text
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_PERSIST_DIR = Path("storage/bm25")
-DEFAULT_CORPUS_PATH = Path("data/processed/legal_documents.jsonl")
+DEFAULT_PERSIST_DIR = BM25_INDEX_DIR
+DEFAULT_CORPUS_PATH = PRODUCTION_CORPUS_PATH
 
 
 def tokenize_legal_vietnamese(text: str, mode: str = "segmented") -> List[str]:
@@ -261,24 +262,40 @@ class BM25Retriever:
 
         for doc_idx, score in zip(doc_indices, score_values):
             idx = int(doc_idx)
-            chunk_info = self.chunks_data[idx]
-            results.append({
-                "chunk_id": chunk_info["chunk_id"],
-                "score": float(score),
-                "content": chunk_info["content"],
-                "retrieval_text": chunk_info["retrieval_text"],
-                "metadata": {
-                    "doc_id": chunk_info["doc_id"],
-                    "doc_title": chunk_info["doc_title"],
-                    "document_no": chunk_info["document_no"],
-                    "article_number": chunk_info["article_number"],
-                    "article_title": chunk_info["article_title"],
-                    "clause_number": chunk_info["clause_number"],
-                    "point": chunk_info["point"],
-                    "source_page_start": chunk_info["source_page_start"],
-                    "source_page_end": chunk_info["source_page_end"],
-                    "official_source": chunk_info["official_source"],
-                }
-            })
+            results.append(self._format_chunk(self.chunks_data[idx], float(score)))
 
         return results
+
+    @staticmethod
+    def _format_chunk(chunk_info: dict[str, Any], score: float) -> dict[str, Any]:
+        return {
+            "chunk_id": chunk_info["chunk_id"],
+            "score": score,
+            "content": chunk_info["content"],
+            "retrieval_text": chunk_info["retrieval_text"],
+            "metadata": {
+                "doc_id": chunk_info["doc_id"],
+                "doc_title": chunk_info["doc_title"],
+                "document_no": chunk_info["document_no"],
+                "article_number": chunk_info["article_number"],
+                "article_title": chunk_info["article_title"],
+                "clause_number": chunk_info["clause_number"],
+                "point": chunk_info["point"],
+                "source_page_start": chunk_info["source_page_start"],
+                "source_page_end": chunk_info["source_page_end"],
+                "official_source": chunk_info["official_source"],
+            },
+        }
+
+    def get_chunk(self, chunk_id: str, score: float = 0.0) -> Optional[dict[str, Any]]:
+        """Returns a canonical chunk (same shape as retrieve() items) by chunk_id."""
+        if self.retriever is None or not self.chunks_data:
+            self.load_index()
+        index = getattr(self, "_id_index", None)
+        if index is None or len(index) != len(self.chunks_data):
+            index = {c["chunk_id"]: i for i, c in enumerate(self.chunks_data)}
+            self._id_index = index
+        pos = index.get(chunk_id)
+        if pos is None:
+            return None
+        return self._format_chunk(self.chunks_data[pos], score)
