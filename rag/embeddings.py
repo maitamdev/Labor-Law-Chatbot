@@ -21,6 +21,8 @@ os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
 
 from sentence_transformers import SentenceTransformer
 
+from config.settings import PRODUCTION_CORPUS_PATH
+
 logger = logging.getLogger(__name__)
 
 FALLBACK_MODEL_NAME = "BAAI/bge-m3"
@@ -55,7 +57,7 @@ def get_parent_clause_map(corpus_path: Optional[Union[str, Path]] = None) -> dic
     if _PARENT_CLAUSE_CACHE is not None:
         return _PARENT_CLAUSE_CACHE
 
-    p = Path(corpus_path or "data/processed/legal_documents.jsonl")
+    p = Path(corpus_path or PRODUCTION_CORPUS_PATH)
     clause_map: dict[tuple[str, str, str], str] = {}
     if p.exists():
         try:
