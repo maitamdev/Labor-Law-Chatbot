@@ -13,7 +13,7 @@
 # -15.0         : Hard suppression (provision is categorically irrelevant)
 #
 # FIELD REFERENCE:
-#   doc_id         : Document identifier (e.g. VBHN_18_2026, ND_12_2022)
+#   doc_id         : Document identifier (e.g. VBHN_18_2026, ND_283_2026)
 #   article        : Article number (int)
 #   clause         : Clause number (int, optional)
 #   point          : Point letter (str, optional)
@@ -28,7 +28,7 @@
 topic_scores:
   probation:
     - { doc_id: VBHN_18_2026, articles: [24, 25, 26, 27], boost: 1.5 }
-    - { doc_id: ND_12_2022, article: 10, boost: 1.0 }
+    - { doc_id: ND_283_2026, article: 16, boost: 1.0 }
   salary:
     - { doc_id: VBHN_18_2026, article_range: [90, 104], boost: 1.0 }
   overtime:
@@ -61,17 +61,17 @@ actor_scores:
 
 # ─────────────────────────────────────────────────────────
 # INTENT-LEVEL SCORING (Signal 5: Intent Score)
-# Distinguishes BLLĐ (substantive rule) vs NĐ 12 (sanctions).
+# Distinguishes BLLĐ (substantive rule) vs NĐ 283 (sanctions).
 # ─────────────────────────────────────────────────────────
 intent_scores:
   SUBSTANTIVE_RULE:
     - { doc_id: VBHN_18_2026, boost: 1.5,
         rationale: "BLLĐ is the primary substantive code" }
-    - { doc_id: ND_12_2022, penalty: -1.0,
+    - { doc_id: ND_283_2026, penalty: -1.0,
         rationale: "Soft-suppress sanctions when user asks about the rule itself" }
   SANCTION:
-    - { doc_id: ND_12_2022, boost: 2.0,
-        rationale: "NĐ 12 is the penalty decree" }
+    - { doc_id: ND_283_2026, boost: 2.0,
+        rationale: "NĐ 283 is the current penalty decree" }
     - { doc_id: VBHN_18_2026, penalty: -0.5,
         rationale: "Soft-suppress substantive code when user asks about fine/penalty" }
 
@@ -267,16 +267,16 @@ qualifier_rules:
     article_rules:
       - { doc_id: VBHN_18_2026, article: 115, clause: 1, point: "a", boost: 5.0 }
 
-  # --- Sanctions (NĐ 12) ---
+  # --- Sanctions (NĐ 283/2026) ---
   sanction_withholding_diploma:
     article_rules:
-      - { doc_id: ND_12_2022, article: 9, clause: 2, point: "a", boost: 5.0 }
+      - { doc_id: ND_283_2026, article: 15, clause: 2, point: "a", boost: 5.0 }
   sanction_probation_overtime:
     article_rules:
-      - { doc_id: ND_12_2022, article: 10, clause: 2, point: "a", boost: 5.0 }
+      - { doc_id: ND_283_2026, article: 16, clause: 2, point: "b", boost: 5.0 }
   sanction_monetary_fine_discipline:
     article_rules:
-      - { doc_id: ND_12_2022, article: 19, clause: 3, point: "b", boost: 5.0 }
+      - { doc_id: ND_283_2026, article: 25, clause: 3, point: "c", boost: 5.0 }
 
   # --- Prohibited monetary fine (Điều 127k2) ---
   prohibited_monetary_fine:
