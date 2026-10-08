@@ -40,15 +40,63 @@ class IssueDecomposer:
         "trách nhiệm", "quyền", "nghĩa vụ", "bảo hiểm", "bhxh", "bhyt", "bhtn",
         "tai nạn", "tnlđ", "chế độ", "hưởng", "bồi thường", "trợ cấp", "chi phí",
         "lương", "thưởng", "kỷ luật", "khiển trách", "sa thải", "đuổi việc",
-        "nghỉ việc", "thôi việc", "chấm dứt", "hợp đồng", "hđlđ", "thử việc",
+        "nghỉ việc", "nghỉ từ", "nghỉ ngay", "báo trước", "thôi việc", "chấm dứt", "hợp đồng", "hđlđ", "thử việc",
         "học nghề", "tập nghề", "làm thêm", "tăng ca", "nghỉ phép", "thai sản",
         "ốm đau", "hưu", "nghỉ hưu", "xử phạt", "phạt", "trái luật", "đúng luật",
         "hợp pháp", "khiếu nại", "tố cáo", "từ chối", "an toàn", "vệ sinh", "quy định",
-        "pháp luật", "luật"
+        "pháp luật", "luật", "kiện", "tòa án", "tranh chấp", "giấy tờ", "giữ bản chính"
     ]
 
     def __init__(self, query_expander: Optional[QueryExpander] = None):
         self.expander = query_expander or QueryExpander()
+
+    @staticmethod
+    def _add_contextual_roles(events: List[str], roles: List[str], narrative: str) -> None:
+        """Carry only a tightly-scoped cross-issue fact into termination evidence.
+
+        A resignation question can depend on an earlier late-wage fact even when
+        that fact is not repeated in the numbered sub-question.
+        """
+        text = (narrative or "").lower()
+        late_wage = any(term in text for term in [
+            "chậm trả lương", "chậm lương", "nợ lương", "không trả lương",
+            "không trả đủ lương", "trả lương không đúng hạn",
+        ])
+        if "TERMINATION" in events and late_wage:
+            if "EMPLOYEE_NO_NOTICE_EXCEPTION" not in roles:
+                roles.append("EMPLOYEE_NO_NOTICE_EXCEPTION")
+            if "EMPLOYEE_NOTICE_REQUIREMENT" in roles:
+                roles.remove("EMPLOYEE_NOTICE_REQUIREMENT")
+        if (
+            "DE_FACTO_LABOR_CONTRACT" in events
+            and any(term in text for term in ["khởi kiện", "kiện", "tòa án", "tranh chấp"])
+            and "INDIVIDUAL_LABOUR_DISPUTE_PROCEDURE" not in roles
+        ):
+            roles.append("INDIVIDUAL_LABOUR_DISPUTE_PROCEDURE")
+
+        misassigned_work = any(term in text for term in [
+            "không được bố trí đúng", "không bố trí đúng", "bố trí công việc không đúng",
+            "không đúng công việc", "làm công việc khác", "chuyển làm việc khác",
+            "chuyển sang làm việc khác", "chuyển công việc khác", "làm bốc vác",
+            "công nhân bốc vác", "không đúng thỏa thuận", "không đúng hợp đồng",
+            "không theo đúng hợp đồng", "chuyển người lao động làm công việc khác",
+            "bố trí công việc theo đúng hợp đồng", "không bố trí theo đúng hợp đồng",
+            "kiến nghị bố trí công việc", "kiến nghị với giám đốc",
+        ])
+        if misassigned_work:
+            if "MISASSIGNED_WORK_TERMINATION" not in events:
+                events.append("MISASSIGNED_WORK_TERMINATION")
+            if "EMPLOYEE_NO_NOTICE_FOR_MISASSIGNED_WORK" not in roles:
+                roles.append("EMPLOYEE_NO_NOTICE_FOR_MISASSIGNED_WORK")
+            if "WORK_REASSIGNMENT_LIMITS" not in roles:
+                roles.append("WORK_REASSIGNMENT_LIMITS")
+            if any(term in text for term in ["bồi thường", "nghỉ việc", "chấm dứt", "tự ý"]):
+                if "EMPLOYEE_UNLAWFUL_TERMINATION_LIABILITY" not in roles:
+                    roles.append("EMPLOYEE_UNLAWFUL_TERMINATION_LIABILITY")
+            if "EMPLOYEE_NOTICE_REQUIREMENT" in roles:
+                roles.remove("EMPLOYEE_NOTICE_REQUIREMENT")
+            if "UNLAWFUL_TERMINATION_COMPENSATION" in roles:
+                roles.remove("UNLAWFUL_TERMINATION_COMPENSATION")
 
     def decompose(self, query: str) -> List[DecomposedIssue]:
         """Decomposes a query into one or more focused legal issues."""
@@ -76,13 +124,14 @@ class IssueDecomposer:
                     expanded = self.expander.expand(q_text)
                     q_events = detect_legal_events(q_text)
                     q_roles = determine_required_evidence_roles(q_events, q_lower)
+                    self._add_contextual_roles(q_events, q_roles, norm_q)
                     det_domain = self._detect_domain(q_text)
 
                     # Fine-grained adjustment for specific sub-question intents:
                     # 1. Mandatory insurance for contracts >= 1 month
                     if any(k in q_lower for k in ["đóng bảo hiểm", "tham gia bảo hiểm", "trách nhiệm trong việc đóng bảo hiểm", "trách nhiệm đóng bảo hiểm"]) and any(k in q_lower for k in ["01 tháng", "1 tháng", "từ 1 tháng", "từ 01 tháng"]):
                         det_domain = "CROSS_DOMAIN"
-                        expanded = f"{q_text} trách nhiệm đóng bảo hiểm xã hội bắt buộc từ 01 tháng Điều 168 Khoản 1 Bộ luật Lao động 2019 Điều 2 Khoản 1 Điểm a và Điều 21 Luật Bảo hiểm xã hội 58/VBHN Điều 39 Nghị định 12/2022/NĐ-CP"
+                        expanded = f"{q_text} trách nhiệm đóng bảo hiểm xã hội bắt buộc từ 01 tháng Điều 168 Khoản 1 Bộ luật Lao động 2019 Điều 2 Khoản 1 Điểm a và Điều 21 Luật Bảo hiểm xã hội 58/VBHN Điều 44 Nghị định 283/2026/NĐ-CP"
                         if "INSURANCE_CONTRIBUTION" not in q_events:
                             q_events.append("INSURANCE_CONTRIBUTION")
                         if "EMPLOYER_INSURANCE_OBLIGATION" not in q_roles:
@@ -91,7 +140,7 @@ class IssueDecomposer:
                     # 2. Uninsured occupational accident
                     elif any(k in q_lower for k in ["tai nạn", "tnlđ"]) and any(k in q_lower for k in ["chưa đóng bảo hiểm", "không đóng bảo hiểm", "chưa tham gia", "trốn đóng", "doanh nghiệp chưa đóng", "chưa đóng"]):
                         det_domain = "OCCUPATIONAL_SAFETY"
-                        expanded = f"{q_text} trách nhiệm người sử dụng lao động khi người lao động bị tai nạn lao động mà doanh nghiệp chưa đóng bảo hiểm chi phí y tế tiền lương bồi thường trợ cấp Điều 38 Điều 39 Khoản 4 Luật An toàn vệ sinh lao động Điều 39 Nghị định 12/2022/NĐ-CP"
+                        expanded = f"{q_text} trách nhiệm người sử dụng lao động khi người lao động bị tai nạn lao động mà doanh nghiệp chưa đóng bảo hiểm chi phí y tế tiền lương bồi thường trợ cấp Điều 38 Điều 39 Khoản 4 Luật An toàn vệ sinh lao động Điều 44 Nghị định 283/2026/NĐ-CP"
                         if "OCCUPATIONAL_ACCIDENT" not in q_events:
                             q_events.append("OCCUPATIONAL_ACCIDENT")
                         if "UNPAID_INSURANCE" not in q_events:
@@ -158,22 +207,26 @@ class IssueDecomposer:
                 for idx, q_text in enumerate(raw_qs, start=1):
                     enriched = self._enrich_with_scenario(q_text, scenario)
                     expanded = self.expander.expand(enriched)
-                    q_events = detect_legal_events(enriched)
-                    q_roles = determine_required_evidence_roles(q_events, enriched.lower())
+                    # Classify the legal event from the sub-question itself.
+                    # Scenario enrichment is for retrieval facts only; using the
+                    # whole narrative here contaminates one issue with another.
+                    q_events = detect_legal_events(q_text)
+                    q_roles = determine_required_evidence_roles(q_events, q_text.lower())
+                    self._add_contextual_roles(q_events, q_roles, scenario)
                     det_domain = self._detect_domain(enriched)
 
                     # Fine-grained adjustment for specific sub-question intents
                     q_lower = q_text.lower()
                     if any(k in q_lower for k in ["đóng bảo hiểm", "tham gia bảo hiểm", "trách nhiệm trong việc đóng bảo hiểm", "trách nhiệm đóng bảo hiểm"]) and any(k in q_lower for k in ["01 tháng", "1 tháng", "từ 1 tháng", "từ 01 tháng"]):
                         det_domain = "CROSS_DOMAIN"
-                        expanded = f"{enriched} trách nhiệm đóng bảo hiểm xã hội bắt buộc từ 01 tháng Điều 168 Khoản 1 Bộ luật Lao động 2019 Điều 2 Khoản 1 Điểm a và Điều 21 Luật Bảo hiểm xã hội 58/VBHN Điều 39 Nghị định 12/2022/NĐ-CP"
+                        expanded = f"{enriched} trách nhiệm đóng bảo hiểm xã hội bắt buộc từ 01 tháng Điều 168 Khoản 1 Bộ luật Lao động 2019 Điều 2 Khoản 1 Điểm a và Điều 21 Luật Bảo hiểm xã hội 58/VBHN Điều 44 Nghị định 283/2026/NĐ-CP"
                         if "INSURANCE_CONTRIBUTION" not in q_events:
                             q_events.append("INSURANCE_CONTRIBUTION")
                         if "EMPLOYER_INSURANCE_OBLIGATION" not in q_roles:
                             q_roles.append("EMPLOYER_INSURANCE_OBLIGATION")
                     elif any(k in q_lower for k in ["tai nạn", "tnlđ"]) and any(k in q_lower for k in ["chưa đóng bảo hiểm", "không đóng bảo hiểm", "chưa tham gia", "trốn đóng", "doanh nghiệp chưa đóng", "chưa đóng"]):
                         det_domain = "OCCUPATIONAL_SAFETY"
-                        expanded = f"{enriched} trách nhiệm người sử dụng lao động khi người lao động bị tai nạn lao động mà doanh nghiệp chưa đóng bảo hiểm chi phí y tế tiền lương bồi thường trợ cấp Điều 38 Điều 39 Khoản 4 Luật An toàn vệ sinh lao động Điều 39 Nghị định 12/2022/NĐ-CP"
+                        expanded = f"{enriched} trách nhiệm người sử dụng lao động khi người lao động bị tai nạn lao động mà doanh nghiệp chưa đóng bảo hiểm chi phí y tế tiền lương bồi thường trợ cấp Điều 38 Điều 39 Khoản 4 Luật An toàn vệ sinh lao động Điều 44 Nghị định 283/2026/NĐ-CP"
                         if "OCCUPATIONAL_ACCIDENT" not in q_events:
                             q_events.append("OCCUPATIONAL_ACCIDENT")
                         if "UNPAID_INSURANCE" not in q_events:
@@ -203,7 +256,7 @@ class IssueDecomposer:
                             q_events.append("WAGE_PAYMENT_SCHEDULE")
                     elif any(k in q_lower for k in ["chậm trả lương", "chậm lương"]) and any(k in q_lower for k in ["xử lý", "như thế nào", "giải quyết", "bồi thường", "chế tài"]):
                         det_domain = "CORE_LABOR"
-                        expanded = f"{enriched} xử lý trường hợp người sử dụng lao động chậm trả lương Khoản 4 Điều 97 đền bù tiền lãi Điểm b Khoản 2 Điều 35 đơn phương chấm dứt hợp đồng lao động không cần báo trước Điều 17 Nghị định 12/2022/NĐ-CP"
+                        expanded = f"{enriched} xử lý trường hợp người sử dụng lao động chậm trả lương Khoản 4 Điều 97 đền bù tiền lãi Điểm b Khoản 2 Điều 35 đơn phương chấm dứt hợp đồng lao động không cần báo trước Điều 23 Nghị định 283/2026/NĐ-CP"
                         if "DELAYED_WAGE_REMEDY" not in q_events:
                             q_events.append("DELAYED_WAGE_REMEDY")
                     elif any(k in q_lower for k in ["khiếu nại", "tạm ngừng làm việc", "ngừng làm việc"]) and any(k in q_lower for k in ["chậm trả lương", "chậm lương", "lương"]):
@@ -220,7 +273,7 @@ class IssueDecomposer:
                             q_roles.append("EMPLOYMENT_RELATIONSHIP_DEFINITION")
                     elif any(k in q_lower for k in ["giấy tờ tùy thân", "bản chính", "giữ bằng", "giữ cccd", "giữ chứng minh", "đòi giữ"]):
                         det_domain = "CORE_LABOR"
-                        expanded = f"{enriched} hành vi người sử dụng lao động không được làm khi giao kết thực hiện hợp đồng lao động giữ bản chính giấy tờ tùy thân văn bằng chứng chỉ Điều 17 Khoản 1 Bộ luật Lao động 2019 Điều 9 Nghị định 12/2022/NĐ-CP"
+                        expanded = f"{enriched} hành vi người sử dụng lao động không được làm khi giao kết thực hiện hợp đồng lao động giữ bản chính giấy tờ tùy thân văn bằng chứng chỉ Điều 17 Khoản 1 Bộ luật Lao động 2019 Điều 15 Nghị định 283/2026/NĐ-CP"
                         if "EMPLOYER_PROHIBITED_ACTS" not in q_events:
                             q_events.append("EMPLOYER_PROHIBITED_ACTS")
                         if "PROHIBITED_ACTS_IDENTIFICATION" not in q_roles:
@@ -228,6 +281,9 @@ class IssueDecomposer:
 
                     if len(q_events) > 1 and "UNKNOWN" in q_events:
                         q_events.remove("UNKNOWN")
+                    self._add_contextual_roles(q_events, q_roles, f"{scenario} {q_text}")
+                    if "MISASSIGNED_WORK_TERMINATION" in q_events:
+                        expanded = f"{enriched} quyền đơn phương chấm dứt hợp đồng lao động không cần báo trước khi không được bố trí theo đúng công việc thỏa thuận Điều 35 Khoản 2 Điểm a chuyển người lao động làm công việc khác tạm thời quá 60 ngày Điều 29 Bộ luật Lao động 2019 nghĩa vụ bồi thường Điều 40"
 
                     results.append(
                         DecomposedIssue(
@@ -269,7 +325,7 @@ class IssueDecomposer:
                     ("Điều kiện và mức hưởng trợ cấp tai nạn lao động từ Quỹ bảo hiểm tai nạn lao động BHXH theo Điều 45, 48 Luật ATVSLĐ và VBHN 06", "OCCUPATIONAL_ACCIDENT_DISEASE"),
                 ]
             # "đang nghỉ thai sản cty đuổi việc thì được bồi thường gì và có được tiền thai sản ko" / "nghỉ sinh con xong đi làm lại bị sa thải"
-            elif any(k in q_lower for k in ["mang thai", "thai sản", "sinh con", "nuôi con"]) and any(k in q_lower for k in ["đuổi việc", "cho nghỉ", "sa thải", "bị sa thải", "cho thôi việc"]):
+            elif any(k in q_lower for k in ["mang thai", "thai sản", "sinh con", "nuôi con"]) and any(k in q_lower for k in ["đuổi việc", "cho nghỉ", "sa thải", "bị sa thải", "cho thôi việc"]) and any(k in q_lower for k in ["tiền thai sản", "chế độ thai sản", "trợ cấp thai sản", "hưởng thai sản", "bảo hiểm trả", "quỹ trả"]):
                 sub_items = [
                     ("Công ty đơn phương chấm dứt hợp đồng sa thải lao động nữ trong thời gian mang thai nghỉ sinh con nuôi con, nghĩa vụ bảo đảm việc làm và bồi thường theo Điều 37, 41, 137 Bộ luật Lao động", "CORE_LABOR"),
                     ("Quyền lợi điều kiện hưởng chế độ thai sản và quyền khiếu nại bảo vệ quyền lợi của lao động nữ theo Luật Bảo hiểm xã hội", "SOCIAL_INSURANCE"),
@@ -280,8 +336,8 @@ class IssueDecomposer:
                     ("Công ty giải quyết chấm dứt hợp đồng lao động khi người lao động đủ tuổi nghỉ hưu theo Điều 34, 169 Bộ luật Lao động", "CORE_LABOR"),
                     ("Người lao động đủ tuổi nghỉ hưu nhưng chưa đủ năm đóng BHXH, điều kiện rút BHXH một lần theo Điều 70 Luật BHXH hoặc đóng tự nguyện Điều 98", "SOCIAL_INSURANCE"),
                 ]
-            # "Công ty chưa đóng BHXH, tôi bị gãy chân khi đang làm việc" / "cty chưa đóng bhxh mà tôi bị tai nạn lúc đang làm" / "công ty nợ bhxh 1 năm rồi tôi bị tai nạn xe nâng ở xưởng"
-            elif any(k in q_lower for k in ["chưa đóng", "không đóng", "ko đóng", "trốn đóng", "nợ bhxh", "nợ bảo hiểm", "chưa tham gia"]) and any(k in q_lower for k in ["bhxh", "bảo hiểm"]) and any(k in q_lower for k in ["tai nạn", "tnlđ", "máy kẹp", "máy ép", "ngã giàn giáo", "gãy chân", "gãy tay", "đứt tay", "bị thương", "chấn thương", "xe nâng", "máy khâu", "máy may", "đâm vào tay", "kẹp tay", "đâm vào"]):
+            # Compound query: asking both about administrative sanction for unpaid insurance AND accident liability
+            elif any(k in q_lower for k in ["chưa đóng", "không đóng", "ko đóng", "trốn đóng", "nợ bhxh", "nợ bảo hiểm", "chưa tham gia"]) and any(k in q_lower for k in ["bhxh", "bảo hiểm"]) and any(k in q_lower for k in ["tai nạn", "tnlđ", "máy kẹp", "máy ép", "ngã giàn giáo", "gãy chân", "gãy tay", "đứt tay", "bị thương", "chấn thương", "xe nâng", "máy khâu", "máy may", "đâm vào tay", "kẹp tay", "đâm vào"]) and any(k in q_lower for k in ["xử phạt thế nào", "tội trốn đóng", "bị phạt gì", "truy cứu"]):
                 sub_items = [
                     ("Công ty chưa đóng bảo hiểm xã hội bắt buộc cho người lao động, nghĩa vụ tham gia và trách nhiệm của người sử dụng lao động theo Điều 168 Bộ luật Lao động và Điều 2 Luật Bảo hiểm xã hội", "CORE_LABOR"),
                     ("Người lao động bị tai nạn lao động khi công ty chưa đóng bảo hiểm xã hội, trách nhiệm của doanh nghiệp thanh toán chi phí y tế tiền lương và bồi thường thay thế cơ quan bảo hiểm theo Điều 38, 39 Luật An toàn vệ sinh lao động", "OCCUPATIONAL_SAFETY"),
@@ -293,6 +349,13 @@ class IssueDecomposer:
                     ("Phân biệt chế độ ốm đau của Luật Bảo hiểm xã hội không áp dụng đối với tai nạn lao động theo Luật Bảo hiểm xã hội", "SOCIAL_INSURANCE"),
                 ]
 
+            # "deal lương ... chỉ trả ... làm phí ... vi phạm luật nào và hướng xử lý"
+            elif any(k in q_lower for k in ["deal lương", "thỏa thuận lương", "chỉ trả", "trả thiếu", "bớt lương", "khấu trừ", "làm phí", "thu phí", "trừ phí", "giữ lương", "không trả đủ", "trả không đủ"]) and any(k in q_lower for k in ["vi phạm luật nào", "hướng xử lý", "làm sao để đòi", "giải quyết thế nào", "xử lý thế nào", "đòi lại tiền", "làm gì"]):
+                sub_items = [
+                    ("Hành vi công ty thỏa thuận lương nhưng chỉ trả một phần và tự ý trừ phí có vi phạm pháp luật không", "CORE_LABOR"),
+                    ("Quyền lợi và hướng xử lý đòi lại tiền lương của người lao động khi bị công ty trả thiếu", "CORE_LABOR"),
+                ]
+
         # Check for specific compound patterns
         # 1. Pattern: "công ty ... hay/hoặc ... bhxh/bảo hiểm" or "trợ cấp thôi việc ... hay trợ cấp thất nghiệp"
         if not sub_items:
@@ -302,7 +365,11 @@ class IssueDecomposer:
                 part1 = m_hay.group(2).strip()
                 part2 = m_hay.group(3).strip()
                 clean_scen = re.sub(r"\s+thì$", "", scen, flags=re.IGNORECASE).strip()
-                if len(part1) >= 5 and len(part2) >= 5:
+                p2_clean = re.sub(r"[?.!]+$", "", part2).strip().lower()
+                is_p2_question_tag = p2_clean in [
+                    "không", "ko", "chưa", "sao", "gì", "gì không", "gì ko", "gì khác", "gì khác không", "gì nữa không", "thế nào", "ra sao"
+                ] or len(p2_clean) < 8 or not any(kw in p2_clean for kw in self.LEGAL_TOPIC_KEYWORDS)
+                if not is_p2_question_tag and len(part1) >= 5 and len(part2) >= 5:
                     if "nghỉ sinh con" in norm_q.lower():
                         sub_items = [
                             ("Nghỉ sinh con thì người sử dụng lao động, công ty có phải trả lương không theo Điều 139 Bộ luật Lao động", "CORE_LABOR"),
@@ -476,23 +543,16 @@ class IssueDecomposer:
         if not sub_items and " và " in norm_q.lower():
             parts = norm_q.split(" và ")
             if len(parts) == 2 and any(k in parts[1].lower() for k in ["có được", "không trả", "không đóng", "giữ bằng", "đóng tiền", "sa thải", "thất nghiệp", "bhxh", "tai nạn", "bồi thường", "bảo hiểm", "chế độ"]):
-                sub_items = [(parts[0].strip(), None), (parts[1].strip(), None)]
+                p0_lower = parts[0].lower()
+                p0_has_intent = any(k in p0_lower for k in [
+                    "có được", "được không", "đúng không", "sai không", "vi phạm", "phạt", "bồi thường", "chế độ", "trách nhiệm", "khiếu nại", "nghỉ việc", "báo trước", "sa thải", "đuổi việc", "thôi việc", "thất nghiệp", "bhxh"
+                ]) and not p0_lower.startswith(("tôi làm cho", "tôi làm việc", "tôi đang làm", "em làm cho", "mình làm cho"))
+                if p0_has_intent and len(parts[0].strip()) > 10:
+                    sub_items = [(parts[0].strip(), None), (parts[1].strip(), None)]
 
         # Fallback: single issue
         if not sub_items:
-            events = detect_legal_events(norm_q)
-            roles = determine_required_evidence_roles(events, norm_q.lower())
-            return [
-                DecomposedIssue(
-                    issue_id="issue_1",
-                    raw_issue_text=norm_q,
-                    retrieval_query=self.expander.expand(norm_q),
-                    domain=self._detect_domain(norm_q),
-                    legal_event=events[0] if events else "UNKNOWN",
-                    legal_events=events,
-                    required_evidence_roles=roles,
-                )
-            ]
+            sub_items = [(norm_q, None)]
 
         # Process each decomposed sub-query
         results: List[DecomposedIssue] = []
@@ -518,7 +578,7 @@ class IssueDecomposer:
             clean_lower = clean_text.lower()
             if any(k in clean_lower for k in ["đóng bảo hiểm", "tham gia bảo hiểm", "trách nhiệm trong việc đóng bảo hiểm", "trách nhiệm đóng bảo hiểm"]) and any(k in clean_lower for k in ["01 tháng", "1 tháng", "từ 1 tháng", "từ 01 tháng"]):
                 detected_dom = "CROSS_DOMAIN"
-                expanded = f"{clean_text} trách nhiệm đóng bảo hiểm xã hội bắt buộc từ 01 tháng Điều 168 Khoản 1 Bộ luật Lao động 2019 Điều 2 Khoản 1 Điểm a và Điều 21 Luật Bảo hiểm xã hội 58/VBHN Điều 39 Nghị định 12/2022/NĐ-CP"
+                expanded = f"{clean_text} trách nhiệm đóng bảo hiểm xã hội bắt buộc từ 01 tháng Điều 168 Khoản 1 Bộ luật Lao động 2019 Điều 2 Khoản 1 Điểm a và Điều 21 Luật Bảo hiểm xã hội 58/VBHN Điều 44 Nghị định 283/2026/NĐ-CP"
                 sub_events = detect_legal_events(clean_text)
                 if "INSURANCE_CONTRIBUTION" not in sub_events:
                     sub_events.append("INSURANCE_CONTRIBUTION")
@@ -527,7 +587,7 @@ class IssueDecomposer:
                     sub_roles.append("EMPLOYER_INSURANCE_OBLIGATION")
             elif any(k in clean_lower for k in ["tai nạn", "tnlđ"]) and any(k in clean_lower for k in ["chưa đóng bảo hiểm", "không đóng bảo hiểm", "chưa tham gia", "trốn đóng", "doanh nghiệp chưa đóng", "chưa đóng"]):
                 detected_dom = "OCCUPATIONAL_SAFETY"
-                expanded = f"{clean_text} trách nhiệm người sử dụng lao động khi người lao động bị tai nạn lao động mà doanh nghiệp chưa đóng bảo hiểm chi phí y tế tiền lương bồi thường trợ cấp Điều 38 Điều 39 Khoản 4 Luật An toàn vệ sinh lao động Điều 39 Nghị định 12/2022/NĐ-CP"
+                expanded = f"{clean_text} trách nhiệm người sử dụng lao động khi người lao động bị tai nạn lao động mà doanh nghiệp chưa đóng bảo hiểm chi phí y tế tiền lương bồi thường trợ cấp Điều 38 Điều 39 Khoản 4 Luật An toàn vệ sinh lao động Điều 44 Nghị định 283/2026/NĐ-CP"
                 sub_events = detect_legal_events(clean_text)
                 if "OCCUPATIONAL_ACCIDENT" not in sub_events:
                     sub_events.append("OCCUPATIONAL_ACCIDENT")
@@ -537,11 +597,86 @@ class IssueDecomposer:
                 for r in ["EMPLOYER_MEDICAL_RESPONSIBILITY", "EMPLOYER_WAGE_RESPONSIBILITY", "EMPLOYER_ACCIDENT_COMPENSATION", "UNINSURED_ACCIDENT_SUBSTITUTION"]:
                     if r not in sub_roles:
                         sub_roles.append(r)
+            elif (any(k in clean_lower for k in ["tai nạn", "tnlđ", "bị ngã", "bị té", "té", "ngã giàn giáo", "máy kẹp", "chấn thương", "gãy chân", "gãy tay"])
+                  and any(k in clean_lower for k in ["bồi thường", "chi phí", "trợ cấp", "tiền lương", "y tế", "cty trả", "công ty trả", "được gì", "gì không", "hay gì"])):
+                detected_dom = "OCCUPATIONAL_SAFETY"
+                expanded = f"{clean_text} trách nhiệm người sử dụng lao động khi người lao động bị tai nạn lao động thanh toán chi phí y tế trả đủ tiền lương bồi thường hoặc trợ cấp tai nạn lao động Điều 38 Điều 39 Luật An toàn vệ sinh lao động trợ cấp tai nạn từ Quỹ bảo hiểm xã hội Điều 45"
+                sub_events = detect_legal_events(clean_text)
+                if "OCCUPATIONAL_ACCIDENT" not in sub_events:
+                    sub_events.append("OCCUPATIONAL_ACCIDENT")
+                if "WORKPLACE_INJURY" not in sub_events:
+                    sub_events.append("WORKPLACE_INJURY")
+                sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
+                for r in ["EMPLOYER_MEDICAL_RESPONSIBILITY", "EMPLOYER_WAGE_RESPONSIBILITY", "EMPLOYER_ACCIDENT_COMPENSATION"]:
+                    if r not in sub_roles:
+                        sub_roles.append(r)
+            elif "trợ cấp thôi việc" in clean_lower:
+                detected_dom = "CORE_LABOR"
+                expanded = f"{clean_text} điều kiện hưởng trợ cấp thôi việc người lao động làm việc thường xuyên từ đủ 12 tháng trở lên Điều 46 Bộ luật Lao động 2019 Điều 8 Nghị định 145/2020/NĐ-CP"
+                sub_events = detect_legal_events(clean_text)
+                sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
+                if "TERMINATION_SEVERANCE_ALLOWANCE" not in sub_roles:
+                    sub_roles.append("TERMINATION_SEVERANCE_ALLOWANCE")
+            elif any(k in clean_lower for k in ["bằng gốc", "nộp bằng", "bằng đại học gốc", "làm tin", "giữ bằng", "giấy tờ gốc"]):
+                detected_dom = "CORE_LABOR"
+                expanded = f"{clean_text} hành vi người sử dụng lao động không được làm khi giao kết thực hiện hợp đồng lao động giữ bản chính giấy tờ tùy thân văn bằng chứng chỉ Điều 17 Khoản 1 Bộ luật Lao động 2019 Điều 15 Nghị định 283/2026/NĐ-CP"
+                sub_events = detect_legal_events(clean_text)
+                sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
+                if "PROHIBITED_ACTS_IDENTIFICATION" not in sub_roles:
+                    sub_roles.append("PROHIBITED_ACTS_IDENTIFICATION")
+            elif any(k in clean_lower for k in ["nhiều hợp đồng", "nhiều công ty", "2 công ty", "hai công ty"]) or (("cty a" in clean_lower or "công ty a" in clean_lower) and ("cty b" in clean_lower or "công ty b" in clean_lower)):
+                detected_dom = "CORE_LABOR"
+                expanded = f"{clean_text} người lao động có thể giao kết nhiều hợp đồng lao động với nhiều người sử dụng lao động Điều 19 Khoản 1 Bộ luật Lao động 2019"
+                sub_events = detect_legal_events(clean_text)
+                sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
+                if "MULTIPLE_CONTRACTS_PERMISSION" not in sub_roles:
+                    sub_roles.append("MULTIPLE_CONTRACTS_PERMISSION")
+            elif any(k in clean_lower for k in ["nợ lương", "chậm lương", "chậm trả lương"]) and any(k in clean_lower for k in ["nghỉ", "té", "nghỉ việc", "báo trước"]):
+                detected_dom = "CORE_LABOR"
+                expanded = f"{clean_text} người lao động có quyền đơn phương chấm dứt hợp đồng lao động không cần báo trước khi không được trả đủ lương hoặc trả lương không đúng thời hạn Điều 35 Khoản 2 Điểm b Bộ luật Lao động 2019"
+                sub_events = detect_legal_events(clean_text)
+                sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
+            elif any(k in clean_lower for k in ["deal lương", "thỏa thuận lương", "chỉ trả", "trả thiếu", "bớt lương", "khấu trừ", "làm phí", "thu phí", "trừ phí", "giữ lương", "không trả đủ", "trả không đủ"]):
+                detected_dom = "CORE_LABOR"
+                expanded = f"{clean_text} người sử dụng lao động phải trả lương đầy đủ đúng hạn không được can thiệp tự quyết chi tiêu lương khấu trừ tiền lương chỉ để bồi thường thiệt hại xử phạt hành vi trả không đủ tiền lương quyền đơn phương chấm dứt hợp đồng lao động Điều 90 Điều 94 Điều 102 Điều 35 Khoản 2 Điểm b Điều 188 Bộ luật Lao động 2019 Điều 17 Nghị định 12/2022/NĐ-CP Điều 23 Nghị định 283/2026/NĐ-CP"
+                sub_events = detect_legal_events(clean_text)
+                if "WAGE_AND_SALARY" not in sub_events:
+                    sub_events.append("WAGE_AND_SALARY")
+                sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
+                for r in ["WAGE_PAYMENT_RULE", "WAGE_DEDUCTION_LIMIT", "UNDERPAYMENT_SANCTION", "DISPUTE_RESOLUTION_PROCEDURE"]:
+                    if r not in sub_roles:
+                        sub_roles.append(r)
+            elif any(k in clean_lower for k in ["mang thai", "thai sản", "nuôi con dưới 12 tháng"]) and any(k in clean_lower for k in ["sa thải", "đuổi việc", "chấm dứt", "cắt giảm"]):
+                detected_dom = "CORE_LABOR"
+                expanded = f"{clean_text} người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt hợp đồng lao động đối với lao động nữ mang thai nuôi con dưới 12 tháng tuổi Điều 37 Khoản 3 Điều 137 Khoản 3 Bộ luật Lao động 2019"
+                sub_events = detect_legal_events(clean_text)
+                sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
+                if "PREGNANCY_DISMISSAL_PROHIBITION" not in sub_roles:
+                    sub_roles.append("PREGNANCY_DISMISSAL_PROHIBITION")
+            elif any(k in clean_lower for k in ["sổ bảo hiểm", "trả sổ", "chốt sổ", "trả lại sổ"]):
+                detected_dom = "CORE_LABOR"
+                expanded = f"{clean_text} trách nhiệm của người sử dụng lao động khi chấm dứt hợp đồng lao động hoàn thành thủ tục xác nhận và trả lại sổ bảo hiểm xã hội thời hạn 14 ngày làm việc Điều 48 Khoản 1 Khoản 3 Bộ luật Lao động 2019"
+                sub_events = detect_legal_events(clean_text)
+                if "TERMINATION" not in sub_events:
+                    sub_events.append("TERMINATION")
+                sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
+                if "TERMINATION_SETTLEMENT_OBLIGATION" not in sub_roles:
+                    sub_roles.append("TERMINATION_SETTLEMENT_OBLIGATION")
+            elif any(k in clean_lower for k in ["thực tập", "thực tập sinh", "sinh viên thực tập"]):
+                detected_dom = "CORE_LABOR"
+                expanded = f"{clean_text} thực tập theo chương trình đào tạo của trường không phải quan hệ lao động hợp đồng đào tạo nghề học nghề tập nghề Điều 13 Khoản 1 Điều 61 Điều 62 Bộ luật Lao động 2019"
+                sub_events = detect_legal_events(clean_text)
+                sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
+                if "EMPLOYMENT_RELATIONSHIP_DEFINITION" not in sub_roles:
+                    sub_roles.append("EMPLOYMENT_RELATIONSHIP_DEFINITION")
+                if "EMPLOYER_TRAINING_OBLIGATION" not in sub_roles:
+                    sub_roles.append("EMPLOYER_TRAINING_OBLIGATION")
             else:
                 expanded = self.expander.expand(clean_text)
                 detected_dom = explicit_dom or self._detect_domain(clean_text)
                 sub_events = detect_legal_events(clean_text)
                 sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
+            self._add_contextual_roles(sub_events, sub_roles, norm_q)
             results.append(
                 DecomposedIssue(
                     issue_id=f"issue_{idx}",
@@ -603,8 +738,14 @@ class IssueDecomposer:
         q_lower = raw_q.lower()
         for s in sentences:
             s_lower = s.lower()
-            if any(k in q_lower for k in ["lương", "tiền lương", "thu nhập"]):
-                if re.search(r"\d+\s*(?:đồng|đ|triệu|tr|k)|\d+\s*%|lương|tiền lương", s_lower):
+            if any(k in q_lower for k in ["làm thêm", "tăng ca", "ngoài giờ"]):
+                if any(k in s_lower for k in ["làm thêm", "tăng ca", "ngoài giờ", "giờ", "trừ thưởng"]):
+                    matched.append(s)
+            elif any(k in q_lower for k in ["báo trước", "nghỉ việc", "chấm dứt", "bồi thường"]):
+                if any(k in s_lower for k in ["hợp đồng", "báo trước", "nghỉ việc", "chấm dứt", "bồi thường"]):
+                    matched.append(s)
+            elif any(k in q_lower for k in ["lương", "tiền lương", "thu nhập"]):
+                if re.search(r"trả lương|chậm trả|nợ lương|kỳ hạn trả|mức lương", s_lower):
                     matched.append(s)
             elif any(k in q_lower for k in ["bhxh", "bảo hiểm"]):
                 if re.search(r"bhxh|bảo hiểm", s_lower):
@@ -630,5 +771,3 @@ class IssueDecomposer:
         if matched:
             return " ".join(matched) + ". " + raw_q
         return raw_q
-
-
