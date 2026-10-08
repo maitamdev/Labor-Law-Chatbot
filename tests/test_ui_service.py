@@ -8,7 +8,8 @@ from pathlib import Path
 import tempfile
 import json
 
-from app.chat_service import ChatService
+from app.chat_service import ChatService, answer_smalltalk
+from rag.output_validator import format_answer_markdown
 from ui.utils.session import SessionManager, generate_title_from_query
 from ui.utils.formatting import format_provision_badge, format_relative_date
 
@@ -29,7 +30,11 @@ def test_title_generation_from_queries():
     assert generate_title_from_query("Công ty bắt tôi thử việc 3 tháng có đúng không?") == "Thử việc 3 tháng"
     assert generate_title_from_query("Tôi ký hợp đồng 2 năm, muốn nghỉ việc phải báo trước bao lâu?") == "Nghỉ việc hợp đồng 2 năm"
     assert generate_title_from_query("Làm thêm ngày lễ được trả lương thế nào?") == "Lương làm thêm ngày lễ"
+    assert generate_title_from_query("Tôi đi làm thêm và ký thỏa thuận công việc") == "Xác định quan hệ lao động"
     assert generate_title_from_query("Công ty có được giữ bằng đại học bản chính không?") == "Công ty giữ bằng đại học"
+    assert generate_title_from_query("Tôi đi làm mà bị sếp đấm") == "Bạo lực tại nơi làm việc"
+    assert generate_title_from_query("Vào làm chính thức rồi cuối tuần mới ký HĐLĐ") == "Đi làm trước khi ký HĐLĐ"
+    assert generate_title_from_query("Nguyên tắc nền tảng khi giao kết HĐLĐ") == "Nguyên tắc giao kết HĐLĐ"
     assert generate_title_from_query("Thủ tục ly hôn thuận tình") == "Thủ tục ly hôn"
 
 
@@ -70,6 +75,21 @@ def test_session_manager_lifecycle(temp_session_mgr):
     assert len(temp_session_mgr.load_conversations()) == 0
 
 
+def test_session_manager_recovers_stale_conversation_id(temp_session_mgr):
+    first = temp_session_mgr.create_conversation("Cuộc trò chuyện thứ nhất")
+    second = temp_session_mgr.create_conversation("Cuộc trò chuyện thứ hai")
+
+    assert temp_session_mgr.ensure_conversation(first["id"])["id"] == first["id"]
+
+    temp_session_mgr.delete_conversation(first["id"])
+    assert temp_session_mgr.ensure_conversation(first["id"])["id"] == second["id"]
+
+    temp_session_mgr.delete_conversation(second["id"])
+    recovered = temp_session_mgr.ensure_conversation("68b366e4")
+    assert recovered["id"] != "68b366e4"
+    assert temp_session_mgr.get_conversation(recovered["id"]) is not None
+
+
 def test_provision_badge_formatting():
     badge = format_provision_badge(article="35", clause="1", point="b")
     assert badge == "Điều 35 · Khoản 1 · Điểm b"
@@ -100,6 +120,7 @@ def test_chat_service_schema_and_clarification(chat_service):
     assert "Cao đẳng trở lên" in res["suggested_followups"]
 
 
+@pytest.mark.ollama
 def test_chat_service_legal_answer_with_citations(chat_service):
     chat_service.reset_conversation()
     res = chat_service.ask("Tôi ký hợp đồng 2 năm, muốn nghỉ việc phải báo trước bao lâu?", update_memory=False)
@@ -122,3 +143,63 @@ def test_chat_service_out_of_scope(chat_service):
     assert res["out_of_scope"] is True
     assert len(res["citations"]) == 0
     assert len(res["suggested_followups"]) > 0
+
+
+def test_conversation_chatgpt_style_lifecycle(temp_session_mgr):
+    # 1. Start fresh conversation
+    c1 = temp_session_mgr.create_conversation("Cuộc trò chuyện mới")
+    assert c1["title"] == "Cuộc trò chuyện mới"
+    assert len(c1["messages"]) == 0
+
+    # 2. First user question auto-names the conversation
+    temp_session_mgr.append_message(c1["id"], "user", "Tôi làm việc bị té thì có được bồi thường tai nạn lao động không?")
+    updated1 = temp_session_mgr.get_conversation(c1["id"])
+    assert updated1["title"] == "Bồi thường tai nạn lao động"
+    assert len(updated1["messages"]) == 1
+
+    # 3. Follow-up assistant message
+    temp_session_mgr.append_message(c1["id"], "assistant", "Theo Điều 38 Luật ATVSLĐ...")
+    updated1 = temp_session_mgr.get_conversation(c1["id"])
+    assert updated1["title"] == "Bồi thường tai nạn lao động"
+    assert len(updated1["messages"]) == 2
+
+    # 4. Start second conversation (independent)
+    c2 = temp_session_mgr.create_conversation("Cuộc trò chuyện mới")
+    temp_session_mgr.append_message(c2["id"], "user", "Công ty tự ý trừ phí tiền lương của tôi")
+    updated2 = temp_session_mgr.get_conversation(c2["id"])
+    assert updated2["title"] == "Khấu trừ tiền lương trái phép"
+    assert len(updated2["messages"]) == 1
+
+    # C1 remains unchanged and intact
+    c1_check = temp_session_mgr.get_conversation(c1["id"])
+    assert len(c1_check["messages"]) == 2
+    assert c1_check["title"] == "Bồi thường tai nạn lao động"
+
+    # 5. Deleting C1 leaves C2 as primary
+    temp_session_mgr.delete_conversation(c1["id"])
+    assert temp_session_mgr.get_conversation(c1["id"]) is None
+    convs = temp_session_mgr.load_conversations()
+    assert len(convs) == 1
+    assert convs[0]["id"] == c2["id"]
+
+
+def test_corpus_scope_and_anti_prompt_leak():
+    # 1. Scope question matches corpus_scope with 0ms fast-track
+    reply = answer_smalltalk("có bao nhiêu luật")
+    assert reply is not None
+    assert reply["is_smalltalk"] is True
+    assert reply["smalltalk_intent"] == "corpus_scope"
+    assert "Bộ luật Lao động 2019" in reply["answer"]
+    assert "Luật An toàn, vệ sinh lao động" in reply["answer"]
+    assert "Luật Bảo hiểm xã hội" in reply["answer"]
+
+    # 2. Leaked preamble and raw LEGAL_CONTEXT are deterministically cleaned
+    raw_leak = (
+        "Bài tư vấn pháp lý cho câu hỏi 'có bao nhiêu luật' dựa trên LEGAL_CONTEXT cung cấp như sau: "
+        "Trong LEGAL_CONTEXT, chỉ có một quy định pháp luật liên quan đến nội quy lao động được đề cập, "
+        "cụ thể là Điều 118 của Bộ luật Lao động. Do đó, có một luật liên quan đến nội quy lao động trong LEGAL_CONTEXT."
+    )
+    cleaned = format_answer_markdown(raw_leak)
+    assert "LEGAL_CONTEXT" not in cleaned
+    assert "Bài tư vấn pháp lý" not in cleaned
+    assert "Điều 118" in cleaned
