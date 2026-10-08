@@ -53,8 +53,8 @@ DOC_MAX_ARTICLES: dict[str, int] = {
     'VBHN_18_2026': 220,
     'ND_135_2020': 10,
     'LVL_74_2025': 120,
-    'ND_374_2025': 20,
-    'ND_219_2025': 30,
+    'ND_374_2025': 50,
+    'ND_219_2025': 40,
     'VBHN_58_2025': 150,
     'ND_158_2025': 50,
     'ND_159_2025': 40,
@@ -277,6 +277,13 @@ class LegalParser:
 
                 if not line:
                     continue
+
+                # The official 2026 consolidated Labor Code prints footnote 44
+                # immediately after the first clause marker in Article 139
+                # ("1.44 Lao động nữ..."). It is a superscript note, not part
+                # of the clause number; normalize only this known source case.
+                if doc_id == "VBHN_18_2026" and current_article_number == "139":
+                    line = re.sub(r"^1\.44(?=\s)", "1.", line)
 
                 # 1. PART check
                 part_match = PART_PATTERN.match(line)
