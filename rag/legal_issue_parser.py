@@ -96,6 +96,9 @@ def detect_legal_events(query: str) -> List[str]:
         VOCATIONAL_TRAINING
         RETIREMENT
         UNEMPLOYMENT
+        WORKPLACE_VIOLENCE
+        CONTRACT_SIGNING_TIMING
+        CONTRACT_FORMATION_PRINCIPLES
         UNKNOWN
     """
     if not query or not isinstance(query, str):
@@ -103,6 +106,96 @@ def detect_legal_events(query: str) -> List[str]:
 
     q_norm = unicodedata.normalize("NFC", query).lower()
     events: List[str] = []
+
+    # Người dùng thường mô tả bạo lực bằng ngôn ngữ đời thường như
+    # "sếp đấm/đánh/tát", không dùng thuật ngữ pháp lý "ngược đãi".
+    violence_terms = [
+        "sếp đấm", "sếp đánh", "sếp tát", "sếp đá", "sếp hành hung",
+        "quản lý đấm", "quản lý đánh", "quản lý tát", "quản lý hành hung",
+        "chủ đánh", "chủ đấm", "chủ tát", "chủ hành hung",
+        "bị đánh ở chỗ làm", "bị đấm ở chỗ làm", "bị hành hung ở chỗ làm",
+        "đánh đập người lao động", "ngược đãi người lao động",
+    ]
+    has_workplace_actor = any(k in q_norm for k in [
+        "sếp", "quản lý", "chủ", "người sử dụng lao động", "giám đốc",
+        "trưởng phòng", "trưởng ca", "cấp trên",
+    ])
+    has_violent_act = any(k in q_norm for k in [
+        "đấm", "đánh", "tát", "đá", "hành hung", "đánh đập", "ngược đãi",
+    ])
+    if any(k in q_norm for k in violence_terms) or (has_workplace_actor and has_violent_act):
+        events.append("WORKPLACE_VIOLENCE")
+
+    # Contract must exist before work starts.  Keep this distinct from renewal
+    # after a fixed-term contract expires (Article 20), which shares generic
+    # words such as "ký HĐLĐ" but answers a different question.
+    signing_terms = ["ký hợp đồng", "ký hđlđ", "ký hđ", "giao kết hợp đồng"]
+    contract_terms = signing_terms + [
+        "hợp đồng lao động", "hđlđ", "hđ lao động", "hợp đồng làm việc", "hợp đồng",
+    ]
+    has_contract_reference = any(k in q_norm for k in contract_terms)
+    has_work_start = any(k in q_norm for k in [
+        "đi làm", "vào làm", "bắt đầu làm", "nhận việc", "nhận vào làm",
+        "làm chính thức", "đã làm", "làm được", "cho nhân viên làm",
+        "cho người lao động làm", "cho một người vào làm",
+    ])
+    has_late_or_missing_contract = any(k in q_norm for k in [
+        "mới ký", "ký sau", "sau mới ký", "cuối tuần mới ký",
+        "hẹn ký sau", "sẽ ký sau", "vài ngày sau ký", "một tuần sau ký",
+        "1 tuần sau ký", "chưa ký", "chưa có hợp đồng", "không có hợp đồng",
+        "chưa được ký", "chưa giao kết",
+    ])
+    is_expired_contract_renewal = any(k in q_norm for k in [
+        "hợp đồng hết hạn", "hợp đồng cũ hết hạn", "hết hạn hợp đồng",
+        "hđlđ hết hạn", "hết hđlđ", "ký tiếp", "ký lần 2", "ký lần hai",
+        "gia hạn hợp đồng", "tiếp tục làm việc sau khi hết hạn",
+    ])
+    work_before_sign_patterns = [
+        r"(?:đi|vào|bắt đầu|nhận.{0,30}vào)\s+làm.{0,80}(?:rồi|sau đó|mới|cuối tuần).{0,30}ký",
+        r"làm\s+(?:việc|chính thức)?.{0,50}(?:trước).{0,50}ký",
+        r"ký.{0,30}(?:sau khi|sau ngày).{0,30}(?:đi|vào|bắt đầu)\s+làm",
+        r"chưa\s+ký.{0,50}(?:đã|mà|nhưng).{0,30}(?:đi|vào|bắt đầu|làm)",
+        r"(?:đã\s+làm|làm\s+được|bắt đầu\s+làm).{0,60}(?:mà|nhưng|vẫn)?.{0,20}chưa\s+ký",
+        r"(?:đi|vào|bắt đầu)\s+làm.{0,60}(?:mà|nhưng|trong khi).{0,30}(?:chưa\s+ký|chưa\s+có|không\s+có)",
+        r"(?:thứ\s+hai|đầu\s+tuần).{0,40}(?:đi|vào|bắt đầu)\s+làm.{0,80}(?:thứ\s+sáu|cuối\s+tuần).{0,30}ký",
+    ]
+    has_order_pattern = any(re.search(pattern, q_norm) for pattern in work_before_sign_patterns)
+    if (
+        has_contract_reference
+        and not is_expired_contract_renewal
+        and (has_order_pattern or (has_work_start and has_late_or_missing_contract))
+    ):
+        events.append("CONTRACT_SIGNING_TIMING")
+
+    # Principles of contract formation (Article 15) must not be confused with
+    # the pre-contract information duties in Article 16.
+    has_formation_context = any(k in q_norm for k in [
+        "giao kết hđlđ", "giao kết hợp đồng lao động", "ký kết hđlđ",
+        "ký kết hợp đồng lao động", "khi giao kết hợp đồng", "lúc giao kết hợp đồng",
+    ])
+    has_principle_intent = any(k in q_norm for k in [
+        "nguyên tắc", "nền tảng", "dựa trên yêu cầu nào", "yêu cầu cơ bản",
+        "yêu cầu nền tảng", "phải tuân theo những gì", "phải tuân thủ gì",
+    ])
+    has_information_intent = any(k in q_norm for k in [
+        "cung cấp thông tin", "phải thông báo", "phải cho biết", "thông tin gì",
+        "nghĩa vụ cung cấp", "khai báo thông tin",
+    ])
+    if has_formation_context and has_principle_intent and not has_information_intent:
+        events.append("CONTRACT_FORMATION_PRINCIPLES")
+
+    # Giao kết nhiều hợp đồng lao động (Điều 19 Bộ luật Lao động 2019)
+    is_multiple_contracts = any(k in q_norm for k in [
+        "nhiều hợp đồng", "nhiều hđlđ", "2 hợp đồng", "hai hợp đồng", "3 hợp đồng",
+        "nhận thêm việc", "làm thêm việc", "làm thêm cho", "nhận thêm công việc",
+        "ký thêm hợp đồng", "ký thêm hđlđ", "làm cho 2 công ty", "làm cho hai công ty",
+        "làm việc cho nhiều", "làm ở nhiều nơi", "làm nhiều nơi", "làm song song",
+        "ký kết hợp đồng lao động với các cơ sở", "ký hợp đồng với các cơ sở",
+        "ký hợp đồng với nhiều công ty", "đồng thời làm việc", "làm việc cho người sử dụng lao động khác",
+        "làm thêm ngoài giờ cho công ty khác"
+    ])
+    if is_multiple_contracts and any(k in q_norm for k in ["hợp pháp", "được không", "có được", "quy định", "ký kết", "hợp đồng", "làm việc"]):
+        events.append("MULTIPLE_CONTRACTS")
 
     # 1. Unpaid / Arrears / Insurance Contribution
     has_unpaid_ins = any(k in q_norm for k in [
@@ -117,7 +210,13 @@ def detect_legal_events(query: str) -> List[str]:
         "nghĩa vụ đóng", "bắt buộc phải đóng", "đối tượng tham gia bhxh",
         "sổ bhxh", "chốt sổ bhxh", "chốt sổ bảo hiểm"
     ])
-    if has_unpaid_ins:
+    has_voluntary_support = (
+        ("bảo hiểm xã hội tự nguyện" in q_norm or "bhxh tự nguyện" in q_norm)
+        and "hỗ trợ" in q_norm
+    )
+    if has_voluntary_support:
+        events.append("VOLUNTARY_SOCIAL_INSURANCE_SUPPORT")
+    elif has_unpaid_ins:
         events.append("UNPAID_INSURANCE")
         events.append("INSURANCE_CONTRIBUTION")
     elif has_ins_contrib:
@@ -133,8 +232,8 @@ def detect_legal_events(query: str) -> List[str]:
         "bảo hiểm tai nạn", "bảo hiểm tnlđ", "tai nạn xe nâng",
         "từ nơi ở đến nơi làm việc", "từ nơi làm việc về nơi ở", "trên tuyến đường đi và về"
     ]) or (
-        any(k in q_norm for k in ["gãy chân", "gãy tay", "đứt tay", "bỏng", "ngã", "chấn thương", "máy dập", "máy chém", "máy cuốn", "máy khâu", "máy may", "đâm vào tay", "kẹp tay", "đâm vào", "kẹp"])
-        and any(k in q_norm for k in ["đang làm", "khi làm việc", "trong giờ làm", "trong ca", "tại xưởng", "ở xưởng", "ở công ty", "công ty", "doanh nghiệp", "người lao động", "lúc làm việc", "chỗ làm", "làm việc", "công trình", "xí nghiệp"])
+        any(k in q_norm for k in ["gãy chân", "gãy tay", "đứt tay", "bỏng", "ngã", "té", "bị té", "té ngã", "trượt chân", "chấn thương", "máy dập", "máy chém", "máy cuốn", "máy khâu", "máy may", "đâm vào tay", "kẹp tay", "đâm vào", "kẹp"])
+        and any(k in q_norm for k in ["đang làm", "khi làm việc", "trong giờ làm", "trong ca", "tại xưởng", "ở xưởng", "ở công ty", "công ty", "cty", "doanh nghiệp", "người lao động", "lúc làm việc", "chỗ làm", "làm việc", "công trình", "xí nghiệp"])
     ) or (
         "tai nạn" in q_norm and any(k in q_norm for k in ["ở xưởng", "tại xưởng", "nhà xưởng", "công trình", "công ty", "doanh nghiệp", "nơi làm việc", "xe nâng", "trong giờ làm việc", "trong ca làm việc"])
     )
@@ -162,8 +261,36 @@ def detect_legal_events(query: str) -> List[str]:
         events.append("MATERNITY")
 
     # 6. Termination
-    if any(k in q_norm for k in ["sa thải", "đuổi việc", "chấm dứt hợp đồng", "hết hạn hợp đồng", "hết hợp đồng", "đơn phương chấm dứt", "thôi việc", "nghỉ việc", "bị cho thôi việc", "cho thôi việc", "cho nghỉ việc"]):
+    if any(k in q_norm for k in ["sa thải", "đuổi việc", "chấm dứt hợp đồng", "hết hạn hợp đồng", "hết hợp đồng", "đơn phương chấm dứt", "thôi việc", "nghỉ việc", "bị cho thôi việc", "cho thôi việc", "cho nghỉ việc", "báo trước", "nếu nghỉ", "muốn nghỉ", "xin nghỉ", "trả sổ", "chốt sổ", "trả sổ bảo hiểm", "trả lại sổ"]):
         events.append("TERMINATION")
+
+    # 6a. Wage payment, underpayment, unauthorized deduction, and delayed wage
+    strong_wage_signal = any(k in q_norm for k in [
+        "chậm trả lương", "nợ lương", "kỳ hạn trả lương", "không trả lương", "khấu trừ lương",
+        "deal lương", "thỏa thuận lương", "chỉ trả", "trả thiếu", "bớt lương", "cắt lương",
+        "trừ lương", "thu phí", "làm phí", "trừ phí", "giữ lương", "khấu trừ", "không trả đủ",
+        "trả không đủ", "hụt lương", "bớt tiền", "phí gì đó"
+    ])
+    general_wage_signal = any(k in q_norm for k in ["trả lương", "tiền lương", "lương tháng", "lương ngày"])
+    if strong_wage_signal or (
+        general_wage_signal
+        and "OCCUPATIONAL_ACCIDENT" not in events
+        and "WORKPLACE_INJURY" not in events
+    ):
+        events.append("WAGE_AND_SALARY")
+
+    # 6b. Overtime / working-time limits and consent
+    if any(k in q_norm for k in [
+        "làm thêm", "tăng ca", "ngoài giờ", "ép làm thêm", "giờ làm thêm",
+        "làm 12 giờ", "làm mười hai giờ"
+    ]):
+        events.append("OVERTIME")
+
+    if any(k in q_norm for k in [
+        "trừ thưởng", "cắt thưởng", "không xét thưởng", "phạt tiền", "cắt lương",
+        "trừ lương", "kỷ luật", "khiển trách"
+    ]):
+        events.append("DISCIPLINE_AND_BONUS")
 
     # 7. Vocational Training
     if any(k in q_norm for k in ["đào tạo", "học nghề", "tập nghề", "bồi dưỡng", "chi phí đào tạo", "bồi hoàn chi phí", "cử đi học", "cử đi đào tạo", "đền tiền", "đền bù chi phí"]):
@@ -185,6 +312,43 @@ def detect_legal_events(query: str) -> List[str]:
     ]):
         events.append("SAFETY_WORK_REFUSAL")
 
+    # 11. Misassigned work / Reassignment to different work (Điều 29 & Điều 35k2a)
+    has_misassigned_work = any(k in q_norm for k in [
+        "không được bố trí đúng", "không bố trí đúng", "bố trí công việc không đúng",
+        "không đúng công việc", "làm công việc khác", "chuyển làm việc khác",
+        "chuyển sang làm việc khác", "chuyển công việc khác", "làm bốc vác",
+        "phải làm công việc của", "không đúng thỏa thuận", "không đúng hợp đồng",
+        "không theo đúng hợp đồng", "chuyển người lao động làm công việc khác",
+        "bố trí công việc theo đúng hợp đồng", "không bố trí theo đúng hợp đồng",
+        "kiến nghị với giám đốc công ty bố trí công việc", "kiến nghị bố trí công việc",
+    ])
+    if has_misassigned_work:
+        events.append("MISASSIGNED_WORK_TERMINATION")
+
+    # 12. Multiple labor contracts (Điều 19 BLLĐ)
+    has_multiple_employers = any(k in q_norm for k in [
+        "nhiều hợp đồng", "nhiều hđlđ", "2 hợp đồng", "hai hợp đồng",
+        "nhiều công ty", "2 công ty", "hai công ty", "công ty khác",
+        "làm cho 2 nơi", "làm hai nơi", "hai nơi", "2 nơi", "nhiều nơi",
+    ]) or (
+        ("cty a" in q_norm or "công ty a" in q_norm) and ("cty b" in q_norm or "công ty b" in q_norm)
+    )
+    if has_multiple_employers:
+        events.append("MULTIPLE_CONTRACTS")
+        if "OVERTIME" in events:
+            events.remove("OVERTIME")
+
+    # 13. Employer prohibited acts: keeping diplomas, IDs, or security deposits (Điều 17 BLLĐ)
+    has_prohibited_act = any(k in q_norm for k in [
+        "bằng gốc", "nộp bằng", "bằng đại học gốc", "làm tin", "giữ bằng",
+        "giữ cccd", "giữ chứng minh", "giữ giấy tờ", "nộp bằng gốc", "giấy tờ gốc",
+        "bản chính", "văn bằng chứng chỉ", "giữ bản chính", "đòi giữ", "giữ lại giấy tờ",
+    ])
+    if has_prohibited_act:
+        events.append("EMPLOYER_PROHIBITED_ACTS")
+        if "CONTRACT_SIGNING_TIMING" in events:
+            events.remove("CONTRACT_SIGNING_TIMING")
+
     if not events:
         events.append("UNKNOWN")
 
@@ -201,6 +365,34 @@ def detect_legal_events(query: str) -> List[str]:
 def determine_required_evidence_roles(events: List[str], query_lower: str) -> List[str]:
     """Deterministically identifies mandatory evidence roles required to substantiate an answer."""
     roles: List[str] = []
+    if "WORKPLACE_VIOLENCE" in events:
+        roles.extend([
+            "EMPLOYER_MISTREATMENT_PROHIBITION",
+            "EMPLOYEE_NO_NOTICE_FOR_MISTREATMENT",
+            "EMPLOYER_MISTREATMENT_SANCTION",
+        ])
+    if "CONTRACT_SIGNING_TIMING" in events:
+        roles.extend([
+            "PRE_WORK_CONTRACT_REQUIREMENT",
+            "EMPLOYMENT_RELATIONSHIP_DEFINITION",
+            "WRITTEN_CONTRACT_FORM",
+            "ORAL_CONTRACT_EXCEPTION",
+        ])
+    if "CONTRACT_FORMATION_PRINCIPLES" in events:
+        roles.extend([
+            "FORMATION_EQUALITY_GOOD_FAITH",
+            "FORMATION_FREEDOM_LIMITS",
+        ])
+    if "MULTIPLE_CONTRACTS" in events:
+        roles.append("MULTIPLE_CONTRACTS_PERMISSION")
+        if "OVERTIME_CONSENT" in roles:
+            roles.remove("OVERTIME_CONSENT")
+        if "OVERTIME_LIMIT" in roles:
+            roles.remove("OVERTIME_LIMIT")
+
+    if "EMPLOYER_PROHIBITED_ACTS" in events:
+        roles.append("PROHIBITED_ACTS_IDENTIFICATION")
+
     if "OCCUPATIONAL_ACCIDENT" in events or "WORKPLACE_INJURY" in events:
         # Check if question concerns employer's responsibilities or unpaid insurance
         if any(k in query_lower for k in [
@@ -221,11 +413,26 @@ def determine_required_evidence_roles(events: List[str], query_lower: str) -> Li
     if "INSURANCE_CONTRIBUTION" in events or "UNPAID_INSURANCE" in events:
         roles.append("EMPLOYER_INSURANCE_OBLIGATION")
 
+    if "VOLUNTARY_SOCIAL_INSURANCE_SUPPORT" in events:
+        roles.extend([
+            "VOLUNTARY_SUPPORT_50",
+            "VOLUNTARY_SUPPORT_40",
+            "VOLUNTARY_SUPPORT_30",
+            "VOLUNTARY_SUPPORT_20",
+        ])
+
     if "ORDINARY_SICKNESS" in events:
         roles.extend(["SICKNESS_BENEFIT_DURATION", "SICKNESS_BENEFIT_RATE"])
 
     if "MATERNITY" in events:
-        roles.append("MATERNITY_BENEFIT")
+        has_mat_benefit = any(k in query_lower for k in ["chế độ", "trợ cấp", "tiền thai sản", "hưởng thai sản", "đóng bảo hiểm"])
+        has_mat_dismissal = any(k in query_lower for k in ["sa thải", "đuổi việc", "chấm dứt", "cắt giảm", "cho nghỉ", "bảo vệ việc làm"])
+        if has_mat_dismissal:
+            roles.append("PREGNANCY_DISMISSAL_PROHIBITION")
+        if has_mat_benefit:
+            roles.append("MATERNITY_BENEFIT")
+        if not has_mat_benefit and not has_mat_dismissal:
+            roles.append("MATERNITY_BENEFIT")
 
     if "VOCATIONAL_TRAINING" in events:
         if any(k in query_lower for k in ["nghĩa vụ", "kế hoạch", "kinh phí", "trách nhiệm"]):
@@ -233,11 +440,58 @@ def determine_required_evidence_roles(events: List[str], query_lower: str) -> Li
         if any(k in query_lower for k in ["bồi hoàn", "hoàn trả", "chi phí", "cam kết", "nghỉ việc"]):
             roles.append("TRAINING_COST_REFUND")
 
-    if "TERMINATION" in events:
+    if "MISASSIGNED_WORK_TERMINATION" in events:
+        roles.extend([
+            "EMPLOYEE_NO_NOTICE_FOR_MISASSIGNED_WORK",
+            "WORK_REASSIGNMENT_LIMITS",
+            "EMPLOYEE_UNLAWFUL_TERMINATION_LIABILITY",
+        ])
+
+    if "TERMINATION" in events or any(k in query_lower for k in ["sổ bảo hiểm", "trả sổ", "chốt sổ", "trả lại sổ"]):
+        if any(k in query_lower for k in ["sổ bảo hiểm", "trả sổ", "chốt sổ", "trả lại sổ"]):
+            roles.append("TERMINATION_SETTLEMENT_OBLIGATION")
         if any(k in query_lower for k in ["trợ cấp thôi việc", "thôi việc"]):
             roles.append("TERMINATION_SEVERANCE_ALLOWANCE")
-        elif any(k in query_lower for k in ["trái luật", "bồi thường"]):
+        elif any(k in query_lower for k in ["trái luật", "bồi thường"]) and not any(
+            k in query_lower for k in ["tôi nghỉ", "nếu nghỉ", "người lao động nghỉ", "xin nghỉ", "muốn nghỉ"]
+        ):
             roles.append("UNLAWFUL_TERMINATION_COMPENSATION")
+
+        is_standalone_employee_exit = not any(
+            ev in events for ev in ["VOCATIONAL_TRAINING", "OCCUPATIONAL_ACCIDENT", "WORKPLACE_INJURY"]
+        )
+        has_unpaid_wage_exit = any(k in query_lower for k in [
+            "nợ lương", "chậm lương", "không trả lương", "chậm trả lương", "quỵt lương"
+        ])
+        if has_unpaid_wage_exit:
+            roles.append("EMPLOYEE_NO_NOTICE_EXCEPTION")
+            if "EMPLOYEE_NOTICE_REQUIREMENT" in roles:
+                roles.remove("EMPLOYEE_NOTICE_REQUIREMENT")
+        elif "MISASSIGNED_WORK_TERMINATION" not in events:
+            if is_standalone_employee_exit and any(k in query_lower for k in ["báo trước", "đơn phương", "muốn nghỉ", "xin nghỉ", "nếu nghỉ"]):
+                roles.append("EMPLOYEE_NOTICE_REQUIREMENT")
+        if is_standalone_employee_exit and any(k in query_lower for k in ["phải bồi thường", "bồi thường hai", "bồi thường 2", "không báo trước"]):
+            roles.append("EMPLOYEE_UNLAWFUL_TERMINATION_LIABILITY")
+
+    if "WAGE_AND_SALARY" in events:
+        roles.append("WAGE_PAYMENT_RULE")
+        if any(k in query_lower for k in ["chậm", "nợ lương", "không trả", "trả thiếu", "chỉ trả", "bớt lương", "khấu trừ", "làm phí", "thu phí", "không trả đủ", "trả không đủ"]):
+            roles.append("DELAYED_WAGE_REMEDY")
+        if any(k in query_lower for k in ["khấu trừ", "làm phí", "thu phí", "trừ phí", "trừ lương", "bớt lương", "chỉ trả", "giữ lương"]):
+            roles.append("WAGE_DEDUCTION_LIMIT")
+        if any(k in query_lower for k in ["vi phạm", "xử phạt", "phạt bao nhiêu", "bị phạt", "vi phạm luật nào", "luật nào"]):
+            roles.append("UNDERPAYMENT_SANCTION")
+        if any(k in query_lower for k in ["hướng xử lý", "làm sao", "ở đâu", "giải quyết", "khởi kiện", "khiếu nại", "tố cáo"]):
+            roles.append("DISPUTE_RESOLUTION_PROCEDURE")
+
+    if "OVERTIME" in events:
+        roles.extend(["OVERTIME_CONSENT", "OVERTIME_LIMIT"])
+
+    if "DISCIPLINE_AND_BONUS" in events:
+        if any(k in query_lower for k in ["thưởng", "trừ thưởng", "cắt thưởng", "không xét thưởng"]):
+            roles.append("BONUS_RULE")
+        if any(k in query_lower for k in ["phạt tiền", "cắt lương", "trừ lương"]):
+            roles.append("PROHIBITED_MONETARY_DISCIPLINE")
 
     if "SAFETY_WORK_REFUSAL" in events or any(k in query_lower for k in ["từ chối làm việc", "đe dọa tính mạng", "nguy cơ đe dọa"]):
         roles.extend([
@@ -609,13 +863,16 @@ class LegalIssueParser:
             qualifiers.append("category_hazardous_normal")
 
         # Deposit and Document Withholding (Điều 17 BLLĐ vs NĐ 12)
-        if any(k in q_lower for k in ["đặt cọc", "thế chấp", "tiền cọc", "tiền bảo đảm", "giữ bằng", "giữ căn cước", "giấy tờ tùy thân"]):
+        if any(k in q_lower for k in [
+            "đặt cọc", "thế chấp", "tiền cọc", "tiền bảo đảm", "giữ bằng", "giữ căn cước", "giấy tờ tùy thân",
+            "bằng gốc", "nộp bằng", "bằng đại học gốc", "làm tin", "giấy tờ gốc", "bản chính", "văn bằng chứng chỉ", "giữ giấy tờ"
+        ]):
             topic = "contract"
             action = "prohibited_acts_contract"
             qualifiers.append("prohibited_deposit_or_withholding")
             if any(k in q_lower for k in ["đặt cọc", "thế chấp", "tiền bảo đảm"]):
                 qualifiers.append("money_deposit_security")
-            if any(k in q_lower for k in ["bằng", "văn bằng", "chứng chỉ", "căn cước", "giấy tờ"]):
+            if any(k in q_lower for k in ["bằng", "văn bằng", "chứng chỉ", "căn cước", "giấy tờ", "bản chính", "làm tin"]):
                 qualifiers.append("original_document_withholding")
 
         # Special Occupation Resignation (Điều 35k1d + NĐ 145 Điều 7)
