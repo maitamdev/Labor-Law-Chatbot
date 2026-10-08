@@ -15,6 +15,8 @@ from typing import Any, Dict, List, Optional, Union, cast
 import chromadb
 from chromadb.config import Settings
 
+from config.settings import CHROMA_INDEX_DIR, PRODUCTION_CORPUS_PATH
+
 from rag.embeddings import (
     DEFAULT_EMBEDDING_DIM,
     DEFAULT_MODEL_NAME,
@@ -25,9 +27,9 @@ from rag.embeddings import (
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_PERSIST_DIR = Path("storage/chroma")
-DEFAULT_COLLECTION_NAME = "vietlabor_chunks"
-DEFAULT_CORPUS_PATH = Path("data/processed/legal_documents.jsonl")
+DEFAULT_PERSIST_DIR = CHROMA_INDEX_DIR
+DEFAULT_COLLECTION_NAME = "vietlabor_chunks_v3"
+DEFAULT_CORPUS_PATH = PRODUCTION_CORPUS_PATH
 
 
 def clean_metadata_for_chroma(chunk: dict[str, Any]) -> dict[str, Union[str, int, float, bool]]:
@@ -113,8 +115,22 @@ class LegalVectorStore:
         with open(self.meta_file, "w", encoding="utf-8") as f:
             json.dump(meta, f, ensure_ascii=False, indent=2)
 
-    def is_index_valid(self) -> bool:
-        """Checks if the existing ChromaDB index matches current corpus fingerprint."""
+    def is_index_valid(self, strict: bool = False) -> bool:
+        """Checks if the existing ChromaDB index is ready for retrieval (strict=False)
+        or matches exact corpus fingerprint (strict=True).
+        """
+        try:
+            collection = self.get_collection()
+            count = collection.count()
+            if count == 0:
+                logger.info("Chroma collection is empty.")
+                return False
+            if not strict:
+                return True
+        except Exception as e:
+            logger.warning(f"Error checking existing collection: {e}")
+            return False
+
         if not self.meta_file.exists():
             return False
 
@@ -126,21 +142,10 @@ class LegalVectorStore:
             corpus_path=self.corpus_path,
             model_name=self.embedding_model.model_name,
         )
-
         if meta.get("fingerprint") != current_fp:
             logger.info("Fingerprint mismatch between corpus and existing index.")
             return False
-
-        try:
-            collection = self.get_collection()
-            count = collection.count()
-            if count != meta.get("total_chunks"):
-                logger.info(f"Chunk count mismatch: index has {count}, meta expected {meta.get('total_chunks')}.")
-                return False
-            return True
-        except Exception as e:
-            logger.warning(f"Error checking existing collection: {e}")
-            return False
+        return True
 
     def build_index(
         self,
@@ -176,24 +181,59 @@ class LegalVectorStore:
         total_chunks = len(chunks)
         logger.info(f"Read {total_chunks} chunks from {self.corpus_path}.")
 
-        # Reset existing collection if it exists
-        try:
-            self.client.delete_collection(name=self.collection_name)
-            logger.info(f"Deleted old collection '{self.collection_name}'.")
-        except Exception:
-            pass
+        previous_meta = self.load_index_meta()
+        if previous_meta and previous_meta.get("model_name") != self.embedding_model.model_name:
+            logger.warning("Embedding model changed; rebuilding vectors with the new model.")
+            force = True
+        if force:
+            try:
+                self.client.delete_collection(name=self.collection_name)
+                logger.info(f"Deleted old collection '{self.collection_name}'.")
+            except Exception:
+                pass
+        collection = self.get_collection()
 
-        collection = self.client.create_collection(
-            name=self.collection_name,
-            metadata={"hnsw:space": "cosine"},
+        # Reuse unchanged vectors. This also makes an interrupted build resumable.
+        existing = collection.get(include=["documents", "metadatas"])
+        indexed = {
+            chunk_id: (document, metadata)
+            for chunk_id, document, metadata in zip(
+                existing["ids"], existing.get("documents") or [], existing.get("metadatas") or []
+            )
+        }
+        desired_ids = {chunk["chunk_id"] for chunk in chunks}
+        obsolete = list(indexed.keys() - desired_ids)
+        for i in range(0, len(obsolete), batch_size):
+            collection.delete(ids=obsolete[i : i + batch_size])
+        to_embed = []
+        metadata_only = []
+        for chunk in chunks:
+            chunk_id = chunk["chunk_id"]
+            retrieval_text = str(chunk.get("retrieval_text") or "").strip() or format_retrieval_text(chunk)
+            metadata = clean_metadata_for_chroma(chunk)
+            old = indexed.get(chunk_id)
+            if old is None or old[0] != retrieval_text:
+                to_embed.append(chunk)
+            elif old[1] != metadata:
+                metadata_only.append((chunk_id, metadata))
+        for i in range(0, len(metadata_only), batch_size):
+            batch = metadata_only[i : i + batch_size]
+            collection.update(ids=[item[0] for item in batch], metadatas=[item[1] for item in batch])
+
+        logger.info(
+            "Index sync: %d unchanged, %d embed, %d metadata-only, %d obsolete.",
+            total_chunks - len(to_embed) - len(metadata_only), len(to_embed), len(metadata_only), len(obsolete),
         )
-
-        # Batch embed and insert
-        logger.info(f"Embedding and inserting {total_chunks} chunks in batches of {batch_size}...")
-        for i in range(0, total_chunks, batch_size):
-            batch_chunks = chunks[i : i + batch_size]
+        for i in range(0, len(to_embed), batch_size):
+            batch_chunks = to_embed[i : i + batch_size]
             batch_ids = [c["chunk_id"] for c in batch_chunks]
-            batch_texts = [format_retrieval_text(c) for c in batch_chunks]
+            # Ingestion may preserve a reviewed retrieval representation whose
+            # embedding already defines the production index. Reuse it when
+            # present; only synthesize text for legacy rows.
+            batch_texts = [
+                str(c.get("retrieval_text") or "").strip() or format_retrieval_text(c)
+                for c in batch_chunks
+            ]
             batch_metas = [clean_metadata_for_chroma(c) for c in batch_chunks]
 
             batch_embeddings = self.embedding_model.embed_documents(
@@ -202,15 +242,21 @@ class LegalVectorStore:
                 show_progress_bar=False,
             )
 
-            collection.add(
+            collection.upsert(
                 ids=batch_ids,
                 embeddings=cast(Any, batch_embeddings),
                 documents=batch_texts,
                 metadatas=cast(Any, batch_metas),
             )
 
-            if show_progress and (i + len(batch_chunks)) % 256 == 0 or (i + len(batch_chunks)) == total_chunks:
-                logger.info(f"Indexed {i + len(batch_chunks)}/{total_chunks} chunks...")
+            if show_progress and (
+                (i + len(batch_chunks)) % 256 == 0
+                or (i + len(batch_chunks)) == len(to_embed)
+            ):
+                logger.info(f"Indexed {i + len(batch_chunks)}/{len(to_embed)} changed chunks...")
+
+        if collection.count() != total_chunks:
+            raise RuntimeError(f"Index incomplete: {collection.count()} / {total_chunks} chunks")
 
         # Save metadata
         meta = {
@@ -234,6 +280,11 @@ class LegalVectorStore:
     ) -> List[dict[str, Any]]:
         """Queries the vector index using cosine similarity."""
         collection = self.get_collection()
+        if collection.count() == 0:
+            raise RuntimeError(
+                f"Vector index '{self.collection_name}' is empty. "
+                "Run: python scripts/build_index_v3.py --target chroma"
+            )
         query_vector = self.embedding_model.embed_query(query_text)
 
         kwargs: dict[str, Any] = {
