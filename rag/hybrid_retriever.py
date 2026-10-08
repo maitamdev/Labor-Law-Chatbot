@@ -7,9 +7,9 @@ using Reciprocal Rank Fusion (RRF) to avoid score scaling distortion.
 from __future__ import annotations
 
 import logging
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from config.settings import BM25_INDEX_DIR, CHROMA_INDEX_DIR, PRODUCTION_CORPUS_PATH, STORAGE_DIR
 from rag.bm25_retriever import BM25Retriever
 from rag.dense_retriever import DenseRetriever
 from rag.reranker import CrossEncoderReranker
@@ -40,44 +40,63 @@ class HybridRetriever:
         if bm25_retriever is not None:
             self.bm25_retriever = bm25_retriever
         else:
-            if index_version == "v3" and Path("storage/bm25_v3").exists():
+            if index_version == "v3":
                 self.bm25_retriever = BM25Retriever(
-                    persist_dir="storage/bm25_v3",
-                    corpus_path="data/processed/legal_documents_v3.jsonl",
+                    persist_dir=BM25_INDEX_DIR,
+                    corpus_path=PRODUCTION_CORPUS_PATH,
                 )
-            elif index_version == "v2" and Path("storage/bm25_v2").exists():
+            elif index_version == "v2" and (STORAGE_DIR / "bm25_v2").exists():
                 self.bm25_retriever = BM25Retriever(
-                    persist_dir="storage/bm25_v2",
-                    corpus_path="data/processed/legal_documents_v2.jsonl",
+                    persist_dir=STORAGE_DIR / "bm25_v2",
+                    corpus_path=PRODUCTION_CORPUS_PATH.parent / "legal_documents_v2.jsonl",
                 )
             else:
-                self.bm25_retriever = BM25Retriever()
+                self.bm25_retriever = BM25Retriever(
+                    persist_dir=STORAGE_DIR / "bm25",
+                    corpus_path=PRODUCTION_CORPUS_PATH.parent / "legal_documents.jsonl",
+                )
 
         if dense_retriever is not None:
             self.dense_retriever = dense_retriever
+            self.dense_ready = True
         else:
-            if index_version == "v3" and Path("storage/chroma_v3").exists():
+            if index_version == "v3":
                 self.dense_retriever = DenseRetriever(
                     vectorstore=LegalVectorStore(
-                        persist_dir="storage/chroma_v3",
+                        persist_dir=CHROMA_INDEX_DIR,
                         collection_name="vietlabor_chunks_v3",
-                        corpus_path="data/processed/legal_documents_v3.jsonl",
+                        corpus_path=PRODUCTION_CORPUS_PATH,
                     )
                 )
-            elif index_version == "v2" and Path("storage/chroma_v2").exists():
+
+            elif index_version == "v2" and (STORAGE_DIR / "chroma_v2").exists():
                 self.dense_retriever = DenseRetriever(
                     vectorstore=LegalVectorStore(
-                        persist_dir="storage/chroma_v2",
+                        persist_dir=STORAGE_DIR / "chroma_v2",
                         collection_name="vietlabor_chunks_v2",
-                        corpus_path="data/processed/legal_documents_v2.jsonl",
+                        corpus_path=PRODUCTION_CORPUS_PATH.parent / "legal_documents_v2.jsonl",
                     )
                 )
             else:
-                self.dense_retriever = DenseRetriever()
+                self.dense_retriever = DenseRetriever(
+                    vectorstore=LegalVectorStore(
+                        persist_dir=STORAGE_DIR / "chroma",
+                        collection_name="vietlabor_chunks",
+                        corpus_path=PRODUCTION_CORPUS_PATH.parent / "legal_documents.jsonl",
+                    )
+                )
+
+            # A corpus refresh can leave Chroma only partly synchronized for a
+            # while. Never answer from that stale/partial collection. BM25 is
+            # complete and provides a fast, deterministic fallback.
+            self.dense_ready = self.dense_retriever.vectorstore.is_index_valid(strict=False)
+            if not self.dense_ready:
+                logger.warning("Dense index is incomplete or stale; using current BM25 index only.")
 
         self.rrf_k = rrf_k
         self.bm25_weight = bm25_weight
         self.dense_weight = dense_weight
+        self.dense_error: Optional[str] = None
 
     def retrieve(
         self,
@@ -107,8 +126,21 @@ class HybridRetriever:
         # 1. Fetch lexical candidates
         bm25_candidates = self.bm25_retriever.retrieve(clean_query, top_k=n_candidates)
 
-        # 2. Fetch dense vector candidates
-        dense_candidates = self.dense_retriever.retrieve(clean_query, top_k=n_candidates)
+        # 2. Fetch dense vector candidates. The Chroma index can be valid while
+        # the embedding model itself fails to load (e.g. a corrupted Hugging
+        # Face cache). That must degrade to lexical search, never crash a chat.
+        dense_candidates: List[Dict[str, Any]] = []
+        if self.dense_ready:
+            try:
+                dense_candidates = self.dense_retriever.retrieve(clean_query, top_k=n_candidates)
+            except Exception as exc:
+                self.dense_ready = False
+                self.dense_error = f"{type(exc).__name__}: {exc}"
+                logger.warning(
+                    "Dense retrieval unavailable (%s). Falling back to BM25-only for this session. "
+                    "Fix: delete the cached embedding model and re-download it.",
+                    self.dense_error[:300],
+                )
 
         # 3. Fuse via Reciprocal Rank Fusion
         fused_pool: Dict[str, Dict[str, Any]] = {}
