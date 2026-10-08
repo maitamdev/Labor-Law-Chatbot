@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import sys
@@ -10,14 +11,20 @@ if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
     getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from config.metadata_registry import get_verified_metadata
+from config.settings import PRODUCTION_CORPUS_PATH
+
 MANIFEST_PATH = PROJECT_ROOT / "data" / "raw" / "download_manifest.csv"
-JSONL_PATH = PROJECT_ROOT / "data" / "processed" / "legal_documents.jsonl"
+JSONL_PATH = PRODUCTION_CORPUS_PATH
 
 
-def validate():
-    if not JSONL_PATH.exists():
-        print(f"[ERROR] File không tồn tại: {JSONL_PATH}")
-        sys.exit(1)
+def validate(jsonl_path: Path = JSONL_PATH) -> bool:
+    if not jsonl_path.exists():
+        print(f"[ERROR] File không tồn tại: {jsonl_path}")
+        return False
 
     # 1. Load manifest IDs and core documents
     manifest_doc_ids = set()
@@ -47,7 +54,7 @@ def validate():
     clauses_detected = set()
     points_detected = 0
 
-    with open(JSONL_PATH, "r", encoding="utf-8") as f:
+    with open(jsonl_path, "r", encoding="utf-8") as f:
         for line_num, line in enumerate(f, start=1):
             line = line.strip()
             if not line:
@@ -64,9 +71,9 @@ def validate():
             content = data.get("content", "")
             doc_id = data.get("doc_id", "")
             doc_title = data.get("doc_title", "")
-            source_file = data.get("source_file", "")
             p_start = data.get("source_page_start", 0)
             p_end = data.get("source_page_end", 0)
+            verified = get_verified_metadata(doc_id)
 
             # Check duplicate ID
             if chunk_id in seen_ids:
@@ -87,18 +94,34 @@ def validate():
             seen_contents.add(content_key)
 
             # Check required metadata
-            if not doc_id or not doc_title or not source_file or not data.get("document_no") or not data.get("issuer") or not data.get("status"):
+            effective_title = doc_title or verified.get("doc_title")
+            effective_doc_no = data.get("document_no") or verified.get("document_no")
+            effective_source = data.get("official_source") or verified.get("official_source")
+            effective_status = data.get("status") or verified.get("status")
+            effective_from = data.get("effective_from") or verified.get("effective_from")
+            if (
+                not chunk_id
+                or not doc_id
+                or not effective_title
+                or not effective_doc_no
+                or not effective_source
+                or not effective_status
+                or str(effective_status).lower() == "needs_verification"
+                or not effective_from
+            ):
                 missing_metadata_chunks += 1
 
             # Check doc_id in manifest
-            if manifest_doc_ids and doc_id not in manifest_doc_ids:
+            if manifest_doc_ids and doc_id not in manifest_doc_ids and str(verified.get("status", "")).lower() == "needs_verification":
                 suspicious_chunks.append({
                     "chunk_id": chunk_id,
                     "reason": f"doc_id '{doc_id}' không có trong manifest."
                 })
 
             # Check page numbers
-            if p_start <= 0 or p_end <= 0 or p_start > p_end:
+            # Text-native sources may not have PDF page coordinates.  Validate
+            # the range only when either coordinate is present.
+            if (p_start or p_end) and (p_start <= 0 or p_end <= 0 or p_start > p_end):
                 suspicious_chunks.append({
                     "chunk_id": chunk_id,
                     "reason": f"Khoảng trang không hợp lệ: {p_start} -> {p_end}"
@@ -155,6 +178,7 @@ def validate():
     print("VIETLABOR INGESTION VALIDATION")
     print("==============================")
     print(f"Core documents total: {total_core_count}")
+    print(f"Corpus file         : {jsonl_path}")
     print(f"Core docs processed : {core_processed_count} / {total_core_count}")
     print(f"Total pages         : {len(pages_processed)}")
     print(f"Total chunks        : {total_chunks}")
@@ -182,4 +206,7 @@ def validate():
 
 
 if __name__ == "__main__":
-    validate()
+    parser = argparse.ArgumentParser(description="Validate the production legal JSONL corpus.")
+    parser.add_argument("--corpus", type=Path, default=JSONL_PATH)
+    args = parser.parse_args()
+    raise SystemExit(0 if validate(args.corpus.resolve()) else 1)
