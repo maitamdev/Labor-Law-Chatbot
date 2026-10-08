@@ -61,6 +61,7 @@ def rag_chain():
         ),
     ],
 )
+@pytest.mark.ollama
 def test_probation_four_groups(rag_chain, query, expected_clause, expected_days_str, group_desc):
     rag_chain.memory.clear()
     res = rag_chain.run(query)
@@ -106,6 +107,7 @@ def test_ambiguous_probation_needs_clarification(rag_chain):
 # ---------------------------------------------------------------------------
 # 3. Notice Period Distinction: User A (Office) vs User B (Flight Crew)
 # ---------------------------------------------------------------------------
+@pytest.mark.ollama
 def test_notice_period_distinction_user_a_vs_user_b(rag_chain):
     # User A: Office worker, 2-year contract -> Điều 35 BLLĐ (30 ngày)
     rag_chain.memory.clear()
