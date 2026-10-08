@@ -1,0 +1,14 @@
+[
+  {
+    "case_id": "dispute_salary_deduction_01",
+    "issue": "Khấu trừ tiền lương làm hỏng tài sản",
+    "legal_basis": "Điều 102 Bộ luật Lao động 2019",
+    "max_deduction_percent": 30
+  },
+  {
+    "case_id": "dispute_illegal_termination_02",
+    "issue": "Sa thải lao động nữ mang thai",
+    "legal_basis": "Điều 137 Bộ luật Lao động 2019",
+    "permitted": false
+  }
+]
