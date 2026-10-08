@@ -35,8 +35,32 @@ class QueryExpander:
          "tổng số giờ làm thêm không quá 40 giờ trong 01 tháng Điều 107 Bộ luật Lao động"),
         (["giờ làm thêm trong một năm", "giờ làm thêm của người lao động không quá bao nhiêu giờ trong một năm", "làm thêm trong năm tối đa"],
          "tổng số giờ làm thêm không quá 200 giờ trong 01 năm Điều 107 Bộ luật Lao động"),
-        (["ép tôi làm thêm", "bắt tôi làm thêm", "ép làm thêm giờ"],
+        (["ép tôi làm thêm", "bắt tôi làm thêm", "ép làm thêm giờ", "ép tăng ca", "bắt tăng ca", "ép nhân viên tăng ca", "bắt nhân viên tăng ca", "bắt làm thêm", "ép làm thêm", "bắt làm thêm giờ", "không đồng ý tăng ca"],
          "phải được sự đồng ý của người lao động khi làm thêm giờ Điều 107 Bộ luật Lao động"),
+
+        # Wage underpayment / unauthorized fee deduction / withholding wage
+        (["deal lương", "thỏa thuận lương", "chỉ trả", "trả thiếu", "bớt lương", "làm phí", "thu phí", "trừ phí", "giữ lương", "khấu trừ lương"],
+         "nguyên tắc trả lương đầy đủ đúng hạn Điều 90 Điều 94 khấu trừ tiền lương Điều 102 quyền đơn phương chấm dứt hợp đồng lao động Điều 35 Khoản 2 Điểm b giải quyết tranh chấp lao động Điều 188 Bộ luật Lao động 2019 xử phạt vi phạm tiền lương Điều 17 Nghị định 12/2022 Điều 23 Nghị định 283/2026"),
+
+        # Article 127: Prohibited acts in labor discipline (fines/wage deduction)
+        (["phạt tiền trừ vào lương", "phạt tiền trừ lương", "phạt tiền khi đi làm trễ", "trừ lương khi đi làm trễ", "trừ lương đi làm trễ", "trừ lương đi trễ", "phạt tiền đi trễ", "phạt tiền đi làm muộn", "trừ lương thay kỷ luật", "phạt tiền thay kỷ luật", "phạt tiền thay cho xử lý kỷ luật"],
+         "hành vi bị nghiêm cấm khi xử lý kỷ luật lao động phạt tiền cắt lương thay việc xử lý kỷ luật lao động Điều 127 Bộ luật Lao động"),
+
+        # Article 130: Handling compensation for damage (equipment damage, deduction max 3 months)
+        (["làm rơi vỡ", "làm rơi vỡ máy", "làm vỡ máy", "làm hỏng máy", "hư hỏng máy", "hư hỏng thiết bị", "trừ lương bồi thường", "bồi thường tối đa bao nhiêu tháng", "bồi thường nhiều nhất bao nhiêu tháng"],
+         "xử lý bồi thường thiệt hại làm hư hỏng dụng cụ thiết bị tài sản bồi thường nhiều nhất là 03 tháng tiền lương khấu trừ vào tiền lương Điều 130 Bộ luật Lao động"),
+
+        # Workplace violence / colloquial assault by a boss or manager
+        (["sếp đấm", "sếp đánh", "sếp tát", "sếp hành hung", "quản lý đánh", "quản lý đấm", "chủ đánh", "chủ đấm", "đánh đập người lao động"],
+         "người sử dụng lao động ngược đãi đánh đập người lao động bị nghiêm cấm Điều 8 Khoản 2 quyền nghỉ không cần báo trước Điều 35 Khoản 2 Điểm c xử phạt Điều 17 Khoản 4 Điểm a Nghị định 283/2026"),
+
+        # Starting work before the employment contract is signed
+        (["đi làm trước rồi mới ký", "vào làm trước rồi mới ký", "làm chính thức rồi mới ký", "cuối tuần mới ký hđlđ", "chưa ký hợp đồng đã đi làm", "ký hợp đồng sau khi đi làm", "bắt đầu làm nhưng chưa ký", "đã làm mà chưa ký", "làm được một tuần mà chưa ký", "hẹn ký hợp đồng sau", "đi làm chưa có hợp đồng"],
+         "trước khi nhận người lao động vào làm việc phải giao kết hợp đồng lao động Điều 13 Khoản 2 hình thức văn bản Điều 14 Khoản 1 hợp đồng dưới 01 tháng bằng lời nói Điều 14 Khoản 2"),
+
+        # Article 15: principles of employment-contract formation
+        (["nguyên tắc giao kết hđlđ", "nguyên tắc giao kết hợp đồng lao động", "nguyên tắc nền tảng khi giao kết", "giao kết hđlđ dựa trên", "yêu cầu cơ bản khi giao kết hđlđ"],
+         "nguyên tắc giao kết hợp đồng lao động tự nguyện bình đẳng thiện chí hợp tác trung thực tự do giao kết không trái pháp luật thỏa ước lao động tập thể đạo đức xã hội Điều 15"),
 
         # Article 98: Overtime and holiday pay
         (["làm ngày lễ được trả bao nhiêu", "tiền lương làm thêm ngày lễ", "lương làm thêm ngày lễ", "lương 300%", "tiền lương làm thêm giờ 300%", "không trả tiền lương làm thêm giờ 300%"],
@@ -65,6 +89,8 @@ class QueryExpander:
         # Article 48: Responsibilities upon contract termination
         (["không trả lương tháng cuối", "chậm trả lương tháng cuối", "thanh toán tiền lương khi chấm dứt", "trả lương tháng cuối", "lương tháng cuối"],
          "trách nhiệm của hai bên khi chấm dứt hợp đồng lao động thanh toán đầy đủ các khoản tiền trong thời hạn 14 ngày Điều 48"),
+        (["trả sổ bảo hiểm", "trả sổ bhxh", "không chịu trả sổ", "không trả sổ", "chưa trả sổ", "giữ sổ bảo hiểm", "giữ sổ bhxh", "chây ì không chịu trả sổ"],
+         "trách nhiệm của người sử dụng lao động khi chấm dứt hợp đồng lao động hoàn thành thủ tục xác nhận thời gian đóng bảo hiểm xã hội bảo hiểm thất nghiệp trả lại sổ bảo hiểm xã hội cùng giấy tờ khác Điều 48 Bộ luật Lao động"),
 
         # Unemployment Insurance: Illegal termination
         (["tự ý nghỉ việc không báo trước", "đơn phương chấm dứt trái luật có được lấy bảo hiểm thất nghiệp", "đơn phương chấm dứt trái luật có được", "nghỉ việc trái luật bảo hiểm thất nghiệp"],
