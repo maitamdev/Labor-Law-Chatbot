@@ -1,17 +1,19 @@
 [theme]
 base = "light"
-primaryColor = "#2563EB"
-backgroundColor = "#F8FAFC"
+primaryColor = "#A5121B"
+backgroundColor = "#FAF7F0"
 secondaryBackgroundColor = "#FFFFFF"
-textColor = "#0F172A"
-font = "sans serif"
+textColor = "#34302D"
+font = "Times New Roman"
 
 [server]
 headless = true
 port = 8501
-enableCORS = false
-enableXsrfProtection = false
-runOnSave = true
+address = "127.0.0.1"
+enableCORS = true
+enableXsrfProtection = true
+runOnSave = false
+enableStaticServing = true
 
 [browser]
 gatherUsageStats = false
