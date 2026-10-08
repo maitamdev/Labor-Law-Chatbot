@@ -14,6 +14,7 @@ Score magnitudes follow a documented scale (see config/evidence_scoring_rules.ya
 """
 from __future__ import annotations
 
+import datetime
 from dataclasses import dataclass, field
 import logging
 import math
@@ -141,18 +142,39 @@ class EvidenceSelector:
         point = str(meta.get("point") or "").strip().lower() or None
         legal_event = meta.get("legal_event") or self._classify_chunk_legal_event(doc_id, art_num, art_title, content)
         evidence_roles = meta.get("evidence_roles") or self._classify_chunk_evidence_roles(cid, doc_id, art_num, cl_num, point, art_title, content)
+        chunk_status = str(meta.get("status") or "").strip()
+        # Chunk-level repeal/expiry is more specific than document metadata;
+        # otherwise the verified registry is authoritative because legacy
+        # indexes filled missing statuses with the generic value "CURRENT".
+        if chunk_status.upper() in {"REPEALED", "EXPIRED"}:
+            raw_status = chunk_status
+        else:
+            raw_status = str(doc_meta.get("status") or chunk_status or "needs_verification").strip()
+        status_key = raw_status.upper().replace(" ", "_")
+        status_aliases = {
+            "CÒN_HIỆU_LỰC": "CURRENT",
+            "CON_HIEU_LUC": "CURRENT",
+            "CÒN_HIỆU_LỰC_MỘT_PHẦN": "PARTIALLY_EFFECTIVE",
+            "CON_HIEU_LUC_MOT_PHAN": "PARTIALLY_EFFECTIVE",
+            "HẾT_HIỆU_LỰC": "REPEALED",
+            "HET_HIEU_LUC": "REPEALED",
+        }
+        normalized_status = status_aliases.get(status_key, status_key)
         return {
             "chunk_id": cid,
             "doc_id": doc_id,
-            "document_no": meta.get("document_no", meta.get("doc_id", "")),
-            "document_title": meta.get("doc_title", meta.get("document_title", "")),
+            "document_no": meta.get("document_no") or doc_meta.get("document_no") or doc_id,
+            "document_title": meta.get("doc_title") or meta.get("document_title") or doc_meta.get("doc_title") or "",
             "article_number": art_num,
             "article_title": art_title,
             "clause_number": cl_num,
             "point": point,
             "content": content,
-            "domain": meta.get("domain", "CORE_LABOR"),
-            "status": meta.get("status", "CURRENT"),
+            "domain": doc_meta.get("domain") or meta.get("domain") or "CORE_LABOR",
+            "status": normalized_status,
+            "effective_from": doc_meta.get("effective_from") or meta.get("effective_from"),
+            "effective_to": doc_meta.get("effective_to") or meta.get("effective_to"),
+            "official_source": meta.get("official_source") or doc_meta.get("official_source") or "",
             "source_role": source_role,
             "rule_type": rule_type,
             "legal_event": legal_event,
@@ -184,10 +206,24 @@ class EvidenceSelector:
         if doc_id == "ND_219_2025" or (doc_id == "VBHN_18_2026" and article_number in [151, 152, 153, 154, 155]):
             return "FOREIGN_WORKER"
         if doc_id == "VBHN_18_2026":
+            if article_number == 8 and "ngược đãi" in c_all:
+                return "WORKPLACE_VIOLENCE"
+            if article_number == 35 and any(k in c_all for k in ["đánh đập", "ngược đãi", "nhục mạ"]):
+                return "WORKPLACE_VIOLENCE"
+            if article_number == 13 and "trước khi nhận người lao động" in c_all:
+                return "CONTRACT_SIGNING_TIMING"
+            if article_number == 14:
+                return "CONTRACT_FORM"
+            if article_number == 15:
+                return "CONTRACT_FORMATION_PRINCIPLES"
+            if article_number == 16:
+                return "PRECONTRACT_INFORMATION_DUTY"
             if article_number == 13:
                 return "DE_FACTO_LABOR_CONTRACT"
             if article_number == 17:
                 return "EMPLOYER_PROHIBITED_ACTS"
+            if article_number in [188, 190]:
+                return "LABOUR_DISPUTE_PROCEDURE"
             if article_number == 168:
                 return "INSURANCE_CONTRIBUTION"
             if article_number in [34, 35, 36, 37, 38, 39, 40, 41, 46, 47, 48]:
@@ -198,7 +234,13 @@ class EvidenceSelector:
                 return "PROBATION"
             if article_number in [90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104]:
                 return "WAGE_AND_SALARY"
+            if article_number in [105, 106, 107, 108]:
+                return "OVERTIME"
             return "CORE_LABOR"
+        if (doc_id, article_number) in {("ND_12_2022", 11), ("ND_283_2026", 17)} and any(
+            k in c_all for k in ["ngược đãi", "cưỡng bức lao động"]
+        ):
+            return "WORKPLACE_VIOLENCE"
         return "UNKNOWN"
 
     @staticmethod
@@ -215,12 +257,57 @@ class EvidenceSelector:
         roles: List[str] = []
         c_all = (article_title + " " + content).lower()
 
+        # Workplace violence: require three separate kinds of support so a
+        # generic prohibition alone cannot produce a complete answer.
+        if doc_id == "VBHN_18_2026" and article_number == 8 and clause_number == 2:
+            roles.append("EMPLOYER_MISTREATMENT_PROHIBITION")
+        if (
+            doc_id == "VBHN_18_2026"
+            and article_number == 35
+            and clause_number == 2
+            and point == "c"
+        ):
+            roles.append("EMPLOYEE_NO_NOTICE_FOR_MISTREATMENT")
+        if (
+            (doc_id, article_number) in {("ND_12_2022", 11), ("ND_283_2026", 17)}
+            and clause_number == 4
+            and point in [None, "a"]
+        ):
+            roles.append("EMPLOYER_MISTREATMENT_SANCTION")
+
         # De Facto Labor Contract Definition (Điều 13 BLLĐ 2019)
         if doc_id == "VBHN_18_2026" and article_number == 13:
-            roles.append("EMPLOYMENT_RELATIONSHIP_DEFINITION")
+            if clause_number in [None, 1] or "được coi là hợp đồng lao động" in c_all:
+                roles.append("EMPLOYMENT_RELATIONSHIP_DEFINITION")
+            if clause_number == 2:
+                roles.append("PRE_WORK_CONTRACT_REQUIREMENT")
 
-        # Employer Prohibited Acts (Điều 17 BLLĐ 2019 & Điều 9 NĐ 12/2022)
-        if (doc_id == "VBHN_18_2026" and article_number == 17) or (doc_id == "ND_12_2022" and article_number == 9):
+        if doc_id == "VBHN_18_2026" and article_number == 14:
+            if clause_number == 1:
+                roles.append("WRITTEN_CONTRACT_FORM")
+            if clause_number == 2:
+                roles.append("ORAL_CONTRACT_EXCEPTION")
+
+        if doc_id == "VBHN_18_2026" and article_number == 15:
+            if clause_number == 1:
+                roles.append("FORMATION_EQUALITY_GOOD_FAITH")
+            if clause_number == 2:
+                roles.append("FORMATION_FREEDOM_LIMITS")
+
+        # Multiple Labor Contracts (Điều 19 BLLĐ 2019)
+        if doc_id == "VBHN_18_2026" and article_number == 19:
+            roles.append("MULTIPLE_CONTRACTS_PERMISSION")
+
+        if doc_id == "VBHN_18_2026" and article_number in [188, 190]:
+            roles.append("INDIVIDUAL_LABOUR_DISPUTE_PROCEDURE")
+
+        if doc_id == "ND_159_2025" and article_number == 5 and clause_number == 1:
+            support_role = {"a": "VOLUNTARY_SUPPORT_50", "b": "VOLUNTARY_SUPPORT_40", "c": "VOLUNTARY_SUPPORT_30", "d": "VOLUNTARY_SUPPORT_20"}.get(point)
+            if support_role:
+                roles.append(support_role)
+
+        # Employer Prohibited Acts (Điều 17 BLLĐ; Điều 15 NĐ 283/2026)
+        if (doc_id == "VBHN_18_2026" and article_number == 17) or (doc_id, article_number) in {("ND_12_2022", 9), ("ND_283_2026", 15)}:
             roles.append("PROHIBITED_ACTS_IDENTIFICATION")
 
         # Employer Insurance Obligation
@@ -271,10 +358,55 @@ class EvidenceSelector:
                 roles.append("TERMINATION_SEVERANCE_ALLOWANCE")
             if article_number == 41:
                 roles.append("UNLAWFUL_TERMINATION_COMPENSATION")
+            if article_number in [37, 137]:
+                roles.append("PREGNANCY_DISMISSAL_PROHIBITION")
+            if article_number == 35:
+                if clause_number == 2 or "không cần báo trước" in c_all:
+                    roles.append("EMPLOYEE_NO_NOTICE_EXCEPTION")
+                    if point == "a" or any(k in c_all for k in ["bố trí", "công việc", "địa điểm", "thỏa thuận", "điều 29"]):
+                        roles.append("EMPLOYEE_NO_NOTICE_FOR_MISASSIGNED_WORK")
+                    if point == "b" or any(k in c_all for k in ["không được trả đủ lương", "trả lương không đúng thời hạn", "chậm trả lương"]):
+                        roles.append("EMPLOYEE_NO_NOTICE_FOR_UNPAID_WAGE")
+                    if point == "c" or any(k in c_all for k in ["ngược đãi", "đánh đập", "nhục mạ"]):
+                        roles.append("EMPLOYEE_NO_NOTICE_FOR_MISTREATMENT")
+                else:
+                    roles.append("EMPLOYEE_NOTICE_REQUIREMENT")
+
+            if article_number == 48:
+                roles.append("TERMINATION_SETTLEMENT_OBLIGATION")
+            if article_number == 29:
+                roles.append("WORK_REASSIGNMENT_LIMITS")
+                roles.append("EMPLOYEE_NO_NOTICE_FOR_MISASSIGNED_WORK")
+            if article_number in [39, 40]:
+                roles.append("EMPLOYEE_UNLAWFUL_TERMINATION_LIABILITY")
+            if article_number in [90, 94, 95, 96, 97]:
+                roles.append("WAGE_PAYMENT_RULE")
+            if article_number == 102:
+                roles.append("WAGE_DEDUCTION_LIMIT")
+            if article_number in [188, 190]:
+                roles.append("DISPUTE_RESOLUTION_PROCEDURE")
+            if article_number == 104:
+                roles.append("BONUS_RULE")
+            if article_number == 97 and (clause_number == 4 or "chậm trả" in c_all):
+                roles.append("DELAYED_WAGE_REMEDY")
+            if article_number == 107:
+                if (clause_number == 2 and point == "a") or "sự đồng ý" in c_all or "đồng ý làm thêm" in c_all:
+                    roles.append("OVERTIME_CONSENT")
+                if (clause_number == 2 and point == "b") or clause_number == 3 or any(k in c_all for k in ["40 giờ", "200 giờ", "300 giờ", "50%"]):
+                    roles.append("OVERTIME_LIMIT")
             if article_number == 5 and clause_number == 1:
                 roles.append("EMPLOYEE_SAFETY_REFUSAL_RIGHT")
             if article_number == 127 and clause_number == 2:
                 roles.append("PROHIBITED_SAFETY_DISCIPLINE")
+                roles.append("PROHIBITED_MONETARY_DISCIPLINE")
+
+        # Underpayment sanctions (Nghị định 12/2022 Điều 17, Nghị định 283/2026 Điều 23)
+        if (doc_id == "ND_12_2022" and article_number == 17) or (doc_id == "ND_283_2026" and article_number == 23):
+            roles.append("UNDERPAYMENT_SANCTION")
+
+        # Nghị định 145/2020/NĐ-CP Điều 8 (Trợ cấp thôi việc)
+        if ("145" in doc_id or "nd_145" in doc_id.lower()) and article_number == 8:
+            roles.append("TERMINATION_SEVERANCE_ALLOWANCE")
 
         # Safety Work Refusal & Prohibited Discipline (Luật ATVSLĐ Điều 6, 12)
         if doc_id == "L_84_2015":
@@ -387,6 +519,24 @@ class EvidenceSelector:
         # Status-aware guard: suppressed repealed law from overriding current law
         if c_status == "REPEALED":
             s_top += SCORE_HARD_SUPPRESS  # -15.0
+        elif c_status in {"NEEDS_VERIFICATION", "UNKNOWN", ""}:
+            # Unverified legal status must never outrank verified current law.
+            s_top -= SCORE_STRONG
+
+        effective_from = m.get("effective_from")
+        if effective_from and q_spec != "CURRENT_STATUS":
+            try:
+                if datetime.date.fromisoformat(str(effective_from)) > datetime.date.today():
+                    s_top += SCORE_HARD_SUPPRESS
+            except ValueError:
+                s_top -= SCORE_STRONG
+        effective_to = m.get("effective_to")
+        if effective_to and q_spec != "CURRENT_STATUS":
+            try:
+                if datetime.date.fromisoformat(str(effective_to)) < datetime.date.today():
+                    s_top += SCORE_HARD_SUPPRESS
+            except ValueError:
+                s_top -= SCORE_STRONG
 
         # Preamble Suppression: Preambles must NEVER override substantive statutory articles
         # unless query is explicitly asking about document validity/enactment (CURRENT_STATUS)
@@ -394,10 +544,18 @@ class EvidenceSelector:
             s_top += SCORE_HARD_SUPPRESS  # -15.0
 
         # Strike Suppression: Articles 198-220 of VBHN_18_2026 (Chương XIV: Đình công)
+        # and Decree 145 Phụ lục VI (nơi không được đình công)
         # must NEVER be cited unless query explicitly mentions "đình công" or "tranh chấp tập thể"
-        if doc_id == "VBHN_18_2026" and art_num and 198 <= art_num <= 220:
+        if (doc_id == "VBHN_18_2026" and art_num and 198 <= art_num <= 220) or ("đình công" in c_lower or "phụ lục vi" in c_lower or (doc_id == "ND_145_2020" and "pl6" in cid.lower())):
             q_low = issue.raw_query.lower()
             if not any(k in q_low for k in ["đình công", "dinh cong", "tranh chấp tập thể", "tranh chấp lao động tập thể"]):
+                s_top += SCORE_HARD_SUPPRESS  # -15.0
+
+        # Foreign Worker Suppression: Articles 151-157 of VBHN_18_2026 (Chương XI: Lao động nước ngoài)
+        # and Decree 219/2025 must NEVER be cited unless query explicitly mentions foreign worker terms
+        if (doc_id == "VBHN_18_2026" and art_num and 151 <= art_num <= 157) or doc_id in ["ND_219_2025", "ND_152_2020", "ND_70_2023"]:
+            q_low = issue.raw_query.lower()
+            if not any(k in q_low for k in ["nước ngoài", "ngoại quốc", "giấy phép lao động", "gplđ", "work permit", "chấp thuận sử dụng"]):
                 s_top += SCORE_HARD_SUPPRESS  # -15.0
 
         if issue_domain == "RETIREMENT":
@@ -482,7 +640,7 @@ class EvidenceSelector:
             else:
                 s_top -= SCORE_STRONG  # -3.0
         elif issue_domain in ["OCCUPATIONAL_SAFETY", "OCCUPATIONAL_ACCIDENT_DISEASE"]:
-            if doc_id in ["L_84_2015", "VBHN_04_BNV_2026", "VBHN_05_BNV_2026", "VBHN_06_BNV_2026", "ND_39_2016"] or c_domain in ["OCCUPATIONAL_SAFETY", "OCCUPATIONAL_ACCIDENT_DISEASE"]:
+            if doc_id in ["L_84_2015", "VBHN_04_BNV_2026", "VBHN_05_BNV_2026", "VBHN_06_BNV_2026", "ND_39_2016", "ND_129_2025"] or c_domain in ["OCCUPATIONAL_SAFETY", "OCCUPATIONAL_ACCIDENT_DISEASE"]:
                 s_top += SCORE_LOCK  # +5.0
                 q_low = issue.raw_query.lower()
                 if issue_domain == "OCCUPATIONAL_SAFETY":
@@ -493,7 +651,11 @@ class EvidenceSelector:
                         s_top += 4.0
                 elif issue_domain == "OCCUPATIONAL_ACCIDENT_DISEASE":
                     # Fund benefits
-                    if doc_id == "L_84_2015" and art_num == 45:
+                    if doc_id == "ND_129_2025" and art_num in [42, 45] and any(
+                        term in q_low for term in ["khai báo", "khai bao", "báo ngay", "báo cáo tai nạn", "công an", "sở nội vụ"]
+                    ):
+                        s_top += SCORE_STRONG
+                    elif doc_id == "L_84_2015" and art_num == 45:
                         s_top += 5.0
                     elif doc_id == "L_84_2015" and art_num in [48, 49, 53]:
                         s_top += 4.0
@@ -501,8 +663,20 @@ class EvidenceSelector:
                         s_top += 4.0
             else:
                 s_top -= SCORE_STRONG  # -3.0
+        elif issue_domain == "COLLECTIVE_LABOR":
+            q_low = issue.raw_query.lower()
+            collective_doc_ids = {"VBHN_18_2026", "VBHN_90_2025", "ND_145_2020", "ND_129_2025"}
+            if doc_id in collective_doc_ids or c_domain == "COLLECTIVE_LABOR":
+                s_top += SCORE_LOCK
+                if any(k in q_low for k in ["đình công", "dinh cong", "báo trước", "thông báo"]):
+                    if doc_id == "ND_129_2025" and art_num == 68:
+                        s_top += SCORE_STRONG
+                    elif doc_id == "VBHN_18_2026" and art_num == 202:
+                        s_top += SCORE_NUDGE
+            elif c_domain in ["RETIREMENT", "UNEMPLOYMENT_INSURANCE", "FOREIGN_WORKER", "SOCIAL_INSURANCE", "OCCUPATIONAL_SAFETY", "OCCUPATIONAL_ACCIDENT_DISEASE"]:
+                s_top -= SCORE_STRONG
         elif issue_domain == "CORE_LABOR":
-            if doc_id in ["VBHN_18_2026", "ND_145_2020", "ND_12_2022"] or c_domain == "CORE_LABOR":
+            if doc_id in ["VBHN_18_2026", "ND_145_2020", "ND_283_2026", "ND_12_2022"] or c_domain == "CORE_LABOR":
                 s_top += SCORE_LOCK  # +5.0
                 q_low = issue.raw_query.lower()
                 if any(k in q_low for k in ["thôi việc", "trợ cấp thôi việc"]):
@@ -532,13 +706,13 @@ class EvidenceSelector:
         elif issue_domain == "CROSS_DOMAIN":
             if c_domain in ["CORE_LABOR", "OCCUPATIONAL_SAFETY"]:
                 s_top += SCORE_LOCK  # +5.0
-            elif doc_id in ["VBHN_18_2026", "L_84_2015", "ND_12_2022"]:
+            elif doc_id in ["VBHN_18_2026", "L_84_2015", "ND_283_2026", "ND_12_2022"]:
                 s_top += SCORE_LOCK  # +5.0
 
         if issue.topic == "probation":
             if doc_id == "VBHN_18_2026" and art_num in [24, 25, 26, 27]:
                 s_top += 1.5
-            elif doc_id == "ND_12_2022" and art_num == 10:
+            elif (doc_id, art_num) in {("ND_12_2022", 10), ("ND_283_2026", 16)}:
                 s_top += 1.0
         elif issue.topic == "salary":
             if doc_id == "VBHN_18_2026" and art_num and 90 <= art_num <= 104:
@@ -594,8 +768,105 @@ class EvidenceSelector:
 
         # 6. Employer Prohibited Acts (Keeping original ID cards / documents)
         if any(ev == "EMPLOYER_PROHIBITED_ACTS" for ev in query_events) or "PROHIBITED_ACTS_IDENTIFICATION" in req_roles_set:
-            if (doc_id == "VBHN_18_2026" and art_num == 17) or (doc_id == "ND_12_2022" and art_num == 9):
+            if (doc_id == "VBHN_18_2026" and art_num == 17) or (doc_id, art_num) in {("ND_12_2022", 9), ("ND_283_2026", 15)}:
                 s_top += SCORE_DOMINANT  # +8.0
+
+        # 7. Workplace violence by an employer/manager. Điều 122–127 regulate
+        # discipline imposed on employees and are the reverse of this event.
+        if "WORKPLACE_VIOLENCE" in query_events:
+            if (
+                (doc_id == "VBHN_18_2026" and art_num in [8, 35])
+                or (doc_id, art_num) in {("ND_12_2022", 11), ("ND_283_2026", 17)}
+            ):
+                s_top += SCORE_DOMINANT
+            if doc_id == "VBHN_18_2026" and art_num in [122, 123, 124, 125, 126, 127]:
+                s_top += SCORE_HARD_SUPPRESS
+
+        # 8. Starting work before signing is governed by Articles 13–14, not
+        # the renewal rules for an expired fixed-term contract in Article 20.
+        if "CONTRACT_SIGNING_TIMING" in query_events:
+            if doc_id == "VBHN_18_2026" and art_num in [13, 14]:
+                s_top += SCORE_DOMINANT
+            if doc_id == "VBHN_18_2026" and art_num == 20:
+                s_top += SCORE_HARD_SUPPRESS
+
+        # 9. Contract-formation principles are Article 15. Article 16 governs
+        # information disclosure and must not answer a principles question.
+        if "CONTRACT_FORMATION_PRINCIPLES" in query_events:
+            if doc_id == "VBHN_18_2026" and art_num == 15:
+                s_top += SCORE_DOMINANT
+            if doc_id == "VBHN_18_2026" and art_num == 16:
+                s_top += SCORE_HARD_SUPPRESS
+
+        # 10. Multiple labor contracts (Điều 19 Bộ luật Lao động 2019)
+        if "MULTIPLE_CONTRACTS" in query_events or "MULTIPLE_CONTRACTS_PERMISSION" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 19:
+                s_top += SCORE_DOMINANT
+            if doc_id == "VBHN_18_2026" and art_num == 107:
+                s_top += SCORE_HARD_SUPPRESS
+
+        # 11. Employer Prohibited Acts (Keeping diploma/ID)
+        if any(ev == "EMPLOYER_PROHIBITED_ACTS" for ev in query_events) or "PROHIBITED_ACTS_IDENTIFICATION" in req_roles_set:
+            if (doc_id == "VBHN_18_2026" and art_num == 17) or (doc_id, art_num) in {("ND_12_2022", 9), ("ND_283_2026", 15)}:
+                s_top += SCORE_DOMINANT
+            if doc_id == "VBHN_18_2026" and art_num in [20, 125, 36]:
+                s_top += SCORE_HARD_SUPPRESS
+
+        # 12. Severance Allowance (Điều 46 BLLĐ & Điều 8 NĐ 145/2020)
+        if "TERMINATION_SEVERANCE_ALLOWANCE" in req_roles_set:
+            if (doc_id == "VBHN_18_2026" and art_num == 46) or (("145" in doc_id or "nd_145" in doc_id.lower()) and art_num == 8):
+                s_top += SCORE_DOMINANT
+            if doc_id == "VBHN_18_2026" and art_num in [47]:
+                s_top -= 3.0
+
+        # 13. Pregnancy dismissal prohibition (Điều 37k3, Điều 137k3 BLLĐ)
+        if "PREGNANCY_DISMISSAL_PROHIBITION" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num in [37, 137]:
+                s_top += SCORE_DOMINANT
+
+        # 14. Unpaid wage resignation exception (Điều 35k2b BLLĐ)
+        if "EMPLOYEE_NO_NOTICE_EXCEPTION" in req_roles_set or "EMPLOYEE_NO_NOTICE_FOR_UNPAID_WAGE" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 35:
+                s_top += SCORE_DOMINANT
+            if doc_id == "VBHN_18_2026" and art_num == 97:
+                s_top += 2.0
+
+        # 15. Severance allowance (Điều 46 BLLĐ, NĐ 145/2020 Điều 8)
+        if "TERMINATION_SEVERANCE_ALLOWANCE" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 46:
+                s_top += SCORE_DOMINANT + 1.0
+            elif ("145" in doc_id or "nd_145" in doc_id.lower()) and art_num == 8:
+                s_top += SCORE_DOMINANT
+
+        # 16. Termination settlement & insurance book return (Điều 48 BLLĐ)
+        if "TERMINATION_SETTLEMENT_OBLIGATION" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 48:
+                s_top += SCORE_DOMINANT
+
+        # 17. Vocational Training & Internship (Điều 13, 61, 62 BLLĐ 2019)
+        if "EMPLOYER_TRAINING_OBLIGATION" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num in [61, 62]:
+                s_top += SCORE_DOMINANT
+        if "EMPLOYMENT_RELATIONSHIP_DEFINITION" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 13:
+                s_top += SCORE_DOMINANT
+            # Suppress internal contract clauses like Article 21 when determining if an employment contract is required
+            if doc_id == "VBHN_18_2026" and art_num == 21:
+                s_top -= 4.0
+
+        # 18. Wage underpayment, deduction & dispute resolution (Điều 90, 94, 102, 188 BLLĐ; NĐ 12/2022 Điều 17, NĐ 283/2026 Điều 23)
+        if "WAGE_PAYMENT_RULE" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num in [90, 94]:
+                s_top += SCORE_DOMINANT
+        if "WAGE_DEDUCTION_LIMIT" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 102:
+                s_top += SCORE_DOMINANT + 1.0
+        if "UNDERPAYMENT_SANCTION" in req_roles_set:
+            if (doc_id == "ND_12_2022" and art_num == 17) or (doc_id == "ND_283_2026" and art_num == 23):
+                s_top += SCORE_DOMINANT
+        if "DISPUTE_RESOLUTION_PROCEDURE" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 188:
+                s_top += SCORE_DOMINANT
 
         # 4. Actor score (employer vs employee termination)
         s_act = 0.0
@@ -628,10 +899,10 @@ class EvidenceSelector:
             else:
                 if doc_id == "VBHN_18_2026":
                     s_int += 1.5
-                elif doc_id == "ND_12_2022":
+                elif doc_id in ["ND_283_2026", "ND_12_2022"]:
                     s_int -= 1.0
         elif issue.intent == "SANCTION":
-            if doc_id == "ND_12_2022":
+            if doc_id in ["ND_283_2026", "ND_12_2022"]:
                 s_int += 2.0
             elif doc_id in ["VBHN_18_2026", "VBHN_58_2025", "L_84_2015"]:
                 s_int -= 0.5
@@ -895,15 +1166,15 @@ class EvidenceSelector:
             if doc_id == "VBHN_18_2026" and art_num == 115 and cl_num == 1 and pt == "a":
                 s_qual += 5.0
 
-        # Sanctions (NĐ 12)
+        # Sanctions (current NĐ 283/2026; historical NĐ 12/2022)
         if "sanction_withholding_diploma" in issue.qualifiers:
-            if doc_id == "ND_12_2022" and art_num == 9 and cl_num == 2 and pt == "a":
+            if (doc_id, art_num) in {("ND_12_2022", 9), ("ND_283_2026", 15)} and cl_num == 2 and pt == "a":
                 s_qual += 5.0
         if "sanction_probation_overtime" in issue.qualifiers:
-            if doc_id == "ND_12_2022" and art_num == 10 and cl_num == 2 and pt == "a":
+            if ((doc_id, art_num, pt) in {("ND_12_2022", 10, "a"), ("ND_283_2026", 16, "b")}) and cl_num == 2:
                 s_qual += 5.0
         if "sanction_monetary_fine_discipline" in issue.qualifiers:
-            if doc_id == "ND_12_2022" and art_num == 19 and cl_num == 3 and pt == "b":
+            if ((doc_id, art_num, pt) in {("ND_12_2022", 19, "b"), ("ND_283_2026", 25, "c")}) and cl_num == 3:
                 s_qual += 5.0
 
         # Prohibited monetary fine or salary deduction in discipline (BLLĐ Điều 127k2)
@@ -1014,7 +1285,7 @@ class EvidenceSelector:
                     s_qual += 8.0
                 elif art_num in [61, 62]:
                     s_qual += 2.0
-            elif doc_id == "ND_12_2022":
+            elif doc_id in ["ND_283_2026", "ND_12_2022"]:
                 s_qual -= 8.0  # Suppress administrative fines when asking about employer statutory duty
 
         # Vocational training contract & cost refund / work commitment (Điều 62, Điều 40k3)
@@ -1038,7 +1309,7 @@ class EvidenceSelector:
                     s_qual += 1.0
                 elif art_num in [35, 36, 113, 115]:
                     s_qual -= 5.0  # Suppress generic leave/termination articles
-            elif doc_id == "ND_12_2022":
+            elif doc_id in ["ND_283_2026", "ND_12_2022"]:
                 s_qual -= 8.0  # Suppress administrative fines for civil training contract dispute
 
         # Safety Work Refusal & Imminent Danger (Luật ATVSLĐ Điều 6k1đ, Điều 12k4, BLLĐ Điều 5k1, Điều 127k2, Điều 124)
@@ -1102,8 +1373,8 @@ class EvidenceSelector:
             if doc_id == "VBHN_18_2026" and art_num == 124:
                 s_qual += 12.0
 
-            # 6. Nghị định 12/2022 Điều 23, Điều 22 (Xử phạt vi phạm ATVSLĐ / kỷ luật)
-            if doc_id == "ND_12_2022" and art_num in [22, 23]:
+            # 6. Nghị định 283/2026 Điều 32–34 (xử phạt ATVSLĐ)
+            if (doc_id == "ND_283_2026" and art_num in [32, 33, 34]) or (doc_id == "ND_12_2022" and art_num in [22, 23]):
                 s_qual += 6.0
 
         # Mandatory social insurance for contracts >= 1 month (BLLĐ Điều 168k1, Luật BHXH Điều 2k1a, Điều 21)
@@ -1122,10 +1393,10 @@ class EvidenceSelector:
                     s_qual += 12.0
             elif doc_id == "VBHN_58_2025" and art_num == 21:
                 s_qual += 16.0  # Trách nhiệm của người sử dụng lao động
-            elif doc_id == "ND_12_2022" and art_num == 39:
+            elif (doc_id == "ND_283_2026" and art_num in [43, 44]) or (doc_id == "ND_12_2022" and art_num == 39):
                 s_qual += 12.0  # Xử phạt hành vi trốn đóng / chậm đóng BHXH
 
-        # Uninsured occupational accident (Luật ATVSLĐ Điều 38, Điều 39k4, NĐ 12/2022 Điều 39)
+        # Uninsured occupational accident (Luật ATVSLĐ Điều 38, Điều 39k4)
         if "uninsured_accident" in issue.qualifiers or (any(k in issue.raw_query.lower() for k in ["tai nạn", "tnlđ"]) and any(k in issue.raw_query.lower() for k in ["chưa đóng", "không đóng", "trốn đóng", "chưa tham gia"])):
             if doc_id == "L_84_2015" and art_num == 39:
                 if cl_num == 4 or cid == "L_84_2015#d39-k4" or "khoản tiền tương ứng" in c_lower:
@@ -1137,7 +1408,7 @@ class EvidenceSelector:
                     s_qual += 16.0  # Viện phí, lương điều trị, bồi thường TNLĐ
                 else:
                     s_qual += 10.0
-            elif doc_id == "ND_12_2022" and art_num == 39:
+            elif (doc_id == "ND_283_2026" and art_num in [43, 44]) or (doc_id == "ND_12_2022" and art_num == 39):
                 s_qual += 12.0  # Xử phạt hành vi chậm đóng / trốn đóng BHXH
             # HARD SUPPRESS: Quỹ BHXH không chi trả Điều 45 vì DN chưa đóng, và cấm trích Điều 168k3
             if doc_id == "L_84_2015" and art_num == 45:
@@ -1335,8 +1606,6 @@ class EvidenceSelector:
         is_flight_crew = (
             "flight_crew" in issue.special_conditions
             or "special_occupation_notice" in issue.qualifiers
-            or (winner.doc_id == "ND_145_2020" and winner.article_number == 7)
-            or (winner.doc_id == "VBHN_18_2026" and winner.article_number == 35 and winner.point == "d")
         )
         if is_flight_crew:
             # Look for highest scored NĐ 145 Điều 7 provision in candidates
@@ -1480,11 +1749,11 @@ class EvidenceSelector:
                 locked_blocks.append(d21)
                 selected_cids.append(d21.chunk_id)
 
-            # 4. Lock ND_12_2022 Điều 39 (Xử phạt trốn đóng)
-            nd12_d39 = next((sc for sc in scored_list if sc.doc_id == "ND_12_2022" and sc.article_number == 39), None)
-            if nd12_d39 and nd12_d39.chunk_id not in selected_cids:
-                locked_blocks.append(nd12_d39)
-                selected_cids.append(nd12_d39.chunk_id)
+            # 4. Current sanction for evading mandatory social insurance.
+            nd283_d44 = next((sc for sc in scored_list if sc.doc_id == "ND_283_2026" and sc.article_number == 44), None)
+            if nd283_d44 and nd283_d44.chunk_id not in selected_cids:
+                locked_blocks.append(nd283_d44)
+                selected_cids.append(nd283_d44.chunk_id)
 
             # Purge any accidental d168-k3
             locked_blocks = [b for b in locked_blocks if not (b.doc_id == "VBHN_18_2026" and b.article_number == 168 and (b.clause_number == 3 or b.chunk_id == "VBHN_18_2026#d168-k3"))]
@@ -1509,15 +1778,36 @@ class EvidenceSelector:
                     locked_blocks.append(sc)
                     selected_cids.append(sc.chunk_id)
 
-            # 3. Lock ND_12_2022 Điều 39 (Xử phạt trốn đóng BHXH)
-            nd12_d39 = next((sc for sc in scored_list if sc.doc_id == "ND_12_2022" and sc.article_number == 39), None)
-            if nd12_d39 and nd12_d39.chunk_id not in selected_cids:
-                locked_blocks.append(nd12_d39)
-                selected_cids.append(nd12_d39.chunk_id)
+            # 3. Current sanction for evading mandatory social insurance.
+            nd283_d44 = next((sc for sc in scored_list if sc.doc_id == "ND_283_2026" and sc.article_number == 44), None)
+            if nd283_d44 and nd283_d44.chunk_id not in selected_cids:
+                locked_blocks.append(nd283_d44)
+                selected_cids.append(nd283_d44.chunk_id)
 
             # Purge any accidental d168-k3 or d45
             locked_blocks = [b for b in locked_blocks if not (b.doc_id == "VBHN_18_2026" and b.article_number == 168 and (b.clause_number == 3 or b.chunk_id == "VBHN_18_2026#d168-k3"))]
             locked_blocks = [b for b in locked_blocks if not (b.doc_id == "L_84_2015" and b.article_number == 45)]
+            selected_cids = [b.chunk_id for b in locked_blocks]
+
+        # Multiple Labor Contracts Bridge (Điều 19 BLLĐ 2019)
+        query_events = getattr(issue, "legal_events", [getattr(issue, "legal_event", "UNKNOWN")])
+        req_roles_set = set(getattr(issue, "required_evidence_roles", []))
+        is_multiple_contracts = "MULTIPLE_CONTRACTS" in query_events or "MULTIPLE_CONTRACTS_PERMISSION" in req_roles_set
+        if is_multiple_contracts:
+            # 1. Lock VBHN_18_2026 Điều 19k1 (Quyền được giao kết nhiều HĐLĐ)
+            d19_k1 = next((sc for sc in scored_list if sc.doc_id == "VBHN_18_2026" and sc.article_number == 19 and (sc.clause_number == 1 or sc.chunk_id == "VBHN_18_2026#d19-k1")), None)
+            if d19_k1 and d19_k1.chunk_id not in selected_cids:
+                locked_blocks.insert(0, d19_k1)
+                selected_cids.insert(0, d19_k1.chunk_id)
+
+            # 2. Lock VBHN_18_2026 Điều 19k2 (Bảo hiểm khi giao kết nhiều HĐLĐ)
+            d19_k2 = next((sc for sc in scored_list if sc.doc_id == "VBHN_18_2026" and sc.article_number == 19 and (sc.clause_number == 2 or sc.chunk_id == "VBHN_18_2026#d19-k2")), None)
+            if d19_k2 and d19_k2.chunk_id not in selected_cids:
+                locked_blocks.append(d19_k2)
+                selected_cids.append(d19_k2.chunk_id)
+
+            # Purge any irrelevant foreign worker chunks if accidentally present
+            locked_blocks = [b for b in locked_blocks if not (b.doc_id == "VBHN_18_2026" and b.article_number in [151, 152, 153, 154, 155])]
             selected_cids = [b.chunk_id for b in locked_blocks]
 
         # Required Evidence Role Locking (Phase 5H.3)
@@ -1541,7 +1831,7 @@ class EvidenceSelector:
                         covered_roles.update(getattr(best_for_role, "evidence_roles", []))
                         has_role_locks = True
 
-        is_statutory_pair = is_flight_crew or is_training_resp or is_training_refund or is_safety_refusal or is_mand_ins or is_uninsured_acc or has_role_locks
+        is_statutory_pair = is_flight_crew or is_training_resp or is_training_refund or is_safety_refusal or is_mand_ins or is_uninsured_acc or is_multiple_contracts or has_role_locks
         is_ambiguous = (best_score < self.min_confidence) or (
             margin < self.min_margin
             and len(scored_list) > 1
