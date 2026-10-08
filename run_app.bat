@@ -17,9 +17,9 @@ if not exist ".venv\Scripts\activate.bat" (
 echo [1/2] Dang kich hoat moi truong ao .venv...
 call .venv\Scripts\activate.bat
 
-echo [2/2] Dang khoi chay giao dien Streamlit...
+echo [2/2] Dang khoi chay giao dien Streamlit an toan tren localhost...
 echo Dia chi truy cap: http://localhost:8501
 echo.
-streamlit run ui/streamlit_app.py
+python -m app.main
 
 pause
