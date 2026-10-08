@@ -198,6 +198,7 @@ class TestVietLaborRAGChainPhase5F:
         assert "chương trình của nhà trường" in res.validated_response.clarification_question
         assert len(res.validated_response.clarification_options) >= 3
 
+    @pytest.mark.ollama
     def test_flow_a_school_internship_transition(self):
         chain = VietLaborRAGChain()
         chain.memory.clear()
@@ -211,6 +212,7 @@ class TestVietLaborRAGChainPhase5F:
         assert res2.validated_response.needs_clarification is False
         assert not any("d46" in cid for cid in res2.validated_response.cited_chunk_ids)
 
+    @pytest.mark.ollama
     def test_flow_b_de_facto_employment_transition(self):
         chain = VietLaborRAGChain()
         chain.memory.clear()
@@ -228,6 +230,7 @@ class TestVietLaborRAGChainPhase5F:
         answer_text = res2.validated_response.final_answer
         assert "d13" in cids_joined or "Điều 13" in answer_text or "quan hệ lao động" in answer_text
 
+    @pytest.mark.ollama
     def test_flow_c_probation_transition_chain(self):
         chain = VietLaborRAGChain()
         chain.memory.clear()
@@ -249,4 +252,3 @@ class TestVietLaborRAGChainPhase5F:
         cids_joined = " ".join(res3.validated_response.cited_chunk_ids)
         answer_text = res3.validated_response.final_answer
         assert "d25" in cids_joined or "d26" in cids_joined or "Điều 25" in answer_text or "Điều 26" in answer_text
-
