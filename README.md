@@ -1,17 +1,17 @@
-# ⚖️ VietLabor AI – Trợ Lý Pháp Lý Lao Động Việt Nam
+# ⚖️ VietLabor AI – Trợ Lý Pháp Lý Lao Động Việt Nam (Hybrid GraphRAG)
 
 <div align="center">
 
 ![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)
 ![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B.svg)
 ![Ollama](https://img.shields.io/badge/LLM-Local%20Ollama%20(Qwen%202.5)-orange.svg)
-![Retrieval](https://img.shields.io/badge/Retrieval-Hybrid%20(BM25s%20%2B%20Dense)-green.svg)
-![Tests](https://img.shields.io/badge/Tests-100%25%20Passing-brightgreen.svg)
-![Privacy](https://img.shields.io/badge/Privacy-100%25%20Local%20%26%20Offline-success.svg)
+![Architecture](https://img.shields.io/badge/Architecture-Hybrid%20GraphRAG%20(Vector%20%2B%20Neo4j)-purple.svg)
+![Tests](https://img.shields.io/badge/Tests-5%2F5%20Graph%20%2B%20Unit-brightgreen.svg)
+![Privacy](https://img.shields.io/badge/Privacy-100%25%20Local--first-success.svg)
 
-**Hệ thống AI chuyên biệt hỗ trợ tra cứu, đối chiếu và tư vấn pháp luật lao động Việt Nam chuẩn xác, bảo mật và đáng tin cậy.**
+**Hệ thống AI chuyên biệt hỗ trợ tra cứu, đối chiếu và tư vấn pháp luật lao động Việt Nam chuẩn xác, bảo mật với kiến trúc Hybrid GraphRAG tiên tiến (ChromaDB + BM25s + Neo4j Knowledge Graph).**
 
-[Tính Năng](#-tính-năng-nổi-bật) • [Kiến Trúc](#-kiến-trúc-hệ-thống) • [Cài Đặt](#-hướng-dẫn-cài-đặt--khởi-chạy) • [Cấu Trúc](#-cấu-trúc-thư-mục) • [Kiểm Thử](#-kiểm-thử--đánh-giá)
+[Tính Năng](#-tính-năng-nổi-bật) • [Kiến Trúc Hybrid GraphRAG](#-kiến-trúc-hệ-thống) • [Bản Thể Học Pháp Lý](#-bản-thể-học-pháp-lý-legal-ontology) • [Cấu Trúc](#-cấu-trúc-thư-mục) • [Cài Đặt](#-hướng-dẫn-cài-đặt--khởi-chạy) • [Kiểm Thử](#-kiểm-thử--đánh-giá)
 
 </div>
 
@@ -19,71 +19,92 @@
 
 ## 📖 Giới Thiệu
 
-**VietLabor AI** là giải pháp trợ lý pháp lý thế hệ mới ứng dụng kỹ thuật **Retrieval-Augmented Generation (RAG)** chuyên sâu cho hệ thống pháp luật lao động Việt Nam. Hệ thống được thiết kế để giải quyết triệt để các hạn chế phổ biến của các mô hình ngôn ngữ lớn (LLM) thông thường:
+**VietLabor AI** là giải pháp trợ lý pháp lý thế hệ mới ứng dụng kỹ thuật **Hybrid GraphRAG (Retrieval-Augmented Generation kết hợp Knowledge Graph)** chuyên sâu cho hệ thống pháp luật lao động Việt Nam. Hệ thống được thiết kế phục vụ nghiên cứu học thuật và đồ án chuyên sâu, giải quyết triệt để các hạn chế phổ biến của các mô hình ngôn ngữ lớn (LLM) và các hệ thống RAG thông thường:
 
 1. **Hiện tượng ảo giác điều luật (Hallucination)**: LLM thông thường hay bịa đặt số hiệu điều khoản, số ngày báo trước hoặc nhầm lẫn giữa các ngành nghề đặc thù.
-2. **Vấn đề bảo mật dữ liệu (Privacy Concern)**: Nhiều người dùng và doanh nghiệp không thể gửi hợp đồng, tranh chấp nội bộ lên các API đám mây công cộng. VietLabor AI vận hành **100% Local / Offline**.
-3. **Cấu trúc luật nhiều tầng nấc (Statutory Hierarchy)**: Quy định lao động phân tán từ Bộ luật, Nghị định hướng dẫn đến Thông tư thi hành. VietLabor AI trang bị cơ chế tự động mở rộng thứ bậc pháp lý và kết nối điều khoản tương ứng.
+2. **Suy luận quan hệ đa tầng (Multi-hop Reasoning)**: RAG dạng vector truyền thống thường thất bại khi câu hỏi đòi hỏi kết nối nhiều văn bản (Ví dụ: Hành vi vi phạm tại Bộ luật Lao động $\rightarrow$ Mức phạt hành chính tại Nghị định 12/2022/NĐ-CP $\rightarrow$ Hướng dẫn đặc thù tại Nghị định 145/2020/NĐ-CP).
+3. **Bảo toàn ngữ cảnh thứ bậc (Statutory Hierarchy)**: Tự động gắn kết câu dẫn Khoản cha khi trích xuất Điểm con, loại bỏ hiện tượng trích dẫn cụt ý.
+4. **Vận hành cục bộ 100% (Local-first & Privacy)**: Không gửi dữ liệu hội thoại ra internet; LLM, Vector DB và Graph DB đều chạy trên hạ tầng máy tính nội bộ.
 
 ---
 
 ## 🚀 Tính Năng Nổi Bật
 
-### 🔒 1. 100% Local AI & Quyền Riêng Tư (Privacy First)
-- Vận hành hoàn toàn cục bộ thông qua **Ollama** (khuyến nghị `qwen2.5:7b` hoặc `qwen2.5-coder:7b`) kết hợp cơ sở dữ liệu vector cục bộ (**ChromaDB** + **BM25s**).
-- Không gửi bất kỳ dữ liệu hội thoại nào ra máy chủ bên ngoài, đảm bảo tuyệt đối bí mật thông tin pháp lý của cá nhân và doanh nghiệp.
+### 🌐 1. Kiến Trúc Truy Hồi Tam Hợp (Tri-Stream Hybrid Retrieval)
+Hệ thống tích hợp 3 luồng truy hồi dữ liệu song song nhằm tối ưu hóa độ bao phủ và độ chính xác:
+* **Dense Vector Search (ChromaDB + BGE-M3)**: Nắm bắt ngữ cảnh và ý định tương đồng về mặt ngữ nghĩa dù người dùng diễn đạt bằng ngôn ngữ đời thường.
+* **Sparse Lexical Search (BM25s + PyVi/Underthesea)**: Bắt chính xác từng thuật ngữ định lượng ("thử việc 60 ngày", "báo trước 45 ngày", "lương tối thiểu vùng", mã số điều luật).
+* **Knowledge Graph Traversal (Neo4j)**: Truy vết theo mạng lưới đồ thị tri thức để tìm kiếm văn bản hướng dẫn thi hành (Statutory Bridge) và chế tài xử phạt tương ứng (Penalty links).
+* **Reciprocal Rank Fusion (RRF) & Reranking**: Hợp nhất thứ hạng đa luồng và tái xếp hạng bằng Cross-Encoder.
 
-### 🔍 2. Truy Hồi Lai Đa Tầng (Hybrid Retrieval with RRF)
-- Kết hợp sức mạnh của:
-  - **BM25s (Lexical Search)**: Tách từ tiếng Việt chuyên sâu (`PyVi`, `Underthesea`), khớp chính xác thuật ngữ pháp lý, tên chức danh, con số định lượng (ví dụ: *"thử việc 60 ngày"*, *"lương tối thiểu vùng"*, *"sa thải"*).
-  - **Dense Semantic Embeddings**: Nắm bắt ngữ cảnh và ý định câu hỏi tương đồng dù người dùng dùng văn phong đời thường.
-  - **Reciprocal Rank Fusion (RRF)**: Tối ưu thứ hạng kết hợp để chọn lọc các đoạn luật chuẩn xác nhất.
+### 🏛️ 2. Đồ Thị Tri Thức & Cầu Dẫn Luật Định (Statutory Bridge via Neo4j)
+* **Mô hình hóa quan hệ đa tầng**: Thiết lập liên kết giữa các văn bản quy phạm pháp luật theo đúng tôn ti trật tự pháp điển (Luật $\rightarrow$ Nghị định $\rightarrow$ Thông tư).
+* **Truy vết chế tài tự động**: Khi phát hiện hành vi vi phạm điều luật (ví dụ: giam lương, giữ bằng gốc, sa thải trái phép), hệ thống tự động dò đồ thị sang Nghị định xử phạt vi phạm hành chính để trích xuất khung tiền phạt và biện pháp khắc phục hậu quả.
 
-### 🏛️ 3. Mở Rộng Thứ Bậc & Cầu Dẫn Luật Định (Statutory Bridge)
-- **Cấu trúc Điều - Khoản - Điểm**: Tự động liên kết câu dẫn của Khoản cha khi trích xuất Điểm con, bảo toàn trọn vẹn ngữ cảnh pháp lý.
-- **Statutory Bridge**: Tự động thiết lập cầu dẫn nối giữa Nghị định hướng dẫn (ví dụ: Điều 7 Nghị định 145/2020/NĐ-CP về ngành nghề đặc thù) với điều khoản gốc của Bộ luật Lao động 2019 (Điều 35 Khoản 1 Điểm d).
+### 🧩 3. Bóc Tách Câu Hỏi Đa Vấn Đề (Multi-Issue Decomposition)
+* Tự động phân tích các tình huống pháp lý phức tạp chứa nhiều hành vi độc lập (vừa bị chậm lương, vừa bị giữ giấy tờ, vừa bị ép thôi việc).
+* Chia nhỏ thành các sub-queries, truy hồi độc lập và tổng hợp bài tư vấn có cấu trúc logic mạch lạc.
 
-### 🧩 4. Bóc Tách Câu Hỏi Kép (Multi-Issue Decomposition)
-- Tự động nhận diện và phân tích các câu hỏi phức hợp chứa nhiều vấn đề pháp lý độc lập (ví dụ: vừa bị nợ lương, vừa bị giữ bằng đại học, vừa bị sa thải).
-- Truy hồi độc lập căn cứ cho từng vấn đề và tổng hợp bài tư vấn toàn diện, có cấu trúc.
+### 🛡️ 4. Khóa Trích Dẫn Chống Ảo Giác (Evidence-Locked Citation Guard)
+* **Backend Citation Ownership**: Quyền sở hữu trích dẫn thuộc về tầng dữ liệu xác thực, mô hình LLM không được tự ý bịa đặt điều luật ngoài phạm vi bằng chứng đã được kiểm chứng.
+* **Cổng kiểm tra độ phủ căn cứ**: Tự động hạ kết luận thành "chưa đủ căn cứ" nếu thiếu điều luật đối chiếu thực tế.
 
-### 🛡️ 5. Kiểm Soát Trích Dẫn Chống Ảo Giác (Evidence-Locked Citation Guard)
-- **Backend Citation Ownership**: Quyền sở hữu trích dẫn thuộc về tầng dữ liệu xác thực, mô hình AI không thể tự ý bịa đặt mã luật ngoài ngữ cảnh đã kiểm chứng.
-- **Zero Phantom Citations Guarantee**: 100% căn cứ pháp lý được hiển thị đều có thể truy nguyên trực tiếp về điều, khoản, văn bản luật ban hành chính thức.
-
-### 💬 6. Đối Thoại Làm Rõ Đa Lượt (Multi-Turn Clarification)
-- Tự động phát hiện các câu hỏi thiếu dữ kiện thực tế thiết yếu (ví dụ: hỏi thời gian thử việc nhưng chưa nêu rõ trình độ/vị trí công việc; hỏi ngày báo trước nhưng chưa nêu loại hợp đồng).
-- Đặt câu hỏi làm rõ lịch sự kèm các **Quick-Reply Chips** (nút bấm gợi ý nhanh) giúp người dùng phản hồi thuận tiện.
-
-### 🎨 7. Trình Bày Markdown Khoa Học & Dễ Đọc
-- Khắc phục triệt để hiện tượng câu trả lời dính liền thành một khối văn bản đặc dài ("1 cục").
-- Tự động ngắt đoạn (`\n\n`), phân chia tiêu đề Markdown (`### 1. ...`, `### 2. ...`), in đậm kết luận cốt lõi và làm nổi bật phần **💡 Lời khuyên thực tế** cùng các bước hướng dẫn cụ thể.
+### 💬 5. Đối Thoại Làm Rõ Đa Lượt (Multi-Turn Clarification)
+* Nhận diện khi người dùng cung cấp thiếu dữ kiện trọng yếu (chưa rõ loại hợp đồng, chưa rõ thời gian làm việc).
+* Đưa ra câu hỏi làm rõ lịch sự kèm các **Quick-Reply Chips** (nút bấm gợi ý phản hồi nhanh).
 
 ---
 
-## 🏗️ Kiến Trúc Hệ Thống
+## 🏗️ Kiến Trúc Hệ Thống (Hybrid GraphRAG)
 
 ```mermaid
 flowchart TD
     User([Người dùng đặt câu hỏi]) --> UI[Streamlit Web UI]
     UI --> Service[ChatService Adapter]
-    Service --> Router[QueryRouter & Actor/Intent Classifier]
+    Service --> Router[QueryRouter & Intent Classifier]
     
     Router --> Decomposer{Câu hỏi phức hợp?}
     Decomposer -- Có --> Parser[Legal Issue Parser / Decomposer]
-    Decomposer -- Không --> Search
+    Decomposer -- Không --> SearchEngine
+    Parser --> SearchEngine
     
-    Parser --> Search[Hybrid Retrieval: BM25s + ChromaDB]
-    Search --> Expansion[Statutory Hierarchy & Bridge Expansion]
-    Expansion --> Selector[Precision Evidence Selector]
+    subgraph SearchEngine [Tri-Stream Retrieval Engine]
+        direction LR
+        BM25[BM25s Lexical Search]
+        Dense[ChromaDB Vector Search]
+        Graph[Neo4j Knowledge Graph]
+    end
     
-    Selector --> PromptBuilder[Context & Prompt Builder]
-    PromptBuilder --> LocalLLM[Local LLM via Ollama - Qwen 2.5]
+    SearchEngine --> Fusion[Graph-Augmented Fusion & RRF]
+    Fusion --> Reranker[Cross-Encoder Reranker]
+    Reranker --> Selector[Precision Evidence Selector]
     
-    LocalLLM --> Validator[Output Validator & Citation Guard]
+    Selector --> PromptBuilder[Context & Citation Guard]
+    PromptBuilder --> LocalLLM[Local LLM via Ollama: Qwen 2.5]
+    
+    LocalLLM --> Validator[Output Validator]
     Validator --> Formatter[Markdown Auto-Formatter]
     Formatter --> UI
 ```
+
+---
+
+## 🧠 Bản Thể Học Pháp Lý (Legal Ontology)
+
+Cấu trúc đồ thị tri thức trong [graph/schema.py](graph/schema.py) được chuẩn hóa theo chuẩn biểu diễn tri thức pháp lý:
+
+```
+(LegalDocument) ──[:HAS_CHAPTER]──> (Chapter) ──[:HAS_ARTICLE]──> (Article)
+                                                                     │
+                                                    ┌────────────────┴────────────────┐
+                                                    ▼                                 ▼
+                                                (Clause)                           (Point)
+```
+
+### Các mối quan hệ liên văn bản cốt lõi:
+1. `(Article)-[:GUIDES]->(Article)`: Cầu dẫn luật định (**Statutory Bridge**), ví dụ: Điều 7 NĐ 145/2020 hướng dẫn thi hành Điều 35 K1 Điểm d Bộ luật Lao động 2019.
+2. `(Article)-[:PENALIZES]->(Article)`: Chế tài xử phạt, ví dụ: Điều 17 NĐ 12/2022 quy định xử phạt vi phạm về tiền lương tại Điều 97 BLLĐ 2019.
+3. `(Article)-[:REFERENCES]->(Article)`: Viện dẫn điều khoản tương ứng giữa các văn bản.
 
 ---
 
@@ -91,64 +112,52 @@ flowchart TD
 
 ```text
 chatbot-law/
-├── app/                        # Tầng kết nối ứng dụng & Service Adapters
-│   ├── __init__.py
-│   ├── chat_service.py         # Adapter điều phối giữa UI và RAG Pipeline
-│   └── main.py
+├── app/                                 # Tầng kết nối ứng dụng & Service Adapters
+│   ├── chat_service.py                  # Điều phối giữa UI và Pipeline
+│   └── main.py                          # Điểm vào chính của ứng dụng
 │
-├── config/                     # Cấu hình hệ thống & đường dẫn
-│   ├── __init__.py
-│   └── settings.py
+├── config/                              # Cấu hình hệ thống & Metadata
+│   ├── metadata_registry.py             # Siêu dữ liệu văn bản pháp luật chính thức
+│   └── settings.py                      # Thiết lập môi trường, Ollama, ChromaDB, Neo4j
 │
-├── data/                       # Dữ liệu pháp luật
-│   ├── raw/                    # Văn bản luật gốc PDF/HTML chính thức
-│   │   ├── core/               # BLLĐ 2019, NĐ 145/2020, NĐ 12/2022, NĐ 293/2025...
-│   │   └── download_manifest.csv
-│   └── processed/              # Dữ liệu đã chunking và chuẩn hóa
+├── data/                                # [BẢO LƯU NGUYÊN VẸN 100%]
+│   ├── raw/                             # Văn bản gốc PDF/DOCX từ Công báo
+│   ├── processed/                       # Dữ liệu trích xuất cấu trúc (legal_documents_v3.jsonl...)
+│   └── evaluation/                      # Bộ câu hỏi benchmark kiểm thử
 │
-├── ingestion/                  # Pipeline thu thập, trích xuất và chunking văn bản luật
-│   ├── cleaner.py              # Xử lý dấu tiếng Việt, ký tự OCR và khoảng trắng
-│   ├── loader.py               # Trích xuất cấu trúc văn bản
-│   └── parser.py               # Phân đoạn Điều - Khoản - Điểm
+├── graph/                               # [MODULE HYBRID GRAPHRAG] Quản lý Knowledge Graph & Neo4j
+│   ├── __init__.py                      # Export các module nòng cốt
+│   ├── schema.py                        # Định nghĩa Ontology: Nodes, Edges, Properties
+│   ├── connector.py                     # Quản lý kết nối Neo4j (Pool, Offline Fallback an toàn)
+│   ├── cypher_templates.py              # Thư viện câu lệnh Cypher tối ưu cho Multi-hop
+│   ├── builder.py                       # Pipeline nạp tri thức READ-ONLY từ JSONL lên Neo4j
+│   └── retriever.py                     # Bộ trích xuất đồ thị con (Subgraph Context Extractor)
 │
-├── rag/                        # Thành phần cốt lõi của VietLabor RAG
-│   ├── chain.py                # Pipeline RAG hoàn chỉnh (VietLaborRAGChain)
-│   ├── query_router.py         # Phân loại chủ thể (Người lao động / NSDLĐ) & ý định
-│   ├── legal_issue_parser.py   # Bóc tách vấn đề pháp lý độc lập
-│   ├── retriever.py            # Hybrid Retriever (BM25s + Dense Embeddings)
-│   ├── context_builder.py      # Mở rộng cây thứ bậc và gắn cầu dẫn luật
-│   ├── evidence_selector.py    # Chọn lọc căn cứ then chốt và khóa citation
-│   ├── evidence_mapper.py      # Ánh xạ token [En] sang tên điều luật chính thức
-│   ├── output_validator.py     # Kiểm duyệt trích dẫn & tự động định dạng Markdown
-│   └── prompts.py              # Mẫu chỉ dẫn hệ thống & prompt công học luật
+├── rag/                                 # Pipeline RAG nòng cốt
+│   ├── bm25_retriever.py                # Truy hồi Lexical Sparse (PyVi + BM25s)
+│   ├── dense_retriever.py               # Truy hồi Dense Vector qua ChromaDB
+│   ├── vectorstore.py                   # Quản lý kho vector ChromaDB cục bộ
+│   ├── hybrid_retriever.py              # Bộ truy hồi lai cơ bản (BM25 + Dense RRF)
+│   ├── hybrid_graph_retriever.py        # [MỚI] Bộ truy hồi Hybrid GraphRAG (Vector + BM25 + Neo4j)
+│   ├── reranker.py                      # Cross-Encoder Reranker
+│   ├── issue_decomposer.py              # Bóc tách vấn đề pháp lý độc lập
+│   ├── legal_calculator.py              # Bộ tính toán thời hạn, số tiền, ngày phép
+│   └── output_validator.py              # Kiểm duyệt trích dẫn & tự động định dạng Markdown
 │
-├── models/                     # Giao tiếp với Local LLM
-│   ├── __init__.py
-│   └── local_llm.py            # Client tương tác với Ollama (JSON Mode)
+├── storage/                             # [BẢO LƯU NGUYÊN VẸN 100%]
+│   ├── bm25_v3/                         # Chỉ mục lexical BM25
+│   └── chroma_v3/                       # Chỉ mục vector ChromaDB
 │
-├── ui/                         # Giao diện người dùng Web (Streamlit)
-│   ├── streamlit_app.py        # Ứng dụng Streamlit chính
-│   ├── components/             # Các component giao diện chuyên biệt
-│   │   ├── chat_message.py     # Bong bóng chat người dùng & thẻ trả lời luật sư
-│   │   ├── citation_card.py    # Thẻ căn cứ pháp lý tương tác (tra cứu nguồn)
-│   │   ├── clarification.py    # Chip làm rõ dữ kiện đa lượt
-│   │   ├── sidebar.py          # Quản lý phiên hội thoại & lịch sử trò chuyện
-│   │   └── welcome.py          # Màn hình chào mừng & câu hỏi tình huống mẫu
-│   └── styles/
-│       └── app.css             # Giao diện tùy biến chuẩn hiện đại
+├── scripts/                             # Scripts vận hành và nạp chỉ mục
+│   ├── build_index_v3.py                # Lập chỉ mục Vector & BM25
+│   └── build_graph_index.py             # Nạp tri thức lên Neo4j Graph Database
 │
-├── tests/                      # Bộ kiểm thử tự động toàn diện (PyTest)
-│   ├── test_ui_service.py      # Kiểm thử Service Adapter & giao diện
-│   ├── test_format_markdown.py # Kiểm thử bộ định dạng ngắt đoạn Markdown
-│   ├── test_phase5b_regression.py
-│   ├── test_phase5c_regression.py
-│   ├── test_phase5d_regression.py
-│   └── test_phase5e_evidence_selector.py
+├── tests/                               # Bộ kiểm thử tự động toàn diện
+│   ├── test_graph_structure.py          # Kiểm thử Ontology, Cypher và Fallback Neo4j
+│   └── ...                              # Toàn bộ test regression và validation
 │
-├── requirements.txt            # Danh sách thư viện phụ thuộc
-├── pytest.ini                  # Cấu hình PyTest
-├── pyrightconfig.json          # Cấu hình Type Checking
-└── README.md                   # Tài liệu giới thiệu dự án
+├── requirements.txt                     # Danh sách thư viện phụ thuộc (bao gồm neo4j>=5.15.0)
+└── ui/                                  # Giao diện người dùng Streamlit
 ```
 
 ---
@@ -156,75 +165,116 @@ chatbot-law/
 ## ⚙️ Hướng Dẫn Cài Đặt & Khởi Chạy
 
 ### 1. Yêu cầu hệ thống
-- **Python**: 3.11 trở lên (`3.11+`)
-- **Ollama**: Đã cài đặt trên máy ([Tải tại ollama.ai](https://ollama.ai))
-- **RAM**: Tối thiểu 8GB (khuyến nghị 16GB+ hoặc GPU rời để chạy mô hình 7B mượt mà)
+* **Python**: 3.11 trở lên (`3.11+`)
+* **Ollama**: Đã cài đặt trên máy ([Tải tại ollama.ai](https://ollama.ai))
+* **Neo4j** *(Tuỳ chọn - Khuyên dùng cho GraphRAG)*: Cài qua Docker hoặc Neo4j Desktop. Nếu không bật Neo4j, hệ thống sẽ tự động fallback về chế độ Vector RAG an toàn.
+* **RAM**: Tối thiểu 8GB (khuyến nghị 16GB+ hoặc GPU rời để chạy mô hình 7B mượt mà).
 
-### 2. Tải và chuẩn bị mô hình LLM cục bộ
-Khởi chạy Ollama và tải mô hình Qwen 2.5:
+### 2. Chuẩn bị LLM Cục bộ
+Khởi chạy Ollama và tải mô hình Qwen 2.5 (bản mặc định của dự án, tối ưu cho GPU 6GB):
 ```bash
-ollama run qwen2.5:7b
+ollama pull qwen2.5:7b-instruct-q4_0
 ```
-*(Bạn cũng có thể sử dụng `qwen2.5-coder:7b` với khả năng tuân thủ định dạng JSON xuất sắc).*
+> Nếu máy đã có sẵn một bản Qwen 2.5 7B khác (ví dụ `qwen2.5:7b`), hệ thống sẽ tự dùng bản đó và ghi cảnh báo vào log.
+> Muốn dùng mô hình khác hẳn (ví dụ `qwen2.5-coder:7b`), đặt biến môi trường `OLLAMA_MODEL`:
+> `$env:OLLAMA_MODEL="qwen2.5-coder:7b"` (PowerShell).
 
 ### 3. Cài đặt môi trường Python
 ```bash
 # Clone repository
-git clone https://github.com/your-username/chatbot-law.git
-cd chatbot-law
+git clone https://github.com/maitamdev/Labor-Law-Chatbot.git
+cd Labor-Law-Chatbot
 
-# Khởi tạo môi trường ảo
+# Khởi tạo và kích hoạt môi trường ảo
 python -m venv .venv
+.\.venv\Scripts\activate   # Windows
+# source .venv/bin/activate # Linux/macOS
 
-# Kích hoạt môi trường ảo:
-# Trên Windows:
-.\.venv\Scripts\activate
-# Trên Linux/macOS:
-source .venv/bin/activate
-
-# Cài đặt các thư viện phụ thuộc
+# Cài đặt thư viện
 pip install -r requirements.txt
 ```
 
-### 4. Khởi chạy ứng dụng Web
-Chạy giao diện Streamlit:
+### 4. Khởi chạy Neo4j (Tùy chọn cho Hybrid GraphRAG)
+Chạy Neo4j nhanh chóng qua Docker:
 ```bash
-streamlit run ui/streamlit_app.py
+docker run -d --name neo4j-vietlabor \
+  -p 7474:7474 -p 7687:7687 \
+  -e NEO4J_AUTH=neo4j/password123 \
+  neo4j:5.15-community
+```
+
+Nạp cơ sở dữ liệu đồ thị tri thức từ corpus (chế độ đọc an toàn, không thay đổi file dữ liệu):
+```bash
+python scripts/build_graph_index.py
+```
+
+Bật mở rộng đồ thị trong pipeline (mặc định tắt; khi Neo4j offline hệ thống tự quay về BM25 + Vector):
+```powershell
+$env:NEO4J_ENABLED="true"   # Linux/macOS: export NEO4J_ENABLED=true
+```
+
+> Cầu nối văn bản (`graph/schema.py`) dùng **NĐ 283/2026** (NĐ 12/2022 đã hết hiệu lực từ 10/09/2026) và được kiểm tra tự động với corpus trong `tests/test_graph_bridges.py`. Nếu đã nạp đồ thị bằng bản cũ, hãy chạy lại `build_graph_index.py`; điều khoản đã hết hiệu lực không bao giờ được chèn vào ngữ cảnh.
+
+### 5. Khởi chạy Ứng Dụng Web
+```bash
+python -m app.main
 ```
 Ứng dụng sẽ tự động mở tại địa chỉ: `http://localhost:8501`.
 
+### 6. Trải nghiệm chatbot (các biến môi trường tùy chọn)
+
+| Tính năng | Mặc định | Biến môi trường |
+|---|---|---|
+| Làm nóng mô hình Ollama khi mở app (first token ~8s → <1s) | bật | `VIETLABOR_OLLAMA_WARMUP=0` để tắt |
+| Viết lại câu hỏi nối tiếp bằng LLM ("Còn vùng III thì sao?") | bật | `VIETLABOR_LLM_FOLLOWUP_REWRITE=0` để tắt |
+| Nhật ký đánh giá 👍/👎 | `storage/feedback.jsonl` | `VIETLABOR_FEEDBACK_PATH` |
+
+Mỗi câu trả lời có thanh thao tác: 📋 sao chép, 🔄 tạo lại (câu trả lời mới nhất), 👍/👎 đánh giá.
+
 ---
 
-## 🧪 Kiểm Thử & Đánh Giá Chất Lượng
+## 🧪 Kiểm Thử & Nghiên Cứu Thực Nghiệm
 
-VietLabor AI sở hữu bộ kiểm thử tự động toàn diện bao quát từ từng module đơn lẻ đến toàn bộ quy trình tích hợp đầu-cuối:
+Hệ thống được thiết kế sẵn sàng cho việc làm **Báo cáo đồ án / Bài báo khoa học** với các bài kiểm tra đối sánh (Ablation Study):
 
 ```bash
-# Chạy toàn bộ các bài kiểm thử
-pytest
+# Kiểm thử cấu trúc Graph Ontology và cơ chế Fallback Neo4j
+pytest tests/test_graph_structure.py -v
 
-# Chạy riêng kiểm thử giao diện và định dạng văn bản
-pytest tests/test_ui_service.py tests/test_format_markdown.py
-
-# Chạy kiểm thử độ chính xác trích dẫn và chống ảo giác
+# Kiểm thử bộ lọc chống ảo giác trích dẫn
 pytest tests/test_phase5d_regression.py
+
+# Chạy toàn bộ test suite
+pytest
 ```
 
-### Kết Quả Đánh Giá
-- **100% Test Coverage** cho các luồng xử lý trích dẫn và adapter.
-- **Zero Phantom Citations**: Loại bỏ hoàn toàn căn cứ giả mạo hoặc trích dẫn ngoài văn bản luật.
-- **Citation Precision**: Đạt độ chính xác tuyệt đối trên các bài kiểm tra tình huống thực tế phức tạp (nghỉ việc có thời hạn, ngành nghề đặc thù tổ lái tàu bay, thử việc theo bậc đào tạo, vi phạm an toàn lao động...).
+### Thiết kế Đối sánh Thực nghiệm (Ablation Study cho Đồ án)
+Script `scripts/evaluate_ablation.py` chấm 155 câu hỏi vàng (`data/evaluation/retrieval_gold.json`) theo Hit@k, Recall@k, MRR, Chunk-Recall ở cấp (văn bản, Điều):
+
+```bash
+python scripts/evaluate_ablation.py --csv reports/ablation_retrieval.csv
+```
+
+| Cấu hình | Mô tả |
+|---|---|
+| `bm25` | BM25s lexical |
+| `dense` | BGE-M3 + ChromaDB |
+| `hybrid` | BM25 + Dense (RRF) |
+| `hybrid_graph` | Hybrid + mở rộng Neo4j (**phương pháp đề xuất**) |
+| `hybrid_norm` | Hybrid sau chuẩn hóa văn nói → thuật ngữ luật |
+
+Thành phần nào không chạy được (thiếu trọng số BGE-M3, Neo4j tắt) sẽ được ghi rõ trong báo cáo `reports/ablation_retrieval.md` thay vì báo số giả.
 
 ---
 
 ## 📚 Cơ Sở Dữ Liệu Pháp Luật Tích Hợp
 
-Hệ thống được xây dựng trên nền tảng các văn bản quy phạm pháp luật lao động hiện hành tại Việt Nam:
+Hệ thống tích hợp đầy đủ hệ thống văn bản pháp luật lao động hiện hành tại Việt Nam:
 1. **Văn bản hợp nhất 18/VBHN-VPQH (2026)**: Bộ luật Lao động số 45/2019/QH14.
-2. **Nghị định 145/2020/NĐ-CP**: Quy định chi tiết và hướng dẫn thi hành một số điều của Bộ luật Lao động về điều kiện lao động và quan hệ lao động.
-3. **Nghị định 12/2022/NĐ-CP**: Xử phạt vi phạm hành chính trong lĩnh vực lao động, bảo hiểm xã hội, đưa người lao động Việt Nam đi làm việc ở nước ngoài theo hợp đồng.
-4. **Nghị định 293/2025/NĐ-CP**: Quy định mức lương tối thiểu đối với người lao động làm việc theo hợp đồng lao động.
-5. **Thông tư 10/2020/TT-BLĐTBXH**: Hướng dẫn thi hành một số điều của Bộ luật Lao động về nội dung của hợp đồng lao động, Hội đồng thương lượng tập thể.
+2. **Nghị định 145/2020/NĐ-CP**: Hướng dẫn thi hành Bộ luật Lao động về điều kiện và quan hệ lao động.
+3. **Nghị định 12/2022/NĐ-CP & Nghị định 283/2026/NĐ-CP**: Quy định xử phạt vi phạm hành chính trong lĩnh vực lao động.
+4. **Nghị định 293/2025/NĐ-CP & Nghị định 135/2020/NĐ-CP**: Lương tối thiểu vùng và lộ trình tuổi nghỉ hưu.
+5. **Thông tư 10/2020/TT-BLĐTBXH**: Hướng dẫn nội dung HĐLĐ và thương lượng tập thể.
 
 ---
 
@@ -236,5 +286,4 @@ Hệ thống được xây dựng trên nền tảng các văn bản quy phạm 
 
 ## 📄 Bản Quyền & Giấy Phép
 
-Dự án được phát hành theo giấy phép [MIT License](LICENSE).
-Mọi đóng góp, báo lỗi (Issues) và yêu cầu kéo (Pull Requests) đều được hoan nghênh!
+Dự án được phát hành theo giấy phép [MIT License](LICENSE). Mọi đóng góp, báo lỗi (Issues) và đề xuất cải tiến (Pull Requests) đều được hoan nghênh!
