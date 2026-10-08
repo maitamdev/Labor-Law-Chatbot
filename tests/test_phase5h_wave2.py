@@ -436,19 +436,24 @@ def test_employer_accident_all_brackets():
 def test_manifest_scope_truthfulness():
     import csv
     manifest_path = "data/raw/extended_wave2_manifest.csv"
-    with open(manifest_path, "r", encoding="utf-8") as f:
+    with open(manifest_path, "r", encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         rows = list(reader)
 
-    assert len(rows) == 10, f"Expected 10 documents, got {len(rows)}"
+    # This manifest grows as later official amendments are added; exact
+    # historical row/article totals are not a scope-truthfulness invariant.
+    assert len(rows) >= 10
+    assert len({r["doc_id"] for r in rows}) == len(rows)
+    assert {"VBHN_58_2025", "TT_12_2025", "ND_141_2026"} <= {r["doc_id"] for r in rows}
 
     total_official = sum(int(r["official_total_articles"]) for r in rows)
     total_ingested = sum(int(r["ingested_articles"]) for r in rows)
 
-    assert total_official == 443, f"Expected 443 official articles, got {total_official}"
-    assert total_ingested == 83, f"Expected 83 ingested articles, got {total_ingested}"
+    assert total_official >= total_ingested > 0
 
     for r in rows:
-        assert r["corpus_scope"] == "SCOPED_EXCERPT", f"Doc {r['doc_id']} must be SCOPED_EXCERPT"
+        expected_scope = "FULL_TEXT" if r["doc_id"] in {"TT_12_2025", "VBHN_58_2025"} else "SCOPED_EXCERPT"
+        assert r["corpus_scope"] == expected_scope, f"Doc {r['doc_id']} scope must be {expected_scope}"
         assert int(r["ingested_articles"]) <= int(r["official_total_articles"])
-
+        if expected_scope == "FULL_TEXT":
+            assert int(r["ingested_articles"]) == int(r["official_total_articles"])
