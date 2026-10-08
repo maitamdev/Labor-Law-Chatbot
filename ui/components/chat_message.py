@@ -22,9 +22,55 @@ def render_user_message(content: str, timestamp: str = "") -> None:
     st.markdown(user_html, unsafe_allow_html=True)
 
 
+def render_message_actions(
+    msg: Dict[str, Any],
+    is_last: bool = False,
+    on_regenerate: Optional[Callable[[], None]] = None,
+    on_feedback: Optional[Callable[[str, str], None]] = None,
+) -> None:
+    """Copy / regenerate / 👍👎 row shown under an assistant answer."""
+    msg_id = str(msg.get("id", "msg"))
+    content = str(msg.get("content", ""))
+    data = msg.get("structured_data", {}) or {}
+    is_smalltalk = bool(data.get("is_smalltalk"))
+    current = msg.get("feedback")
+
+    cols = st.columns([0.09, 0.09, 0.09, 0.09, 0.64], gap="small")
+    with cols[0]:
+        with st.popover("📋", help="Sao chép câu trả lời"):
+            st.caption("Bấm biểu tượng sao chép ở góc phải khung bên dưới.")
+            st.code(content, language="markdown", wrap_lines=True)
+    if is_smalltalk:
+        return
+    with cols[1]:
+        if is_last and on_regenerate is not None:
+            if st.button("🔄", key=f"{msg_id}_regen", help="Tạo lại câu trả lời"):
+                on_regenerate()
+    if on_feedback is None:
+        return
+    with cols[2]:
+        if st.button(
+            "👍", key=f"{msg_id}_fb_up", help="Câu trả lời hữu ích",
+            type="primary" if current == "up" else "secondary",
+        ):
+            on_feedback(msg_id, "up")
+    with cols[3]:
+        if st.button(
+            "👎", key=f"{msg_id}_fb_down", help="Câu trả lời chưa đúng / chưa đủ",
+            type="primary" if current == "down" else "secondary",
+        ):
+            on_feedback(msg_id, "down")
+    if current:
+        with cols[4]:
+            st.caption("Đã ghi nhận đánh giá — cảm ơn bạn!")
+
+
 def render_assistant_message(
     msg: Dict[str, Any],
     on_chip_click: Optional[Callable[[str], None]] = None,
+    is_last: bool = False,
+    on_regenerate: Optional[Callable[[], None]] = None,
+    on_feedback: Optional[Callable[[str, str], None]] = None,
 ) -> None:
     """Renders assistant answer card with avatar, findings, citations, and clarification chips."""
     content = msg.get("content", "")
@@ -35,6 +81,9 @@ def render_assistant_message(
     citations = data.get("citations", [])
     needs_clarification = data.get("needs_clarification", False)
     followups = data.get("suggested_followups", [])
+    evidence_coverage = data.get("evidence_coverage", {}) or {}
+    unresolved_issue_ids = data.get("unresolved_issue_ids", []) or []
+    is_smalltalk = bool(data.get("is_smalltalk"))
 
     # Layout with left avatar icon and right message container
     col_avatar, col_content = st.columns([0.08, 0.92], gap="small")
@@ -58,6 +107,17 @@ def render_assistant_message(
         # Render the full structured advisory answer
         st.markdown(content)
 
+        total_issues = int(evidence_coverage.get("total_issue_count") or 0)
+        complete_issues = int(evidence_coverage.get("complete_issue_count") or 0)
+        if total_issues > 1:
+            if unresolved_issue_ids:
+                st.warning(
+                    f"Kiểm tra căn cứ: {complete_issues}/{total_issues} vấn đề đủ căn cứ. "
+                    "Các vấn đề còn thiếu đã bị chặn kết luận."
+                )
+            else:
+                st.caption(f"Đã kiểm tra độc lập căn cứ cho {complete_issues}/{total_issues} vấn đề pháp lý.")
+
         # Render deduplicated statutory citations if present
         if citations and not needs_clarification:
             st.markdown("**Căn cứ pháp lý:**")
@@ -74,8 +134,8 @@ def render_assistant_message(
             for c_idx, c in enumerate(unique_citations):
                 render_citation_card(c, key_prefix=f"{msg_id}_c{c_idx}")
 
-        # Render clarification quick-reply chips if clarification is needed
-        if needs_clarification and followups:
+        # Render quick-reply chips for clarification, or starter questions after small talk
+        if (needs_clarification or is_smalltalk) and followups:
             render_clarification_chips(
                 chips=followups,
                 message_id=msg_id,
@@ -84,3 +144,7 @@ def render_assistant_message(
 
         if timestamp:
             st.markdown(f'<div class="assistant-msg-time">{html.escape(timestamp)}</div>', unsafe_allow_html=True)
+
+        render_message_actions(
+            msg, is_last=is_last, on_regenerate=on_regenerate, on_feedback=on_feedback,
+        )
