@@ -40,6 +40,7 @@ env/
 .pytest_cache/
 .coverage
 htmlcov/
+evaluation/results/benchmark_report_*.json
 
 # Local Storage and Vector Database
 storage/*
@@ -61,4 +62,6 @@ scratch/
 *.zip
 *.log
 .system_generated/
+archive/data_backup/
+tmp/
 
