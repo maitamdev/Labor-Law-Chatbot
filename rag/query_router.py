@@ -17,11 +17,14 @@ import re
 from typing import Any, Dict, List, Optional
 import unicodedata
 
+from rag.conversational import detect_smalltalk
+from rag.workplace_lockout import workplace_lockout_request
+
 
 @dataclass
 class RouteDecision:
     """Encapsulates the deterministic routing decision for a query."""
-    strategy: str  # "exact_reference" | "hybrid" | "out_of_scope"
+    strategy: str  # "exact_reference" | "hybrid" | "out_of_scope" | "smalltalk"
     reason: str
     detected_article: Optional[int] = None
     detected_clause: Optional[int] = None
@@ -37,7 +40,7 @@ class RouteDecision:
     legal_intent: str = "SUBSTANTIVE_RULE"  # "SUBSTANTIVE_RULE" | "SANCTION" | "BOTH"
     augmented_query: Optional[str] = None
     # Phase 5G Domain & Status-Aware flags:
-    domain: str = "CORE_LABOR"  # "CORE_LABOR" | "RETIREMENT" | "UNEMPLOYMENT_INSURANCE" | "FOREIGN_WORKER" | "CROSS_DOMAIN" | "UNKNOWN"
+    domain: str = "CORE_LABOR"  # Includes specialized labor domains such as COLLECTIVE_LABOR.
     target_domains: List[str] = field(default_factory=lambda: ["CORE_LABOR"])
     scope_tier: str = "core"  # "core" | "extended"
     target_status: str = "CURRENT"  # "CURRENT" | "PARTIALLY_EFFECTIVE" | "ANY"
@@ -73,10 +76,11 @@ class QueryRouter:
         "nghị định 293": "293/2025/NĐ-CP",
         "lương tối thiểu 2025": "293/2025/NĐ-CP",
         "nghị định 12": "12/2022/NĐ-CP",
-        "xử phạt lao động": "12/2022/NĐ-CP",
+        "nghị định 283": "283/2026/NĐ-CP",
+        "xử phạt lao động": "283/2026/NĐ-CP",
         "nghị định 337": "337/2025/NĐ-CP",
         "hợp đồng điện tử": "337/2025/NĐ-CP",
-        "thông tư 08": "08/2026/TT-BLĐTBXH",
+        "thông tư 08": "08/2026/TT-BNV",
         # Phase 5G Extended Document Aliases:
         "nghị định 135": "135/2020/NĐ-CP",
         "nd 135": "135/2020/NĐ-CP",
@@ -153,6 +157,11 @@ class QueryRouter:
         "58/vbhn", "nghị định 158", "nghị định 159", "thông tư 12", "158/2025",
         "159/2025", "12/2025", "nghị định 176", "176/2025", "hưu trí xã hội",
         "trợ cấp hưu trí xã hội",
+    ]
+
+    COLLECTIVE_LABOR_SIGNALS = [
+        "đình công", "tranh chấp tập thể", "tranh chấp lao động tập thể",
+        "thương lượng tập thể", "thỏa ước lao động tập thể",
     ]
 
     OCCUPATIONAL_SAFETY_SIGNALS = [
@@ -294,6 +303,18 @@ class QueryRouter:
 
         norm_query = unicodedata.normalize("NFC", query).strip().lower()
 
+        # -1. Conversational small talk (greeting / thanks / identity) never
+        # needs statutory retrieval.
+        smalltalk = detect_smalltalk(norm_query)
+        if smalltalk is not None:
+            return RouteDecision(
+                strategy="smalltalk",
+                reason=f"Conversational: {smalltalk.intent}",
+                intent=smalltalk.intent,
+                domain="CONVERSATION",
+                target_domains=["CONVERSATION"],
+            )
+
         # 0. Out-of-scope check (with exemption for foreign marriage labor rights)
         is_foreign_labor = any(k in norm_query for k in ["giấy phép lao động", "work permit", "làm việc", "lao động", "gplđ"])
         is_oos = any(k in norm_query for k in self.OUT_OF_SCOPE_SIGNALS)
@@ -318,6 +339,10 @@ class QueryRouter:
         has_unemployment = any(k in norm_query for k in self.UNEMPLOYMENT_SIGNALS)
         has_retirement = (any(k in norm_query for k in self.RETIREMENT_SIGNALS) or "135/2020" in norm_query) and not ("đóng bhxh" in norm_query or "năm đóng" in norm_query)
         has_foreign = any(k in norm_query for k in self.FOREIGN_WORKER_SIGNALS)
+        has_collective_labor = (
+            any(k in norm_query for k in self.COLLECTIVE_LABOR_SIGNALS)
+            or workplace_lockout_request(norm_query)
+        )
         has_core_labor = any(k in norm_query for k in [
             "chấm dứt hợp đồng", "chấm dứt hđlđ", "hết hạn hợp đồng", "hết hạn hđlđ",
             "sa thải", "bồi thường hợp đồng", "đơn phương", "thôi việc", "mất việc",
@@ -428,6 +453,11 @@ class QueryRouter:
         elif has_foreign:
             detected_domain = "FOREIGN_WORKER"
             target_domains = ["FOREIGN_WORKER"]
+            scope_tier = "extended"
+            target_status = "CURRENT"
+        elif has_collective_labor:
+            detected_domain = "COLLECTIVE_LABOR"
+            target_domains = ["COLLECTIVE_LABOR"]
             scope_tier = "extended"
             target_status = "CURRENT"
         else:
