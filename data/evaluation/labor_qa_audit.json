@@ -1,0 +1,8115 @@
+{
+  "question_count": 1000,
+  "flags": {
+    "quantity_requires_manual_check": 13,
+    "answer_very_short": 27
+  },
+  "findings": [
+    {
+      "sheet_row": 5,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 6,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 7,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 8,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 9,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 10,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 11,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 12,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 13,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 14,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 15,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 16,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 17,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 18,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 19,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 20,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 21,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 22,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 23,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 24,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 25,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 26,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 27,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 28,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 29,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 30,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 31,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 32,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 33,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 34,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 35,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 36,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 37,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 38,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 39,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 40,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 41,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 42,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 43,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 44,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 45,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 46,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 47,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 48,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 49,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 50,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 51,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 52,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 53,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 54,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "10,2 triệu đồng"
+      ]
+    },
+    {
+      "sheet_row": 55,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 56,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 57,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 58,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 59,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 60,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 61,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 62,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 63,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 64,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 65,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 66,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 67,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 68,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 69,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 70,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 71,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 72,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 73,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 74,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 75,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 76,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 77,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 78,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 79,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 80,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 81,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 82,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 83,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 84,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 85,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 86,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 87,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 88,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 89,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 90,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 91,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 92,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 93,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 94,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 95,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 96,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 97,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 98,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 99,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 100,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 101,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 102,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 103,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 104,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 105,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 106,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 107,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 108,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 109,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "03 ngày làm việc"
+      ]
+    },
+    {
+      "sheet_row": 110,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 111,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 112,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 113,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 114,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 115,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 116,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 117,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 118,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 119,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 120,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 121,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 122,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 123,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 124,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 125,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 126,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 127,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 128,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 129,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 130,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 131,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 132,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 133,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 134,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 135,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 136,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 137,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 138,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 139,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 140,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 141,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 142,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 143,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 144,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 145,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 146,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 147,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 148,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 149,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 150,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 151,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 152,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 153,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 154,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 155,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 156,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 157,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 158,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 159,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 160,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 161,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 162,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 163,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 164,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 165,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 166,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 167,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 168,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 169,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 170,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 171,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 172,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 173,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 174,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 175,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 176,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 177,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 178,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 179,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 180,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 181,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 182,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 183,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 184,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "15 ngày"
+      ]
+    },
+    {
+      "sheet_row": 185,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 186,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 187,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 188,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 189,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 190,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 191,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 192,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 193,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 194,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 195,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 196,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 197,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 198,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 199,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 200,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 201,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 202,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 203,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 204,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 207,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 208,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 209,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 210,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 211,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 212,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 213,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 214,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 215,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 216,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 217,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 218,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 219,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 220,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 221,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 222,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 223,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 224,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 225,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 226,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 227,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 228,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 229,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 230,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 231,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 232,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 233,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 234,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 235,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 236,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 237,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 238,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 239,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 240,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 241,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 242,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 243,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 244,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 245,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 246,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 247,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 248,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 249,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 250,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 251,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 252,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 253,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 254,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 255,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 256,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 257,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 258,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 259,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 260,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 261,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 262,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 263,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 264,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 265,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 266,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 267,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 268,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 269,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 270,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 271,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 272,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 273,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 274,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 275,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 276,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 277,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 278,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 279,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 280,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 281,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 282,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 283,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 284,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 285,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 286,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 287,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 288,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 289,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 290,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 291,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 292,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 293,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 294,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 295,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 296,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 297,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 298,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 299,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 300,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 301,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 302,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 303,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 304,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 305,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 306,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 307,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 308,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 309,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 310,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 311,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 312,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 313,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 314,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 315,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 316,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 317,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 318,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 319,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 320,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 321,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 322,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 323,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 324,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 325,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 326,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 327,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 328,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 329,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 330,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 331,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 332,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 333,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 334,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 335,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 336,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 337,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 338,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 339,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 340,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 341,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 342,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 343,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 344,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "08 tháng"
+      ]
+    },
+    {
+      "sheet_row": 345,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 346,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 347,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 348,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 349,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 350,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 351,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 352,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 353,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 354,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 355,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 356,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 357,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 358,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 359,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 360,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 361,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 362,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 363,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 364,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 365,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 366,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 367,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 368,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 369,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 370,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 371,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 372,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 373,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 374,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 375,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 376,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 377,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 378,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 379,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "10,2 triệu đồng"
+      ]
+    },
+    {
+      "sheet_row": 380,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 381,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 382,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 383,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 384,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 385,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 386,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 387,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 388,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 389,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 390,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 391,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 392,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 393,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 394,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 395,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 396,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 397,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 398,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 399,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 400,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 401,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 402,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 403,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 404,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 405,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 406,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 408,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 409,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 410,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 411,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 412,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 413,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 414,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 415,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 416,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 417,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 418,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 419,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 420,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 421,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 422,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 423,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 424,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 425,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 426,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 427,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 428,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 429,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 430,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 431,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 432,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 433,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 434,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 435,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 436,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 437,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 438,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 439,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 440,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 441,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 442,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "40 ngày làm việc"
+      ]
+    },
+    {
+      "sheet_row": 443,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 444,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "40 ngày làm việc"
+      ]
+    },
+    {
+      "sheet_row": 445,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 446,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 447,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 448,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 449,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 450,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 451,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 452,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 453,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 454,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 455,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 456,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 457,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 458,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 459,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 460,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 461,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 462,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 463,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 464,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 465,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 466,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 467,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 468,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 469,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 470,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 471,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 472,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 473,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 474,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 475,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 476,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 477,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 478,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 479,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 480,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 481,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "03 năm"
+      ]
+    },
+    {
+      "sheet_row": 482,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 483,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 484,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 485,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 486,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 487,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 488,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 489,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 490,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 491,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 492,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 493,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 494,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 495,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 496,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 497,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 498,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 499,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 500,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 501,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 502,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 503,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 504,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 505,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 506,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 507,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 508,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 509,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 510,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 511,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 512,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 513,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 514,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 515,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 516,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 517,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 518,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 519,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 520,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 521,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 522,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 523,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 524,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 525,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 526,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 527,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 528,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "10 năm"
+      ]
+    },
+    {
+      "sheet_row": 529,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 530,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 531,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 532,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 533,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 534,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 535,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 536,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 537,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 538,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 539,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 540,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 541,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 542,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 543,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 544,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 545,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 546,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 547,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 548,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 549,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 550,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 551,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 552,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 553,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 554,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 555,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 556,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "05 tháng"
+      ]
+    },
+    {
+      "sheet_row": 557,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 558,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 559,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 560,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 561,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 562,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 563,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 564,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 565,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 566,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "300 triệu đồng"
+      ]
+    },
+    {
+      "sheet_row": 567,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 568,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 569,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 570,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 571,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 572,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 573,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 574,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 575,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 576,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 577,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 578,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 579,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 580,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 581,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 582,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 583,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 584,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 585,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 586,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 587,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 588,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 589,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 590,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 591,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 592,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 593,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 594,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 595,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 596,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 597,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 598,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 599,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 600,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 601,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 602,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 603,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 604,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 605,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 606,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 607,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 609,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 610,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 611,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 612,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 613,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 614,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 615,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 616,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 617,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 618,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 619,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 620,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 621,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "40 triệu đồng"
+      ]
+    },
+    {
+      "sheet_row": 622,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 623,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 624,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 625,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 626,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 627,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 628,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 629,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 630,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 631,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 632,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 633,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 634,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 635,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 636,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 637,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 638,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 639,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 640,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 641,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 642,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 643,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 644,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 645,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 646,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 647,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 648,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 649,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 650,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 651,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 652,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 653,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 654,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 655,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 656,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 657,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 658,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 659,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 660,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 661,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 662,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 663,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 664,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 665,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 666,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 667,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 668,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 669,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 670,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 671,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 672,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 673,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 674,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 675,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 676,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 677,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 678,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 679,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 680,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 681,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 682,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 683,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 684,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 685,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 686,
+      "flags": [
+        "quantity_requires_manual_check"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": [
+        "15 ngày"
+      ]
+    },
+    {
+      "sheet_row": 687,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 688,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 689,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 690,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 691,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 692,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 693,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 694,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 695,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 696,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 697,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 698,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 699,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 700,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 701,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 702,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 703,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 704,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 705,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 706,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 707,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 708,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 709,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 710,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 711,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 712,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 713,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 714,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 715,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 716,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 717,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 718,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 719,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 720,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 721,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 722,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 723,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 724,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 725,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 726,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 727,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 728,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 729,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 730,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 731,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 732,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 733,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 734,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 735,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 736,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 737,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 738,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 739,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 740,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 741,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 742,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 743,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 744,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 745,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 746,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 747,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 748,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 749,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 750,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 751,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 752,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 753,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 754,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 755,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 756,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 757,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 758,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 759,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 760,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 761,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 762,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 763,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 764,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 765,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 766,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 767,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 768,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 769,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 770,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 771,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 772,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 773,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 774,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 775,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 776,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 777,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 778,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 779,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 780,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 781,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 782,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 783,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 784,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 785,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 786,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 787,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 788,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 789,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 790,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 791,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 792,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 793,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 794,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 795,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 796,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 797,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 798,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 799,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 800,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 801,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 802,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 803,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 804,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 805,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 806,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 807,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 808,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 810,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 811,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 812,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 813,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 814,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 815,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 816,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 817,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 818,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 819,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 820,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 821,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 822,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 823,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 824,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 825,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 826,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 827,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 828,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 829,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 830,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 831,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 832,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 833,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 834,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 835,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 836,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 837,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 838,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 839,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 840,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 841,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 842,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 843,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 844,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 845,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 846,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 847,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 848,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 849,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 850,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 851,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 852,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 853,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 854,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 855,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 856,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 857,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 858,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 859,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 860,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 861,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 862,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 863,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 864,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 865,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 866,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 867,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 868,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 869,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 870,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 871,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 872,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 873,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 874,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 875,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 876,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 877,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 878,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 879,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 880,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 881,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 882,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 883,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 884,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 885,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 886,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 887,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 888,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 889,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 890,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 891,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 892,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 893,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 894,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 895,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 896,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 897,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 898,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 899,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 900,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 901,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 902,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 903,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 904,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 905,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 906,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 907,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 908,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 909,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 910,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 911,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 912,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 913,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 914,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 915,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 916,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 917,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 918,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 919,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 920,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 921,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 922,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 923,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 924,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 925,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 926,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 927,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 928,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 929,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 930,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 931,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 932,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 933,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 934,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 935,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 936,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 937,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 938,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 939,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 940,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 941,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 942,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 943,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 944,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 945,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 946,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 947,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 948,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 949,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 950,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 951,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 952,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 953,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 954,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 955,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 956,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 957,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 958,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 959,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 960,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 961,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 962,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 963,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 964,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 965,
+      "flags": [
+        "answer_very_short"
+      ],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 966,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 967,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 968,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 969,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 970,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 971,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 972,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 973,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 974,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 975,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 976,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 977,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 978,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 979,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 980,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 981,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 982,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 983,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 984,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 985,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 986,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 987,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 988,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 989,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 990,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 991,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 992,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 993,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 994,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 995,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 996,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 997,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 998,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 999,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 1000,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 1001,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 1002,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 1003,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 1004,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 1005,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 1006,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 1007,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 1008,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    },
+    {
+      "sheet_row": 1009,
+      "flags": [],
+      "missing_documents": [],
+      "missing_articles": [],
+      "missing_clauses": [],
+      "quantities_to_check": []
+    }
+  ]
+}
