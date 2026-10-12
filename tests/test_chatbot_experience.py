@@ -221,6 +221,7 @@ def test_chain_uses_graph_retriever_by_default():
     assert "HybridGraphRetriever(" in src
 
 
+@pytest.mark.ollama
 def test_internship_no_hardcoded_leak_and_proper_grounding():
     from rag.chain import VietLaborRAGChain
     chain = VietLaborRAGChain()
@@ -235,6 +236,7 @@ def test_internship_no_hardcoded_leak_and_proper_grounding():
     assert any(k in r2.answer.lower() for k in ["không cần", "không bắt buộc", "không phải", "chưa phải", "không thuộc", "không có nghĩa vụ", "chưa cần", "tùy thuộc", "điều 13", "điều 61"]), f"Unexpected answer: {r2.answer}"
 
 
+@pytest.mark.ollama
 def test_wage_underpayment_and_unauthorized_fee_deduction():
     from rag.chain import VietLaborRAGChain
     chain = VietLaborRAGChain()
@@ -253,13 +255,20 @@ def test_wage_underpayment_and_unauthorized_fee_deduction():
     assert any(k in ans for k in ["94", "102", "khấu trừ", "nguyên tắc trả lương"])
 
 
-def test_workplace_accident_fall_compensation():
-    from rag.chain import VietLaborRAGChain
+FALL_QUERY = "tôi làm cho cty lao động và tôi bị té thì tôi có được bồi thường hay gì không"
+
+
+def test_workplace_accident_fall_is_single_issue():
     from rag.issue_decomposer import IssueDecomposer
-    q = "tôi làm cho cty lao động và tôi bị té thì tôi có được bồi thường hay gì không"
-    issues = IssueDecomposer().decompose(q)
+    issues = IssueDecomposer().decompose(FALL_QUERY)
     assert len(issues) == 1
     assert "tôi, gì không" not in issues[0].raw_issue_text
+
+
+@pytest.mark.ollama
+def test_workplace_accident_fall_compensation():
+    from rag.chain import VietLaborRAGChain
+    q = FALL_QUERY
 
     chain = VietLaborRAGChain()
     chain.memory.clear()
