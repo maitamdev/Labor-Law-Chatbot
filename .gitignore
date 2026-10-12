@@ -62,6 +62,5 @@ scratch/
 *.zip
 *.log
 .system_generated/
-archive/data_backup/
 tmp/
 
