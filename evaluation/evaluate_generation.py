@@ -20,9 +20,9 @@ Evaluates generation quality, faithfulness, citation correctness, and abstention
 from __future__ import annotations
 
 import json
-from pathlib import Path
 import sys
 import time
+from pathlib import Path
 from typing import Any, Dict, List
 
 # Ensure project root is in sys.path
@@ -33,13 +33,14 @@ if str(PROJECT_ROOT) not in sys.path:
 # Ensure Windows terminal prints Vietnamese UTF-8 cleanly with line buffering
 if sys.platform == "win32":
     if hasattr(sys.stdout, "reconfigure"):
-        getattr(sys.stdout, "reconfigure")(encoding="utf-8", line_buffering=True)
+        sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
     if hasattr(sys.stderr, "reconfigure"):
-        getattr(sys.stderr, "reconfigure")(encoding="utf-8", line_buffering=True)
+        sys.stderr.reconfigure(encoding="utf-8", line_buffering=True)
 
-from langchain_core.messages import HumanMessage, SystemMessage
-from models.local_llm import LocalLLMManager
-from rag.chain import VietLaborRAGChain
+from langchain_core.messages import HumanMessage, SystemMessage  # noqa: E402
+
+from models.local_llm import LocalLLMManager  # noqa: E402
+from rag.chain import VietLaborRAGChain  # noqa: E402
 
 
 def evaluate_no_rag_baseline(
@@ -48,7 +49,7 @@ def evaluate_no_rag_baseline(
 ) -> List[Dict[str, Any]]:
     """Evaluates Local Qwen 2.5 without any retrieval context (pure pretraining memory)."""
     print("\n--- [EVALUATION] Running Local Qwen Baseline WITHOUT RAG ---")
-    llm = llm_manager.get_llm()
+    llm: Any = llm_manager.get_llm()
     baseline_results = []
 
     system_prompt = (
@@ -172,7 +173,7 @@ def run_generation_benchmark(dataset_path: str = "data/evaluation/phase5b_eval_d
                 # Check if cited chunk matches expected statutory ground
                 doc_match = (not expected_doc_id) or (expected_doc_id in c_doc) or (expected_doc_id in c_doc_no) or (c_doc in expected_doc_id)
                 art_match = (not expected_article) or (expected_article == c_art)
-                cl_match = (not expected_clause) or (expected_clause == c_cl)
+                _cl_match = (not expected_clause) or (expected_clause == c_cl)
 
                 if doc_match and art_match:
                     has_statutory_support = True
