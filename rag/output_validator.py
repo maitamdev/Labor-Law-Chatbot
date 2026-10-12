@@ -97,6 +97,17 @@ def format_answer_markdown(text: str) -> str:
     # 5d. Clean up technical prefixes like "Finding:" or "Kết luận:" at start of line
     t = re.sub(r"(?mi)^(?:Finding|Kết luận)\s*:\s*", "", t)
 
+    # 5d-2. Remove JSON-schema field lines the model copied into the prose.
+    t = re.sub(
+        r"(?mi)^[ \t]*(?:[-*•][ \t]*)?\**[ \t]*(?:Finding|Evidence[_ ]ids|Needs[_ ]clarification|Out[_ ]of[_ ]scope|"
+        r"Clarification[_ ]question|Issue[_ ]id)\**[ \t]*:?[ \t]*\**[ \t]*(?:issue_\d+|không|có|true|false|null|none|\[\])?\.?[ \t]*\**[ \t]*$\n?",
+        "",
+        t,
+    )
+    t = re.sub(r"(?mi)^([ \t]*(?:[-*•][ \t]*)?)\**[ \t]*(?:Evidence[_ ]ids)\**[ \t]*:[^\n]*\n?", "", t)
+    t = re.sub(r"(?mi)^([ \t]*(?:[-*•][ \t]*)?)\**Conclusion:?\**[ \t]*:?[ \t]*", r"\1", t)
+    t = re.sub(r"\bissue_\d+\b", "", t)
+
     # 5e. Smooth out awkward grammar where citations were directly plugged into verbs
     t = re.sub(
         r"(?i)\b(đòi lại|yêu cầu)\s+((?:Điểm\s+[a-zđ]\s+)?(?:Khoản\s+\d+\s+)?Điều\s+\d+[^,\n.]+)",
@@ -184,7 +195,7 @@ class OutputValidator:
 
     STANDARD_OOS_MSG = (
         "VietLabor AI là hệ thống chuyên biệt hỗ trợ tra cứu pháp luật lao động Việt Nam. "
-        "Câu hỏi của bạn nằm ngoài phạm vi tư vấn của hệ thống."
+        "Câu hỏi của bạn nằm ngoài phạm vi tra cứu của hệ thống."
     )
 
     @staticmethod
@@ -278,8 +289,8 @@ class OutputValidator:
 
             if "DISCIPLINE_AND_BONUS" in events and "quy chế thưởng" in missing:
                 finding.finding = (
-                    "Công ty không được ép làm thêm khi chưa có sự đồng ý của người lao động. "
-                    "Riêng việc không xét thưởng chưa thể kết luận hợp pháp hay trái pháp luật khi chưa có quy chế thưởng, hợp đồng hoặc thỏa ước quy định điều kiện hưởng thưởng."
+                    ("Công ty không được ép làm thêm khi chưa có sự đồng ý của người lao động. " if "OVERTIME" in all_events else "")
+                    + "Riêng việc không xét thưởng chưa thể kết luận hợp pháp hay trái pháp luật khi chưa có quy chế thưởng, hợp đồng hoặc thỏa ước quy định điều kiện hưởng thưởng."
                 )
                 corrected = True
 
@@ -641,9 +652,10 @@ class OutputValidator:
                 needs_synthesis = True
             else:
                 s_ans = str(raw_ans).strip()
+                has_substantive_body = bool(re.sub(r"(?m)^\s*#{1,6}\s+.*$", "", s_ans).strip())
                 if (s_ans.startswith("{") and s_ans.endswith("}")) or (
                     s_ans.startswith("{") and ('"findings"' in s_ans or '"issue"' in s_ans or '"conclusion"' in s_ans)
-                ):
+                ) or (parsed_findings and not has_substantive_body):
                     needs_synthesis = True
 
             if needs_synthesis:
@@ -976,14 +988,20 @@ class OutputValidator:
                         clean_tokens.append(token)
                     f.evidence_ids = clean_tokens
                 if finding_cross_violation:
-                    f.finding = "Chưa đủ căn cứ trong cơ sở dữ liệu để kết luận vấn đề này vì đầu ra đã dùng nhầm căn cứ của vấn đề khác."
-                    f.evidence_ids = []
-                    f.supporting_chunk_ids = []
-                    f.grounding_status = "insufficient"
-                    f.grounding_reason = "Phát hiện trích dẫn chéo giữa các vấn đề."
-                    if issue_id:
-                        invalid_grounding_issue_ids.add(issue_id)
-                    continue
+                    if not f.evidence_ids:
+                        cross_issue_violation = True
+                        f.finding = "Chưa đủ căn cứ trong cơ sở dữ liệu để kết luận vấn đề này vì đầu ra đã dùng nhầm căn cứ của vấn đề khác."
+                        f.evidence_ids = []
+                        f.supporting_chunk_ids = []
+                        f.grounding_status = "insufficient"
+                        f.grounding_reason = "Phát hiện trích dẫn chéo giữa các vấn đề."
+                        if issue_id:
+                            invalid_grounding_issue_ids.add(issue_id)
+                        continue
+                    else:
+                        f.supporting_chunk_ids = list(issue_allowed)
+                        f.grounding_status = "grounded"
+                        f.grounding_reason = None
                 f.supporting_chunk_ids = list(issue_allowed)
                 f.grounding_status = "grounded" if issue_allowed else "insufficient"
                 if not issue_allowed:
@@ -1097,7 +1115,7 @@ class OutputValidator:
 
         # If any issue failed the evidence gate, discard the unconstrained prose
         # and rebuild from gated findings so an unsupported assertion cannot leak.
-        if unsupported_set or cross_issue_violation or deterministic_guard_applied:
+        if unsupported_set or cross_issue_violation or deterministic_guard_applied or (findings and not re.sub(r"(?m)^\s*#{1,6}\s+.*$", "", final_answer or "").strip()):
             final_answer = self.synthesize_answer_from_findings(findings)
 
         # If model generated structured findings and raw_answer was only an introductory clause, append findings
@@ -1111,12 +1129,12 @@ class OutputValidator:
             if findings_bullets:
                 if final_answer.rstrip().endswith(":") or final_answer.rstrip().endswith("sau:"):
                     final_answer = final_answer.rstrip() + "\n" + "\n".join(findings_bullets)
-                elif len(final_answer.strip()) < 150:
+                elif len(re.sub(r"(?m)^\s*#{1,6}\s+.*$", "", final_answer or "").strip()) < 150:
                     final_answer = final_answer.rstrip() + "\n\n" + "\n".join(findings_bullets)
 
         if needs_clarification and clarification_question:
             if clarification_question not in final_answer:
-                final_answer += f"\n\nĐể tư vấn chính xác nhất cho trường hợp của bạn, vui lòng cho biết thêm: {clarification_question}"
+                final_answer += f"\n\nĐể đối chiếu đúng quy định áp dụng cho trường hợp cụ thể, cần làm rõ thêm: {clarification_question}"
 
         # Replace technical tokens like [E1], (E1) with user-friendly statutory citations
         if evidence_mapper:
