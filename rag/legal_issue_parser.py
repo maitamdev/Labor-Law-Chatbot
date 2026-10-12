@@ -257,7 +257,13 @@ def detect_legal_events(query: str) -> List[str]:
         events.append("ORDINARY_SICKNESS")
 
     # 5. Maternity
-    if any(k in q_norm for k in ["thai sản", "sinh con", "nghỉ sinh", "mang thai", "khám thai", "nuôi con dưới 12 tháng"]):
+    if any(k in q_norm for k in [
+        "thai sản", "sinh con", "nghỉ sinh", "mang thai", "khám thai",
+        "nuôi con dưới 12 tháng", "nuôi con dưới 1 tuổi", "con dưới 1 tuổi",
+        "con dưới 12 tháng", "con chưa đủ 1 tuổi", "con chưa đủ 12 tháng",
+        "con nhỏ dưới 1 tuổi", "con nhỏ dưới 12 tháng", "bạn nữ con dưới 1 tuổi",
+        "lao động nữ nuôi con"
+    ]):
         events.append("MATERNITY")
 
     # 6. Termination
@@ -426,7 +432,10 @@ def determine_required_evidence_roles(events: List[str], query_lower: str) -> Li
 
     if "MATERNITY" in events:
         has_mat_benefit = any(k in query_lower for k in ["chế độ", "trợ cấp", "tiền thai sản", "hưởng thai sản", "đóng bảo hiểm"])
-        has_mat_dismissal = any(k in query_lower for k in ["sa thải", "đuổi việc", "chấm dứt", "cắt giảm", "cho nghỉ", "bảo vệ việc làm"])
+        has_mat_dismissal = any(k in query_lower for k in [
+            "sa thải", "đuổi việc", "chấm dứt", "cắt giảm", "cho nghỉ", "bảo vệ việc làm",
+            "không có việc", "sắp xếp việc", "thôi việc", "nghỉ việc", "báo trước", "thỏa thuận"
+        ])
         if has_mat_dismissal:
             roles.append("PREGNANCY_DISMISSAL_PROHIBITION")
         if has_mat_benefit:
@@ -881,12 +890,15 @@ class LegalIssueParser:
             qualifiers.append("special_occupation_notice")
 
         # Maternity & Female employees (Điều 122, 137)
-        if any(k in q_lower for k in ["mang thai", "thai sản", "nuôi con dưới 12 tháng"]):
+        if any(k in q_lower for k in [
+            "mang thai", "thai sản", "nuôi con dưới 12 tháng", "nuôi con dưới 1 tuổi",
+            "con dưới 1 tuổi", "con dưới 12 tháng", "con chưa đủ 1 tuổi", "con nhỏ dưới 1 tuổi"
+        ]):
             special_conditions.append("female_maternity")
             qualifiers.append("female_maternity_protection")
             if any(k in q_lower for k in ["tháng thứ 7", "tháng thứ 07", "7 tháng"]):
                 qualifiers.append("pregnancy_month_7")
-            if any(k in q_lower for k in ["sa thải", "kỷ luật"]):
+            if any(k in q_lower for k in ["sa thải", "kỷ luật", "đuổi việc", "chấm dứt", "cắt giảm", "thôi việc"]):
                 qualifiers.append("no_discipline_maternity")
 
         # Discipline forms & monetary penalties (Điều 124, 127)
