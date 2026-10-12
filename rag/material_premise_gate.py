@@ -444,7 +444,7 @@ class MaterialPremiseGate:
                     clarification_question=(
                         "Theo Điều 46 Bộ luật Lao động, trợ cấp thôi việc chỉ áp dụng khi người lao động đã làm việc thường xuyên "
                         "từ đủ 12 tháng trở lên và chấm dứt hợp đồng theo một số trường hợp luật định (hết hạn, thỏa thuận...). "
-                        "Để tư vấn chính xác, bạn vui lòng cho biết:\n"
+                        "Để đối chiếu đúng quy định, cần làm rõ:\n"
                         "1. Bạn đã làm việc tại công ty được bao lâu (đã đủ 12 tháng chưa)?\n"
                         "2. Lý do hai bên chấm dứt hợp đồng lao động là gì?"
                     ),
