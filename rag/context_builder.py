@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import json
 import logging
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
@@ -175,6 +176,8 @@ class ContextBuilder:
         enforce_statutory_bridge: bool = True,
         expand_siblings: bool = True,
         allow_repealed: bool = False,
+        query: str = "",
+        priority_chunk_ids: Optional[List[Tuple[str, Optional[str]]]] = None,
     ) -> FormattedContext:
         """Builds organized, compact legal evidence blocks labeled [E1], [E2], ...
         
@@ -183,8 +186,14 @@ class ContextBuilder:
             multi_issue_candidates: Optional mapping from issue_id -> candidate chunks for compound queries.
             enforce_statutory_bridge: When True, ensures delegating bridges (e.g. Điều 35k1d BLLĐ for Điều 7 NĐ 145) are attached.
             expand_siblings: When True, expands sibling points under the same statutory clause.
+            query: Original question text (used only to guard topic-specific bridges).
+            priority_chunk_ids: (chunk_id, owner_issue_id) pairs from the statutory
+                constraint engine. They are placed first so protective provisions
+                always survive the context budget.
         """
-        if not retrieved_chunks and not multi_issue_candidates:
+        priority_set: Set[str] = {cid for cid, _ in (priority_chunk_ids or [])}
+        query_lc = (query or "").lower()
+        if not retrieved_chunks and not multi_issue_candidates and not priority_chunk_ids:
             return FormattedContext(
                 prompt_context="[KHÔNG CÓ DỮ LIỆU PHÁP LUẬT NÀO ĐƯỢC TRUY XUẤT]",
                 available_chunk_ids=set(),
@@ -682,19 +691,32 @@ class ContextBuilder:
                         seen_cids.add(cid)
 
             # 2m. Misassigned Work & Unlawful Termination Bridge (Điều 35k2a, Điều 29, Điều 40 BLLĐ 2019)
+            has_maternity_protection = any(
+                str((c.get("metadata") or c).get("doc_id", "")) == "VBHN_18_2026" and
+                str((c.get("metadata") or c).get("article_number", "")) in ["37", "137"]
+                for c, _ in selected_chunks
+            ) or any(cid.startswith(("VBHN_18_2026#d37", "VBHN_18_2026#d137")) for cid in priority_set)
+            # Employee-quit consequences (Điều 35k2a, Điều 40) are only relevant
+            # when the employee is the one leaving; otherwise they mislead the model.
+            employee_leaving = (not query_lc) or bool(re.search(
+                r"(muốn|xin|tự|định|sẽ) (nghỉ việc|thôi việc|nghỉ làm|bỏ việc|chấm dứt)|nghỉ ngang|đơn phương nghỉ|"
+                r"có được nghỉ|được quyền nghỉ|nghỉ (luôn|ngay)|không cần báo trước",
+                query_lc,
+            ))
             misassigned_work_iid = None
-            for c, i_id in selected_chunks:
-                c_text = str(c.get("content", "")).lower()
-                meta = c.get("metadata") or c
-                d_id = str(meta.get("doc_id", ""))
-                a_num = str(meta.get("article_number", ""))
-                cid_str = str(c.get("chunk_id") or "")
-                if (
-                    (d_id == "VBHN_18_2026" and a_num == "29")
-                    or any(k in c_text for k in ["chuyển người lao động làm công việc khác so với hợp đồng", "không được bố trí theo đúng công việc"])
-                ) and not misassigned_work_iid:
-                    misassigned_work_iid = i_id or "statutory_bridge"
-                    break
+            if not has_maternity_protection and employee_leaving:
+                for c, i_id in selected_chunks:
+                    c_text = str(c.get("content", "")).lower()
+                    meta = c.get("metadata") or c
+                    d_id = str(meta.get("doc_id", ""))
+                    a_num = str(meta.get("article_number", ""))
+                    cid_str = str(c.get("chunk_id") or "")
+                    if (
+                        (d_id == "VBHN_18_2026" and a_num == "29")
+                        or any(k in c_text for k in ["chuyển người lao động làm công việc khác so với hợp đồng", "không được bố trí theo đúng công việc"])
+                    ) and not misassigned_work_iid:
+                        misassigned_work_iid = i_id or "statutory_bridge"
+                        break
 
             if misassigned_work_iid:
                 target_mw_iid = misassigned_work_iid
@@ -716,6 +738,27 @@ class ContextBuilder:
                         canonical_mw_chunks.append((b_chk, target_mw_iid))
                         seen_cids.add(cid)
                 selected_chunks = canonical_mw_chunks + selected_chunks
+
+        # 2z. Statutory constraint engine: protective / precondition provisions
+        # go first (after topic bridges, which may rebuild an issue's pool).
+        if priority_chunk_ids:
+            existing_owner: Dict[str, Optional[str]] = {}
+            for c, i_id in selected_chunks:
+                existing_owner.setdefault(str(c.get("chunk_id") or ""), i_id)
+            front: List[Tuple[Dict[str, Any], Optional[str]]] = []
+            front_ids: Set[str] = set()
+            for cid, owner in priority_chunk_ids:
+                if cid in front_ids:
+                    continue
+                chk = next((c for c, _ in selected_chunks if c.get("chunk_id") == cid), None) or self._get_chunk_by_id(cid)
+                if not chk:
+                    continue
+                if not owner and multi_issue_candidates and cid in existing_owner and existing_owner[cid] not in (None, "statutory_bridge"):
+                    owner = existing_owner[cid]
+                front.append((chk, owner))
+                front_ids.add(cid)
+                seen_cids.add(cid)
+            selected_chunks = front + [item for item in selected_chunks if str(item[0].get("chunk_id") or "") not in front_ids]
 
         # Fair-share ordering: put the first block of every issue before any
         # issue receives its second block. This prevents the final issue in a
