@@ -9,6 +9,7 @@ def chain():
     return VietLaborRAGChain()
 
 
+@pytest.mark.ollama
 def test_misassigned_work_termination_scenario(chain):
     query = (
         "Chị Trang được tuyển dụng vào làm việc tại Công ty chế biến gỗ theo hợp đồng lao động thời hạn 36 tháng. "
