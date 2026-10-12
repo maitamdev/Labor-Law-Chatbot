@@ -816,13 +816,32 @@ class EvidenceSelector:
         if "TERMINATION_SEVERANCE_ALLOWANCE" in req_roles_set:
             if (doc_id == "VBHN_18_2026" and art_num == 46) or (("145" in doc_id or "nd_145" in doc_id.lower()) and art_num == 8):
                 s_top += SCORE_DOMINANT
+            q_lower = str(getattr(issue, "raw_query", "") or "").lower()
+            if "TERMINATION_REDUNDANCY_ALLOWANCE" not in req_roles_set and not any(k in q_lower for k in ["mất việc", "mat viec"]):
+                if doc_id == "VBHN_18_2026" and art_num in [47]:
+                    s_top -= 3.0
+            else:
+                if doc_id == "VBHN_18_2026" and art_num in [47]:
+                    s_top += SCORE_DOMINANT
+
+        # 12b. Redundancy Allowance (Điều 47 BLLĐ & Điều 8 NĐ 145/2020)
+        if "TERMINATION_REDUNDANCY_ALLOWANCE" in req_roles_set:
             if doc_id == "VBHN_18_2026" and art_num in [47]:
-                s_top -= 3.0
+                s_top += SCORE_DOMINANT
+            elif ("145" in doc_id or "nd_145" in doc_id.lower()) and art_num == 8:
+                s_top += SCORE_DOMINANT
+
+        # 12c. Work Reassignment Limits (Điều 29, 33 BLLĐ)
+        if "WORK_REASSIGNMENT_LIMITS" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num in [29, 33]:
+                s_top += SCORE_DOMINANT
 
         # 13. Pregnancy dismissal prohibition (Điều 37k3, Điều 137k3 BLLĐ)
         if "PREGNANCY_DISMISSAL_PROHIBITION" in req_roles_set:
             if doc_id == "VBHN_18_2026" and art_num in [37, 137]:
-                s_top += SCORE_DOMINANT
+                s_top += SCORE_DOMINANT + 10.0
+            if doc_id == "VBHN_18_2026" and art_num == 36:
+                s_top -= 35.0  # Suppress Article 36 (unilateral termination rights & 45-day notice)
 
         # 14. Unpaid wage resignation exception (Điều 35k2b BLLĐ)
         if "EMPLOYEE_NO_NOTICE_EXCEPTION" in req_roles_set or "EMPLOYEE_NO_NOTICE_FOR_UNPAID_WAGE" in req_roles_set:
