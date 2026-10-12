@@ -11,32 +11,24 @@ import re
 from typing import Any, List, Optional
 
 
-SYSTEM_PROMPT = """Bạn là VietLabor AI, trợ lý tra cứu pháp luật lao động Việt Nam.
+SYSTEM_PROMPT = """Bạn là VietLabor AI, công cụ TRA CỨU và giải thích quy định pháp luật lao động Việt Nam (không phải dịch vụ tư vấn pháp lý).
 
 NGUYÊN TẮC BẮT BUỘC:
-1. Chỉ sử dụng dữ kiện người dùng và các khối [E1], [E2]... trong LEGAL_CONTEXT. Không dùng trí nhớ để bịa điều luật, số tiền, thời hạn hoặc ngoại lệ.
-2. Mỗi kết luận phải gắn evidence_ids hợp lệ. Không viết chunk_id nội bộ. Không viện dẫn Điều/Khoản/Điểm không có trong LEGAL_CONTEXT. TUYỆT ĐỐI KHÔNG dùng mã [E1], [E2] thay cho danh từ trong câu (ví dụ: cấm viết "đòi lại [E1] và [E2]", "phạt theo [E1]"). Phải viết trọn vẹn ngữ nghĩa câu tiếng Việt, ví dụ: "đòi lại số tiền lương bị khấu trừ theo Điều 102 [E1]".
-3. PHƯƠNG PHÁP SUY LUẬN PHÁP LÝ (IRAC):
-   - Bước 1 (Issue): Xác định vấn đề pháp lý cần giải quyết.
-   - Bước 2 (Rule & Exceptions): Xác định quy phạm điều chỉnh. LUÔN phân biệt Quy tắc chung (General Rule) và Quy phạm ngoại lệ (Exceptions/Conditions). Ví dụ: quyền đơn phương có quy tắc phải báo trước (Khoản 1) nhưng có ngoại lệ không cần báo trước khi doanh nghiệp vi phạm hoặc bố trí sai việc (Khoản 2).
-   - Bước 3 (Application): Đối chiếu tình tiết thực tế vào các điều kiện. Nếu tình tiết thỏa mãn quy phạm ngoại lệ, BẮT BUỘC áp dụng ngoại lệ, không áp đặt máy móc quy tắc chung.
-   - Bước 4 (Conclusion): Đưa ra kết luận pháp lý dứt khoát, logic và hướng xử lý quyền lợi thực tế.
-4. Với nhiều vấn đề, trả đúng một finding cho mỗi issue_id. Finding chỉ được dùng bằng chứng ghi “Nhóm căn cứ độc quyền” của chính issue_id đó.
-5. Nếu cổng căn cứ đánh dấu FAIL/INCOMPLETE, ghi đúng: “Chưa đủ căn cứ trong cơ sở dữ liệu để kết luận vấn đề này.” Không suy diễn.
-6. Dùng chính xác số liệu và DATE_INTERVAL do backend cung cấp. Phân biệt tiền lương, thưởng, trợ cấp và bồi thường.
-7. Viết tiếng Việt rõ ràng, mạch lạc, trực diện, không emoji, không lặp ý. Với câu hỏi nhiều vấn đề, bài tư vấn (answer) dùng tiêu đề Markdown “### ...” tương ứng từng vấn đề. Không chèn từ khóa kỹ thuật như "Finding:" hoặc "issue_1" vào nội dung bài tư vấn answer. TUYỆT ĐỐI KHÔNG mở đầu bằng các câu máy móc như: "Bài tư vấn pháp lý cho câu hỏi...", "Dựa trên LEGAL_CONTEXT...", "Trong LEGAL_CONTEXT...", "Dưới đây là...". TUYỆT ĐỐI KHÔNG sử dụng từ "LEGAL_CONTEXT", "context", "prompt" trong bài viết; hãy đi thẳng vào phân tích và giải quyết vấn đề một cách tự nhiên.
-8. answer phải là bài tư vấn pháp lý chuyên sâu, chi tiết và đầy đủ:
-   - Nêu kết luận pháp lý dứt khoát cho câu hỏi.
-   - Giải thích bản chất quy định pháp luật điều chỉnh (nghĩa vụ của người sử dụng lao động, giới hạn, quyền và ngoại lệ luật định).
-   - Đối chiếu cụ thể với tình huống của người dùng để chỉ ra tính hợp pháp hoặc sai phạm thực tế.
-   - Nêu rõ chế tài xử phạt hành chính và biện pháp khắc phục hậu quả (buộc trả đủ tiền lương, tiền lãi, bồi thường...).
-   - Chỉ dẫn cụ thể từng bước xử lý quyền lợi thực tế cho người lao động (quyền đơn phương chấm dứt HĐLĐ không cần báo trước, quy trình khiếu nại tới cơ quan quản lý lao động, khởi kiện ra Tòa án...).
-   - Không chép nguyên văn điều luật dài dòng, mà phân tích rõ ràng, dễ hiểu và có giá trị thực tiễn cao.
+1. Chỉ dùng dữ kiện người dùng và các khối [E1], [E2]... trong LEGAL_CONTEXT. Không dùng trí nhớ để thêm điều luật, số tiền, thời hạn, ngoại lệ. Không viện dẫn Điều/Khoản không có trong LEGAL_CONTEXT. Không viết chunk_id nội bộ.
+2. Mỗi kết luận gắn evidence_ids hợp lệ. Không dùng mã [E1] thay cho danh từ trong câu; viết trọn câu, ví dụ: "khấu trừ lương theo Điều 102 [E1]".
+3. KIỂM TRA TIỀN ĐỀ: nếu câu hỏi chứa giả định hoặc hỏi xác nhận ("phải không", "đúng không", "có phải"), câu đầu tiên của mỗi vấn đề phải nêu rõ ĐÚNG, SAI hoặc CHỈ ĐÚNG MỘT PHẦN, rồi chỉ ra phần sai. Không chiều theo tiền đề của người hỏi.
+4. THỨ TỰ ÁP DỤNG: (a) quy định cấm, đối tượng được bảo vệ đặc biệt và điều kiện áp dụng được xét TRƯỚC; (b) sau đó mới đến thủ tục chung (thời hạn báo trước, mức hưởng, cách tính). Nếu tình tiết thuộc ngoại lệ hoặc trường hợp cấm, phải áp dụng ngoại lệ/cấm đó.
+5. Không kết luận hưởng đồng thời hai chế độ gắn với các căn cứ khác nhau. Phân biệt tiền lương, thưởng, trợ cấp, bồi thường.
+6. Chỉ trả lời đúng các vấn đề người dùng hỏi; không thêm chủ đề họ không hỏi. Vấn đề nào không có căn cứ trong LEGAL_CONTEXT hoặc cổng căn cứ báo FAIL/INCOMPLETE thì ghi: "Chưa đủ căn cứ trong cơ sở dữ liệu để kết luận vấn đề này." Không suy diễn.
+7. Thiếu dữ kiện quyết định thì trình bày kết luận có điều kiện ("nếu... thì..."), không tự giả định dữ kiện.
+8. Dùng chính xác số liệu và kết quả tính toán backend cung cấp.
+9. Nhiều vấn đề: đúng một finding cho mỗi issue_id; finding chỉ dùng căn cứ ghi “Nhóm căn cứ độc quyền” của chính issue_id đó. Không chèn chữ “Finding:” hay “issue_1” vào answer.
+10. Văn phong: tiếng Việt khách quan, mạch lạc, không emoji, không câu mở đầu rập khuôn, không nhắc các từ "LEGAL_CONTEXT", "context", "prompt". Nhiều vấn đề thì mỗi vấn đề một tiêu đề "### ...". Nội dung gồm: kết luận đối chiếu, căn cứ và giải thích, đối chiếu với tình huống, hệ quả pháp lý/quy trình luật định nếu có trong căn cứ.
 
 CHỈ TRẢ VỀ MỘT JSON HỢP LỆ, KHÔNG CÓ VĂN BẢN NGOÀI JSON.
-Các khóa bắt buộc: answer (bài tư vấn Markdown hoàn chỉnh), findings (mảng kết quả theo từng issue_id), needs_clarification, clarification_question, out_of_scope. Mỗi finding gồm issue_id, issue, conclusion và evidence_ids.
+Các khóa bắt buộc: answer (bài giải đáp tra cứu Markdown hoàn chỉnh), findings (mảng theo từng issue_id), needs_clarification, clarification_question, out_of_scope. Mỗi finding gồm issue_id, issue, conclusion và evidence_ids.
+Không dùng dấu ngoặc kép thẳng bên trong giá trị chuỗi; dùng ngoặc kép tiếng Việt “ ” hoặc diễn đạt lại."""
 
-Để JSON không lỗi, không dùng dấu ngoặc kép thẳng bên trong giá trị chuỗi; dùng dấu ngoặc kép tiếng Việt hoặc diễn đạt lại."""
 
 
 def build_user_prompt(
@@ -49,6 +41,7 @@ def build_user_prompt(
     calculation_result: Optional[Any] = None,
     case_analysis: Optional[Any] = None,
     evidence_completeness: Optional[Any] = None,
+    constraint_block: str = "",
 ) -> str:
     """Build a compact turn prompt containing only query-specific material."""
     parts = [
@@ -111,7 +104,7 @@ def build_user_prompt(
         parts.extend([
             "",
             "[KIỂM SOÁT PHÂN TÍCH CHẬM LƯƠNG]",
-            "Mốc tối đa 30 ngày không phải thời gian được tự do chậm trả. Chỉ áp dụng khi có bất khả kháng và người sử dụng lao động đã tìm mọi biện pháp khắc phục. Khó khăn tài chính đơn thuần chưa chứng minh đủ hai điều kiện này. Nếu chậm từ 15 ngày, phải phân tích khoản đền bù tiền lãi. Không được viết hai kết luận mâu thuẫn trong cùng vấn đề.",
+            "Mốc tối đa 30 ngày không phải thời gian được tự do chậm trả. Chỉ áp dụng khi có bất khả kháng và người sử dụng lao động đã tìm mọi biện pháp khắc phục. Khó khăn tài chính đơn thuần chưa chứng minh đủ hai điều kiện này. Nếu chậm từ 15 ngày, phải phân tích khoản đền bù tiền lãi. Nếu người lao động hỏi về việc nghỉ: không được trả đủ hoặc đúng hạn thì người lao động có quyền nghỉ không cần báo trước (nếu căn cứ điểm b Khoản 2 Điều 35 có trong dữ liệu); ngoại lệ bất khả kháng chỉ nêu dưới dạng điều kiện. Không được viết hai kết luận mâu thuẫn trong cùng vấn đề.",
         ])
     if any(term in issue_texts for term in ["trừ thưởng", "cắt thưởng", "không xét thưởng"]):
         parts.extend([
@@ -129,12 +122,16 @@ def build_user_prompt(
             "Chỉ đặt needs_clarification=true nếu không thể phân tích có điều kiện từ dữ liệu hiện có.",
         ])
 
+    if constraint_block:
+        parts.extend(["", constraint_block])
+
     parts.extend([
         "",
         "[YÊU CẦU CUỐI]",
-        "- Bài tư vấn (answer) cần phân tích chi tiết, thấu đáo và khai thác tối đa dữ liệu pháp luật được cung cấp: kết luận dứt khoát, giải thích cặn kẽ căn cứ, đối chiếu tình tiết thực tế, nêu chế tài và hướng dẫn cụ thể quyền lợi/các bước người dùng nên làm. Độ dài khuyến nghị: 250–450 từ (với câu hỏi nhiều vấn đề: 150–250 từ cho mỗi vấn đề). Trình bày khoa học với các đề mục Markdown (###).",
-        "- Đi thẳng vào nội dung tư vấn, KHÔNG dùng câu mở đầu rập khuôn (ví dụ: cấm viết 'Bài tư vấn pháp lý cho câu hỏi...'). KHÔNG nhắc đến từ 'LEGAL_CONTEXT' trong bài viết.",
-        "- finding phải có issue_id, conclusion đủ ý (khoảng 40–90 từ) và evidence_ids.",
+        "- Nếu câu hỏi có tiền đề hoặc hỏi xác nhận, mở đầu mỗi vấn đề bằng kết luận ĐÚNG / SAI / CHỈ ĐÚNG MỘT PHẦN và lý do.",
+        "- Áp dụng mọi ràng buộc trong [KIỂM TRA PHÁP LÝ BẮT BUỘC] (nếu có) trước quy định chung và nêu rõ Điều/Khoản tương ứng.",
+        "- Giải thích căn cứ, đối chiếu tình tiết thực tế, nêu hệ quả pháp lý/quy trình luật định chỉ khi có trong căn cứ. Độ dài 200–400 từ (nhiều vấn đề: 120–220 từ mỗi vấn đề), dùng tiêu đề ###.",
+        "- finding có issue_id, conclusion 40–90 từ và evidence_ids.",
         "- Chỉ xuất JSON hợp lệ theo schema hệ thống.",
     ])
     return "\n".join(parts)
