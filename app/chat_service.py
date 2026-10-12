@@ -11,6 +11,7 @@ import re
 import unicodedata
 from typing import Any, Dict, List, Optional
 
+from app import answer_cache
 from config.metadata_registry import get_verified_metadata
 from rag.chain import VietLaborRAGChain, ChainExecutionResult, StageCallback, TokenCallback
 from rag.conversational import detect_smalltalk
@@ -147,12 +148,41 @@ class ChatService:
         update_memory: bool = True,
         on_stage: Optional[StageCallback] = None,
         on_token: Optional[TokenCallback] = None,
+        bypass_cache: bool = False,
     ) -> Dict[str, Any]:
         """Executes RAG inference and maps output to clean UI response schema.
 
         on_stage / on_token are optional real-time callbacks (see VietLaborRAGChain.run).
+        bypass_cache skips the cache lookup (used by "regenerate"); a fresh
+        grounded answer still replaces the cached one.
         """
         norm_q = unicodedata.normalize("NFC", question).strip()
+
+        # First-turn questions only: follow-ups depend on earlier facts.
+        use_cache = answer_cache.enabled() and not self.chain.memory.history
+        cache_key = answer_cache.make_key(norm_q) if use_cache else ""
+        if use_cache and not bypass_cache:
+            cached = answer_cache.get(cache_key)
+            if cached is not None:
+                if update_memory:
+                    self.chain.memory.add_turn(norm_q, str(cached.get("final_answer") or cached.get("answer") or ""))
+                cached["latency_ms"] = 0.0
+                cached["cache_hit"] = True
+                return cached
+
+        payload = self._ask_uncached(norm_q, update_memory, on_stage, on_token)
+        payload.setdefault("cache_hit", False)
+        if use_cache and answer_cache.is_cacheable(payload):
+            answer_cache.put(cache_key, payload)
+        return payload
+
+    def _ask_uncached(
+        self,
+        norm_q: str,
+        update_memory: bool,
+        on_stage: Optional[StageCallback],
+        on_token: Optional[TokenCallback],
+    ) -> Dict[str, Any]:
         result: ChainExecutionResult = self.chain.run(
             norm_q, update_memory=update_memory, on_stage=on_stage, on_token=on_token,
         )
@@ -267,7 +297,7 @@ class ChatService:
 
         # Extract Clean Core Answer (strip redundant raw citation footers if already structured)
         clean_answer = val_resp.final_answer
-        parts = re.split(r"\n\s*(?:căn cứ pháp lý|căn cứ|can cu phap ly)\s*:", clean_answer, flags=re.IGNORECASE)
+        parts = re.split(r"\n\s*(?:CĂN CỨ PHÁP LÝ|CAN CU PHAP LY)\s*:", clean_answer)
         if len(parts) > 1:
             clean_answer = parts[0].strip()
 
