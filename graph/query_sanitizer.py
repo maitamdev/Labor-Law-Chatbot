@@ -18,8 +18,9 @@ def sanitize_cypher_param(value: str) -> str:
     """Strip dangerous characters from query string parameters."""
     if not isinstance(value, str):
         return str(value)
-    # Remove control characters and quotes
-    cleaned = re.sub(r'['"\;\x00-\x1f]', "", value)
+    # Remove control characters, quotes and semicolons
+    chars_to_remove = set("'\\\";")
+    cleaned = "".join(c for c in value if c not in chars_to_remove and ord(c) >= 32)
     return cleaned.strip()
 
 def validate_readonly_cypher(query: str) -> bool:

@@ -15,8 +15,8 @@ def run_health_checks() -> dict:
     
     # 2. Config check
     try:
-        from config.settings import settings
-        results["config_loaded"] = True
+        from config.settings import PROJECT_ROOT
+        results["config_loaded"] = PROJECT_ROOT.exists()
     except Exception as e:
         results["config_loaded"] = False
         results["config_error"] = str(e)
