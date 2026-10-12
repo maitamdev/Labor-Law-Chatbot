@@ -122,6 +122,8 @@ class CaseAnalyzer:
             (
                 "quy chế thưởng, hợp đồng lao động hoặc thỏa ước lao động tập thể quy định điều kiện hưởng thưởng",
                 ("quy chế thưởng", "hợp đồng quy định thưởng", "thỏa ước lao động", "điều kiện thưởng"),
+                # Only material when the question is actually about a bonus.
+                ("thưởng",),
             ),
         ],
         "DE_FACTO_LABOR_CONTRACT": [
@@ -216,7 +218,11 @@ class CaseAnalyzer:
             combined_lower = f"{lower} {issue_lower}"
             for event in events:
                 rules = self._MATERIAL_FACT_RULES.get(event, [])
-                for label, signals in rules:
+                for rule in rules:
+                    label, signals = rule[0], rule[1]
+                    applies_when = rule[2] if len(rule) > 2 else ()
+                    if applies_when and not any(t in combined_lower for t in applies_when):
+                        continue
                     if not any(signal in combined_lower for signal in signals):
                         missing.append(label)
                 if rules:
