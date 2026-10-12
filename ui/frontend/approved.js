@@ -47,6 +47,78 @@ export default function(component) {
     setTimeout(() => scrollToLatest(false), 150);
   }
 
+  // Progressive Typewriter streaming reveal for newly generated assistant messages
+  let typeTimer;
+  const typingTarget = app.querySelector('.assistant-message[data-typing="true"]');
+  if (typingTarget) {
+    const mdContainer = typingTarget.querySelector('.answer-markdown');
+    if (mdContainer) {
+      // Find all non-empty text nodes in the already-rendered DOM tree
+      const walker = document.createTreeWalker(mdContainer, NodeFilter.SHOW_TEXT, null, false);
+      const textNodes = [];
+      let textNode;
+      while ((textNode = walker.nextNode())) {
+        if (textNode.nodeValue && textNode.nodeValue.length > 0) {
+          textNodes.push({ node: textNode, fullText: textNode.nodeValue });
+          textNode.nodeValue = '';
+        }
+      }
+
+      if (textNodes.length > 0) {
+        typingTarget.classList.add('is-typing');
+        const cursor = document.createElement('span');
+        cursor.className = 'typing-cursor';
+
+        let nodeIdx = 0;
+        let charIdx = 0;
+        let finished = false;
+
+        const finishTyping = () => {
+          if (finished) return;
+          finished = true;
+          if (typeTimer) clearInterval(typeTimer);
+          for (let i = 0; i < textNodes.length; i++) {
+            textNodes[i].node.nodeValue = textNodes[i].fullText;
+          }
+          if (cursor.parentNode) cursor.remove();
+          typingTarget.classList.remove('is-typing');
+          typingTarget.removeAttribute('data-typing');
+          scrollToLatest(true);
+        };
+
+        // Click anywhere on message to immediately reveal all text
+        typingTarget.addEventListener('click', finishTyping, { once: true });
+
+        typeTimer = setInterval(() => {
+          if (nodeIdx >= textNodes.length) {
+            finishTyping();
+            return;
+          }
+
+          const cur = textNodes[nodeIdx];
+          if (cur.node.parentNode && cursor.parentNode !== cur.node.parentNode) {
+            cur.node.parentNode.insertBefore(cursor, cur.node.nextSibling);
+          }
+
+          // Progressive reveal: 3-5 chars per tick gives smooth natural typewriter speed (~200 chars/s)
+          const step = Math.min(4, cur.fullText.length - charIdx);
+          charIdx += step;
+          cur.node.nodeValue = cur.fullText.slice(0, charIdx);
+
+          scrollToLatest(false);
+
+          if (charIdx >= cur.fullText.length) {
+            nodeIdx++;
+            charIdx = 0;
+          }
+        }, 16);
+      } else {
+        typingTarget.classList.remove('is-typing');
+        typingTarget.removeAttribute('data-typing');
+      }
+    }
+  }
+
   // Dynamic progress cycling while assistant is busy
   let thinkingTimer;
   if (busy) {
@@ -160,9 +232,11 @@ export default function(component) {
         }
 
         const nameLower = file.name.toLowerCase();
-        const allowed = ['.pdf', '.docx', '.doc', '.txt'];
+        const allowed = ['.pdf', '.docx', '.txt'];
         if (!allowed.some(ext => nameLower.endsWith(ext))) {
-          toast('Chỉ hỗ trợ tệp văn bản .PDF, .DOCX, .DOC hoặc .TXT');
+          toast(nameLower.endsWith('.doc')
+            ? 'Tệp Word định dạng cũ (.doc) chưa được hỗ trợ. Vui lòng lưu lại dưới dạng .docx hoặc .pdf.'
+            : 'Chỉ hỗ trợ tệp văn bản .PDF, .DOCX hoặc .TXT');
           fileInput.value = '';
           return;
         }
@@ -206,12 +280,82 @@ export default function(component) {
   };
   const dialogs = {
     guide:['Hướng dẫn sử dụng','<p>Nhập câu hỏi về luật lao động hoặc tải lên hợp đồng (.pdf, .docx, .txt) rồi bấm <strong>Gửi câu hỏi</strong>. Enter để gửi, Shift + Enter để xuống dòng.</p><p>Bạn cũng có thể chọn câu hỏi gợi ý. Nếu trợ lý cần thêm dữ kiện, chọn câu trả lời phù hợp hoặc nhập thông tin bổ sung.</p><p>Mở <strong>Căn cứ pháp lý</strong> để xem điều khoản và nguồn văn bản. Trong trang Trợ lý AI, mở <strong>Lịch sử</strong> để tiếp tục trò chuyện.</p>'],
-    login:['Đăng nhập','<p>Ứng dụng đang chạy cục bộ. Bạn có thể sử dụng trợ lý và lưu lịch sử trên máy này mà không cần tài khoản.</p><p>Chức năng đăng nhập tài khoản chưa được cấu hình.</p>'],
-    attachment:['Đính kèm văn bản','<p>Trợ lý hỗ trợ đọc trực tiếp các tệp hợp đồng, quyết định, thỏa thuận dạng <strong>.PDF, .DOCX, .DOC hoặc .TXT</strong> (tối đa 15MB).</p><p>Bấm vào nút <strong>Đính kèm văn bản</strong> (biểu tượng kẹp giấy) tại ô nhập liệu để tải tệp lên đối chiếu và rà soát pháp luật.</p>'],
+    attachment:['Đính kèm văn bản','<p>Trợ lý hỗ trợ đọc trực tiếp các tệp hợp đồng, quyết định, thỏa thuận dạng <strong>.PDF, .DOCX hoặc .TXT</strong> (tối đa 15MB). PDF dạng ảnh scan được nhận dạng bằng OCR (tối đa 10 trang).</p><p>Bấm vào nút <strong>Đính kèm văn bản</strong> (biểu tượng kẹp giấy) tại ô nhập liệu để tải tệp lên đối chiếu và rà soát pháp luật.</p>'],
     policy:['Chính sách sử dụng','<p>VietLabor AI hỗ trợ tra cứu thông tin pháp luật lao động từ các văn bản trong cơ sở dữ liệu. Nội dung cung cấp mang tính tham khảo và không thay thế ý kiến tư vấn chuyên môn cho tình huống pháp lý cụ thể.</p>'],
     terms:['Điều khoản','<p>VietLabor AI hỗ trợ tra cứu thông tin pháp luật lao động từ các văn bản trong cơ sở dữ liệu. Nội dung cung cấp mang tính tham khảo và không thay thế ý kiến tư vấn chuyên môn cho tình huống pháp lý cụ thể.</p>'],
     contact:['Liên hệ','<p>Thông tin liên hệ chưa được cấu hình.</p><p>Bạn có thể gửi góp ý qua mục <strong>Phản hồi</strong> của ứng dụng.</p>'],
     feedback:['Phản hồi','<form class="feedback-form"><label for="vl-feedback">Góp ý về giao diện hoặc câu trả lời</label><textarea id="vl-feedback" required maxlength="1000" placeholder="Nhập góp ý của bạn..."></textarea><button class="send" type="submit">Gửi phản hồi</button></form>'],
+  };
+  const escapeHtml = value => String(value || '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  // Builds a printable consultation document from the already-rendered (and
+  // server-escaped) answer. Only the user's question is raw text, so it is
+  // escaped here.
+  const exportAnswer = messageId => {
+    const article = app.querySelector(`[data-export="${CSS.escape(messageId)}"]`)?.closest('.assistant-message');
+    if (!article) return;
+    const index = data.messages.findIndex(msg => msg.id === messageId);
+    const question = index > 0
+      ? [...data.messages.slice(0, index)].reverse().find(msg => msg.role === 'user')?.content || ''
+      : '';
+    const answerHtml = article.querySelector('.answer-markdown')?.innerHTML || '';
+    const coverage = article.querySelector('.coverage')?.outerHTML || '';
+    const citations = [...article.querySelectorAll('.citation')].map(card => {
+      const title = card.querySelector('summary strong')?.textContent || '';
+      const badge = card.querySelector('summary small')?.textContent || '';
+      const heading = card.querySelector('div > p')?.textContent || '';
+      const excerpt = card.querySelector('blockquote')?.textContent || '';
+      const link = card.querySelector('.citation-links a')?.getAttribute('href') || '';
+      return `<li><strong>${escapeHtml(title)}</strong> — ${escapeHtml(badge)}`
+        + (heading ? `<div class="heading">${escapeHtml(heading)}</div>` : '')
+        + (excerpt ? `<blockquote>${escapeHtml(excerpt)}</blockquote>` : '')
+        + (link ? `<div class="link">Nguồn: ${escapeHtml(link)}</div>` : '')
+        + '</li>';
+    }).join('');
+    const stamp = new Date().toLocaleString('vi-VN');
+    const doc = `<!doctype html><html lang="vi"><head><meta charset="utf-8">
+<title>Bản tư vấn pháp luật lao động - VietLabor AI</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  body { font: 12.5pt/1.55 "Times New Roman", Georgia, serif; color: #1d1d27; max-width: 760px; margin: 24px auto; padding: 0 16px; }
+  header { border-bottom: 3px solid #A5121B; padding-bottom: 10px; margin-bottom: 18px; }
+  header h1 { margin: 0; font-size: 20pt; color: #A5121B; }
+  header .meta { font-size: 10pt; color: #6b5f52; margin-top: 4px; }
+  h2 { font-size: 13.5pt; color: #A5121B; border-bottom: 1px solid #e7d9c4; padding-bottom: 4px; margin-top: 22px; }
+  .question { background: #faf6ee; border-left: 4px solid #D6A43B; padding: 10px 14px; white-space: pre-wrap; }
+  table { border-collapse: collapse; width: 100%; } td, th { border: 1px solid #d9c9b0; padding: 4px 8px; }
+  ol.citations li { margin-bottom: 10px; } .heading { font-style: italic; }
+  blockquote { margin: 6px 0 0; padding: 6px 12px; background: #f7f4ee; border-left: 3px solid #cbb89b; font-size: 11pt; }
+  .link { font-size: 9.5pt; color: #6b5f52; word-break: break-all; }
+  footer { margin-top: 28px; padding-top: 10px; border-top: 1px solid #e7d9c4; font-size: 9.5pt; color: #6b5f52; }
+</style></head><body>
+<header><h1>BẢN TƯ VẤN PHÁP LUẬT LAO ĐỘNG</h1><div class="meta">VietLabor AI — Trợ lý tra cứu pháp luật lao động Việt Nam • Xuất lúc ${escapeHtml(stamp)}</div></header>
+${question ? `<h2>Câu hỏi / tình huống</h2><div class="question">${escapeHtml(question)}</div>` : ''}
+<h2>Nội dung tư vấn</h2>${answerHtml}${coverage}
+${citations ? `<h2>Căn cứ pháp lý</h2><ol class="citations">${citations}</ol>` : ''}
+<footer>Nội dung do hệ thống AI tổng hợp từ văn bản pháp luật trong cơ sở dữ liệu, chỉ mang tính tham khảo và không thay thế ý kiến tư vấn của luật sư hoặc cơ quan nhà nước có thẩm quyền. Luôn đối chiếu với văn bản pháp luật gốc.</footer>
+</body></html>`;
+    const win = window.open('', '_blank');
+    if (win) {
+      win.document.open();
+      win.document.write(doc);
+      win.document.close();
+      win.focus();
+      setTimeout(() => win.print(), 300);
+      toast('Chọn "Lưu dưới dạng PDF" trong hộp thoại in để tải bản tư vấn.');
+    } else {
+      // Popup blocked: download the same document as an HTML file instead.
+      const url = URL.createObjectURL(new Blob([doc], {type: 'text/html;charset=utf-8'}));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `ban-tu-van-vietlabor-${Date.now()}.html`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      toast('Trình duyệt chặn cửa sổ in, đã tải bản tư vấn dạng HTML.');
+    }
   };
   const onClick = async event => {
     const button = event.target.closest('button');
@@ -343,6 +487,8 @@ export default function(component) {
         try { await navigator.clipboard.writeText(message.content); toast('Đã sao chép câu trả lời.'); }
         catch (_) { toast('Trình duyệt chưa cho phép sao chép. Bạn có thể chọn nội dung và sao chép trực tiếp.'); }
       }
+    } else if (button.hasAttribute('data-export')) {
+      exportAnswer(button.dataset.export);
     } else if (button.hasAttribute('data-dialog')) {
       const key = button.dataset.dialog;
       if (key === 'history') showDialog('Lịch sử trò chuyện', app.querySelector('#history-content').innerHTML);
@@ -378,5 +524,6 @@ export default function(component) {
     app.removeEventListener('click', onClick); 
     clearTimeout(toastTimer); 
     if (thinkingTimer) clearInterval(thinkingTimer);
+    if (typeTimer) clearInterval(typeTimer);
   };
 }
