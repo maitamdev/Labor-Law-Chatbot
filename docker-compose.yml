@@ -1,0 +1,93 @@
+# VietLabor AI - one-command local stack: app + Ollama (Qwen 2.5) + Neo4j.
+#
+#   docker compose up -d                      # start everything
+#   docker compose run --rm app python scripts/build_graph_index.py   # once, load the graph
+#   open http://127.0.0.1:8501
+#
+# Prerequisites on the host (all gitignored, mounted read-only/read-write):
+#   data/processed/legal_documents_v3.jsonl   corpus
+#   storage/bm25_v3, storage/chroma_v3        indexes (python scripts/build_index_v3.py)
+#   HF_CACHE_DIR                               Hugging Face cache containing the
+#                                              embedding model (the app runs with
+#                                              HF_HUB_OFFLINE=1 and never downloads).
+#
+# Every port is bound to 127.0.0.1 so nothing is exposed to the LAN by default.
+
+name: vietlabor
+
+services:
+  app:
+    build: .
+    image: vietlabor-app:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8501:8501"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:7b-instruct-q4_0}
+      NEO4J_ENABLED: "true"
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-password123}
+      HF_HOME: /hf-cache
+    volumes:
+      - ./data:/app/data:ro
+      - ./storage:/app/storage            # indexes + chat history + feedback
+      - ${HF_CACHE_DIR:-~/.cache/huggingface}:/hf-cache:ro
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "127.0.0.1:11434:11434"
+    volumes:
+      - ollama-models:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+    # NVIDIA GPU (requires nvidia-container-toolkit). Remove this block to run on CPU.
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # Pulls the model into the shared volume once, then exits.
+  ollama-pull:
+    image: ollama/ollama:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["ollama", "pull", "${OLLAMA_MODEL:-qwen2.5:7b-instruct-q4_0}"]
+    restart: "no"
+
+  neo4j:
+    image: neo4j:5.15-community
+    ports:
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-password123}
+    volumes:
+      - neo4j-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:7474 >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+volumes:
+  ollama-models:
+  neo4j-data:
