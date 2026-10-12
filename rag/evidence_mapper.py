@@ -231,10 +231,8 @@ class EvidenceMapper:
         if not text or not isinstance(text, str):
             return text
 
-        def _repl(m: re.Match) -> str:
-            eid_num = m.group(1) or m.group(2)
-            norm_eid = f"E{eid_num}".upper()
-            block = self.get_block_by_id(norm_eid)
+        def _label_for(eid_num: str) -> str:
+            block = self.get_block_by_id(f"E{eid_num}".upper())
             if not block:
                 return ""
 
@@ -262,10 +260,13 @@ class EvidenceMapper:
                 parts.append(f"Khoản {block.clause_number}")
             if block.article_number is not None:
                 parts.append(f"Điều {block.article_number}")
+            return f"{' '.join(parts)} {doc_short}" if parts else doc_short
 
-            label = f"{' '.join(parts)} {doc_short}" if parts else doc_short
-            start_pos = m.start()
-            prefix_text = text[:start_pos].rstrip()
+        def _repl(m: re.Match) -> str:
+            label = _label_for(m.group(1) or m.group(2))
+            if not label:
+                return ""
+            prefix_text = m.string[:m.start()].rstrip()
             if re.search(r"(?:đòi lại|yêu cầu thanh toán|yêu cầu bồi thường)\s*$", prefix_text, re.IGNORECASE):
                 return f"số tiền lương bị khấu trừ (căn cứ {label})"
             elif re.search(r"(?:căn cứ|theo|quy định tại|áp dụng|chiếu theo)\s*$", prefix_text, re.IGNORECASE):
@@ -278,9 +279,34 @@ class EvidenceMapper:
                 return f"theo {label}"
             return label
 
+        # Grouped lists such as "(căn cứ E1, E3, E5)" or "[E1, E2]".
+        group_pat = re.compile(
+            r"[\(\[]\s*(?:(?:căn cứ|theo|xem)\s*:?\s*)?(E\d+(?:\s*(?:,|;|và|&)\s*E\d+)+)\s*[\)\]]",
+            re.IGNORECASE,
+        )
+
+        def _group_repl(m: re.Match) -> str:
+            nums = re.findall(r"E(\d+)", m.group(1), re.IGNORECASE)
+            labels = [lbl for lbl in dict.fromkeys(_label_for(n) for n in nums) if lbl]
+            return f"(căn cứ: {'; '.join(labels)})" if labels else ""
+
+        res = group_pat.sub(_group_repl, text)
+
         # Match [E1], [E2], (E1), (E2)
         pattern = re.compile(r"\[\s*E(\d+)\s*\]|\(\s*E(\d+)\s*\)", re.IGNORECASE)
-        res = pattern.sub(_repl, text)
+        res = pattern.sub(_repl, res)
+
+        # Bare tokens such as "theo E2" or "(căn cứ E3)" must not leak either.
+        bare_pat = re.compile(r"(?<![\w/#-])E(\d+)(?![\w/-])")
+        res = bare_pat.sub(lambda m: _label_for(m.group(1)) or m.group(0), res)
+
+        # Deduplicate repeated statutory phrases caused by model already writing the provision before [En]
+        res = re.sub(
+            r"((?:Điểm\s+[a-zđA-ZĐ]\s*,?\s*)?(?:Khoản\s+\d+\s*,?\s*)?(?:Điều\s+\d+))\s+\1\b",
+            r"\1",
+            res,
+            flags=re.IGNORECASE,
+        )
         return res
 
 
