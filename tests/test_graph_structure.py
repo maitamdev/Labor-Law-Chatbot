@@ -95,3 +95,23 @@ def test_format_graph_context():
     assert "VBHN_18_2026" in formatted
     assert "ND_145_2020" in formatted
     assert "120 ngày" in formatted
+
+
+def test_automated_statutory_references_extraction():
+    """Verify automated extraction of intra- and inter-document REFERENCES from corpus."""
+    from graph.builder import KnowledgeGraphBuilder
+    from graph.schema import LegalRelationType
+
+    builder = KnowledgeGraphBuilder(connector=Neo4jConnector(enabled=False))
+    refs = builder.extract_references_from_corpus()
+
+    assert len(refs) >= 500, f"Expected at least 500 extracted references, got {len(refs)}"
+    assert all(r["rel_type"] == LegalRelationType.REFERENCES.value for r in refs)
+    assert all(r["source_doc_id"] and r["target_doc_id"] for r in refs)
+    assert all(isinstance(r["source_article"], int) and isinstance(r["target_article"], int) for r in refs)
+
+    # Must contain both intra-doc (e.g. within BLLĐ) and inter-doc (e.g. Decree -> Law) references
+    intra_refs = [r for r in refs if r["source_doc_id"] == r["target_doc_id"]]
+    inter_refs = [r for r in refs if r["source_doc_id"] != r["target_doc_id"]]
+    assert len(intra_refs) >= 300
+    assert len(inter_refs) >= 100
