@@ -8,6 +8,9 @@ import pytest
 # cover them construct the components explicitly with fake LLMs.
 os.environ.setdefault("VIETLABOR_LLM_FOLLOWUP_REWRITE", "0")
 os.environ.setdefault("VIETLABOR_OLLAMA_WARMUP", "0")
+# The answer cache is process-wide; keep it off so tests cannot leak answers
+# into each other. tests/test_answer_cache.py enables it explicitly.
+os.environ.setdefault("VIETLABOR_ANSWER_CACHE", "0")
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
