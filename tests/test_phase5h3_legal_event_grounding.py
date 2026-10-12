@@ -376,7 +376,9 @@ ADVERSARIAL_30_CASES = [
         "id": "ADV_04",
         "query": "công ty ko đóng bảo hiểm tai nạn thì ai trả tiền",
         "expected_events": ["UNPAID_INSURANCE", "OCCUPATIONAL_ACCIDENT"],
-        "min_issues": 2,
+        # Unpaid *accident* insurance is the premise of one liability question
+        # (same rule as rubric TC_IN_05), so a single issue is expected.
+        "min_issues": 1,
     },
     {
         "id": "ADV_05",
