@@ -255,6 +255,7 @@ class SessionManager:
 
             convs.sort(key=lambda x: x.get("updated_at", ""), reverse=True)
             self.save_conversations(convs)
+            return msg["id"]
 
     def pop_last_exchange(self, conv_id: str) -> Optional[str]:
         """Removes the trailing assistant answer and the user question before it.
