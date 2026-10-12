@@ -46,11 +46,13 @@ OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:7b-instruct-q4_0")
 
 # Optimized 6GB RTX 3060 Laptop GPU inference profile.
 # 2560 context + 4500 chars context ensures peak 50+ tokens/s GPU speed with zero latency.
-OLLAMA_NUM_CTX = int(os.getenv("OLLAMA_NUM_CTX", "3072"))
+# Measured prompt size is ~2.4K tokens before the answer; 3072 left too little
+# room for a complete JSON answer. 5120 keeps generation on the GPU-friendly side.
+OLLAMA_NUM_CTX = int(os.getenv("OLLAMA_NUM_CTX", "5120"))
 OLLAMA_NUM_PREDICT = int(os.getenv("OLLAMA_NUM_PREDICT", "1200"))
 OLLAMA_NUM_GPU = int(os.getenv("OLLAMA_NUM_GPU", "-1"))
 OLLAMA_KEEP_ALIVE = os.getenv("OLLAMA_KEEP_ALIVE", "24h")
-RAG_MAX_CONTEXT_CHARS = int(os.getenv("VIETLABOR_MAX_CONTEXT_CHARS", "4500"))
+RAG_MAX_CONTEXT_CHARS = int(os.getenv("VIETLABOR_MAX_CONTEXT_CHARS", "5500"))
 RAG_MAX_CONTEXT_CHUNKS = int(os.getenv("VIETLABOR_MAX_CONTEXT_CHUNKS", "8"))
 
 
