@@ -84,12 +84,12 @@ class CypherTemplates:
 
     # 5b. Batch graph expansion used by the live retrieval pipeline.
     # Given seed articles (from BM25 + dense hits), return the corpus chunk_ids of
-    # articles linked through GUIDES / PENALIZES in either direction. Returning
-    # chunk_ids (not free text) lets graph hits flow through the same evidence
+    # articles linked through GUIDES / PENALIZES / REFERENCES in either direction.
+    # Returning chunk_ids (not free text) lets graph hits flow through the same evidence
     # locking and citation validation as every other candidate.
     RELATED_ARTICLE_CHUNKS = """
     UNWIND $seeds AS seed
-    MATCH (a:Article {doc_id: seed.doc_id, number: seed.number})-[r:GUIDES|PENALIZES]-(b:Article)
+    MATCH (a:Article {doc_id: seed.doc_id, number: seed.number})-[r:GUIDES|PENALIZES|REFERENCES]-(b:Article)
     WHERE NOT (b.doc_id = seed.doc_id AND b.number = seed.number)
     WITH seed, b, type(r) AS relation, startNode(r) = b AS b_is_source
     RETURN DISTINCT seed.doc_id AS seed_doc_id,
@@ -102,7 +102,16 @@ class CypherTemplates:
     LIMIT $limit
     """
 
-    # 6. Schema Initialization & Constraints
+    # 6. Statutory References: Find articles referenced by a given article
+    GET_REFERENCES_FOR_ARTICLE = """
+    MATCH (art:Article {doc_id: $doc_id, number: $article_number})-[r:REFERENCES]->(target:Article)
+    RETURN target.doc_id AS target_doc_id,
+           target.number AS target_article_number,
+           target.title AS target_title,
+           r.citation AS citation
+    """
+
+    # 7. Schema Initialization & Constraints
     CREATE_CONSTRAINTS = [
         "CREATE CONSTRAINT document_id_unique IF NOT EXISTS FOR (d:LegalDocument) REQUIRE d.doc_id IS UNIQUE",
         "CREATE CONSTRAINT article_id_unique IF NOT EXISTS FOR (a:Article) REQUIRE a.chunk_id IS UNIQUE",
