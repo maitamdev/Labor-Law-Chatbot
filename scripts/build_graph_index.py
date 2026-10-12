@@ -58,11 +58,12 @@ def main():
     elapsed = time.time() - t_start
 
     logger.info(
-        "=== GRAPH BUILD FINISHED in %.2fs: %d Documents, %d Articles, %d Bridges ===",
+        "=== GRAPH BUILD FINISHED in %.2fs: %d Documents, %d Articles, %d Bridges, %d References ===",
         elapsed,
         stats.get("documents", 0),
         stats.get("articles", 0),
         stats.get("bridges", 0),
+        stats.get("references", 0),
     )
 
 
