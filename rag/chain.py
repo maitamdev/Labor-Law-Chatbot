@@ -24,7 +24,7 @@ import re
 import time
 from typing import Any, Callable, Dict, List, Optional, Set
 
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 
 from models.local_llm import LocalLLMManager
 from config.settings import LLM_FOLLOWUP_REWRITE, RAG_MAX_CONTEXT_CHARS, RAG_MAX_CONTEXT_CHUNKS
@@ -53,6 +53,12 @@ from rag.retirement_age import AGE_EVIDENCE_IDS, grounded_answer as grounded_ret
 from rag.voluntary_insurance_support import SUPPORT_EVIDENCE_IDS, grounded_answer as grounded_support_answer, is_support_question
 from rag.foreign_worker_multisite import MULTISITE_EVIDENCE_IDS, grounded_answer as grounded_multisite_answer, is_multisite_filing_question
 from rag.workplace_lockout import LOCKOUT_EVIDENCE_IDS, grounded_workplace_lockout_answer, standalone_lockout_rule_request
+from rag.service_contract_vs_labor_contract import (
+    SERVICE_CONTRACT_EVIDENCE_IDS,
+    grounded_service_contract_answer,
+    is_service_contract_vs_labor_contract_query,
+)
+from rag.statutory_constraints import ConstraintPlan, StatutoryConstraintEngine, verbatim_note
 
 logger = logging.getLogger(__name__)
 
@@ -79,57 +85,7 @@ class Turn:
     facts: Dict[str, str] = field(default_factory=dict)
 
 
-DOMAIN_PRIMARY_DOCS: Dict[str, Set[str]] = {
-    "SOCIAL_INSURANCE": {"VBHN_58_2025", "ND_158_2025", "ND_159_2025", "TT_12_2025", "ND_176_2025"},
-    "OCCUPATIONAL_SAFETY": {"L_84_2015", "VBHN_04_BNV_2026", "VBHN_05_BNV_2026", "VBHN_06_BNV_2026", "ND_39_2016", "ND_44_2016", "TT_24_2022", "ND_129_2025"},
-    "OCCUPATIONAL_ACCIDENT_DISEASE": {"L_84_2015", "VBHN_04_BNV_2026", "VBHN_05_BNV_2026", "VBHN_06_BNV_2026", "ND_39_2016", "ND_129_2025"},
-    "UNEMPLOYMENT_INSURANCE": {"LVL_74_2025", "LUAT_74_2025", "ND_374_2025"},
-    "FOREIGN_WORKER": {"ND_219_2025", "VBHN_18_2026"},
-    "RETIREMENT": {"ND_135_2020", "VBHN_18_2026", "VBHN_58_2025"},
-    "CORE_LABOR": {"VBHN_18_2026", "ND_145_2020", "LUAT_113_2025", "ND_168_2026"},
-    "MATERNITY": {"VBHN_18_2026", "LUAT_113_2025", "ND_168_2026", "VBHN_58_2025"},
-    "COLLECTIVE_LABOR": {"VBHN_18_2026", "VBHN_90_2025", "ND_145_2020", "ND_129_2025"},
-    "EMPLOYMENT_SERVICE": {"LVL_74_2025", "ND_318_2025", "ND_352_2025"},
-    "CROSS_DOMAIN": {"VBHN_58_2025", "L_84_2015", "LVL_74_2025", "LUAT_74_2025", "VBHN_18_2026", "ND_158_2025", "VBHN_06_BNV_2026", "ND_135_2020", "ND_374_2025"},
-}
-
-EVIDENCE_ROLE_RETRIEVAL_HINTS: Dict[str, str] = {
-    "OVERTIME_CONSENT": "Điều 107 Khoản 2 Điểm a sự đồng ý của người lao động làm thêm giờ",
-    "OVERTIME_LIMIT": "Điều 107 Khoản 2 Điểm b giới hạn số giờ làm thêm trong ngày tháng năm",
-    "BONUS_RULE": "Điều 104 Bộ luật Lao động quy chế thưởng căn cứ kết quả sản xuất kinh doanh mức độ hoàn thành công việc",
-    "PROHIBITED_MONETARY_DISCIPLINE": "Điều 127 Khoản 2 cấm phạt tiền cắt lương thay xử lý kỷ luật",
-    "WAGE_PAYMENT_RULE": "Điều 94 Điều 97 nguyên tắc kỳ hạn trả lương",
-    "DELAYED_WAGE_REMEDY": "Điều 97 Khoản 4 trả lương chậm từ 15 ngày tiền lãi",
-    "EMPLOYEE_NOTICE_REQUIREMENT": "Điều 35 Khoản 1 thời hạn báo trước của người lao động",
-    "EMPLOYEE_NO_NOTICE_EXCEPTION": "Điều 35 Khoản 2 người lao động có quyền đơn phương chấm dứt hợp đồng lao động không cần báo trước",
-    "EMPLOYEE_NO_NOTICE_FOR_MISASSIGNED_WORK": "Điều 35 Khoản 2 Điểm a người lao động không được bố trí theo đúng công việc địa điểm làm việc được nghỉ không cần báo trước Điều 29",
-    "WORK_REASSIGNMENT_LIMITS": "Điều 29 Bộ luật Lao động chuyển người lao động làm công việc khác so với hợp đồng lao động",
-    "EMPLOYEE_UNLAWFUL_TERMINATION_LIABILITY": "Điều 40 nghĩa vụ người lao động đơn phương chấm dứt trái pháp luật",
-    "INDIVIDUAL_LABOUR_DISPUTE_PROCEDURE": "Điều 188 và Điều 190 Bộ luật Lao động thủ tục hòa giải quyền yêu cầu Tòa án và thời hiệu tranh chấp lao động cá nhân",
-    "EMPLOYER_MISTREATMENT_PROHIBITION": "Điều 8 Khoản 2 Bộ luật Lao động cấm ngược đãi người lao động",
-    "EMPLOYEE_NO_NOTICE_FOR_MISTREATMENT": "Điều 35 Khoản 2 Điểm c người lao động bị người sử dụng lao động đánh đập được nghỉ không cần báo trước",
-    "EMPLOYER_MISTREATMENT_SANCTION": "Điều 17 Khoản 4 Điểm a Nghị định 283/2026 xử phạt người sử dụng lao động ngược đãi người lao động",
-    "PRE_WORK_CONTRACT_REQUIREMENT": "Điều 13 Khoản 2 trước khi nhận người lao động vào làm việc phải giao kết hợp đồng lao động",
-    "EMPLOYMENT_RELATIONSHIP_DEFINITION": "Điều 13 Khoản 1 việc làm có trả công và chịu quản lý được coi là hợp đồng lao động",
-    "WRITTEN_CONTRACT_FORM": "Điều 14 Khoản 1 hợp đồng lao động phải bằng văn bản hoặc thông điệp dữ liệu",
-    "ORAL_CONTRACT_EXCEPTION": "Điều 14 Khoản 2 hợp đồng dưới 01 tháng có thể giao kết bằng lời nói trừ trường hợp luật định",
-    "FORMATION_EQUALITY_GOOD_FAITH": "Điều 15 Khoản 1 nguyên tắc tự nguyện bình đẳng thiện chí hợp tác và trung thực khi giao kết hợp đồng lao động",
-    "FORMATION_FREEDOM_LIMITS": "Điều 15 Khoản 2 tự do giao kết nhưng không trái pháp luật thỏa ước lao động tập thể và đạo đức xã hội",
-    "MULTIPLE_CONTRACTS_PERMISSION": "Điều 19 Khoản 1 Bộ luật Lao động người lao động có thể giao kết nhiều hợp đồng lao động với nhiều người sử dụng lao động",
-    "TERMINATION_SEVERANCE_ALLOWANCE": "Điều 46 Bộ luật Lao động và Điều 8 Nghị định 145/2020 trợ cấp thôi việc người lao động làm việc thường xuyên từ đủ 12 tháng trở lên",
-    "PROHIBITED_ACTS_IDENTIFICATION": "Điều 17 Khoản 1 Bộ luật Lao động nghiêm cấm giữ bản chính giấy tờ tùy thân văn bằng chứng chỉ của người lao động Điều 15 Nghị định 283/2026",
-    "PREGNANCY_DISMISSAL_PROHIBITION": "Điều 37 Khoản 3 Điều 137 Khoản 3 Bộ luật Lao động người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt hợp đồng lao động đối với lao động nữ mang thai nuôi con dưới 12 tháng tuổi",
-    "UNINSURED_ACCIDENT_SUBSTITUTION": "Điều 39 Khoản 4 và Điều 38 Luật An toàn vệ sinh lao động người sử dụng lao động chưa đóng bảo hiểm tai nạn lao động phải bồi thường thanh toán chi phí y tế tiền lương",
-    "EMPLOYER_MEDICAL_RESPONSIBILITY": "Điều 38 Khoản 1 Khoản 2 Luật An toàn vệ sinh lao động thanh toán chi phí y tế chi phí đồng chi trả cho người lao động bị tai nạn lao động",
-    "EMPLOYER_WAGE_RESPONSIBILITY": "Điều 38 Khoản 3 Luật An toàn vệ sinh lao động trả đủ tiền lương cho người lao động bị tai nạn lao động trong thời gian điều trị",
-    "EMPLOYER_ACCIDENT_COMPENSATION": "Điều 38 Khoản 4 Khoản 5 Luật An toàn vệ sinh lao động bồi thường cho người lao động bị tai nạn lao động không do lỗi của người lao động",
-    "EMPLOYEE_NO_NOTICE_FOR_UNPAID_WAGE": "Điều 35 Khoản 2 Điểm b Bộ luật Lao động người lao động có quyền đơn phương chấm dứt hợp đồng lao động không cần báo trước khi không được trả đủ lương hoặc trả lương không đúng thời hạn",
-    "TERMINATION_SETTLEMENT_OBLIGATION": "Điều 48 Khoản 1 Khoản 3 Bộ luật Lao động trách nhiệm khi chấm dứt hợp đồng lao động hoàn thành thủ tục xác nhận thời gian đóng bảo hiểm xã hội trả lại sổ bảo hiểm trong thời hạn 14 ngày làm việc",
-    "EMPLOYER_TRAINING_OBLIGATION": "Điều 61 Điều 62 Bộ luật Lao động học nghề tập nghề hợp đồng đào tạo nghề không phải hợp đồng lao động",
-    "WAGE_DEDUCTION_LIMIT": "Điều 102 Bộ luật Lao động khấu trừ tiền lương người sử dụng lao động chỉ được khấu trừ bồi thường thiệt hại tài sản Điều 129",
-    "UNDERPAYMENT_SANCTION": "Điều 17 Nghị định 12/2022 Điều 23 Nghị định 283/2026 xử phạt vi phạm tiền lương trả không đủ tiền lương khấu trừ tiền lương trái quy định buộc trả đủ tiền lương và tiền lãi",
-    "DISPUTE_RESOLUTION_PROCEDURE": "Điều 188 Bộ luật Lao động hòa giải viên lao động giải quyết tranh chấp lao động cá nhân về tiền lương khởi kiện Tòa án nhân dân",
-}
+from rag.retrieval_hints import DOMAIN_PRIMARY_DOCS, EVIDENCE_ROLE_RETRIEVAL_HINTS  # noqa: E402,F401
 
 
 class ConversationMemory:
@@ -282,11 +238,36 @@ class ConversationMemory:
             or self.accumulated_facts.get("probation_clarified")
         )
 
+    # Human-readable labels for facts that stay relevant for the whole
+    # consultation. Internal routing codes (relationship_type, ...) are omitted.
+    FACT_LABELS: Dict[str, str] = {
+        "contract_term": "Thời hạn hợp đồng",
+        "contract_term_type": "Loại hợp đồng",
+        "qualification": "Trình độ / chức danh",
+        "special_occupation": "Ngành nghề",
+        "school_program": "Thực tập",
+        "de_facto_employee": "Quan hệ thực tế",
+        "probation_clarified": "Thử việc",
+    }
+
+    def get_fact_summary(self) -> str:
+        """Lists persistent user facts, including those from turns no longer in history."""
+        lines = [
+            f"- {label}: {self.accumulated_facts[key]}"
+            for key, label in self.FACT_LABELS.items()
+            if self.accumulated_facts.get(key)
+        ]
+        return "\n".join(lines)
+
     def get_history_summary(self) -> str:
-        """Formats recent history for LLM prompt context."""
+        """Formats recent history plus persistent facts for LLM prompt context."""
         if not self.history:
             return "Không có lịch sử trước đó."
         lines = []
+        facts = self.get_fact_summary()
+        if facts:
+            lines.append("Tình tiết người dùng đã cung cấp (áp dụng cho cả cuộc tư vấn):")
+            lines.append(facts)
         for i, turn in enumerate(self.history, start=1):
             lines.append(f"Lượt {i}:")
             lines.append(f"  Người dùng: {turn.user_query}")
@@ -370,6 +351,8 @@ class VietLaborRAGChain:
         self.memory = ConversationMemory(max_turns=3)
         self.premise_gate = MaterialPremiseGate()
         self.qa_anchor_index = QuestionLawAnchorIndex()
+        # Generic statutory constraints (protections, preconditions, exclusive regimes).
+        self.constraint_engine = StatutoryConstraintEngine()
 
         # Initialize or reuse retrievers
         # Default retriever is the Hybrid GraphRAG engine (BM25 + Dense + Neo4j).
@@ -398,6 +381,11 @@ class VietLaborRAGChain:
         self.followup_rewriter = FollowupRewriter(
             llm_manager=self.llm_manager, enabled=LLM_FOLLOWUP_REWRITE,
         )
+
+    @staticmethod
+    def _answer_body(final_answer: str) -> str:
+        """Answer text without the generated 'CĂN CỨ PHÁP LÝ' citation footer."""
+        return re.split(r"\n\s*CĂN CỨ PHÁP LÝ\s*:", final_answer or "", maxsplit=1)[0]
 
     def _resolve_followup(self, colloquial_q: str, on_stage: Optional[StageCallback] = None) -> tuple[str, Optional[str]]:
         """Returns (resolved_query, llm_standalone_or_None).
@@ -460,7 +448,7 @@ class VietLaborRAGChain:
     # Out-of-scope response message (DRY: used in run() and tests)
     # -------------------------------------------------------------------------
     _OOS_MESSAGE = (
-        "Câu hỏi của bạn không thuộc phạm vi tư vấn của pháp luật lao động Việt Nam "
+        "Câu hỏi của bạn không thuộc phạm vi tra cứu pháp luật lao động Việt Nam "
         "(ví dụ: hôn nhân gia đình, đất đai, hình sự, giao thông, thuế doanh nghiệp, kiện đòi nợ, thủ tục doanh nghiệp, sở hữu trí tuệ). "
         "VietLabor AI chỉ hỗ trợ tra cứu các quy định về quan hệ lao động, tiền lương, "
         "hợp đồng, kỷ luật, bảo hiểm và thời giờ làm việc theo Bộ luật Lao động và các văn bản hướng dẫn thi hành."
@@ -851,6 +839,11 @@ class VietLaborRAGChain:
             self.qa_anchor_index.lookup_chunk_ids(LOCKOUT_EVIDENCE_IDS)
             if lockout_query and len(decomposed_issues) <= 1 else []
         )
+        service_contract_query = is_service_contract_vs_labor_contract_query(resolved_q)
+        service_contract_chunks = (
+            self.qa_anchor_index.lookup_chunk_ids(SERVICE_CONTRACT_EVIDENCE_IDS)
+            if service_contract_query and len(decomposed_issues) <= 1 else []
+        )
 
         t_ret_end = time.perf_counter()
         retrieval_latency_ms = (t_ret_end - t_ret_start) * 1000
@@ -869,6 +862,15 @@ class VietLaborRAGChain:
             issue_id = decomposed_issues[0].issue_id if decomposed_issues else "issue_1"
             multi_issue_locked[issue_id] = list(locked_chunks)
             combined_candidate_chunks = lockout_chunks + [
+                c for c in combined_candidate_chunks if c.get("chunk_id") not in set(locked_chunk_ids)
+            ]
+        elif len(service_contract_chunks) == len(SERVICE_CONTRACT_EVIDENCE_IDS):
+            retrieval_method = "Verified Service Contract vs Labor Contract Provisions"
+            locked_chunks = service_contract_chunks
+            locked_chunk_ids = [c["chunk_id"] for c in service_contract_chunks]
+            issue_id = decomposed_issues[0].issue_id if decomposed_issues else "issue_1"
+            multi_issue_locked[issue_id] = list(locked_chunks)
+            combined_candidate_chunks = service_contract_chunks + [
                 c for c in combined_candidate_chunks if c.get("chunk_id") not in set(locked_chunk_ids)
             ]
         elif route_decision.is_exact_reference() and len(combined_candidate_chunks) > 0:
@@ -992,6 +994,14 @@ class VietLaborRAGChain:
         Returns a dict with keys:
             context, raw_llm_output, validated_resp, locked_chunk_ids, llm_latency_ms.
         """
+        # Generic statutory constraints: decided from the user's facts and from
+        # what retrieval selected, for every question (no per-question scripts).
+        constraint_plan: ConstraintPlan = self.constraint_engine.plan(
+            query=resolved_q,
+            issues=decomposed_issues,
+            selected_chunks=locked_chunks,
+        )
+
         # Build compact statutory evidence blocks ONLY from locked evidence
         context = self.context_builder.build_context(
             retrieved_chunks=locked_chunks,
@@ -999,7 +1009,10 @@ class VietLaborRAGChain:
             enforce_statutory_bridge=True,
             expand_siblings=False,
             allow_repealed=("12/2022" in resolved_q or "nghị định 12" in resolved_q.lower()),
+            query=resolved_q,
+            priority_chunk_ids=constraint_plan.priority_chunk_ids,
         )
+        chunk_to_evidence: Dict[str, str] = {b.chunk_id: b.evidence_id for b in context.evidence_blocks}
 
         # Synchronize statutory bridges added by ContextBuilder into locked_chunk_ids
         for cid in context.available_chunk_ids:
@@ -1050,9 +1063,19 @@ class VietLaborRAGChain:
             deterministic_answer = grounded_workplace_lockout_answer(resolved_q, context.available_chunk_ids)
             deterministic_ids = LOCKOUT_EVIDENCE_IDS if deterministic_answer else ()
             deterministic_issue = "Đóng cửa tạm thời nơi làm việc khi đình công"
+        if single_issue and not deterministic_answer:
+            deterministic_answer = grounded_service_contract_answer(resolved_q, context.available_chunk_ids)
+            deterministic_ids = SERVICE_CONTRACT_EVIDENCE_IDS if deterministic_answer else ()
+            deterministic_issue = "Phân biệt Hợp đồng dịch vụ và Hợp đồng lao động"
         if deterministic_answer:
             registry = context.chunk_metadata_registry
-            cited_ids = list(deterministic_ids)
+            self.qa_anchor_index._load()
+            for cid in deterministic_ids:
+                if cid not in registry and self.qa_anchor_index._by_id:
+                    chunk = self.qa_anchor_index._by_id.get(cid)
+                    if chunk:
+                        registry[cid] = chunk
+            cited_ids = [cid for cid in deterministic_ids if cid in registry]
             citations = context.evidence_mapper.format_citations_from_metadata(
                 [registry[cid] for cid in cited_ids]
             )
@@ -1093,6 +1116,7 @@ class VietLaborRAGChain:
             calculation_result=calculation_result,
             case_analysis=case_analysis,
             evidence_completeness=evidence_completeness,
+            constraint_block=self.constraint_engine.prompt_block(constraint_plan, chunk_to_evidence),
         )
 
         messages = [
@@ -1168,6 +1192,81 @@ class VietLaborRAGChain:
         )
         validated_resp.evidence_coverage = evidence_completeness.to_dict()
         validated_resp.case_analysis = case_analysis.to_dict()
+
+        # Stage 4b: generic statutory audit. If the answer ignored a constraint
+        # triggered by the user's own facts, regenerate once with an explicit
+        # correction; if it still ignores it, append the verbatim statute text.
+        if (
+            not constraint_plan.is_empty
+            and not parsed_answer.out_of_scope
+            and not parsed_answer.needs_clarification
+            and validated_resp.cited_chunk_ids
+        ):
+            violations = self.constraint_engine.audit(
+                constraint_plan, self._answer_body(validated_resp.final_answer), chunk_to_evidence,
+            )
+            if violations:
+                logger.info("Constraint audit failed: %s", [v.check.check_id for v in violations])
+                try:
+                    retry_messages = messages + [
+                        AIMessage(content=raw_llm_output),
+                        HumanMessage(content=self.constraint_engine.correction_message(
+                            violations, chunk_to_evidence, self._answer_body(validated_resp.final_answer),
+                        )),
+                    ]
+                    t_retry = time.perf_counter()
+                    retry_resp = llm.invoke(retry_messages)
+                    llm_latency_ms += (time.perf_counter() - t_retry) * 1000
+                    retry_content = getattr(retry_resp, "content", retry_resp)
+                    retry_raw = retry_content if isinstance(retry_content, str) else str(retry_content)
+                    retry_parsed: LegalAnswer = self.validator.parse_llm_json(retry_raw)
+                    retry_parsed.needs_clarification = False
+                    retry_parsed.clarification_question = None
+                    retry_validated: ValidatedResponse = self.validator.validate_and_format(
+                        legal_answer=retry_parsed,
+                        available_chunk_ids=context.available_chunk_ids,
+                        chunk_registry=context.chunk_metadata_registry,
+                        evidence_mapper=context.evidence_mapper,
+                        locked_chunk_ids=locked_chunk_ids,
+                        issue_evidence_map={
+                            issue_id: [str(item.get("chunk_id")) for item in chunks if item.get("chunk_id")]
+                            for issue_id, chunks in context_issue_map.items()
+                        },
+                        expected_issues=decomposed_issues,
+                        unsupported_issue_ids=evidence_completeness.unsupported_issue_ids,
+                        case_analysis=case_analysis,
+                    )
+                    retry_violations = self.constraint_engine.audit(
+                        constraint_plan, self._answer_body(retry_validated.final_answer), chunk_to_evidence,
+                    )
+                    if retry_validated.cited_chunk_ids and len(retry_violations) < len(violations):
+                        retry_validated.evidence_coverage = evidence_completeness.to_dict()
+                        retry_validated.case_analysis = case_analysis.to_dict()
+                        validated_resp = retry_validated
+                        raw_llm_output = retry_raw
+                        violations = retry_violations
+                except Exception as exc:  # pragma: no cover - never lose the first answer
+                    logger.warning("Constraint regeneration failed: %s", exc)
+
+            if violations:
+                note, used_ids = verbatim_note(violations, context.chunk_metadata_registry)
+                body = self._answer_body(validated_resp.final_answer)
+                contradicted = [
+                    f for f in self.constraint_engine.contradicted(violations, body) if f.check.safe_conclusion
+                ]
+                if contradicted:
+                    # Never show a conclusion that is the opposite of the statute.
+                    logger.warning("Answer contradicts statute: %s", [f.check.check_id for f in contradicted])
+                    body = "\n\n".join(f.check.safe_conclusion for f in contradicted)
+                if note or contradicted:
+                    cited = list(dict.fromkeys(list(validated_resp.cited_chunk_ids) + used_ids))
+                    metas = [context.chunk_metadata_registry[c] for c in cited if c in context.chunk_metadata_registry]
+                    citations = context.evidence_mapper.format_citations_from_metadata(metas)
+                    validated_resp.final_answer = (
+                        format_answer_markdown((body.rstrip() + "\n\n" + note).strip()) + "\n\n" + citations.strip()
+                    )
+                    validated_resp.cited_chunk_ids = cited
+                    validated_resp.formatted_citations = citations
 
         return {
             "context": context,
