@@ -106,6 +106,8 @@ Cấu trúc đồ thị tri thức trong [graph/schema.py](graph/schema.py) đư
 2. `(Article)-[:PENALIZES]->(Article)`: Chế tài xử phạt, ví dụ: Điều 17 NĐ 12/2022 quy định xử phạt vi phạm về tiền lương tại Điều 97 BLLĐ 2019.
 3. `(Article)-[:REFERENCES]->(Article)`: Viện dẫn điều khoản tương ứng giữa các văn bản.
 
+> **Phạm vi hiện tại của đồ thị**: `graph/builder.py` nạp các nút `LegalDocument` và `Article` (mỗi chunk điều luật) cùng cạnh `HAS_ARTICLE`, cộng thêm **9 cầu dẫn `GUIDES`/`PENALIZES`** được đối chiếu thủ công trong `DEFAULT_STATUTORY_BRIDGES`. Các nhãn `Chapter`/`Clause`/`Point` và cạnh `REFERENCES` đã có trong ontology nhưng **chưa được nạp tự động**. Xem trực quan các cầu dẫn tại mục **"Đồ thị tri thức"** trên giao diện.
+
 ---
 
 ## 📁 Cấu Trúc Thư Mục Dự Án
@@ -215,6 +217,15 @@ $env:NEO4J_ENABLED="true"   # Linux/macOS: export NEO4J_ENABLED=true
 
 > Cầu nối văn bản (`graph/schema.py`) dùng **NĐ 283/2026** (NĐ 12/2022 đã hết hiệu lực từ 10/09/2026) và được kiểm tra tự động với corpus trong `tests/test_graph_bridges.py`. Nếu đã nạp đồ thị bằng bản cũ, hãy chạy lại `build_graph_index.py`; điều khoản đã hết hiệu lực không bao giờ được chèn vào ngữ cảnh.
 
+### 4b. Chạy toàn bộ bằng Docker Compose (tùy chọn)
+File `docker-compose.yml` đóng gói app + Ollama + Neo4j (mọi cổng chỉ bind `127.0.0.1`). Cần có sẵn trên máy host: corpus `data/processed/`, chỉ mục `storage/bm25_v3`, `storage/chroma_v3` và thư mục cache Hugging Face chứa mô hình embedding (app chạy `HF_HUB_OFFLINE=1`).
+```bash
+docker compose up -d                                              # app + ollama + neo4j (+ tải model 1 lần)
+docker compose run --rm app python scripts/build_graph_index.py   # nạp đồ thị lần đầu
+# mở http://127.0.0.1:8501
+```
+> Mặc định dùng GPU NVIDIA cho Ollama; máy không có GPU thì xóa khối `deploy:` trong service `ollama`. Đặt `HF_CACHE_DIR` nếu cache không nằm ở `~/.cache/huggingface`.
+
 ### 5. Khởi chạy Ứng Dụng Web
 ```bash
 python -m app.main
@@ -228,8 +239,11 @@ python -m app.main
 | Làm nóng mô hình Ollama khi mở app (first token ~8s → <1s) | bật | `VIETLABOR_OLLAMA_WARMUP=0` để tắt |
 | Viết lại câu hỏi nối tiếp bằng LLM ("Còn vùng III thì sao?") | bật | `VIETLABOR_LLM_FOLLOWUP_REWRITE=0` để tắt |
 | Nhật ký đánh giá 👍/👎 | `storage/feedback.jsonl` | `VIETLABOR_FEEDBACK_PATH` |
+| Bộ nhớ đệm câu trả lời (câu hỏi đầu phiên trùng khớp sau chuẩn hóa, chỉ lưu câu trả lời đủ căn cứ; 256 mục, 6 giờ) | bật | `VIETLABOR_ANSWER_CACHE=0` để tắt |
 
-Mỗi câu trả lời có thanh thao tác: 📋 sao chép, 🔄 tạo lại (câu trả lời mới nhất), 👍/👎 đánh giá.
+Mỗi câu trả lời có thanh thao tác: 📋 sao chép, 🔄 tạo lại (câu trả lời mới nhất, bỏ qua bộ nhớ đệm), 👍/👎 đánh giá (👎 xóa câu trả lời khỏi bộ nhớ đệm), ⬇️ xuất bản tư vấn (mở hộp in → "Lưu dưới dạng PDF", gồm câu hỏi, câu trả lời, căn cứ pháp lý và tuyên bố miễn trừ).
+
+Tệp đính kèm hỗ trợ `.txt`, `.pdf`, `.docx`. PDF scan (không có lớp chữ) được nhận dạng bằng OCR cục bộ RapidOCR, tối đa 10 trang; `.doc` (Word 97-2003) cần lưu lại thành `.docx`.
 
 ---
 
@@ -244,8 +258,11 @@ pytest tests/test_graph_structure.py -v
 # Kiểm thử bộ lọc chống ảo giác trích dẫn
 pytest tests/test_phase5d_regression.py
 
-# Chạy toàn bộ test suite
+# Chạy toàn bộ test suite (không cần Ollama; các test gọi LLM thật được đánh dấu @pytest.mark.ollama và tự bỏ qua)
 pytest
+
+# Chạy thêm các test end-to-end với LLM thật (cần `ollama serve` đang chạy)
+pytest --run-ollama
 ```
 
 ### Thiết kế Đối sánh Thực nghiệm (Ablation Study cho Đồ án)
