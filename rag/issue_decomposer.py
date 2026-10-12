@@ -93,6 +93,19 @@ class IssueDecomposer:
             if any(term in text for term in ["bồi thường", "nghỉ việc", "chấm dứt", "tự ý"]):
                 if "EMPLOYEE_UNLAWFUL_TERMINATION_LIABILITY" not in roles:
                     roles.append("EMPLOYEE_UNLAWFUL_TERMINATION_LIABILITY")
+
+        nursing_or_pregnant = any(term in text for term in [
+            "mang thai", "thai sản", "nuôi con dưới 12 tháng", "nuôi con dưới 1 tuổi",
+            "con dưới 1 tuổi", "con dưới 12 tháng", "con chưa đủ 1 tuổi", "con nhỏ dưới 1 tuổi",
+            "bạn nữ con dưới 1 tuổi"
+        ])
+        if nursing_or_pregnant and any(term in text for term in ["sa thải", "đuổi việc", "chấm dứt", "cho nghỉ", "thôi việc", "báo trước", "không có việc"]):
+            if "MATERNITY" not in events:
+                events.append("MATERNITY")
+            if "PREGNANCY_DISMISSAL_PROHIBITION" not in roles:
+                roles.append("PREGNANCY_DISMISSAL_PROHIBITION")
+            if "EMPLOYER_UNILATERAL_TERMINATION_RIGHT" in roles:
+                roles.remove("EMPLOYER_UNILATERAL_TERMINATION_RIGHT")
             if "EMPLOYEE_NOTICE_REQUIREMENT" in roles:
                 roles.remove("EMPLOYEE_NOTICE_REQUIREMENT")
             if "UNLAWFUL_TERMINATION_COMPENSATION" in roles:
@@ -325,7 +338,13 @@ class IssueDecomposer:
                     ("Điều kiện và mức hưởng trợ cấp tai nạn lao động từ Quỹ bảo hiểm tai nạn lao động BHXH theo Điều 45, 48 Luật ATVSLĐ và VBHN 06", "OCCUPATIONAL_ACCIDENT_DISEASE"),
                 ]
             # "đang nghỉ thai sản cty đuổi việc thì được bồi thường gì và có được tiền thai sản ko" / "nghỉ sinh con xong đi làm lại bị sa thải"
-            elif any(k in q_lower for k in ["mang thai", "thai sản", "sinh con", "nuôi con"]) and any(k in q_lower for k in ["đuổi việc", "cho nghỉ", "sa thải", "bị sa thải", "cho thôi việc"]) and any(k in q_lower for k in ["tiền thai sản", "chế độ thai sản", "trợ cấp thai sản", "hưởng thai sản", "bảo hiểm trả", "quỹ trả"]):
+            # Being on / returning from maternity leave raises two independent
+            # issues (dismissal protection + BHXH maternity benefit) even when the
+            # user does not mention the benefit. Pregnancy alone stays one issue.
+            elif any(k in q_lower for k in ["mang thai", "thai sản", "sinh con", "nuôi con"]) and any(k in q_lower for k in ["đuổi việc", "cho nghỉ", "sa thải", "bị sa thải", "cho thôi việc"]) and (
+                any(k in q_lower for k in ["tiền thai sản", "chế độ thai sản", "trợ cấp thai sản", "hưởng thai sản", "bảo hiểm trả", "quỹ trả"])
+                or any(k in q_lower for k in ["nghỉ sinh", "nghỉ thai sản", "sinh con xong", "sau sinh", "đi làm lại"])
+            ):
                 sub_items = [
                     ("Công ty đơn phương chấm dứt hợp đồng sa thải lao động nữ trong thời gian mang thai nghỉ sinh con nuôi con, nghĩa vụ bảo đảm việc làm và bồi thường theo Điều 37, 41, 137 Bộ luật Lao động", "CORE_LABOR"),
                     ("Quyền lợi điều kiện hưởng chế độ thai sản và quyền khiếu nại bảo vệ quyền lợi của lao động nữ theo Luật Bảo hiểm xã hội", "SOCIAL_INSURANCE"),
@@ -336,8 +355,12 @@ class IssueDecomposer:
                     ("Công ty giải quyết chấm dứt hợp đồng lao động khi người lao động đủ tuổi nghỉ hưu theo Điều 34, 169 Bộ luật Lao động", "CORE_LABOR"),
                     ("Người lao động đủ tuổi nghỉ hưu nhưng chưa đủ năm đóng BHXH, điều kiện rút BHXH một lần theo Điều 70 Luật BHXH hoặc đóng tự nguyện Điều 98", "SOCIAL_INSURANCE"),
                 ]
-            # Compound query: asking both about administrative sanction for unpaid insurance AND accident liability
-            elif any(k in q_lower for k in ["chưa đóng", "không đóng", "ko đóng", "trốn đóng", "nợ bhxh", "nợ bảo hiểm", "chưa tham gia"]) and any(k in q_lower for k in ["bhxh", "bảo hiểm"]) and any(k in q_lower for k in ["tai nạn", "tnlđ", "máy kẹp", "máy ép", "ngã giàn giáo", "gãy chân", "gãy tay", "đứt tay", "bị thương", "chấn thương", "xe nâng", "máy khâu", "máy may", "đâm vào tay", "kẹp tay", "đâm vào"]) and any(k in q_lower for k in ["xử phạt thế nào", "tội trốn đóng", "bị phạt gì", "truy cứu"]):
+            # Unpaid insurance + workplace injury = two independent issues: the
+            # employer's contribution obligation and its substitute liability for
+            # the accident (Điều 39 Khoản 4 Luật ATVSLĐ). If the unpaid insurance
+            # *is* the accident insurance, it is only the premise of a single
+            # liability question (rubric TC_IN_05) and is not split.
+            elif "bảo hiểm tai nạn" not in q_lower and any(k in q_lower for k in ["chưa đóng", "không đóng", "ko đóng", "trốn đóng", "nợ bhxh", "nợ bảo hiểm", "chưa tham gia"]) and any(k in q_lower for k in ["bhxh", "bảo hiểm"]) and any(k in q_lower for k in ["tai nạn", "tnlđ", "máy kẹp", "máy ép", "ngã giàn giáo", "gãy chân", "gãy tay", "đứt tay", "bị thương", "chấn thương", "xe nâng", "máy khâu", "máy may", "đâm vào tay", "kẹp tay", "đâm vào"]):
                 sub_items = [
                     ("Công ty chưa đóng bảo hiểm xã hội bắt buộc cho người lao động, nghĩa vụ tham gia và trách nhiệm của người sử dụng lao động theo Điều 168 Bộ luật Lao động và Điều 2 Luật Bảo hiểm xã hội", "CORE_LABOR"),
                     ("Người lao động bị tai nạn lao động khi công ty chưa đóng bảo hiểm xã hội, trách nhiệm của doanh nghiệp thanh toán chi phí y tế tiền lương và bồi thường thay thế cơ quan bảo hiểm theo Điều 38, 39 Luật An toàn vệ sinh lao động", "OCCUPATIONAL_SAFETY"),
@@ -646,9 +669,15 @@ class IssueDecomposer:
                 for r in ["WAGE_PAYMENT_RULE", "WAGE_DEDUCTION_LIMIT", "UNDERPAYMENT_SANCTION", "DISPUTE_RESOLUTION_PROCEDURE"]:
                     if r not in sub_roles:
                         sub_roles.append(r)
-            elif any(k in clean_lower for k in ["mang thai", "thai sản", "nuôi con dưới 12 tháng"]) and any(k in clean_lower for k in ["sa thải", "đuổi việc", "chấm dứt", "cắt giảm"]):
+            elif any(k in clean_lower for k in [
+                "mang thai", "thai sản", "nuôi con dưới 12 tháng", "nuôi con dưới 1 tuổi",
+                "con dưới 1 tuổi", "con dưới 12 tháng", "con chưa đủ 1 tuổi", "con nhỏ dưới 1 tuổi",
+                "bạn nữ con dưới 1 tuổi"
+            ]) and any(k in clean_lower for k in [
+                "sa thải", "đuổi việc", "chấm dứt", "cắt giảm", "không có việc", "sắp xếp việc", "cho nghỉ", "thỏa thuận", "báo trước"
+            ]):
                 detected_dom = "CORE_LABOR"
-                expanded = f"{clean_text} người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt hợp đồng lao động đối với lao động nữ mang thai nuôi con dưới 12 tháng tuổi Điều 37 Khoản 3 Điều 137 Khoản 3 Bộ luật Lao động 2019"
+                expanded = f"{clean_text} người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt hợp đồng lao động đối với lao động nữ mang thai nuôi con dưới 12 tháng tuổi Điều 37 Khoản 3 Điều 137 Khoản 3 Bộ luật Lao động 2019 tạm thời chuyển người lao động làm công việc khác Điều 29"
                 sub_events = detect_legal_events(clean_text)
                 sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
                 if "PREGNANCY_DISMISSAL_PROHIBITION" not in sub_roles:
