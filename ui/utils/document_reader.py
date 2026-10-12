@@ -7,8 +7,45 @@ from __future__ import annotations
 
 import base64
 import io
+import logging
+import threading
 from pathlib import Path
-from typing import Tuple
+from typing import Any, Optional, Tuple
+
+logger = logging.getLogger(__name__)
+
+# A page with less extractable text than this is treated as a scanned image.
+MIN_TEXT_LAYER_CHARS = 20
+# OCR costs ~1-2 s/page on CPU; cap it so one upload cannot stall the chat.
+MAX_OCR_PAGES = 10
+OCR_RENDER_DPI = 200
+
+_ocr_engine: Optional[Any] = None
+_ocr_lock = threading.Lock()
+
+
+def _get_ocr_engine() -> Optional[Any]:
+    """Lazily loads the local RapidOCR engine; returns None if unavailable."""
+    global _ocr_engine
+    with _ocr_lock:
+        if _ocr_engine is None:
+            try:
+                from rapidocr_onnxruntime import RapidOCR  # type: ignore[import-not-found]
+                _ocr_engine = RapidOCR(use_cls=False)
+            except Exception as exc:  # pragma: no cover - depends on local install
+                logger.warning("RapidOCR unavailable, scanned PDFs cannot be read: %s", exc)
+                return None
+        return _ocr_engine
+
+
+def _ocr_page(page: Any) -> str:
+    """Runs OCR on one PyMuPDF page and returns recognized lines."""
+    engine = _get_ocr_engine()
+    if engine is None:
+        return ""
+    pix = page.get_pixmap(dpi=OCR_RENDER_DPI)
+    result, _ = engine(pix.tobytes("png"))
+    return "\n".join(r[1] for r in result) if result else ""
 
 
 def format_file_size(size_bytes: int) -> str:
@@ -59,8 +96,14 @@ def extract_attachment_text(attachment: dict) -> Tuple[str, str, str]:
     ext = Path(filename).suffix.lower()
     extracted_text = ""
 
-    # 1. DOCX Extraction
-    if ext in [".docx", ".doc"]:
+    # 1. DOCX Extraction (legacy binary .doc is not supported by python-docx;
+    # decoding its bytes would feed binary garbage to the model)
+    if ext == ".doc":
+        extracted_text = (
+            "Không đọc được tệp Word định dạng cũ (.doc). "
+            "Vui lòng lưu lại dưới dạng .docx hoặc .pdf rồi tải lên lại."
+        )
+    elif ext == ".docx":
         try:
             import docx
             doc = docx.Document(io.BytesIO(file_bytes))
@@ -76,23 +119,39 @@ def extract_attachment_text(attachment: dict) -> Tuple[str, str, str]:
                         parts.append(" | ".join(row_texts))
             extracted_text = "\n\n".join(parts)
         except Exception as e:
-            # Fallback to text decoding if docx parsing fails
-            try:
-                extracted_text = file_bytes.decode("utf-8", errors="ignore")
-            except Exception:
-                extracted_text = f"Không thể đọc tệp văn bản Word: {e}"
+            extracted_text = f"Không thể đọc tệp văn bản Word: {e}"
 
-    # 2. PDF Extraction
+    # 2. PDF Extraction: text layer first, OCR fallback for scanned pages
     elif ext == ".pdf":
         try:
             import pymupdf
             pdf_doc = pymupdf.open(stream=file_bytes, filetype="pdf")
             pages = []
+            ocr_pages = 0
+            skipped_ocr = 0
             for i, page in enumerate(pdf_doc):
                 page_text = page.get_text().strip()
+                if len(page_text) < MIN_TEXT_LAYER_CHARS:
+                    if ocr_pages < MAX_OCR_PAGES:
+                        ocr_text = _ocr_page(page).strip()
+                        ocr_pages += 1
+                        if ocr_text:
+                            page_text = ocr_text
+                    else:
+                        skipped_ocr += 1
                 if page_text:
                     pages.append(f"--- Trang {i + 1} ---\n{page_text}")
+            pdf_doc.close()
             extracted_text = "\n\n".join(pages)
+            if ocr_pages:
+                extracted_text = (
+                    f"[Lưu ý: {ocr_pages} trang là ảnh scan, nội dung được nhận dạng bằng OCR và có thể sai chính tả.]\n\n"
+                    + extracted_text
+                )
+            if skipped_ocr:
+                extracted_text += f"\n\n[... Bỏ qua {skipped_ocr} trang scan vượt giới hạn OCR {MAX_OCR_PAGES} trang ...]"
+            if not extracted_text.strip():
+                extracted_text = "Không trích xuất được nội dung từ tệp PDF (tệp rỗng hoặc ảnh scan không nhận dạng được)."
         except Exception as e:
             extracted_text = f"Không thể đọc tệp PDF: {e}"
 
