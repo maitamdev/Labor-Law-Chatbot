@@ -18,21 +18,21 @@ from __future__ import annotations
 
 import json
 import logging
-from pathlib import Path
 import statistics
 import sys
 import time
-from typing import Any, Dict, List, Set
+from pathlib import Path
+from typing import Any, Dict
 
 if hasattr(sys.stdout, "reconfigure"):
-    getattr(sys.stdout, "reconfigure")(encoding="utf-8", line_buffering=True)
+    sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
 sys.path.insert(0, ".")
 
-from rag.query_router import QueryRouter
 from rag.evidence_selector import EvidenceSelector
+from rag.evidence_sufficiency_validator import EvidenceSufficiencyValidator
 from rag.hybrid_retriever import HybridRetriever
 from rag.legal_issue_parser import LegalIssueParser
-from rag.evidence_sufficiency_validator import EvidenceSufficiencyValidator
+from rag.query_router import QueryRouter
 
 logging.basicConfig(level=logging.WARNING)
 
@@ -106,9 +106,9 @@ def evaluate_fw_procedural(
         h1 = (len(retrieved_ids) > 0 and (retrieved_ids[0] in gold_chunks or retrieved_arts[0] in gold_articles)) or \
              any(retrieved_ids[0].startswith(f"ND_219_2025#d{a}") for a in gold_articles)
         h3 = any(cid in gold_chunks or art in gold_articles or any(cid.startswith(f"ND_219_2025#d{a}") for a in gold_articles)
-                 for cid, art in zip(retrieved_ids[:3], retrieved_arts[:3]))
+                 for cid, art in zip(retrieved_ids[:3], retrieved_arts[:3], strict=False))
         h5 = any(cid in gold_chunks or art in gold_articles or any(cid.startswith(f"ND_219_2025#d{a}") for a in gold_articles)
-                 for cid, art in zip(retrieved_ids[:5], retrieved_arts[:5]))
+                 for cid, art in zip(retrieved_ids[:5], retrieved_arts[:5], strict=False))
 
         if h1:
             hit1 += 1
@@ -150,12 +150,12 @@ def evaluate_fw_procedural(
             "type": q_type,
             "question": q_text,
             "gold_articles": list(gold_articles),
-            "hit1": bool(h1),
-            "hit3": bool(h3),
-            "hit5": bool(h5),
+            "hit1": h1,
+            "hit3": h3,
+            "hit5": h5,
             "retrieved_top5": retrieved_ids[:5],
             "locked_chunk_ids": locked_cids,
-            "has_nd219": bool(has_nd219),
+            "has_nd219": has_nd219,
             "sufficiency_status": val_res.overall_status,
             "is_legally_sufficient": is_sufficient,
             "latency_ms": lat_ms,
