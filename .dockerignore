@@ -1,0 +1,19 @@
+.git
+.venv
+venv
+.vscode
+.idea
+.pytest_cache
+__pycache__
+**/__pycache__
+*.pyc
+archive
+scratch
+output
+evaluation/results
+# Large, gitignored runtime data is mounted as volumes instead of baked in.
+data/raw
+data/processed
+storage
+models/*.bin
+models/*.gguf
