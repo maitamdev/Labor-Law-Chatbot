@@ -43,6 +43,15 @@ class LegalGraphRetriever:
             {"doc_id": doc_id, "article_number": article_number},
         )
 
+    def get_references(self, doc_id: str, article_number: int) -> List[Dict[str, Any]]:
+        """Retrieves statutory cross-references (REFERENCES) for a given article."""
+        if not self.is_available():
+            return []
+        return self.connector.run_query(
+            CypherTemplates.GET_REFERENCES_FOR_ARTICLE,
+            {"doc_id": doc_id, "article_number": article_number},
+        )
+
     def retrieve_multi_hop_chain(self, doc_id: str, article_number: int) -> Optional[Dict[str, Any]]:
         """Executes full multi-hop traversal: Framework Article -> Guiding Decrees + Penalties."""
         if not self.is_available():
