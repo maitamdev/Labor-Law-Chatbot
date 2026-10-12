@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from types import SimpleNamespace
+from typing import Any, Dict
 
 from rag.case_analyzer import CaseAnalyzer
 from rag.evidence_completeness import EvidenceCompletenessGate
@@ -19,6 +20,12 @@ def _issue(issue_id, text, roles=None, events=None):
         legal_events=events or [],
         required_evidence_roles=roles or [],
     )
+
+
+def _get_chunk(builder: ContextBuilder, chunk_id: str) -> Dict[str, Any]:
+    chunk = builder._get_chunk_by_id(chunk_id)
+    assert chunk is not None, f"Chunk {chunk_id} not found"
+    return chunk
 
 
 def test_case_analyzer_builds_auditable_case_file_for_long_scenario():
@@ -124,8 +131,8 @@ def test_context_builder_replaces_discipline_noise_for_workplace_violence():
     builder = ContextBuilder()
     context = builder.build_context(
         retrieved_chunks=[
-            builder._get_chunk_by_id("VBHN_18_2026#d8-k2"),
-            builder._get_chunk_by_id("VBHN_18_2026#d122-k1-b"),
+            _get_chunk(builder, "VBHN_18_2026#d8-k2"),
+            _get_chunk(builder, "VBHN_18_2026#d122-k1-b"),
         ],
         expand_siblings=False,
     )
@@ -218,8 +225,8 @@ def test_context_builder_replaces_article_20_with_contract_signing_rules():
     builder = ContextBuilder()
     context = builder.build_context(
         retrieved_chunks=[
-            builder._get_chunk_by_id("VBHN_18_2026#d20-k2-c"),
-            builder._get_chunk_by_id("VBHN_18_2026#d13-k2"),
+            _get_chunk(builder, "VBHN_18_2026#d20-k2-c"),
+            _get_chunk(builder, "VBHN_18_2026#d13-k2"),
         ],
         expand_siblings=False,
     )
@@ -297,8 +304,8 @@ def test_context_builder_purges_article_16_from_principles_question():
     builder = ContextBuilder()
     context = builder.build_context(
         retrieved_chunks=[
-            builder._get_chunk_by_id("VBHN_18_2026#d16-k1"),
-            builder._get_chunk_by_id("VBHN_18_2026#d15-k1"),
+            _get_chunk(builder, "VBHN_18_2026#d16-k1"),
+            _get_chunk(builder, "VBHN_18_2026#d15-k1"),
         ],
         expand_siblings=False,
     )
@@ -352,7 +359,7 @@ def test_de_facto_contract_litigation_gets_procedure_role_without_overtime_noise
 
 def test_context_builder_purges_irrelevant_overtime_and_wage_chunks_from_de_facto_issue():
     builder = ContextBuilder()
-    get = builder._get_chunk_by_id
+    get = lambda cid: _get_chunk(builder, cid)
     context = builder.build_context(
         retrieved_chunks=[],
         multi_issue_candidates={
@@ -407,8 +414,8 @@ def test_deterministic_guards_produce_complete_de_facto_and_original_document_ad
     )
 
     assert changed is True
-    assert "Tên gọi “thỏa thuận công việc” không quyết định" in findings[0].finding
-    assert "không bắt buộc hòa giải" in findings[0].finding
+    assert "không quyết định bản chất quan hệ pháp lý" in findings[0].finding
+    assert "không bắt buộc phải qua thủ tục hòa giải" in findings[0].finding
     assert "20 đến 25 triệu đồng" in findings[1].finding
     assert "ND_283_2026#d15-k3-d" in findings[1].supporting_chunk_ids
 
