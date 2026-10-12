@@ -46,10 +46,11 @@ def test_busy_chat_disables_submissions_and_preserves_grounding_notice():
 
 
 def test_responsive_breakpoints_remain_valid_after_desktop_scaling(monkeypatch):
+    from typing import Any, cast
     from ui.components import approved_layout
     approved_layout.get_surface.cache_clear()
     monkeypatch.setattr(approved_layout, 'component', lambda name, **kwargs: kwargs)
-    definition = approved_layout.get_surface()
+    definition = cast(dict[str, Any], approved_layout.get_surface())
     css = definition['css']
     assert '@media (max-width:1100px)' in css
     assert '@media (max-width:760px)' in css
@@ -81,4 +82,39 @@ def test_templates_view_renders_all_eight_full_templates():
     embedded = json.loads(markup[start:end])
     assert len(embedded) == 8
     assert embedded[0]['id'] == 'hop_dong_lao_dong'
+
+
+def test_answers_offer_pdf_export_but_smalltalk_does_not():
+    messages = [
+        {'id': 'q', 'role': 'user', 'content': 'Thử việc tối đa bao lâu?'},
+        {'id': 'a1', 'role': 'assistant', 'content': 'Tối đa 60 ngày.', 'structured_data': {}},
+        {'id': 'a2', 'role': 'assistant', 'content': 'Xin chào!', 'structured_data': {'is_smalltalk': True}},
+    ]
+    rendered = render_messages(messages, False)
+    assert 'data-export="a1"' in rendered
+    assert 'data-export="a2"' not in rendered
+
+
+def test_header_has_no_fake_login_and_upload_excludes_legacy_doc():
+    markup = layout_markup('home', [], [], False, '')
+    assert 'data-dialog="login"' not in markup
+    assert 'Đăng nhập' not in markup
+    assert 'accept=".txt,.pdf,.docx"' in markup
+
+
+def test_progressive_typing_attribute_on_new_assistant_message():
+    messages = [
+        {'id': 'q', 'role': 'user', 'content': 'Thử việc tối đa bao lâu?'},
+        {'id': 'a1', 'role': 'assistant', 'content': 'Tối đa 60 ngày.', 'structured_data': {}},
+    ]
+    # Without typing_id: no typing class or attribute
+    static_rendered = render_messages(messages, False, typing_id='')
+    assert 'data-typing="true"' not in static_rendered
+    assert 'is-typing' not in static_rendered
+
+    # With typing_id: activates typewriter streaming reveal
+    typing_rendered = render_messages(messages, False, typing_id='a1')
+    assert 'data-typing="true"' in typing_rendered
+    assert 'is-typing' in typing_rendered
+    assert 'data-msg-id="a1"' in typing_rendered
 
