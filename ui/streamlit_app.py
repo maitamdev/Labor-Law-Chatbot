@@ -72,12 +72,17 @@ if CSS_PATH.exists():
 # conversation memory and a globally cached instance can mix facts between
 # browser sessions. Heavy embedding weights are already cached by the model
 # wrapper itself.
-APP_BUILD_VERSION = "2026.10.08.v3.19_rich_detailed_advisory_prompts"
+APP_BUILD_VERSION = "2026.10.12.v3.20_nursing_worker_and_severance_grounding"
 
 def get_chat_service(build_version: str = APP_BUILD_VERSION):
-    from app.chat_service import ChatService
     cache_key = f"chat_service::{build_version}"
     if cache_key not in st.session_state:
+        for mod_name in list(sys.modules.keys()):
+            if mod_name.startswith(("rag.", "app.")):
+                sys.modules.pop(mod_name, None)
+        import app.answer_cache as _ac
+        _ac.clear()
+        from app.chat_service import ChatService
         service = ChatService()
         active_id = st.session_state.get("active_conv_id")
         if isinstance(active_id, str) and active_id:
@@ -148,6 +153,7 @@ def handle_regenerate():
             remaining = (session_mgr.get_conversation(conv_id) or {}).get("messages", [])
             state_value.restore_conversation(remaining)
     st.session_state["submitted_query"] = question
+    st.session_state["bypass_answer_cache"] = True
     st.rerun()
 
 
@@ -166,9 +172,12 @@ def handle_feedback(msg_id: str, rating: str):
             )
             record_feedback(build_feedback_record(
                 rating=rating, question=question, answer=str(m.get("content", "")),
-                conv_id=str(conv_id), msg_id=msg_id, structured_data=m.get("structured_data"),
+                conv_id=conv_id, msg_id=msg_id, structured_data=m.get("structured_data"),
             ))
             session_mgr.set_message_feedback(conv_id, msg_id, rating)
+            if rating == "down" and question:
+                from app import answer_cache
+                answer_cache.evict_question(question)
             break
     st.rerun()
 
@@ -244,12 +253,13 @@ if submitted or submitted_attachment:
         st_reply = answer_smalltalk(content_to_save, has_history=len(conv_messages) > 1)
 
     if st_reply is not None:
-        session_mgr.append_message(
+        st_aid = session_mgr.append_message(
             conv_id=active_id,
             role="assistant",
             content=str(st_reply.get("answer", "")),
             structured_data=st_reply,
         )
+        st.session_state["typing_msg_id"] = st_aid
         st.session_state["ui_view"] = "chat"
     else:
         # Only complex legal questions or document review trigger the asynchronous thinking state
@@ -260,6 +270,7 @@ active_conv = session_mgr.get_conversation(active_id)
 messages = (active_conv or {}).get("messages", [])
 pending_query = st.session_state.get("pending_query")
 view = st.session_state.get("ui_view", "home")
+typing_id = str(st.session_state.pop("typing_msg_id", "") or "")
 ui_result = render_approved_layout(
     view=view,
     messages=messages,
@@ -267,6 +278,7 @@ ui_result = render_approved_layout(
     busy=bool(pending_query),
     active_id=active_id,
     notice=st.session_state.pop("ui_notice", ""),
+    typing_id=typing_id,
 )
 
 # Component events are transient, validated again on the Python boundary.
@@ -338,7 +350,11 @@ if pending_query:
                 active_conv = session_mgr.get_conversation(active_id)
                 chat_service.restore_conversation((active_conv or {}).get("messages", []))
                 setattr(chat_service, "_synced_conv_id", active_id)
-            resp_data = chat_service.ask(user_query, update_memory=True)
+            resp_data = chat_service.ask(
+                user_query,
+                update_memory=True,
+                bypass_cache=bool(st.session_state.pop("bypass_answer_cache", False)),
+            )
         except (ConnectionError, FileNotFoundError):
             resp_data = {
                 "answer": "Không thể kết nối mô hình AI cục bộ. Vui lòng mở Ollama và kiểm tra mô hình đã được cài đặt, sau đó thử lại.",
@@ -351,11 +367,9 @@ if pending_query:
                 "findings": [], "citations": [], "needs_clarification": False,
                 "clarification_question": None, "suggested_followups": [],
             }
-    session_mgr.append_message(
+    new_aid = session_mgr.append_message(
         conv_id=active_id, role="assistant", content=str(resp_data.get("answer", "")), structured_data=resp_data,
     )
-    # v7 reload trigger
-
-
+    st.session_state["typing_msg_id"] = new_aid
     st.session_state.pop("pending_query", None)
     st.rerun()
