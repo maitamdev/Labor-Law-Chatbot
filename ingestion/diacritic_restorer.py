@@ -10,10 +10,10 @@ Employs an auditable 4-tier pipeline:
   Tier 4: Contextual Post-Correction (Currency, Account vs Citation, Contract Terminology, Capitalization)
 """
 
+import json
 import os
 import re
-import json
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Any, Dict, List, Optional, Tuple
 
 
 class LegalDiacriticRestorer:

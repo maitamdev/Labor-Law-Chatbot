@@ -3,14 +3,11 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
-import os
 import re
-import sys
 import time
-import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional, List, Dict, Any, Tuple
+from typing import Optional
 
 import pymupdf
 from rapidocr_onnxruntime import RapidOCR  # type: ignore[import-not-found]
