@@ -9,17 +9,15 @@ from __future__ import annotations
 import datetime
 import json
 import logging
+from contextlib import closing
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, List, Optional, Union, cast
 
 import chromadb
 from chromadb.config import Settings
 
 from config.settings import CHROMA_INDEX_DIR, PRODUCTION_CORPUS_PATH
-
 from rag.embeddings import (
-    DEFAULT_EMBEDDING_DIM,
-    DEFAULT_MODEL_NAME,
     LocalBGEEmbeddings,
     compute_corpus_fingerprint,
     format_retrieval_text,
@@ -86,11 +84,21 @@ class LegalVectorStore:
         self.meta_file = self.persist_dir / "index_meta.json"
 
         self.persist_dir.mkdir(parents=True, exist_ok=True)
-        self.client = chromadb.PersistentClient(
-            path=str(self.persist_dir),
-            settings=Settings(anonymized_telemetry=False),
-        )
+        self._client: Optional[ Any ] = None
         self.embedding_model = embedding_model or LocalBGEEmbeddings()
+
+    @property
+    def client(self) -> Any:
+        if self._client is None:
+            self._client = chromadb.PersistentClient(
+                path=str(self.persist_dir),
+                settings=Settings(anonymized_telemetry=False),
+            )
+        return self._client
+
+    @client.setter
+    def client(self, value: Any) -> None:
+        self._client = value
 
     def get_collection(self) -> Any:
         """Retrieves or creates the target Chroma collection with cosine distance."""
@@ -115,27 +123,58 @@ class LegalVectorStore:
         with open(self.meta_file, "w", encoding="utf-8") as f:
             json.dump(meta, f, ensure_ascii=False, indent=2)
 
-    def is_index_valid(self, strict: bool = False) -> bool:
-        """Checks if the existing ChromaDB index is ready for retrieval (strict=False)
-        or matches exact corpus fingerprint (strict=True).
-        """
+    def _corpus_chunk_count(self) -> int:
+        if not self.corpus_path.exists():
+            return 0
+        total = 0
+        with open(self.corpus_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    total += 1
+        return total
+
+    def _sqlite_chunk_count(self) -> Optional[int]:
+        """Reads collection embedding count directly from chroma.sqlite3 without loading HNSW."""
+        import sqlite3
+
+        sqlite_path = self.persist_dir / "chroma.sqlite3"
+        if not sqlite_path.is_file():
+            return 0
         try:
-            collection = self.get_collection()
-            count = collection.count()
-            if count == 0:
-                logger.info("Chroma collection is empty.")
-                return False
-            if not strict:
-                return True
+            with closing(sqlite3.connect(sqlite_path.resolve().as_uri() + "?mode=ro", uri=True)) as con:
+                row = con.execute(
+                    "SELECT COUNT(*) FROM embeddings WHERE segment_id IN ("
+                    "SELECT id FROM segments WHERE collection = ("
+                    "SELECT id FROM collections WHERE name = ?"
+                    "))",
+                    (self.collection_name,),
+                ).fetchone()
+                return int(row[0]) if row else 0
         except Exception as e:
-            logger.warning(f"Error checking existing collection: {e}")
+            logger.debug(f"SQLite count check fallback: {e}")
+            return None
+
+    def is_index_valid(self, strict: bool = False) -> bool:
+        """True only when index meta, fingerprint, and collection count match the corpus."""
+        del strict  # kept for callers; completeness is always required
+        expected = self._corpus_chunk_count()
+        if expected == 0:
             return False
 
+        # Fast & safe metadata and SQLite checks BEFORE touching native HNSW segments
         if not self.meta_file.exists():
             return False
 
         meta = self.load_index_meta()
         if not meta:
+            return False
+
+        if meta.get("total_chunks") != expected:
+            logger.info(
+                "Chroma index meta total_chunks (%s) != corpus (%d).",
+                meta.get("total_chunks"),
+                expected,
+            )
             return False
 
         current_fp = compute_corpus_fingerprint(
@@ -145,6 +184,26 @@ class LegalVectorStore:
         if meta.get("fingerprint") != current_fp:
             logger.info("Fingerprint mismatch between corpus and existing index.")
             return False
+
+        sqlite_count = self._sqlite_chunk_count()
+        if sqlite_count is not None and sqlite_count != expected:
+            logger.info("Chroma SQLite index incomplete: %d / %d chunks.", sqlite_count, expected)
+            return False
+
+        try:
+            collection = self.get_collection()
+            count = collection.count()
+        except Exception as e:
+            logger.warning(f"Error checking existing collection: {e}")
+            return False
+
+        if count == 0:
+            logger.info("Chroma collection is empty.")
+            return False
+        if count != expected:
+            logger.info("Chroma index incomplete: %d / %d chunks.", count, expected)
+            return False
+
         return True
 
     def build_index(
@@ -154,6 +213,8 @@ class LegalVectorStore:
         show_progress: bool = True,
     ) -> dict[str, Any]:
         """Builds or reuses the ChromaDB vector index from the production corpus."""
+        if batch_size <= 0:
+            raise ValueError("batch_size must be positive")
         if not self.corpus_path.exists():
             raise FileNotFoundError(f"Corpus file not found: {self.corpus_path}")
 
@@ -179,6 +240,8 @@ class LegalVectorStore:
                     chunks.append(json.loads(line_str))
 
         total_chunks = len(chunks)
+        if not chunks or len({c["chunk_id"] for c in chunks}) != total_chunks:
+            raise ValueError("Corpus must contain unique, nonempty chunks")
         logger.info(f"Read {total_chunks} chunks from {self.corpus_path}.")
 
         previous_meta = self.load_index_meta()
@@ -193,52 +256,62 @@ class LegalVectorStore:
                 pass
         collection = self.get_collection()
 
+
         # Reuse unchanged vectors. This also makes an interrupted build resumable.
         existing = collection.get(include=["documents", "metadatas"])
         indexed = {
             chunk_id: (document, metadata)
             for chunk_id, document, metadata in zip(
-                existing["ids"], existing.get("documents") or [], existing.get("metadatas") or []
+                existing["ids"], existing.get("documents") or [], existing.get("metadatas") or [], strict=True
             )
         }
         desired_ids = {chunk["chunk_id"] for chunk in chunks}
         obsolete = list(indexed.keys() - desired_ids)
         for i in range(0, len(obsolete), batch_size):
             collection.delete(ids=obsolete[i : i + batch_size])
+
         to_embed = []
         metadata_only = []
         for chunk in chunks:
             chunk_id = chunk["chunk_id"]
-            retrieval_text = str(chunk.get("retrieval_text") or "").strip() or format_retrieval_text(chunk)
+            retrieval_text = str(chunk.get("retrieval_text") or "").strip() or format_retrieval_text(chunk, corpus_path=self.corpus_path)
             metadata = clean_metadata_for_chroma(chunk)
             old = indexed.get(chunk_id)
             if old is None or old[0] != retrieval_text:
                 to_embed.append(chunk)
             elif old[1] != metadata:
                 metadata_only.append((chunk_id, metadata))
-        for i in range(0, len(metadata_only), batch_size):
-            batch = metadata_only[i : i + batch_size]
+
+        upsert_step = 500
+        for i in range(0, len(metadata_only), upsert_step):
+            batch = metadata_only[i : i + upsert_step]
             collection.update(ids=[item[0] for item in batch], metadatas=[item[1] for item in batch])
 
         logger.info(
             "Index sync: %d unchanged, %d embed, %d metadata-only, %d obsolete.",
-            total_chunks - len(to_embed) - len(metadata_only), len(to_embed), len(metadata_only), len(obsolete),
+            total_chunks - len(to_embed) - len(metadata_only),
+            len(to_embed),
+            len(metadata_only),
+            len(obsolete),
         )
-        for i in range(0, len(to_embed), batch_size):
-            batch_chunks = to_embed[i : i + batch_size]
+        is_cuda = getattr(self.embedding_model, "device", "cpu") == "cuda"
+        embed_step = max(batch_size, 128) if is_cuda else batch_size
+        encode_batch = 32 if is_cuda else batch_size
+        for i in range(0, len(to_embed), embed_step):
+            batch_chunks = to_embed[i : i + embed_step]
             batch_ids = [c["chunk_id"] for c in batch_chunks]
             # Ingestion may preserve a reviewed retrieval representation whose
             # embedding already defines the production index. Reuse it when
             # present; only synthesize text for legacy rows.
             batch_texts = [
-                str(c.get("retrieval_text") or "").strip() or format_retrieval_text(c)
+                str(c.get("retrieval_text") or "").strip() or format_retrieval_text(c, corpus_path=self.corpus_path)
                 for c in batch_chunks
             ]
             batch_metas = [clean_metadata_for_chroma(c) for c in batch_chunks]
 
             batch_embeddings = self.embedding_model.embed_documents(
                 batch_texts,
-                batch_size=len(batch_texts),
+                batch_size=min(encode_batch, len(batch_texts)),
                 show_progress_bar=False,
             )
 
@@ -248,7 +321,6 @@ class LegalVectorStore:
                 documents=batch_texts,
                 metadatas=cast(Any, batch_metas),
             )
-
             if show_progress and (
                 (i + len(batch_chunks)) % 256 == 0
                 or (i + len(batch_chunks)) == len(to_embed)
@@ -279,8 +351,11 @@ class LegalVectorStore:
         where: Optional[dict] = None,
     ) -> List[dict[str, Any]]:
         """Queries the vector index using cosine similarity."""
+        if not query_text.strip() or top_k <= 0:
+            return []
         collection = self.get_collection()
-        if collection.count() == 0:
+        count = collection.count()
+        if count == 0:
             raise RuntimeError(
                 f"Vector index '{self.collection_name}' is empty. "
                 "Run: python scripts/build_index_v3.py --target chroma"
@@ -289,7 +364,7 @@ class LegalVectorStore:
 
         kwargs: dict[str, Any] = {
             "query_embeddings": [query_vector],
-            "n_results": top_k,
+            "n_results": min(top_k, count),
             "include": ["documents", "metadatas", "distances"],
         }
         if where:
@@ -306,7 +381,8 @@ class LegalVectorStore:
         documents = results["documents"][0] if results.get("documents") else [""] * len(ids)
         metadatas = results["metadatas"][0] if results.get("metadatas") else [{}] * len(ids)
 
-        for chunk_id, dist, doc, meta in zip(ids, distances, documents, metadatas):
+        for chunk_id, dist, doc, meta in zip(ids, distances, documents, metadatas, strict=True):
+            meta = meta or {}
             # Chroma returns cosine distance d in [0, 2]. Cosine similarity is 1.0 - d
             sim_score = float(max(0.0, min(1.0, 1.0 - dist)))
             formatted_results.append({
