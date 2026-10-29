@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "updated": "2026-10-13",
+  "north_star": "Giảm trả lời sai pháp lý trên câu mới (không nhớ 106 Cần Thơ); ưu tiên retrieval + căn cứ đúng văn bản hiệu lực.",
+  "metrics": {
+    "retrieval_gold_hit10_hybrid_norm": { "target": 0.93, "floor": 0.88 },
+    "retrieval_gold_hit10_colloquial": { "target": 0.92, "floor": 0.85 },
+    "rubric_15_pass_rate": { "target": 0.9, "floor": 0.8 },
+    "pytest_default_pass": { "target": "all_non_skipped", "floor": "no_regressions" },
+    "chroma_index_coverage": { "target": 1.0, "floor": 0.99 },
+    "corpus_wave3_manifest": { "target": 1.0, "floor": 0.85 }
+  },
+  "cycle_order": [
+    "index_health",
+    "pytest_fast",
+    "retrieval_ablation",
+    "audit_corpus",
+    "optional_ollama_rubric"
+  ],
+  "notes": [
+    "Không merge 106 Cần Tho vào SFT national train.",
+    "CAN_THO_OFFICIAL_GROUNDING=false cho benchmark quốc gia.",
+    "Sau mỗi ingest corpus: build_index_v3 --force hoặc resume chroma."
+  ]
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "CL_01",
+    "query": "Tôi bị công ty sa thải vì nghỉ không phép 3 ngày, có đúng luật không?",
+    "should_hard_lock": false,
+    "note": "Chủ đề chấm dứt HĐ nhưng không trùng bất kỳ câu Cần Thơ nào — không khóa theo scenario."
+  },
+  {
+    "id": "CL_02",
+    "query": "Chủ cửa hàng nói thỏa thuận công việc không phải hợp đồng lao động nên không trả tiền, đúng không?",
+    "should_hard_lock": false,
+    "note": "Cùng chủ đề Điều 13 nhưng câu ngắn/khác tình huống — dùng rule de_facto + retrieval, không anchor lock Cần Thơ."
+  },
+  {
+    "id": "CL_03",
+    "query": "Thời gian thử việc tối đa là bao lâu?",
+    "should_hard_lock": false,
+    "note": "Câu tra cứu ngắn — chỉ enrich/nominate, không hard-lock scenario dài."
+  }
+]
