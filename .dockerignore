@@ -17,3 +17,16 @@ data/processed
 storage
 models/*.bin
 models/*.gguf
+# Local credentials must never enter the build context or an image layer.
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+**/node_modules
+reports
+.ruff_cache
+.coverage
+htmlcov
+*.egg-info
+dist
+build

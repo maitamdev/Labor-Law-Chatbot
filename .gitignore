@@ -63,4 +63,12 @@ scratch/
 *.log
 .system_generated/
 tmp/
+node_modules/
+package-lock.json
+
+# Server credentials and authentication recovery state
+.streamlit/secrets.toml
+.env
+.env.*
+!.env.example
 
