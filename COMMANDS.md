@@ -180,22 +180,55 @@ pytest tests/test_chain.py tests/test_ingestion.py
 
 ---
 
-## 📊 7. Đánh Giá & Đo Đạc Hiệu Năng (Benchmark & Evaluation)
+## 🎓 7. Huấn luyện tinh chỉnh (SFT) — chế độ quốc gia
 
-### 7.1. Chạy đánh giá toàn diện 15 ca kiểm thử theo Rubric Chấm điểm Đại học (Mục IV & Tiêu chí E2)
+Không huấn luyện “nhớ thuộc” 106 tình huống Cần Thơ vào generator (xem `rag/anchor_lock_policy.py`).
+Ưu tiên **RAG + constraint engine**; SFT chỉ dùng **1.000 câu QA đã đối chiếu Sheet**:
+
+```powershell
+# Tạo train/val ChatML (~900/100) cho Colab LoRA
+python scripts/build_national_sft_train_val.py
+
+# (Tuỳ chọn) Xuất lại bản ChatML/Alpaca đầy đủ 1.000 câu
+python scripts/export_training_data.py
+python scripts/validate_dataset_schema.py data/training/vietlabor_sft_national_train.jsonl
+```
+
+Huấn luyện GPU: mở `VietLabor_SFT_Qwen25_Colab.ipynb`, trỏ `train` → `data/training/vietlabor_sft_national_train.jsonl`,
+`val` → `vietlabor_sft_national_val.jsonl`. Sau LoRA, đánh giá lại cùng bộ val + `run_rubric_evaluation.py` (RAG bật).
+
+### 7.1 Vòng cải thiện dài hạn (test → nâng cấp)
+
+Mục tiêu: `data/evaluation/national_improvement_goals.json`
+
+```powershell
+# Mỗi lần sửa RAG/corpus: pytest nhanh + audit + snapshot
+python scripts/run_improvement_cycle.py
+
+# Khi Chroma đủ 100% corpus:
+python scripts/run_improvement_cycle.py --run-ablation
+```
+
+Snapshot: `reports/improvement_cycle/latest_snapshot.json`
+
+---
+
+## 📊 8. Đánh Giá & Đo Đạc Hiệu Năng (Benchmark & Evaluation)
+
+### 8.1. Chạy đánh giá toàn diện 15 ca kiểm thử theo Rubric Chấm điểm Đại học (Mục IV & Tiêu chí E2)
 ```powershell
 python scripts/run_rubric_evaluation.py
 ```
 > Kết quả đánh giá chi tiết và tỷ lệ đạt sẽ được tự động xuất ra file Markdown tại: `reports/rubric_15_test_cases.md`.
 
-### 7.2. Đánh giá chất lượng truy hồi và cắt giảm độ trễ (Ablation Benchmark)
+### 8.2. Đánh giá chất lượng truy hồi và cắt giảm độ trễ (Ablation Benchmark)
 ```powershell
 python scripts/evaluate_ablation.py
 ```
 
 ---
 
-## 🔧 8. Khắc Phục Lỗi Thường Gặp (Troubleshooting)
+## 🔧 9. Khắc Phục Lỗi Thường Gặp (Troubleshooting)
 
 | Lỗi | Nguyên nhân | Cách khắc phục |
 | :--- | :--- | :--- |

@@ -6,8 +6,8 @@
 ![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B.svg)
 ![Ollama](https://img.shields.io/badge/LLM-Local%20Ollama%20(Qwen%202.5)-orange.svg)
 ![Architecture](https://img.shields.io/badge/Architecture-Hybrid%20GraphRAG%20(Vector%20%2B%20Neo4j)-purple.svg)
-![Tests](https://img.shields.io/badge/Tests-5%2F5%20Graph%20%2B%20Unit-brightgreen.svg)
-![Privacy](https://img.shields.io/badge/Privacy-100%25%20Local--first-success.svg)
+![Tests](https://img.shields.io/badge/Tests-584%20passed%20%7C%206%20skipped-brightgreen.svg)
+![Privacy](https://img.shields.io/badge/Privacy-Private%20chat%20%2B%20RLS-success.svg)
 
 **Hệ thống AI chuyên biệt hỗ trợ tra cứu, đối chiếu và tư vấn pháp luật lao động Việt Nam chuẩn xác, bảo mật với kiến trúc Hybrid GraphRAG tiên tiến (ChromaDB + BM25s + Neo4j Knowledge Graph).**
 
@@ -24,14 +24,28 @@
 1. **Hiện tượng ảo giác điều luật (Hallucination)**: LLM thông thường hay bịa đặt số hiệu điều khoản, số ngày báo trước hoặc nhầm lẫn giữa các ngành nghề đặc thù.
 2. **Suy luận quan hệ đa tầng (Multi-hop Reasoning)**: RAG dạng vector truyền thống thường thất bại khi câu hỏi đòi hỏi kết nối nhiều văn bản (Ví dụ: Hành vi vi phạm tại Bộ luật Lao động $\rightarrow$ Mức phạt hành chính tại Nghị định 12/2022/NĐ-CP $\rightarrow$ Hướng dẫn đặc thù tại Nghị định 145/2020/NĐ-CP).
 3. **Bảo toàn ngữ cảnh thứ bậc (Statutory Hierarchy)**: Tự động gắn kết câu dẫn Khoản cha khi trích xuất Điểm con, loại bỏ hiện tượng trích dẫn cụt ý.
-4. **Vận hành cục bộ 100% (Local-first & Privacy)**: Không gửi dữ liệu hội thoại ra internet; LLM, Vector DB và Graph DB đều chạy trên hạ tầng máy tính nội bộ.
+4. **AI cục bộ, lịch sử riêng theo tài khoản**: LLM, Vector DB và Graph DB chạy nội bộ. Chế độ khách giữ chat trong bộ nhớ phiên; tài khoản Supabase lưu lịch sử trên PostgreSQL với RLS chỉ cho chủ tài khoản truy cập. Admin ứng dụng không được đọc chat người khác.
+
+### Tài khoản Supabase và khu quản trị
+
+Xem [hướng dẫn cấu hình Supabase](docs/SUPABASE_SETUP.md) để tạo project, chạy SQL,
+cấu hình email và cấp admin đầu tiên. Đã có đăng nhập/đăng ký email, khôi phục và đổi
+mật khẩu, lịch sử riêng, quản lý người dùng, văn bản PDF, phản hồi có đồng ý chia sẻ,
+tiến trình AI, nhật ký và sao lưu metadata. Chưa cấu hình Supabase thì trang AI vẫn
+mở ở chế độ khách. Không có tài khoản hoặc mật khẩu admin mặc định.
+
+### Phân công file báo cáo
+
+Xem [phân công file cho Tâm, Hiếu, Thiên, Thành, Đạt](docs/PHAN_CONG_FILE_BAO_CAO.md).
+Tài liệu ghi phần phụ trách, từng file cần báo cáo, ý nghĩa và chức năng của file đó.
+Kết quả kiểm chứng bản sửa gần nhất nằm trong [biên bản ngày 29/10/2026](docs/CHAT_FIXES_2026-10-29.md).
 
 ---
 
 ## 🚀 Tính Năng Nổi Bật
 
 ### 🌐 1. Kiến Trúc Truy Hồi Tam Hợp (Tri-Stream Hybrid Retrieval)
-Hệ thống tích hợp 3 luồng truy hồi dữ liệu song song nhằm tối ưu hóa độ bao phủ và độ chính xác:
+Hệ thống hợp nhất kết quả BM25 và vector bằng RRF, sau đó mở rộng ứng viên theo quan hệ Neo4j khi có kết nối:
 * **Dense Vector Search (ChromaDB + BGE-M3)**: Nắm bắt ngữ cảnh và ý định tương đồng về mặt ngữ nghĩa dù người dùng diễn đạt bằng ngôn ngữ đời thường.
 * **Sparse Lexical Search (BM25s + PyVi/Underthesea)**: Bắt chính xác từng thuật ngữ định lượng ("thử việc 60 ngày", "báo trước 45 ngày", "lương tối thiểu vùng", mã số điều luật).
 * **Knowledge Graph Traversal (Neo4j)**: Truy vết theo mạng lưới đồ thị tri thức để tìm kiếm văn bản hướng dẫn thi hành (Statutory Bridge) và chế tài xử phạt tương ứng (Penalty links).
@@ -167,7 +181,7 @@ chatbot-law/
 ## ⚙️ Hướng Dẫn Cài Đặt & Khởi Chạy
 
 ### 1. Yêu cầu hệ thống
-* **Python**: 3.11 trở lên (`3.11+`)
+* **Python**: 3.11 hoặc 3.12 (`>=3.11,<3.13`)
 * **Ollama**: Đã cài đặt trên máy ([Tải tại ollama.ai](https://ollama.ai))
 * **Neo4j** *(Tuỳ chọn - Khuyên dùng cho GraphRAG)*: Cài qua Docker hoặc Neo4j Desktop. Nếu không bật Neo4j, hệ thống sẽ tự động fallback về chế độ Vector RAG an toàn.
 * **RAM**: Tối thiểu 8GB (khuyến nghị 16GB+ hoặc GPU rời để chạy mô hình 7B mượt mà).
@@ -195,6 +209,10 @@ python -m venv .venv
 # Cài đặt thư viện
 pip install -r requirements.txt
 ```
+
+Để phát triển và chạy kiểm tra tĩnh, dùng `python -m pip install -e ".[dev]"`.
+Các bài đánh giá dùng DeepEval cần cài thêm `python -m pip install -e ".[evaluation]"`.
+`requirements.txt` và `pyproject.toml` dùng cùng danh sách thư viện chạy ứng dụng.
 
 ### 4. Khởi chạy Neo4j (Tùy chọn cho Hybrid GraphRAG)
 Chạy Neo4j nhanh chóng qua Docker:
@@ -263,7 +281,16 @@ pytest
 
 # Chạy thêm các test end-to-end với LLM thật (cần `ollama serve` đang chạy)
 pytest --run-ollama
+
+# Kiểm tra mã nguồn, kiểu dữ liệu, dependency và số lượng chunk trong chỉ mục
+python -m ruff check .
+python -m pyright
+python -m pip check
+python scripts/health_check.py
 ```
+
+Kết quả rà soát và các giới hạn kiểm chứng ngày 26/10/2026 được ghi trong
+[báo cáo kiểm tra dự án](docs/PROJECT_AUDIT_2026-10-26.md).
 
 ### Thiết kế Đối sánh Thực nghiệm (Ablation Study cho Đồ án)
 Script `scripts/evaluate_ablation.py` chấm 155 câu hỏi vàng (`data/evaluation/retrieval_gold.json`) theo Hit@k, Recall@k, MRR, Chunk-Recall ở cấp (văn bản, Điều):
