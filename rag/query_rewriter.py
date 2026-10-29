@@ -188,7 +188,6 @@ class AdaptiveQueryRewriter:
 
     def rewrite_deterministic(self, query: str) -> str:
         """Fast dictionary-based canonical statutory substitution (0ms latency)."""
-        expanded = query
         q_lower = query.lower()
         additions = []
 
@@ -235,10 +234,10 @@ class AdaptiveQueryRewriter:
             # Clean quotes or backticks if returned
             content = re.sub(r"^[\"']|[\"']$", "", content).strip()
             if content and len(content) > 5:
-                logger.info(f"LLM rewritten query: '{query}' -> '{content}'")
+                logger.info("LLM query rewrite completed; content omitted for privacy")
                 return content
         except Exception as e:
-            logger.warning(f"LLM query rewrite failed: {e}. Falling back to deterministic rewrite.")
+            logger.warning("LLM query rewrite failed (%s); using deterministic rewrite", type(e).__name__)
 
         return self.rewrite_deterministic(query)
 

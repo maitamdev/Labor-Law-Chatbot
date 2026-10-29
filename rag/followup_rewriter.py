@@ -81,6 +81,9 @@ def looks_like_followup(query: str, has_history: bool) -> bool:
     folded = fold_vietnamese(query).strip()
     if not folded:
         return False
+    from rag.query_router import is_out_of_scope_query
+    if is_out_of_scope_query(query, has_history=has_history):
+        return False
     words = folded.split()
     if len(words) > MAX_STANDALONE_WORDS:
         return False  # long, detailed turns are already self-contained
@@ -195,5 +198,5 @@ class FollowupRewriter:
         if standalone is None:
             return None
         latency_ms = (time.perf_counter() - t0) * 1000
-        logger.info("Follow-up rewrite (%.0f ms): '%s' -> '%s'", latency_ms, query, standalone)
+        logger.info("Follow-up rewrite completed (%.0f ms); content omitted for privacy", latency_ms)
         return FollowupRewrite(original=query, standalone=standalone, latency_ms=latency_ms)
