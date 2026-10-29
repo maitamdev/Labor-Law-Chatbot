@@ -3,15 +3,15 @@
 VietLabor AI - Phase 6 UI & Chat Service Unit Tests
 Tests ChatService adapter, session persistence, and UI schema validation.
 """
-import pytest
-from pathlib import Path
 import tempfile
-import json
+from pathlib import Path
+
+import pytest
 
 from app.chat_service import ChatService, answer_smalltalk
 from rag.output_validator import format_answer_markdown
+from ui.utils.formatting import format_provision_badge
 from ui.utils.session import SessionManager, generate_title_from_query
-from ui.utils.formatting import format_provision_badge, format_relative_date
 
 
 @pytest.fixture

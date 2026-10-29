@@ -128,7 +128,7 @@ def test_chain_resolve_followup_uses_rewrite_and_keeps_rule_hints():
         enabled=True,
     )
     stages = []
-    resolved, standalone = chain._resolve_followup("Vậy tôi đòi lại được không?", lambda k, l: stages.append(k))
+    resolved, standalone = chain._resolve_followup("Vậy tôi đòi lại được không?", lambda k, line: stages.append(k))
     assert standalone.startswith("Công ty trả lương thử việc 70%")
     assert resolved.startswith(standalone)
     assert stages == ["analyze"]

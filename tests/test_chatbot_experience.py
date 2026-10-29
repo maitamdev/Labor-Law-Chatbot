@@ -216,6 +216,7 @@ def test_graph_online_adds_penalty_chunk_as_citable_evidence(monkeypatch):
 
 def test_chain_uses_graph_retriever_by_default():
     import inspect
+
     from rag import chain as chain_mod
     src = inspect.getsource(chain_mod.VietLaborRAGChain.__init__)
     assert "HybridGraphRetriever(" in src
@@ -279,3 +280,56 @@ def test_workplace_accident_fall_compensation():
     assert any("d38" in cid or "d39" in cid or "d45" in cid for cid in cited)
     ans = res.answer.lower()
     assert any(k in ans for k in ["bồi thường", "tai nạn", "y tế", "tiền lương", "điều trị", "38"])
+
+
+@pytest.mark.parametrize("off_topic_q", [
+    "con chó sang là ai",
+    "con mèo kêu thế nào",
+    "hôm nay ăn gì",
+    "thời tiết hôm nay thế nào",
+    "1 + 1 bằng mấy",
+    "sơn tùng mtp là ai",
+    "cách nấu phở bò hà nội",
+    "bóng đá tối nay mấy giờ",
+    "viết code python giải phương trình",
+    "xàm xí quá",
+])
+def test_off_topic_queries_fast_tracked_instantly_with_and_without_history(off_topic_q):
+    from app.smalltalk import answer_out_of_scope_fast
+    from rag.chain import ConversationMemory
+    from rag.followup_rewriter import looks_like_followup
+
+    router = QueryRouter()
+    for has_hist in (False, True):
+        decision = router.route(off_topic_q, has_history=has_hist)
+        assert decision.strategy == "out_of_scope", f"Expected out_of_scope for '{off_topic_q}' (has_history={has_hist})"
+
+        fast_payload = answer_out_of_scope_fast(off_topic_q, has_history=has_hist)
+        assert fast_payload is not None
+        assert fast_payload["out_of_scope"] is True
+        assert fast_payload["latency_ms"] == 0.0
+        assert fast_payload["citations"] == []
+
+    assert looks_like_followup(off_topic_q, has_history=True) is False
+    mem = ConversationMemory(max_turns=3)
+    mem.add_turn("Tôi ký hợp đồng 2 năm, muốn nghỉ việc báo trước bao lâu?", "Bạn cần báo trước ít nhất 30 ngày.")
+    assert mem.resolve_context(off_topic_q) == off_topic_q
+
+
+@pytest.mark.parametrize("valid_followup", [
+    "Còn vùng III thì sao?",
+    "Vậy tôi đòi lại được không?",
+    "Nếu có, mức tính như thế nào?",
+    "Cao đẳng trở lên",
+    "Hợp đồng 2 năm",
+    "Thực tập theo trường (có giấy giới thiệu)",
+    "Tôi không rõ",
+    "30 triệu",
+])
+def test_valid_contextual_followups_never_flagged_out_of_scope(valid_followup):
+    from app.smalltalk import answer_out_of_scope_fast
+
+    router = QueryRouter()
+    decision = router.route(valid_followup, has_history=True)
+    assert decision.strategy != "out_of_scope", f"Valid follow-up '{valid_followup}' should not be out_of_scope"
+    assert answer_out_of_scope_fast(valid_followup, has_history=True) is None

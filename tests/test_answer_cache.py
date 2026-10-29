@@ -101,3 +101,12 @@ def test_cached_payload_is_isolated_from_caller_mutation():
     res = svc.ask("Câu hỏi Z?")
     res["answer"] = "bị sửa"
     assert _CountingService(GROUNDED).ask("Câu hỏi Z?")["answer"] == "Tối đa 60 ngày."
+
+
+def test_regeneration_retires_old_answer_when_new_answer_is_not_grounded():
+    _CountingService(GROUNDED).ask("Regenerate question", update_memory=False)
+    replacement = _CountingService({**GROUNDED, "is_fully_grounded": False})
+    replacement.ask("Regenerate question", update_memory=False, bypass_cache=True)
+    final = _CountingService(GROUNDED)
+    final.ask("Regenerate question")
+    assert final.calls == 1
