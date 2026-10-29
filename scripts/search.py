@@ -6,8 +6,8 @@ Enables interactive or one-shot querying across BM25, Dense, and Hybrid retrieva
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # Ensure workspace root is in sys.path
 workspace_root = Path(__file__).resolve().parent.parent
