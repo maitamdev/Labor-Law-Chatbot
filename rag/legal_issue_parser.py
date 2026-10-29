@@ -6,10 +6,10 @@ from user legal queries to drive deterministic evidence selection.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import re
-from typing import Any, Dict, List, Optional, Set
 import unicodedata
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Set
 
 from rag.query_router import QueryRouter
 
@@ -349,11 +349,20 @@ def detect_legal_events(query: str) -> List[str]:
         "bằng gốc", "nộp bằng", "bằng đại học gốc", "làm tin", "giữ bằng",
         "giữ cccd", "giữ chứng minh", "giữ giấy tờ", "nộp bằng gốc", "giấy tờ gốc",
         "bản chính", "văn bằng chứng chỉ", "giữ bản chính", "đòi giữ", "giữ lại giấy tờ",
+        "đặt cọc", "tiền cọc", "ký quỹ", "thế chấp", "tiền bảo đảm", "biện pháp bảo đảm",
     ])
     if has_prohibited_act:
         events.append("EMPLOYER_PROHIBITED_ACTS")
         if "CONTRACT_SIGNING_TIMING" in events:
             events.remove("CONTRACT_SIGNING_TIMING")
+
+    # 14. Statute of limitations for labor discipline (Điều 123 BLLĐ)
+    has_discipline_limit = (
+        any(k in q_norm for k in ["thời hiệu", "quá hạn", "hết thời hiệu"])
+        or bool(re.search(r"(?:sau|cách đây|đã qua|từ)\s*\d+\s*(?:tháng|năm)|\d+\s*(?:tháng|năm)\s*trước", q_norm))
+    ) and any(k in q_norm for k in ["kỷ luật", "sa thải", "khiển trách", "cách chức", "vi phạm"])
+    if has_discipline_limit:
+        events.append("DISCIPLINE_STATUTE_OF_LIMITATIONS")
 
     if not events:
         events.append("UNKNOWN")
@@ -398,6 +407,18 @@ def determine_required_evidence_roles(events: List[str], query_lower: str) -> Li
 
     if "EMPLOYER_PROHIBITED_ACTS" in events:
         roles.append("PROHIBITED_ACTS_IDENTIFICATION")
+        if any(k in query_lower for k in [
+            "bằng", "văn bằng", "chứng chỉ", "cccd", "cmnd", "căn cước",
+            "giấy tờ", "bản chính", "bản gốc", "làm tin",
+        ]):
+            roles.append("PROHIBITED_ORIGINAL_DOCUMENT_RETENTION")
+        if any(k in query_lower for k in [
+            "đặt cọc", "tiền cọc", "ký quỹ", "thế chấp", "tiền bảo đảm", "biện pháp bảo đảm",
+        ]):
+            roles.append("PROHIBITED_SECURITY_DEPOSIT")
+
+    if "DISCIPLINE_STATUTE_OF_LIMITATIONS" in events:
+        roles.append("DISCIPLINE_LIMITATION_PERIOD")
 
     if "OCCUPATIONAL_ACCIDENT" in events or "WORKPLACE_INJURY" in events:
         # Check if question concerns employer's responsibilities or unpaid insurance
@@ -823,7 +844,12 @@ class LegalIssueParser:
         if any(k in q_lower for k in ["dưới 12 tháng", "dưới 1 năm", "dưới 01 năm", "ít hơn 12 tháng"]):
             qualifiers.append("contract_under_12_months")
         else:
-            m_term = re.search(r"(\d+)\s*(năm|tháng)", q_lower)
+            q_for_term = re.sub(
+                r"(?:sau|cách đây|đã qua|từ)\s*\d+\s*(?:năm|tháng)(?:\s*trước)?|\d+\s*(?:năm|tháng)\s*trước",
+                "",
+                q_lower,
+            )
+            m_term = re.search(r"(\d+)\s*(năm|tháng)", q_for_term)
             if m_term:
                 num = int(m_term.group(1))
                 unit = m_term.group(2)
@@ -915,6 +941,13 @@ class LegalIssueParser:
             topic = "discipline"
             action = "prohibited_monetary_fine"
             qualifiers.append("prohibited_monetary_fine")
+        if (
+            any(k in q_lower for k in ["thời hiệu", "quá hạn", "hết thời hiệu"])
+            or bool(re.search(r"(?:sau|cách đây|đã qua|từ)\s*\d+\s*(?:tháng|năm)", q_lower))
+        ) and any(k in q_lower for k in ["kỷ luật", "sa thải", "khiển trách", "cách chức", "vi phạm"]):
+            topic = "discipline"
+            action = "discipline_statute_of_limitations"
+            qualifiers.append("discipline_statute_of_limitations")
 
         # Safety work refusal, imminent danger & statutory employee rights
         if any(k in q_lower for k in [

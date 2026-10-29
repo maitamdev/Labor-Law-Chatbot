@@ -4,9 +4,9 @@ VietLabor AI - Issue Decomposer
 Detects multi-issue compound legal queries and splits them into distinct sub-issues
 to enable independent per-issue retrieval and prevent context omission.
 """
-from dataclasses import dataclass, field
 import re
 import unicodedata
+from dataclasses import dataclass, field
 from typing import List, Optional, Tuple
 
 from rag.legal_issue_parser import detect_legal_events, determine_required_evidence_roles
@@ -496,8 +496,8 @@ class IssueDecomposer:
                     ]
                 elif "thử việc" in norm_q.lower():
                     sub_items = [
-                        (f"thời gian thử việc, hợp đồng thử việc riêng biệt không phải tham gia BHXH bắt buộc theo Điều 24 Bộ luật Lao động và Điều 2 Luật BHXH", "CORE_LABOR"),
-                        (f"thời gian thử việc có phải đóng bảo hiểm thất nghiệp theo Điều 59, 75 Luật Việc làm không", "UNEMPLOYMENT_INSURANCE"),
+                        ("thời gian thử việc, hợp đồng thử việc riêng biệt không phải tham gia BHXH bắt buộc theo Điều 24 Bộ luật Lao động và Điều 2 Luật BHXH", "CORE_LABOR"),
+                        ("thời gian thử việc có phải đóng bảo hiểm thất nghiệp theo Điều 59, 75 Luật Việc làm không", "UNEMPLOYMENT_INSURANCE"),
                     ]
                 else:
                     sub_items = [
@@ -571,7 +571,31 @@ class IssueDecomposer:
                     "có được", "được không", "đúng không", "sai không", "vi phạm", "phạt", "bồi thường", "chế độ", "trách nhiệm", "khiếu nại", "nghỉ việc", "báo trước", "sa thải", "đuổi việc", "thôi việc", "thất nghiệp", "bhxh"
                 ]) and not p0_lower.startswith(("tôi làm cho", "tôi làm việc", "tôi đang làm", "em làm cho", "mình làm cho"))
                 if p0_has_intent and len(parts[0].strip()) > 10:
-                    sub_items = [(parts[0].strip(), None), (parts[1].strip(), None)]
+                    p1_text = parts[1].strip()
+                    is_multi_contract_p0 = (
+                        any(k in p0_lower for k in ["nhiều hợp đồng", "nhiều công ty", "2 công ty", "hai công ty", "ký thêm hợp đồng"])
+                        or (("cty a" in p0_lower or "công ty a" in p0_lower) and ("cty b" in p0_lower or "công ty b" in p0_lower))
+                    )
+                    if not (is_multi_contract_p0 and len(p1_text.split()) <= 8):
+                        sub_items = [(parts[0].strip(), None), (p1_text, None)]
+
+        # 11B. Multi-sentence / multi-clause disjoint legal issues (e.g. prohibited act at hiring + later discipline/termination)
+        if not sub_items:
+            sent_parts = [
+                p.strip()
+                for p in re.split(
+                    r"(?<!\d)\.\s+|\?\s+|;\s+|,\s*(?=(?:nay|bây giờ|hiện nay|hiện tại|ngoài ra|thêm nữa|mặt khác)\s+)",
+                    norm_q,
+                    flags=re.IGNORECASE,
+                )
+                if len(p.strip()) >= 12
+            ]
+            if len(sent_parts) >= 2:
+                ev_first = set(detect_legal_events(sent_parts[0])) - {"UNKNOWN"}
+                rest_text = ". ".join(sent_parts[1:])
+                ev_rest = set(detect_legal_events(rest_text)) - {"UNKNOWN"}
+                if "EMPLOYER_PROHIBITED_ACTS" in ev_first and ev_rest and ev_first.isdisjoint(ev_rest):
+                    sub_items = [(sent_parts[0], "CORE_LABOR"), (rest_text, None)]
 
         # Fallback: single issue
         if not sub_items:
@@ -640,20 +664,59 @@ class IssueDecomposer:
                 sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
                 if "TERMINATION_SEVERANCE_ALLOWANCE" not in sub_roles:
                     sub_roles.append("TERMINATION_SEVERANCE_ALLOWANCE")
-            elif any(k in clean_lower for k in ["bằng gốc", "nộp bằng", "bằng đại học gốc", "làm tin", "giữ bằng", "giấy tờ gốc"]):
+            elif (
+                any(k in clean_lower for k in ["thời hiệu", "quá hạn", "hết thời hiệu"])
+                or bool(re.search(r"(?:sau|cách đây|đã qua|từ)\s*\d+\s*(?:tháng|năm)", clean_lower))
+            ) and any(k in clean_lower for k in ["kỷ luật", "sa thải", "khiển trách", "cách chức", "vi phạm"]):
                 detected_dom = "CORE_LABOR"
-                expanded = f"{clean_text} hành vi người sử dụng lao động không được làm khi giao kết thực hiện hợp đồng lao động giữ bản chính giấy tờ tùy thân văn bằng chứng chỉ Điều 17 Khoản 1 Bộ luật Lao động 2019 Điều 15 Nghị định 283/2026/NĐ-CP"
+                expanded = (
+                    f"{clean_text} thời hiệu xử lý kỷ luật lao động 06 tháng 12 tháng liên quan trực tiếp đến tài chính tài sản "
+                    "tiết lộ bí mật công nghệ kinh doanh Điều 123 Khoản 1 Khoản 2 Khoản 3 nguyên tắc trình tự xử lý kỷ luật Điều 122 "
+                    "hình thức xử lý kỷ luật sa thải Điều 125 Bộ luật Lao động 2019"
+                )
                 sub_events = detect_legal_events(clean_text)
+                if "DISCIPLINE_STATUTE_OF_LIMITATIONS" not in sub_events:
+                    sub_events.append("DISCIPLINE_STATUTE_OF_LIMITATIONS")
+                sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
+            elif any(k in clean_lower for k in [
+                "bằng gốc", "nộp bằng", "bằng đại học gốc", "làm tin", "giữ bằng", "giấy tờ gốc",
+                "bản chính", "giữ cccd", "đặt cọc", "tiền cọc", "ký quỹ", "thế chấp",
+            ]):
+                detected_dom = "CORE_LABOR"
+                expanded = (
+                    f"{clean_text} hành vi người sử dụng lao động không được làm khi giao kết thực hiện hợp đồng lao động "
+                    "giữ bản chính giấy tờ tùy thân văn bằng chứng chỉ yêu cầu thực hiện biện pháp bảo đảm bằng tiền hoặc tài sản khác đặt cọc "
+                    "Điều 17 Khoản 1 Khoản 2 Bộ luật Lao động 2019 Điều 15 Khoản 2 Khoản 3 Nghị định 283/2026/NĐ-CP"
+                )
+                sub_events = detect_legal_events(clean_text)
+                if "EMPLOYER_PROHIBITED_ACTS" not in sub_events:
+                    sub_events.append("EMPLOYER_PROHIBITED_ACTS")
                 sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
                 if "PROHIBITED_ACTS_IDENTIFICATION" not in sub_roles:
                     sub_roles.append("PROHIBITED_ACTS_IDENTIFICATION")
             elif any(k in clean_lower for k in ["nhiều hợp đồng", "nhiều công ty", "2 công ty", "hai công ty"]) or (("cty a" in clean_lower or "công ty a" in clean_lower) and ("cty b" in clean_lower or "công ty b" in clean_lower)):
-                detected_dom = "CORE_LABOR"
-                expanded = f"{clean_text} người lao động có thể giao kết nhiều hợp đồng lao động với nhiều người sử dụng lao động Điều 19 Khoản 1 Bộ luật Lao động 2019"
+                detected_dom = "CROSS_DOMAIN" if any(k in clean_lower for k in ["bảo hiểm", "bhxh", "bhyt", "bhtn"]) else "CORE_LABOR"
+                expanded = (
+                    f"{clean_text} người lao động có thể giao kết nhiều hợp đồng lao động với nhiều người sử dụng lao động "
+                    "việc tham gia bảo hiểm xã hội bảo hiểm y tế bảo hiểm thất nghiệp Điều 19 Khoản 1 Khoản 2 Bộ luật Lao động 2019"
+                )
                 sub_events = detect_legal_events(clean_text)
                 sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
                 if "MULTIPLE_CONTRACTS_PERMISSION" not in sub_roles:
                     sub_roles.append("MULTIPLE_CONTRACTS_PERMISSION")
+            elif any(k in clean_lower for k in ["từ chối làm việc", "từ chối tiếp tục làm việc"]) or (
+                any(k in clean_lower for k in ["sạt lở", "đe dọa trực tiếp đến tính mạng", "nguy cơ tai nạn", "mất an toàn"])
+                and "từ chối" in clean_lower
+            ):
+                detected_dom = "CROSS_DOMAIN"
+                expanded = (
+                    f"{clean_text} quyền từ chối làm việc khi có nguy cơ đe dọa trực tiếp đến tính mạng sức khỏe "
+                    "không bị coi là vi phạm kỷ luật lao động Điểm d Khoản 1 Điều 5 Bộ luật Lao động Điểm đ Khoản 1 Điều 6 Luật An toàn vệ sinh lao động"
+                )
+                sub_events = detect_legal_events(clean_text)
+                if "SAFETY_WORK_REFUSAL" not in sub_events:
+                    sub_events.append("SAFETY_WORK_REFUSAL")
+                sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
             elif any(k in clean_lower for k in ["nợ lương", "chậm lương", "chậm trả lương"]) and any(k in clean_lower for k in ["nghỉ", "té", "nghỉ việc", "báo trước"]):
                 detected_dom = "CORE_LABOR"
                 expanded = f"{clean_text} người lao động có quyền đơn phương chấm dứt hợp đồng lao động không cần báo trước khi không được trả đủ lương hoặc trả lương không đúng thời hạn Điều 35 Khoản 2 Điểm b Bộ luật Lao động 2019"
@@ -706,6 +769,11 @@ class IssueDecomposer:
                 sub_events = detect_legal_events(clean_text)
                 sub_roles = determine_required_evidence_roles(sub_events, clean_lower)
             self._add_contextual_roles(sub_events, sub_roles, norm_q)
+            if "MISASSIGNED_WORK_TERMINATION" in sub_events and "Điều 35 Khoản 2 Điểm a" not in expanded:
+                expanded = (
+                    f"{clean_text} quyền đơn phương chấm dứt hợp đồng lao động không cần báo trước khi không được bố trí theo đúng công việc thỏa thuận "
+                    "Điều 35 Khoản 2 Điểm a chuyển người lao động làm công việc khác tạm thời quá 60 ngày Điều 29 Bộ luật Lao động 2019 nghĩa vụ bồi thường Điều 40"
+                )
             results.append(
                 DecomposedIssue(
                     issue_id=f"issue_{idx}",
