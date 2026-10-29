@@ -13,14 +13,14 @@ from __future__ import annotations
 
 import json
 import logging
-from pathlib import Path
 import statistics
 import sys
 import time
-from typing import Any, Dict, List, Optional
+from pathlib import Path
+from typing import Any, Dict
 
 if hasattr(sys.stdout, "reconfigure"):
-    getattr(sys.stdout, "reconfigure")(encoding="utf-8", line_buffering=True)
+    sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
 sys.path.insert(0, ".")
 
 from rag.hybrid_retriever import HybridRetriever

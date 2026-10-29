@@ -22,15 +22,15 @@ from __future__ import annotations
 
 import json
 import logging
-from pathlib import Path
 import re
 import statistics
 import sys
 import time
-from typing import Any, Dict, List, Set
+from pathlib import Path
+from typing import Any, Dict
 
 if hasattr(sys.stdout, "reconfigure"):
-    getattr(sys.stdout, "reconfigure")(encoding="utf-8", line_buffering=True)
+    sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
 sys.path.insert(0, ".")
 
 from rag.evidence_selector import EvidenceSelector
@@ -206,7 +206,12 @@ def evaluate_production_set_b(
         has_support = len(locked_blocks) > 0
         support_list.append(1.0 if has_support else 0.0)
 
-        def is_chunk_relevant(chk: Dict[str, Any]) -> bool:
+        def is_chunk_relevant(
+            chk: Dict[str, Any],
+            gold_cids=gold_cids,
+            expected_docs=expected_docs,
+            expected_articles=expected_articles,
+        ) -> bool:
             cid = chk.get("chunk_id", "")
             if gold_cids and cid in gold_cids:
                 return True
