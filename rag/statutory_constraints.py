@@ -42,6 +42,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 BLLD = "VBHN_18_2026"
 ND145 = "ND_145_2020"
+ATVSLD = "L_84_2015"
 
 
 def normalize_text(text: str) -> str:
@@ -231,8 +232,8 @@ CHECKS: Tuple[LegalCheck, ...] = (
         check_id="DISCIPLINE_PROCEDURE",
         title="Điều kiện, trình tự xử lý kỷ luật và sa thải",
         inject_ids=(
-            f"{BLLD}#d122-k1-a", f"{BLLD}#d125-k4", f"{BLLD}#d122-k4", f"{BLLD}#d125-k1",
-            f"{BLLD}#d122-k1-b", f"{BLLD}#d125-k3", f"{BLLD}#d122-k1-c", f"{BLLD}#d125-k2",
+            f"{BLLD}#d122-k1-a", f"{BLLD}#d125-k1", f"{BLLD}#d122-k4", f"{BLLD}#d125-k2",
+            f"{BLLD}#d122-k1", f"{BLLD}#d125-k3", f"{BLLD}#d122-k1-d", f"{BLLD}#d125-k4",
         ),
         instruction=(
             "Sa thải chỉ được áp dụng khi hành vi thuộc đúng một trường hợp liệt kê tại Điều 125. Mọi hình thức kỷ luật phải tuân thủ "
@@ -337,6 +338,26 @@ CHECKS: Tuple[LegalCheck, ...] = (
         priority=2,
     ),
     LegalCheck(
+        check_id="MISASSIGNED_WORK_TERMINATION",
+        title="Đối chiếu ngoại lệ báo trước khi không được bố trí đúng công việc",
+        inject_ids=(f"{BLLD}#d35-k2-a", f"{BLLD}#d29-k1", f"{BLLD}#d40-k1", f"{BLLD}#d40-k2"),
+        instruction=(
+            "Trước quy định báo trước thông thường, phải đối chiếu điểm a Khoản 2 Điều 35: "
+            "không được bố trí đúng công việc, địa điểm hoặc điều kiện đã thỏa thuận, trừ trường hợp tại Điều 29. "
+            "Kiểm tra căn cứ, thời hạn và sự đồng ý khi chuyển công việc theo Điều 29. "
+            "Chỉ áp dụng nghĩa vụ bồi thường theo Điều 40 khi xác định việc đơn phương chấm dứt là trái pháp luật."
+        ),
+        query_all=(
+            r"không (được )?bố trí.{0,30}đúng|không đúng (công việc|hợp đồng|thỏa thuận)|"
+            r"làm công việc khác|phải làm công việc của|làm bốc vác|"
+            r"bố trí công việc theo đúng hợp đồng|kiến nghị.{0,40}bố trí công việc",
+            P_EMPLOYEE_QUITS,
+        ),
+        query_none=(P_EMPLOYER_ACTS,),
+        audit_pattern=r"điểm a.{0,30}(khoản 2|điều 35)|khoản 2.{0,20}điều 35",
+        priority=0,
+    ),
+    LegalCheck(
         check_id="WAGE_PAYMENT_DELAY",
         title="Chậm trả, nợ lương",
         inject_ids=(f"{BLLD}#d94-k1", f"{BLLD}#d97-k4", f"{BLLD}#d35-k2-b"),
@@ -384,6 +405,69 @@ CHECKS: Tuple[LegalCheck, ...] = (
         query_all=(r"chốt sổ|trả sổ|sổ bảo hiểm|thanh toán.{0,30}(nghỉ việc|thôi việc|chấm dứt)|quyết toán|giữ sổ",),
         audit_pattern=r"điều 48",
         priority=2,
+    ),
+    LegalCheck(
+        check_id="DISCIPLINE_STATUTE_OF_LIMITATIONS",
+        title="Thời hiệu xử lý kỷ luật lao động",
+        inject_ids=(f"{BLLD}#d123-k1", f"{BLLD}#d123-k2", f"{BLLD}#d123-k3"),
+        instruction=(
+            "Thời hiệu xử lý kỷ luật lao động là 06 tháng kể từ ngày xảy ra hành vi vi phạm (12 tháng nếu liên quan trực tiếp đến "
+            "tài chính, tài sản, tiết lộ bí mật công nghệ, bí mật kinh doanh) theo Khoản 1 Điều 123; trường hợp kéo dài thời hiệu khi hết "
+            "thời gian tại Khoản 4 Điều 122 không quá 60 ngày (Khoản 2 Điều 123). Quyết định xử lý kỷ luật phải được ban hành trong thời hạn này."
+        ),
+        query_all=(
+            r"sa thải|kỷ luật|khiển trách|cách chức|xử lý vi phạm",
+            r"thời hiệu|quá hạn|hết hạn|(sau|cách đây|đã qua)\s*\d+\s*(tháng|năm)|\d+\s*(tháng|năm)\s*trước|từ năm ngoái",
+        ),
+        article_any=((BLLD, "123"),),
+        audit_pattern=r"điều 123",
+        priority=1,
+    ),
+    LegalCheck(
+        check_id="PROHIBITED_ID_DEPOSIT_RETENTION",
+        title="Hành vi người sử dụng lao động không được làm khi giao kết, thực hiện hợp đồng lao động",
+        inject_ids=(f"{BLLD}#d17-k1", f"{BLLD}#d17-k2"),
+        instruction=(
+            "Đối chiếu Điều 17 Bộ luật Lao động 2019: người sử dụng lao động không được giữ bản chính giấy tờ tùy thân, văn bằng, "
+            "chứng chỉ của người lao động (Khoản 1) và không được yêu cầu người lao động thực hiện biện pháp bảo đảm bằng tiền hoặc "
+            "tài sản khác (đặt cọc, thế chấp, ký quỹ) cho việc thực hiện HĐLĐ (Khoản 2)."
+        ),
+        query_all=(
+            r"giữ (bản chính|bản gốc|bằng|văn bằng|chứng chỉ|cccd|cmnd|căn cước|giấy tờ tùy thân)|"
+            r"(nộp|thu) (bản chính|bản gốc)\s*(bằng|văn bằng|chứng chỉ|cccd|cmnd|căn cước)|"
+            r"(đặt cọc|tiền cọc|ký quỹ|thế chấp).{0,30}(đi làm|nhận việc|hợp đồng|công ty|doanh nghiệp|khi vào làm)|"
+            r"(yêu cầu|bắt|ép)\s*(đặt cọc|nộp cọc|ký quỹ|thế chấp)",
+        ),
+        article_any=((BLLD, "17"),),
+        audit_pattern=r"điều 17",
+        contradiction_pattern=r"(công ty|người sử dụng lao động|doanh nghiệp) (được phép|có quyền) (giữ bản chính|thu tiền cọc|yêu cầu đặt cọc)",
+        safe_conclusion=(
+            "Theo Khoản 1 và Khoản 2 Điều 17 Bộ luật Lao động 2019, người sử dụng lao động không được giữ bản chính giấy tờ tùy thân, "
+            "văn bằng, chứng chỉ của người lao động và không được yêu cầu người lao động thực hiện biện pháp bảo đảm bằng tiền hoặc tài sản "
+            "khác cho việc thực hiện hợp đồng lao động."
+        ),
+        priority=1,
+    ),
+    LegalCheck(
+        check_id="WORKPLACE_ACCIDENT_LIABILITY",
+        title="Trách nhiệm của người sử dụng lao động đối với người lao động bị tai nạn lao động, bệnh nghề nghiệp",
+        inject_ids=(
+            f"{ATVSLD}#d38-k1", f"{ATVSLD}#d38-k2", f"{ATVSLD}#d38-k3", f"{ATVSLD}#d38-k4", f"{ATVSLD}#d39-k4",
+        ),
+        instruction=(
+            "Đối chiếu Điều 38 và Điều 39 Luật An toàn, vệ sinh lao động 2015: người sử dụng lao động có trách nhiệm kịp thời sơ cứu, cấp cứu, "
+            "tạm ứng và thanh toán chi phí y tế (Khoản 1, 2 Điều 38), trả đủ tiền lương trong thời gian điều trị, phục hồi chức năng (Khoản 3 Điều 38), "
+            "bồi thường hoặc trợ cấp theo mức suy giảm khả năng lao động và mức độ lỗi (Khoản 4, 5 Điều 38). Nếu người sử dụng lao động không đóng "
+            "bảo hiểm tai nạn lao động, bệnh nghề nghiệp cho người lao động thuộc diện bắt buộc thì phải trả thêm khoản tiền tương ứng với chế độ "
+            "quỹ bảo hiểm chi trả theo Khoản 4 Điều 39."
+        ),
+        query_all=(
+            r"tai nạn lao động|bệnh nghề nghiệp",
+            r"bồi thường|trợ cấp|chi phí (y tế|điều trị|viện phí)|trách nhiệm.{0,25}(công ty|doanh nghiệp|người sử dụng lao động)|không đóng bảo hiểm",
+        ),
+        article_any=((ATVSLD, "38"), (ATVSLD, "39")),
+        audit_pattern=r"điều 38|điều 39",
+        priority=1,
     ),
     # Article-structure links: cheap companions whenever retrieval picks the general rule.
     LegalCheck(
@@ -600,9 +684,14 @@ def citation_label(meta: Dict[str, Any]) -> str:
     if article not in (None, ""):
         parts.append(f"Điều {article}")
     doc_id = str(meta.get("doc_id") or "")
-    doc = "Bộ luật Lao động 2019" if doc_id == BLLD else (
-        "Nghị định 145/2020/NĐ-CP" if doc_id == ND145 else str(meta.get("document_title") or meta.get("document_no") or doc_id)
-    )
+    if doc_id == BLLD:
+        doc = "Bộ luật Lao động 2019"
+    elif doc_id == ND145:
+        doc = "Nghị định 145/2020/NĐ-CP"
+    elif doc_id == ATVSLD:
+        doc = "Luật An toàn, vệ sinh lao động 2015"
+    else:
+        doc = str(meta.get("document_title") or meta.get("document_no") or doc_id)
     return f"{' '.join(parts)} {doc}".strip()
 
 

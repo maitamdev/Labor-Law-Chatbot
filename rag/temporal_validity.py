@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Optional
 
+
 @dataclass(frozen=True)
 class StatuteValidity:
     code: str
