@@ -12,13 +12,189 @@ Router selects RETRIEVAL STRATEGY, NEVER hard-codes statutory answers.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import re
-from typing import Any, Dict, List, Optional
 import unicodedata
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
-from rag.conversational import detect_smalltalk
+from rag.conversational import detect_smalltalk, fold_vietnamese
 from rag.workplace_lockout import workplace_lockout_request
+
+# Diacritic-folded stems that indicate a query is related to labor, employment,
+# workplace relations, social/unemployment/health insurance, occupational safety,
+# trade unions, or Vietnamese statutory provisions.
+LABOR_LEGAL_FOLDED_SIGNALS = (
+    "lao dong", "lam viec", "di lam", "viec lam", "cong viec", "nghe nghiep", "hoc nghe", "tap nghe",
+    "cong ty", "cty", "doanh nghiep", "co quan", "don vi", "to chuc", "xuong", "nha may", "xi nghiep", "chi nhanh",
+    "nguoi su dung", "nsdld", "nld", "sep", "giam doc", "quan ly", "chu su dung", "ong chu", "ba chu",
+    "nhan vien", "cong nhan", "nguoi lam", "ung vien", "tuyen dung", "thuc tap", "hoc viec", "thu viec", "fresher", "fesher",
+    "hop dong", "hdld", "phu luc", "thoa thuan", "giao ket", "cham dut", "don phuong", "huy bo", "tam hoan",
+    "luong", "tien cong", "thu nhap", "thuong", "phu cap", "tro cap", "boi thuong", "khau tru", "tam ung", "no luong", "cham luong", "quyt luong",
+    "nghi viec", "thoi viec", "sa thai", "duoi viec", "mat viec", "bo viec", "nghi ngang", "bao truoc", "ban giao", "duoi ngang",
+    "ky luat", "khien trach", "keo dai thoi han", "cach chuc", "noi quy", "bien ban", "vi pham", "xu phat", "bi phat", "phat tien", "muc phat",
+    "thoi gio", "gio lam", "lam them", "tang ca", "ca dem", "ban dem", "nghi phep", "phep nam", "nghi le", "nghi tet", "nghi tuan", "nghi hang tuan", "nghi hang nam", "nghi giua gio", "nghi chuyen ca", "nghi bu", "nghi om", "nghi viec rieng", "khong huong luong",
+    "bao hiem", "bhxh", "bhtn", "bhyt", "thai san", "sinh con", "mang thai", "nuoi con", "om dau", "duong suc", "huu tri", "nghi huu", "tuoi huu", "luong huu", "tu tuat", "mai tang", "so bhxh", "chot so", "rut mot lan",
+    "that nghiep", "dich vu viec lam", "bao luu",
+    "an toan", "ve sinh", "atvsld", "tai nan", "tnld", "benh nghe nghiep", "bnn", "bao ho", "kham suc khoe", "suy giam kha nang", "giam dinh", "nang nhoc", "doc hai", "nguy hiem", "sat lo", "kiem dinh", "nghiem ngat",
+    "cong doan", "dinh cong", "thuong luong", "thoa uoc", "doi thoai", "tranh chap", "hoa giai", "khieu nai", "to cao", "khoi kien", "toa an", "thanh tra", "trieu tap", "vang mat",
+    "nuoc ngoai", "work permit", "giay phep", "gpld", "chuyen gia",
+    "chua thanh nien", "khuyet tat", "giup viec", "cho thue lai", "nguoi cao tuoi",
+    "dat coc", "the chap", "giu bang", "van bang", "chung chi", "giay to", "can cuoc", "cccd", "cmnd", "ho chieu", "bi mat kinh doanh", "bi mat cong nghe",
+    "dieu ", "khoan ", "diem ", "bo luat", "luat ", "nghi dinh", "thong tu", "quyet dinh", "phap luat", "quy dinh", "vbhn", "nd-cp", "nd cp", "quyen loi", "nghia vu", "che do",
+    "vung i", "vung ii", "vung iii", "vung iv", "vung 1", "vung 2", "vung 3", "vung 4", "toi thieu vung",
+    "di tre", "ve som", "nghi khong phep", "cham cong", "van tay", "dong phuc",
+    "chuyen cong tac", "dieu chuyen", "bo tri", "giam bien che", "cat giam", "co cau", "dong cua", "pha san", "giai the", "sap nhap",
+    "to lai", "tau bay", "phi cong", "tiep vien", "thuyen vien", "tau bien",
+    "dai hoc", "cao dang", "trung cap", "ky su", "cu nhan", "pho thong", "bao ve", "tap vu", "phu kho", "van phong",
+    "dao tao", "hoc phi", "cam ket", "hoan tra chi phi",
+    "quay roi", "nguoc dai", "danh dap", "hanh hung", "cuong buc", "phan biet doi xu",
+    "kpi", "doanh so", "hoa hong", "tien an", "xang xe", "chuyen can", "tham nien",
+)
+
+# Diacritic-folded markers indicating a short follow-up turn or clarification reply
+# when conversation history already exists.
+FOLLOWUP_CONTEXT_FOLDED_SIGNALS = (
+    "con ", "the con", "vay ", "neu vay", "nhu vay", "the thi", "the neu", "con neu", "ngoai ra",
+    "thi sao", "truong hop do", "truong hop nay", "truong hop tren", "nhu tren", "cai do", "cai nay",
+    "khi do", "luc do", "vua roi", "o tren", "dieu do", "dieu nay", "van de do", "van de nay",
+    "muc do", "khoan do", "so tien do", "ben do",
+    "muc tinh", "cach tinh", "tinh the nao", "tinh ra sao", "tinh sao",
+    "doi lai", "ap dung", "hieu luc", "ho so", "thu tuc", "nop o dau", "bao cho ai",
+    "khong ro", "toi khong ro", "dong y", "khong dong y",
+    "co duoc khong", "duoc khong", "dung khong", "hop phap khong", "trai luat khong",
+    "bao lau", "bao nhieu ngay", "bao nhieu thang", "may ngay", "may thang", "bao nhieu phan tram",
+    "neu co", "neu khong", "co phai", "vung ", "loai ", "cap ", "bac ",
+)
+
+EXPLICIT_OFF_TOPIC_SIGNALS = (
+    "con chó", "con mèo", "con heo", "con lợn", "con gà", "con vịt", "con khỉ", "thú cưng",
+    "nấu ăn", "công thức nấu", "cách nấu", "hôm nay ăn gì", "phở bò", "bún bò",
+    "thời tiết", "dự báo thời tiết", "nhiệt độ hôm nay",
+    "bóng đá", "world cup", "ngoại hạng anh", "việt vị", "cá cược", "đánh bài", "xổ số", "vietlott", "lô đề",
+    "ca sĩ", "diễn viên", "sơn tùng", "showbiz", "hát một bài", "kể chuyện cười",
+    "giá vàng", "chứng khoán", "bitcoin", "tiền ảo", "forex",
+    "machine learning", "deep learning", "viết code", "lập trình python", "giải phương trình", "đạo hàm", "tích phân",
+    "đăng kiểm xe", "đăng kiểm ô tô", "sang tên xe",
+    "visa du lịch", "xin cấp visa", "du lịch tự túc",
+    "cài đặt hệ điều hành", "windows 11", "usb boot", "sốt xuất huyết", "điều trị bệnh tại nhà",
+)
+
+# Accept each correctly accented word or its unaccented spelling, but do not
+# collapse different Vietnamese words into one veto ("lở đe" != "lô đề",
+# "còn chờ" != "con chó"). Word boundaries also keep "ca sinh" out of "ca sĩ".
+_OFF_TOPIC_PATTERNS = tuple(
+    re.compile(
+        r"(?<!\w)"
+        + r"\s+".join(
+            "(?:" + "|".join(re.escape(alias) for alias in dict.fromkeys((word, fold_vietnamese(word)))) + ")"
+            for word in signal.split()
+        )
+        + r"(?!\w)"
+    )
+    for signal in EXPLICIT_OFF_TOPIC_SIGNALS
+)
+
+
+def _has_explicit_off_topic_signal(query: str) -> bool:
+    normalized = unicodedata.normalize("NFC", query or "").lower()
+    normalized = re.sub(r"[^\w\s]", " ", normalized)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    for pattern in _OFF_TOPIC_PATTERNS:
+        for match in pattern.finditer(normalized):
+            # With no accents, "lo de doa" is "lở đe dọa". Gambling followed
+            # by a threat would be "lo de de doa", which still matches.
+            if match.group() == "lo de" and re.match(r"\s+doa(?:\s|$)", normalized[match.end():]):
+                continue
+            return True
+    return False
+
+
+_MATH_TRIVIA_RE = re.compile(r"\b\d+\s*(?:[\+\-\*\/x]|cong|tru|nhan|chia)\s*\d+\b")
+_EMPLOYMENT_CONSEQUENCE_RE = re.compile(
+    r"\b(?:hdld|hop dong lao dong)\b.*\b(?:xu ly|cham dut|tam hoan)\b"
+    r"|\b(?:cham dut|tam hoan)\b.*\b(?:hdld|hop dong lao dong)\b"
+    r"|\b(?:sa thai|ky luat lao dong|hinh thuc ky luat|xu ly ky luat)\b"
+)
+_CRIMINAL_CONTEXT_SIGNALS = {"trộm cắp", "phạt tù", "hình sự"}
+_NUMERIC_SLOT_RE = re.compile(r"\b\d+(?:[.,]\d+)*\b")
+_SHORT_CONFIRMATIONS = {"co", "khong", "dung", "dung roi", "chua", "chua co", "roi", "co giay", "khong co"}
+
+
+def has_labor_or_legal_signal(query: str) -> bool:
+    """Returns True if the query contains any Vietnamese labor, workplace, insurance, or statutory signal."""
+    folded = fold_vietnamese(query or "")
+    if not folded:
+        return False
+    padded = f" {folded} "
+    return any(sig in padded for sig in LABOR_LEGAL_FOLDED_SIGNALS)
+
+
+def _is_math_trivia(query: str) -> bool:
+    # Operators must be checked before punctuation is folded away. Dates,
+    # hour ranges and amounts inside labor questions are not math trivia.
+    return not has_labor_or_legal_signal(query) and bool(
+        _MATH_TRIVIA_RE.search(query.lower())
+        or _MATH_TRIVIA_RE.search(fold_vietnamese(query))
+    )
+
+
+def is_contextual_followup(query: str, has_history: bool = False) -> bool:
+    """Returns True when an active conversation turn is a valid follow-up or clarification answer."""
+    if not has_history:
+        return False
+    folded = fold_vietnamese(query or "")
+    if not folded:
+        return False
+    padded = f" {folded} "
+    if _has_explicit_off_topic_signal(query):
+        return False
+    if _is_math_trivia(query):
+        return False
+    if folded in _SHORT_CONFIRMATIONS:
+        return True
+    if any(sig in padded for sig in FOLLOWUP_CONTEXT_FOLDED_SIGNALS):
+        return True
+    if _NUMERIC_SLOT_RE.search(folded) and len(folded.split()) <= 10:
+        return True
+    return False
+
+
+def is_out_of_scope_query(query: str, has_history: bool = False) -> bool:
+    """Fast deterministic check for whether a query is outside Vietnam labor law scope."""
+    if not query or not isinstance(query, str) or not query.strip():
+        return False
+    norm_query = unicodedata.normalize("NFC", query).strip().lower()
+    if detect_smalltalk(norm_query, has_history=has_history) is not None:
+        return False
+
+    from rag.cantho_official_grounding import queries_cantho_official_match
+    if queries_cantho_official_match(query):
+        return False
+
+    folded = fold_vietnamese(norm_query)
+    is_foreign_labor = any(k in norm_query for k in ["giấy phép lao động", "work permit", "làm việc", "lao động", "gplđ"])
+    # A criminal event can be the premise of a labor-law question about an
+    # employment contract or discipline, rather than a request for criminal law.
+    asks_employment_consequence = bool(_EMPLOYMENT_CONSEQUENCE_RE.search(folded))
+    has_explicit_oos = (
+        any(
+            k in norm_query
+            for k in QueryRouter.OUT_OF_SCOPE_SIGNALS
+            if not (k in _CRIMINAL_CONTEXT_SIGNALS and asks_employment_consequence)
+        )
+        or _has_explicit_off_topic_signal(norm_query)
+        or _is_math_trivia(norm_query)
+    )
+    if has_explicit_oos and not (("người nước ngoài" in norm_query or "kết hôn với người nước ngoài" in norm_query) and is_foreign_labor):
+        return True
+
+    if has_labor_or_legal_signal(norm_query):
+        return False
+
+    if is_contextual_followup(norm_query, has_history=has_history):
+        return False
+
+    return True
 
 
 @dataclass
@@ -288,11 +464,12 @@ class QueryRouter:
          "Tai nạn xảy ra do lỗi của ai và bạn đã được giám định tỷ lệ suy giảm khả năng lao động là bao nhiêu %?"),
     ]
 
-    def route(self, query: str) -> RouteDecision:
+    def route(self, query: str, has_history: bool = False) -> RouteDecision:
         """Analyzes query text and determines the optimal retrieval route.
         
         Args:
             query: Normalized user query.
+            has_history: Whether prior conversation turns exist in the active session.
             
         Returns:
             RouteDecision indicating strategy ('exact_reference' or 'hybrid' or 'out_of_scope')
@@ -305,7 +482,7 @@ class QueryRouter:
 
         # -1. Conversational small talk (greeting / thanks / identity) never
         # needs statutory retrieval.
-        smalltalk = detect_smalltalk(norm_query)
+        smalltalk = detect_smalltalk(norm_query, has_history=has_history)
         if smalltalk is not None:
             return RouteDecision(
                 strategy="smalltalk",
@@ -315,10 +492,8 @@ class QueryRouter:
                 target_domains=["CONVERSATION"],
             )
 
-        # 0. Out-of-scope check (with exemption for foreign marriage labor rights)
-        is_foreign_labor = any(k in norm_query for k in ["giấy phép lao động", "work permit", "làm việc", "lao động", "gplđ"])
-        is_oos = any(k in norm_query for k in self.OUT_OF_SCOPE_SIGNALS)
-        if is_oos and not (("người nước ngoài" in norm_query or "kết hôn với người nước ngoài" in norm_query) and is_foreign_labor):
+        # 0. Out-of-scope check (with exemption for foreign marriage labor rights & contextual followups)
+        if is_out_of_scope_query(query, has_history=has_history):
             return RouteDecision(
                 strategy="out_of_scope",
                 reason="Câu hỏi nằm ngoài phạm vi pháp luật lao động Việt Nam",
