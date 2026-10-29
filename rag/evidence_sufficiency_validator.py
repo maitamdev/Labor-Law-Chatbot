@@ -13,8 +13,7 @@ Outputs:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-import re
-from typing import Any, Dict, List, Optional, Sequence, Set
+from typing import Any, List, Optional, Sequence, Set
 
 
 @dataclass

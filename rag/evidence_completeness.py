@@ -101,9 +101,9 @@ class EvidenceCompletenessGate:
                     from rag.evidence_selector import EvidenceSelector
 
                     article_raw = meta.get("article_number")
-                    article = int(article_raw) if str(article_raw or "").isdigit() else None
+                    article = int(str(article_raw)) if str(article_raw or "").isdecimal() else None
                     clause_raw = meta.get("clause_number")
-                    clause = int(clause_raw) if str(clause_raw or "").isdigit() else None
+                    clause = int(str(clause_raw)) if str(clause_raw or "").isdecimal() else None
                     raw_roles = EvidenceSelector._classify_chunk_evidence_roles(
                         chunk_id=str(meta.get("chunk_id") or chunk.get("chunk_id") or ""),
                         doc_id=str(meta.get("doc_id") or ""),
