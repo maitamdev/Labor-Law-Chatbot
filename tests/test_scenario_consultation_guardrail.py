@@ -9,9 +9,9 @@ Verifies:
 """
 import pytest
 
+from rag.legal_calculator import BenefitCalculator
 from rag.legal_issue_parser import LegalIssueParser
 from rag.material_premise_gate import MaterialPremiseGate
-from rag.legal_calculator import BenefitCalculator
 from rag.query_processor import is_scenario_or_legal_consultation, normalize_colloquial_vietnamese
 
 

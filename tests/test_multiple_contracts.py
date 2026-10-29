@@ -6,11 +6,9 @@ on domestic multiple employment contract situations.
 """
 from __future__ import annotations
 
-import pytest
-
+from rag.evidence_selector import EvidenceSelector
 from rag.legal_issue_parser import LegalIssueParser
 from rag.query_router import QueryRouter
-from rag.evidence_selector import EvidenceSelector
 
 
 def test_multiple_contracts_event_and_role_detection():

@@ -1,7 +1,19 @@
 # -*- coding: utf-8 -*-
 """Regression test for employee termination without notice due to misassigned work (BLLĐ 2019 Điều 35k2a, Điều 29, Điều 40)."""
+
 import pytest
+
 from rag.chain import VietLaborRAGChain
+
+SCENARIO_QUERY = (
+    "Chị Trang được tuyển dụng vào làm việc tại Công ty chế biến gỗ theo hợp đồng lao động thời hạn 36 tháng. "
+    "Theo thỏa thuận trong hợp đồng, Chị Trang được tuyển dụng vào vị trí kiểm tra chất lượng sản phẩm. "
+    "Tuy nhiên, đã 03 tháng kể từ khi vào công ty làm việc, chị lại phải làm công việc của công nhân bốc vác. "
+    "Chị đã nhiều lần kiến nghị với Giám đốc công ty bố trí công việc theo đúng hợp đồng nhưng không được giải quyết "
+    "cũng không được giải thích lý do. Chị đã nghỉ việc mà không báo trước cho công ty.\n"
+    "Hỏi: Việc tự ý nghỉ việc của chị Trang có bị coi là đơn phương chấm dứt hợp đồng lao động trái pháp luật không? "
+    "Trong trường hợp tự ý chấm dứt hợp đồng lao động chị Trang có phải bồi thường không?"
+)
 
 
 @pytest.fixture(scope="module")
@@ -11,15 +23,7 @@ def chain():
 
 @pytest.mark.ollama
 def test_misassigned_work_termination_scenario(chain):
-    query = (
-        "Chị Trang được tuyển dụng vào làm việc tại Công ty chế biến gỗ theo hợp đồng lao động thời hạn 36 tháng. "
-        "Theo thỏa thuận trong hợp đồng, Chị Trang được tuyển dụng vào vị trí kiểm tra chất lượng sản phẩm. "
-        "Tuy nhiên, đã 03 tháng kể từ khi vào công ty làm việc, chị lại phải làm công việc của công nhân bốc vác. "
-        "Chị đã nhiều lần kiến nghị với Giám đốc công ty bố trí công việc theo đúng hợp đồng nhưng không được giải quyết "
-        "cũng không được giải thích lý do. Chị đã nghỉ việc mà không báo trước cho công ty.\n"
-        "Hỏi: Việc tự ý nghỉ việc của chị Trang có bị coi là đơn phương chấm dứt hợp đồng lao động trái pháp luật không? "
-        "Trong trường hợp tự ý chấm dứt hợp đồng lao động chị Trang có phải bồi thường không?"
-    )
+    query = SCENARIO_QUERY
 
     result = chain.run(query)
 
@@ -33,5 +37,38 @@ def test_misassigned_work_termination_scenario(chain):
 
     # Verify legal conclusions in answer
     answer = result.answer
-    assert "KHÔNG bị coi là đơn phương chấm dứt hợp đồng lao động trái pháp luật" in answer or "không bị coi là đơn phương chấm dứt hợp đồng lao động trái pháp luật" in answer.lower()
+    assert (
+        "KHÔNG bị coi là đơn phương chấm dứt hợp đồng lao động trái pháp luật" in answer
+        or "không bị coi là đơn phương chấm dứt hợp đồng lao động trái pháp luật" in answer.lower()
+    )
     assert "KHÔNG phải bồi thường" in answer or "không phải bồi thường" in answer.lower()
+
+
+def test_misassigned_exception_survives_priority_context_budget():
+    from rag.context_builder import ContextBuilder
+    from rag.issue_decomposer import IssueDecomposer
+    from rag.statutory_constraints import StatutoryConstraintEngine
+
+    builder = ContextBuilder(max_context_chars=5500, max_chunks=8)
+    chunk_ids = [
+        "VBHN_18_2026#d29-k4",
+        "VBHN_18_2026#d35-k1-b",
+        "VBHN_18_2026#d39",
+        "VBHN_18_2026#d29-k1",
+        "VBHN_18_2026#d41-k3",
+        "VBHN_18_2026#d40-k2",
+    ]
+    chunks = [builder._get_chunk_by_id(cid) for cid in chunk_ids]
+    issues = IssueDecomposer().decompose(SCENARIO_QUERY)
+    plan = StatutoryConstraintEngine().plan(SCENARIO_QUERY, issues, chunks)
+    context = builder.build_context(
+        chunks,
+        multi_issue_candidates={"issue_1": chunks[:3], "issue_2": chunks[3:]},
+        enforce_statutory_bridge=True,
+        expand_siblings=False,
+        query=SCENARIO_QUERY,
+        priority_chunk_ids=plan.priority_chunk_ids,
+    )
+    assert "VBHN_18_2026#d35-k2-a" in context.available_chunk_ids
+    assert "VBHN_18_2026#d29-k1" in context.available_chunk_ids
+    assert len(context.prompt_context) <= 5500

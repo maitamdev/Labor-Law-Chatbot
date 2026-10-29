@@ -8,7 +8,6 @@ from rag.workplace_lockout import (
     workplace_lockout_request,
 )
 
-
 QUESTION = (
     "Xin cho Tôi biết Người sử dụng lao động có quyền đóng cửa nơi làm việc không? "
     "đóng cửa nơi làm việc trong trường hợp nào?"

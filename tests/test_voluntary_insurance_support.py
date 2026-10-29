@@ -1,7 +1,6 @@
 from rag.legal_issue_parser import LegalIssueParser
 from rag.voluntary_insurance_support import SUPPORT_EVIDENCE_IDS, grounded_answer
 
-
 QUESTION = (
     "Nhà nước hiện hỗ trợ tiền đóng BHXH tự nguyện cho những nhóm đối tượng nào "
     "và mức hỗ trợ có giống nhau cho tất cả người tham gia không?"
