@@ -11,9 +11,9 @@ from __future__ import annotations
 
 import argparse
 import logging
-from pathlib import Path
 import sys
 import time
+from pathlib import Path
 
 # Ensure workspace root is in sys.path
 workspace_root = Path(__file__).resolve().parent.parent
@@ -21,7 +21,7 @@ if str(workspace_root) not in sys.path:
     sys.path.insert(0, str(workspace_root))
 
 if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
-    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8")
 
 from config.settings import PRODUCTION_CORPUS_PATH
 from graph.builder import KnowledgeGraphBuilder

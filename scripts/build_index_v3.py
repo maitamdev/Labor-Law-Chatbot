@@ -16,9 +16,9 @@ from __future__ import annotations
 
 import argparse
 import logging
-from pathlib import Path
 import sys
 import time
+from pathlib import Path
 
 # Ensure workspace root is in sys.path
 workspace_root = Path(__file__).resolve().parent.parent
@@ -26,7 +26,7 @@ if str(workspace_root) not in sys.path:
     sys.path.insert(0, str(workspace_root))
 
 if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
-    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8")
 
 from rag.bm25_retriever import BM25Retriever
 from rag.vectorstore import LegalVectorStore
@@ -51,7 +51,7 @@ def build_bm25_v3(force: bool = False):
     logger.info(f"BM25 V3 index ready in {time.time() - t0:.2f}s: {bm25_meta.get('total_chunks')} chunks.")
 
 
-def build_chroma_v3(force: bool = False):
+def build_chroma_v3(force: bool = False, chroma_batch_size: int = 128):
     t_start = time.time()
     logger.info("Building / verifying Chroma V3 semantic index...")
     store = LegalVectorStore(
@@ -59,7 +59,7 @@ def build_chroma_v3(force: bool = False):
         collection_name="vietlabor_chunks_v3",
         corpus_path=V3_CORPUS_PATH,
     )
-    meta = store.build_index(force=force)
+    meta = store.build_index(force=force, batch_size=chroma_batch_size)
     logger.info(
         "Chroma V3 index ready in %.2fs: %s chunks.",
         time.time() - t_start,
@@ -71,6 +71,12 @@ def main():
     parser = argparse.ArgumentParser(description="Build VietLabor AI V3 retrieval indexes (Core + Wave 1 + Wave 2).")
     parser.add_argument("--force", action="store_true", help="Force rebuild of indexes.")
     parser.add_argument("--target", choices=["all", "chroma", "bm25"], default="all", help="Target index.")
+    parser.add_argument(
+        "--chroma-batch-size",
+        type=int,
+        default=int(__import__("os").environ.get("VIETLABOR_CHROMA_BATCH_SIZE", "128")),
+        help="Chroma upsert / encode batch size (default 128 on CPU).",
+    )
     args = parser.parse_args()
 
     logger.info("=== STARTING V3 INDEX BUILD PROCESS ===")
@@ -80,7 +86,7 @@ def main():
         build_bm25_v3(force=args.force)
 
     if args.target in ("all", "chroma"):
-        build_chroma_v3(force=args.force)
+        build_chroma_v3(force=args.force, chroma_batch_size=max(8, args.chroma_batch_size))
 
     logger.info(f"=== ALL V3 INDEXES BUILT IN {time.time() - t_start:.2f}s ===")
 
