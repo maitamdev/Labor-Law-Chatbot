@@ -6,11 +6,11 @@ No hardcoded fake history.
 """
 from __future__ import annotations
 
+import copy
 import datetime
 import json
 import logging
 import os
-import re
 import threading
 import uuid
 from pathlib import Path
@@ -108,21 +108,21 @@ class SessionManager:
 
     def load_conversations(self) -> List[Dict[str, Any]]:
         """Loads conversations from disk storage with thread-safe mtime caching."""
-        with _HISTORY_LOCK:
+        with getattr(self, "_lock", _HISTORY_LOCK):
             if not self.storage_path.exists():
                 self._cached_conversations = []
                 self._cache_mtime = -1.0
                 return []
             try:
-                current_mtime = self.storage_path.stat().st_mtime
+                current_mtime = self.storage_path.stat().st_mtime_ns
                 if self._cached_conversations is not None and self._cache_mtime == current_mtime:
-                    return [dict(c) for c in self._cached_conversations]
+                    return copy.deepcopy(self._cached_conversations)
                 with open(self.storage_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     if isinstance(data, list):
                         self._cached_conversations = data
                         self._cache_mtime = current_mtime
-                        return [dict(c) for c in data]
+                        return copy.deepcopy(data)
                     return []
             except Exception as e:
                 logger.warning("Failed to load chat history: %s", e)
@@ -130,7 +130,7 @@ class SessionManager:
 
     def save_conversations(self, conversations: List[Dict[str, Any]]) -> None:
         """Persists conversations atomically to avoid partial JSON files."""
-        with _HISTORY_LOCK:
+        with getattr(self, "_lock", _HISTORY_LOCK):
             temp_path = self.storage_path.with_name(
                 f".{self.storage_path.name}.{uuid.uuid4().hex}.tmp"
             )
@@ -140,9 +140,9 @@ class SessionManager:
                     f.flush()
                     os.fsync(f.fileno())
                 os.replace(temp_path, self.storage_path)
-                self._cached_conversations = [dict(c) for c in conversations]
+                self._cached_conversations = copy.deepcopy(conversations)
                 try:
-                    self._cache_mtime = self.storage_path.stat().st_mtime
+                    self._cache_mtime = self.storage_path.stat().st_mtime_ns
                 except OSError:
                     self._cache_mtime = -1.0
             except Exception as e:
@@ -151,10 +151,11 @@ class SessionManager:
                     temp_path.unlink(missing_ok=True)
                 except OSError:
                     pass
+                raise
 
     def create_conversation(self, title: str = "Cuộc trò chuyện mới") -> Dict[str, Any]:
         """Creates and stores a fresh conversation."""
-        with _HISTORY_LOCK:
+        with getattr(self, "_lock", _HISTORY_LOCK):
             convs = self.load_conversations()
             now = datetime.datetime.now()
             conv_id = str(uuid.uuid4())[:8]
@@ -170,6 +171,27 @@ class SessionManager:
             convs.insert(0, new_conv)
             self.save_conversations(convs)
             return new_conv
+
+    def import_conversations(self, conversations: List[Dict[str, Any]]) -> Dict[str, str]:
+        """Attach nonempty guest chats to an account without replacing its history."""
+        with getattr(self, "_lock", _HISTORY_LOCK):
+            saved = self.load_conversations()
+            known_ids = {item["id"] for item in saved}
+            id_map = {}
+            for conversation in conversations:
+                if not conversation.get("messages"):
+                    continue
+                imported = copy.deepcopy(conversation)
+                previous_id = str(imported["id"])
+                while imported["id"] in known_ids:
+                    imported["id"] = uuid.uuid4().hex[:8]
+                known_ids.add(imported["id"])
+                id_map[previous_id] = imported["id"]
+                saved.append(imported)
+            if id_map:
+                saved.sort(key=lambda item: item.get("updated_at", ""), reverse=True)
+                self.save_conversations(saved)
+            return id_map
 
     def get_conversation(self, conv_id: str) -> Optional[Dict[str, Any]]:
         """Finds a conversation by ID."""
@@ -187,7 +209,7 @@ class SessionManager:
         recently updated one, and create a fresh conversation only when history
         is empty.
         """
-        with _HISTORY_LOCK:
+        with getattr(self, "_lock", _HISTORY_LOCK):
             convs = self.load_conversations()
             if conv_id:
                 for conversation in convs:
@@ -199,7 +221,7 @@ class SessionManager:
 
     def update_conversation_title(self, conv_id: str, new_title: str) -> None:
         """Updates conversation title."""
-        with _HISTORY_LOCK:
+        with getattr(self, "_lock", _HISTORY_LOCK):
             convs = self.load_conversations()
             for c in convs:
                 if c["id"] == conv_id:
@@ -210,7 +232,7 @@ class SessionManager:
 
     def delete_conversation(self, conv_id: str) -> None:
         """Deletes a conversation by ID."""
-        with _HISTORY_LOCK:
+        with getattr(self, "_lock", _HISTORY_LOCK):
             convs = self.load_conversations()
             convs = [c for c in convs if c["id"] != conv_id]
             self.save_conversations(convs)
@@ -222,11 +244,11 @@ class SessionManager:
         content: str,
         structured_data: Optional[Dict[str, Any]] = None,
         attachment: Optional[Dict[str, Any]] = None,
-    ) -> None:
+    ) -> str:
         """Appends a user or assistant message to a conversation."""
         if role not in {"user", "assistant"}:
             raise ValueError("role must be 'user' or 'assistant'")
-        with _HISTORY_LOCK:
+        with getattr(self, "_lock", _HISTORY_LOCK):
             convs = self.load_conversations()
             now = datetime.datetime.now()
             timestamp_str = now.strftime("%H:%M")
@@ -264,7 +286,7 @@ class SessionManager:
         is removed here to avoid a duplicate user bubble. Returns None when the
         conversation does not end with a user -> assistant pair.
         """
-        with _HISTORY_LOCK:
+        with getattr(self, "_lock", _HISTORY_LOCK):
             convs = self.load_conversations()
             for c in convs:
                 if c["id"] != conv_id:
@@ -283,7 +305,7 @@ class SessionManager:
         """Stores 'up' / 'down' feedback on an assistant message."""
         if rating not in {"up", "down"}:
             raise ValueError("rating must be 'up' or 'down'")
-        with _HISTORY_LOCK:
+        with getattr(self, "_lock", _HISTORY_LOCK):
             convs = self.load_conversations()
             for c in convs:
                 if c["id"] != conv_id:
@@ -294,3 +316,18 @@ class SessionManager:
                         self.save_conversations(convs)
                         return True
             return False
+
+
+class InMemorySessionManager(SessionManager):
+    """Anonymous chat history belongs only to one browser session, never a file."""
+
+    def __init__(self):
+        self._conversations: List[Dict[str, Any]] = []
+
+    def load_conversations(self) -> List[Dict[str, Any]]:
+        with getattr(self, "_lock", _HISTORY_LOCK):
+            return copy.deepcopy(self._conversations)
+
+    def save_conversations(self, conversations: List[Dict[str, Any]]) -> None:
+        with getattr(self, "_lock", _HISTORY_LOCK):
+            self._conversations = copy.deepcopy(conversations)

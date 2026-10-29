@@ -5,7 +5,6 @@ VietLabor AI - UI Formatting Helpers (Phase 6)
 from __future__ import annotations
 
 import datetime
-import html
 from typing import Optional
 
 

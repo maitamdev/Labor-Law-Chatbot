@@ -8,7 +8,6 @@ from __future__ import annotations
 import base64
 from functools import lru_cache
 from pathlib import Path
-from typing import Optional
 
 # Paths
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -29,8 +28,8 @@ def ensure_retina_logo() -> Path:
         return PRIMARY_LOGO_PATH
 
     try:
-        from PIL import Image
         import numpy as np
+        from PIL import Image
 
         STATIC_LOGO_RETINA.parent.mkdir(parents=True, exist_ok=True)
         img = Image.open(PRIMARY_LOGO_PATH)
