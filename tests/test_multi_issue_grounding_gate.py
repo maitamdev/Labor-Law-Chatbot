@@ -3,8 +3,8 @@ from types import SimpleNamespace
 from typing import Any, Dict
 
 from rag.case_analyzer import CaseAnalyzer
-from rag.evidence_completeness import EvidenceCompletenessGate
 from rag.context_builder import ContextBuilder
+from rag.evidence_completeness import EvidenceCompletenessGate
 from rag.evidence_mapper import EvidenceBlock, EvidenceMapper
 from rag.issue_decomposer import IssueDecomposer
 from rag.legal_issue_parser import detect_legal_events, determine_required_evidence_roles
@@ -359,7 +359,8 @@ def test_de_facto_contract_litigation_gets_procedure_role_without_overtime_noise
 
 def test_context_builder_purges_irrelevant_overtime_and_wage_chunks_from_de_facto_issue():
     builder = ContextBuilder()
-    get = lambda cid: _get_chunk(builder, cid)
+    def get(cid):
+        return _get_chunk(builder, cid)
     context = builder.build_context(
         retrieved_chunks=[],
         multi_issue_candidates={

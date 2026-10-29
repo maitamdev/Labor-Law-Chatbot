@@ -15,11 +15,12 @@ Covers:
 9. Structured table / numeric schedule extraction
 """
 import pytest
-from rag.query_router import QueryRouter
+
 from rag.issue_decomposer import IssueDecomposer
-from rag.legal_calculator import BenefitCalculator, CURRENT_REFERENCE_SALARY
-from rag.material_premise_gate import MaterialPremiseGate
+from rag.legal_calculator import BenefitCalculator
 from rag.legal_issue_parser import LegalIssueParser
+from rag.material_premise_gate import MaterialPremiseGate
+from rag.query_router import QueryRouter
 
 
 @pytest.fixture

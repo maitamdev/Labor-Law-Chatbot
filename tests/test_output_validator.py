@@ -9,9 +9,7 @@ Tests:
 """
 from __future__ import annotations
 
-import pytest
-
-from rag.output_validator import OutputValidator, LegalAnswer, LegalFinding
+from rag.output_validator import LegalAnswer, LegalFinding, OutputValidator
 
 
 def test_parse_llm_json_duplicate_keys_and_missing_answer():

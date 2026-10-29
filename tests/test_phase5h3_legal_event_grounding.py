@@ -11,20 +11,18 @@ Validates:
 5. Semantic Incompatibility Penalties (Accident vs Sickness)
 6. 30 Real-World Adversarial Queries (Paraphrases, Colloquial, Negative Tests)
 """
-import pytest
-from typing import Dict, Any, List
 
+import pytest
+
+from rag.evidence_mapper import CitationSanitizer, EvidenceBlock, EvidenceMapper
+from rag.evidence_selector import EvidenceSelector
+from rag.evidence_sufficiency_validator import EvidenceSufficiencyValidator
+from rag.issue_decomposer import IssueDecomposer
 from rag.legal_issue_parser import (
     LegalIssueParser,
-    LegalIssue,
     detect_legal_events,
-    determine_required_evidence_roles,
 )
-from rag.issue_decomposer import IssueDecomposer
-from rag.evidence_selector import EvidenceSelector, ScoredEvidence
-from rag.evidence_mapper import EvidenceMapper, EvidenceBlock, CitationSanitizer, PhantomCitation
-from rag.evidence_sufficiency_validator import EvidenceSufficiencyValidator
-from rag.output_validator import OutputValidator, ValidatedResponse, LegalAnswer
+from rag.output_validator import OutputValidator
 
 
 @pytest.fixture
