@@ -2,6 +2,10 @@
   "venvPath": ".",
   "venv": ".venv",
   "pythonVersion": "3.11",
+  "include": [
+    "app", "config", "evaluation", "graph", "ingestion",
+    "law_crawler", "models", "rag", "scripts", "ui"
+  ],
   "extraPaths": [
     ".",
     ".venv/Lib/site-packages"
@@ -10,7 +14,12 @@
     "**/node_modules",
     "**/__pycache__",
     ".venv",
-    "scratch"
+    "scratch",
+    "build",
+    "dist",
+    "storage",
+    "reports",
+    "data"
   ],
   "reportMissingImports": "none",
   "reportAttributeAccessIssue": "none"
