@@ -6,10 +6,9 @@ from __future__ import annotations
 
 import base64
 import io
-from pathlib import Path
 
-from ui.utils.document_reader import format_file_size, extract_attachment_text
 from ui.components.approved_layout import render_messages
+from ui.utils.document_reader import extract_attachment_text, format_file_size
 from ui.utils.session import SessionManager
 
 

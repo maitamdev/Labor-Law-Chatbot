@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Unit test suite verifying session utilities and title generation."""
-from ui.utils.session import generate_title_from_query, SessionManager
+from ui.utils.session import SessionManager, generate_title_from_query
 
 
 def test_generate_title_from_query():

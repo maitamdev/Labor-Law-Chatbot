@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Unit test suite for document attachment reader functions."""
 import base64
-from ui.utils.document_reader import format_file_size, extract_attachment_text
+
+from ui.utils.document_reader import extract_attachment_text, format_file_size
 
 
 def test_format_file_size():
