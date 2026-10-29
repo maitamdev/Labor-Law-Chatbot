@@ -1,0 +1,162 @@
+[
+  {
+    "id": "home",
+    "number": "01",
+    "title": "Trang AI · Chế độ khách",
+    "file": "01-home.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "login",
+    "number": "02",
+    "title": "Đăng nhập bằng email",
+    "file": "02-login.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "register",
+    "number": "03",
+    "title": "Tạo tài khoản người dùng",
+    "file": "03-register.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "forgot",
+    "number": "04",
+    "title": "Quên mật khẩu",
+    "file": "04-forgot.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "reset-sent",
+    "number": "05",
+    "title": "Thông báo gửi email khôi phục",
+    "file": "05-reset-sent.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "reset-password",
+    "number": "06",
+    "title": "Đặt mật khẩu mới",
+    "file": "06-reset-password.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "reset-success",
+    "number": "07",
+    "title": "Đặt lại mật khẩu thành công",
+    "file": "07-reset-success.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "user-chat",
+    "number": "08",
+    "title": "Chat & lịch sử của người dùng",
+    "file": "08-user-chat.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "user-profile",
+    "number": "09",
+    "title": "Hồ sơ & bảo mật tài khoản",
+    "file": "09-user-profile.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "admin-dashboard",
+    "number": "10",
+    "title": "Admin · Tổng quan",
+    "file": "10-admin-dashboard.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "admin-users",
+    "number": "11",
+    "title": "Admin · Người dùng",
+    "file": "11-admin-users.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "admin-user-detail",
+    "number": "12",
+    "title": "Admin · Chi tiết tài khoản",
+    "file": "12-admin-user-detail.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "admin-documents",
+    "number": "13",
+    "title": "Admin · Kho văn bản",
+    "file": "13-admin-documents.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "admin-document-add",
+    "number": "14",
+    "title": "Admin · Kiểm tra & duyệt văn bản",
+    "file": "14-admin-document-add.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "admin-feedback",
+    "number": "15",
+    "title": "Admin · Xử lý phản hồi",
+    "file": "15-admin-feedback.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "admin-operations",
+    "number": "16",
+    "title": "Admin · Vận hành AI",
+    "file": "16-admin-operations.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "admin-audit",
+    "number": "17",
+    "title": "Admin · Nhật ký & sao lưu",
+    "file": "17-admin-audit.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "admin-settings",
+    "number": "18",
+    "title": "Admin · Cài đặt & phân quyền",
+    "file": "18-admin-settings.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "access-denied",
+    "number": "19",
+    "title": "Từ chối truy cập trái quyền",
+    "file": "19-access-denied.jpg",
+    "width": 1440,
+    "height": 1080
+  },
+  {
+    "id": "admin-dashboard",
+    "number": "20",
+    "title": "Admin · Giao diện điện thoại",
+    "file": "20-admin-mobile.jpg",
+    "width": 390,
+    "height": 844
+  }
+]
