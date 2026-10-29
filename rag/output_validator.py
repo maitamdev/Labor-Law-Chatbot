@@ -18,9 +18,16 @@ from typing import Any, Dict, List, Optional, Set, Union
 
 from pydantic import BaseModel, Field
 
+from config.settings import STRICT_CITATION_OWNERSHIP
 from rag.evidence_mapper import CitationSanitizer, EvidenceMapper, EvidenceMappingResult
 
 logger = logging.getLogger(__name__)
+
+_PHANTOM_CITATION_NOTICE = (
+    "\n\n---\n"
+    "*Lưu ý hệ thống: Các viện dẫn điều/khoản không có trong căn cứ pháp lý đã được khóa "
+    "đã được loại bỏ. Chỉ nên tin cậy nội dung tương ứng với mục **Căn cứ pháp lý** bên dưới.*"
+)
 
 
 def format_answer_markdown(text: str) -> str:
@@ -223,14 +230,20 @@ class OutputValidator:
 
         interval_text = ""
         interval_days: Optional[int] = None
+        duration_months: Optional[int] = None
         for fact in facts or []:
-            if value(fact, "fact_type") != "DATE_INTERVAL":
-                continue
-            interval_text = str(value(fact, "value", ""))
-            match = re.search(r":\s*(\d+)\s*ngày", interval_text, re.IGNORECASE)
-            if match:
-                interval_days = int(match.group(1))
-                break
+            ftype = value(fact, "fact_type")
+            fval = str(value(fact, "value", ""))
+            if ftype == "DATE_INTERVAL" and interval_days is None:
+                interval_text = fval
+                match = re.search(r":\s*(\d+)\s*ngày", interval_text, re.IGNORECASE)
+                if match:
+                    interval_days = int(match.group(1))
+            elif ftype == "DURATION" and duration_months is None:
+                m_dur = re.search(r"(\d+)\s*(tháng|năm)", fval, re.IGNORECASE)
+                if m_dur:
+                    num = int(m_dur.group(1))
+                    duration_months = num * 12 if m_dur.group(2).lower() == "năm" else num
 
         profile_map = {str(value(p, "issue_id", "")): p for p in (profiles or [])}
         all_owned = {cid for cids in issue_evidence_map.values() for cid in cids}
@@ -260,6 +273,25 @@ class OutputValidator:
                     issue="Nguyên tắc giao kết hợp đồng lao động",
                 ))
                 existing_issue_ids.add(profile_issue_id)
+            elif (
+                "MISASSIGNED_WORK_TERMINATION" in profile_events
+                and "VBHN_18_2026#d35-k2-a" in owned
+                and profile_issue_id not in existing_issue_ids
+            ):
+                findings.append(LegalFinding(
+                    issue_id=profile_issue_id,
+                    issue=str(value(profile, "issue_text", "") or "Chấm dứt hợp đồng khi bố trí trái công việc"),
+                ))
+                existing_issue_ids.add(profile_issue_id)
+            elif (
+                "SAFETY_WORK_REFUSAL" in profile_events
+                and profile_issue_id not in existing_issue_ids
+            ):
+                findings.append(LegalFinding(
+                    issue_id=profile_issue_id,
+                    issue=str(value(profile, "issue_text", "") or "Quyền từ chối làm việc khi mất an toàn lao động"),
+                ))
+                existing_issue_ids.add(profile_issue_id)
 
         all_events = {ev for p in (profiles or []) for ev in (value(p, "legal_events", []) or [])}
 
@@ -287,7 +319,31 @@ class OutputValidator:
                 )
                 corrected = True
 
-            if "DISCIPLINE_AND_BONUS" in events and "quy chế thưởng" in missing:
+            if "SAFETY_WORK_REFUSAL" in events or (
+                "SAFETY_WORK_REFUSAL" in all_events and any(cid.startswith(("84_2015#d6", "VBHN_18_2026#d5")) for cid in owned)
+            ):
+                has_bonus_missing = "quy chế thưởng" in missing
+                finding.finding = (
+                    "Căn cứ Điểm đ Khoản 1 Điều 6 Luật An toàn, vệ sinh lao động 2015 và Điểm d Khoản 1 Điều 5 Bộ luật Lao động 2019, "
+                    "người lao động có quyền **từ chối làm công việc hoặc rời bỏ nơi làm việc** mà vẫn được trả đủ tiền lương và **không bị coi là vi phạm kỷ luật lao động** "
+                    "khi thấy rõ có nguy cơ xảy ra tai nạn lao động đe dọa nghiêm trọng tính mạng hoặc sức khỏe của mình (đồng thời phải báo ngay cho người quản lý trực tiếp). "
+                    "Do đó, việc công ty đòi xử lý kỷ luật khiển trách người lao động trong trường hợp này là **trái quy định pháp luật**."
+                    + (
+                        " Riêng việc không xét thưởng chưa thể kết luận hợp pháp hay trái pháp luật khi chưa có quy chế thưởng, hợp đồng hoặc thỏa ước quy định điều kiện hưởng thưởng."
+                        if has_bonus_missing
+                        else ""
+                    )
+                )
+                support_safety = [
+                    cid for cid in owned
+                    if cid.startswith(("84_2015#d6", "VBHN_18_2026#d5", "VBHN_18_2026#d104", "VBHN_18_2026#d127"))
+                ]
+                if support_safety:
+                    finding.supporting_chunk_ids = support_safety
+                finding.grounding_status = "grounded"
+                finding.grounding_reason = None
+                corrected = True
+            elif "DISCIPLINE_AND_BONUS" in events and "quy chế thưởng" in missing:
                 finding.finding = (
                     ("Công ty không được ép làm thêm khi chưa có sự đồng ý của người lao động. " if "OVERTIME" in all_events else "")
                     + "Riêng việc không xét thưởng chưa thể kết luận hợp pháp hay trái pháp luật khi chưa có quy chế thưởng, hợp đồng hoặc thỏa ước quy định điều kiện hưởng thưởng."
@@ -380,23 +436,152 @@ class OutputValidator:
                 finding.supporting_chunk_ids = [cid for cid in support if cid in owned]
                 corrected = True
 
-            if "EMPLOYER_PROHIBITED_ACTS" in events and "VBHN_18_2026#d17-k1" in owned:
-                has_sanction = {"ND_283_2026#d15-k2", "ND_283_2026#d15-k2-a"}.issubset(owned)
-                has_remedy = "ND_283_2026#d15-k3-d" in owned
-                finding.finding = (
-                    "Hành vi giữ bản chính giấy tờ tùy thân, văn bằng, chứng chỉ của người lao động là vi phạm pháp luật và bị nghiêm cấm theo Khoản 1 Điều 17 Bộ luật Lao động 2019. "
-                    "Người sử dụng lao động không được phép giữ bản chính văn bằng, chứng chỉ với bất kỳ lý do gì (kể cả để làm tin). "
-                    + ("Theo khoản 2 Điều 15 Nghị định 283/2026/NĐ-CP (hoặc Điều 9 Nghị định 12/2022/NĐ-CP), hành vi này có thể bị xử phạt tiền từ 20 đến 25 triệu đồng đối với cá nhân vi phạm (từ 40 đến 50 triệu đồng đối với tổ chức). " if has_sanction else "")
-                    + ("Đồng thời, người sử dụng lao động bị buộc phải trả lại bản chính giấy tờ, văn bằng, chứng chỉ đã giữ cho người lao động. " if has_remedy else "")
-                    + "Người lao động có quyền từ chối nộp bản chính và yêu cầu người sử dụng lao động tuân thủ đúng quy định pháp luật."
+            if "EMPLOYER_PROHIBITED_ACTS" in events and ("VBHN_18_2026#d17-k1" in owned or "VBHN_18_2026#d17-k2" in owned):
+                has_doc_ban = "VBHN_18_2026#d17-k1" in owned
+                has_deposit_ban = "VBHN_18_2026#d17-k2" in owned
+                has_sanction = "ND_283_2026#d15-k2" in owned and (
+                    "ND_283_2026#d15-k2-a" in owned or "ND_283_2026#d15-k2-b" in owned
                 )
+                has_remedy = "ND_283_2026#d15-k3-d" in owned or "ND_283_2026#d15-k3-đ" in owned
+                parts_17: List[str] = []
+                if has_doc_ban:
+                    parts_17.append(
+                        "Hành vi giữ bản chính giấy tờ tùy thân, văn bằng, chứng chỉ của người lao động là vi phạm pháp luật và bị nghiêm cấm theo Khoản 1 Điều 17 Bộ luật Lao động 2019. "
+                        "Người sử dụng lao động không được phép giữ bản chính văn bằng, chứng chỉ với bất kỳ lý do gì (kể cả để làm tin)."
+                    )
+                if has_deposit_ban:
+                    parts_17.append(
+                        (
+                            "Đồng thời, theo "
+                            if has_doc_ban
+                            else "Theo "
+                        )
+                        + "Khoản 2 Điều 17 Bộ luật Lao động 2019, người sử dụng lao động bị nghiêm cấm yêu cầu người lao động thực hiện biện pháp bảo đảm bằng tiền hoặc tài sản khác cho việc thực hiện hợp đồng lao động (như yêu cầu đặt cọc tiền)."
+                    )
+                if has_sanction:
+                    parts_17.append(
+                        "Theo khoản 2 Điều 15 Nghị định 283/2026/NĐ-CP, hành vi này có thể bị xử phạt tiền từ 20 đến 25 triệu đồng đối với cá nhân vi phạm (từ 40 đến 50 triệu đồng đối với tổ chức)."
+                    )
+                if has_remedy:
+                    if has_doc_ban and has_deposit_ban:
+                        parts_17.append(
+                            "Đồng thời, theo khoản 3 Điều 15 Nghị định 283/2026/NĐ-CP, người sử dụng lao động bị buộc phải trả lại bản chính giấy tờ tùy thân, văn bằng, chứng chỉ và hoàn trả khoản tiền, tài sản đã giữ trái quy định (kèm tiền lãi) cho người lao động."
+                        )
+                    elif has_doc_ban:
+                        parts_17.append(
+                            "Đồng thời, người sử dụng lao động bị buộc phải trả lại bản chính giấy tờ, văn bằng, chứng chỉ đã giữ cho người lao động."
+                        )
+                    else:
+                        parts_17.append(
+                            "Đồng thời, người sử dụng lao động bị buộc phải hoàn trả khoản tiền hoặc tài sản đã giữ trái quy định (kèm tiền lãi) cho người lao động."
+                        )
+                parts_17.append(
+                    "Người lao động có quyền từ chối nộp bản chính giấy tờ, từ chối nộp tiền đặt cọc và yêu cầu người sử dụng lao động tuân thủ đúng quy định pháp luật."
+                    if (has_doc_ban and has_deposit_ban)
+                    else "Người lao động có quyền từ chối nộp bản chính và yêu cầu người sử dụng lao động tuân thủ đúng quy định pháp luật."
+                )
+                finding.finding = " ".join(parts_17)
                 support = [
                     "VBHN_18_2026#d17-k1",
+                    "VBHN_18_2026#d17-k2",
                     "ND_283_2026#d15-k2",
                     "ND_283_2026#d15-k2-a",
+                    "ND_283_2026#d15-k2-b",
                     "ND_283_2026#d15-k3-d",
+                    "ND_283_2026#d15-k3-đ",
                 ]
                 finding.supporting_chunk_ids = [cid for cid in support if cid in owned]
+                finding.grounding_status = "grounded"
+                finding.grounding_reason = None
+                corrected = True
+
+            if ("DISCIPLINE_STATUTE_OF_LIMITATIONS" in events or finding.grounding_status == "missing") and "VBHN_18_2026#d123-k1" in owned:
+                has_k2 = "VBHN_18_2026#d123-k2" in owned
+                has_k3 = "VBHN_18_2026#d123-k3" in owned
+                has_d122_k1a = "VBHN_18_2026#d122-k1-a" in owned
+                has_d122_k4 = "VBHN_18_2026#d122-k4" in owned
+                has_d125 = any(cid.startswith("VBHN_18_2026#d125") for cid in owned)
+                elapsed_months = duration_months
+                if elapsed_months is None and interval_days is not None:
+                    elapsed_months = round(interval_days / 30)
+                if elapsed_months is None:
+                    m_iss = re.search(r"(\d+)\s*tháng\s*trước|(?:sau|cách đây|đã qua|từ)\s*(\d+)\s*tháng", str(finding.issue or ""), re.IGNORECASE)
+                    if m_iss:
+                        elapsed_months = int(m_iss.group(1) or m_iss.group(2))
+
+                finding.finding = (
+                    "Căn cứ Khoản 1 Điều 123 Bộ luật Lao động 2019, thời hiệu xử lý kỷ luật lao động thông thường là **06 tháng** kể từ ngày xảy ra hành vi vi phạm; "
+                    "trường hợp hành vi vi phạm liên quan trực tiếp đến tài chính, tài sản, tiết lộ bí mật công nghệ, bí mật kinh doanh của người sử dụng lao động thì thời hiệu xử lý kỷ luật lao động là **12 tháng**."
+                    + (
+                        f" Đối với hành vi vi phạm nội quy xảy ra từ **{elapsed_months} tháng trước**: "
+                        "nếu đây là vi phạm thông thường (không liên quan trực tiếp đến tài chính, tài sản, tiết lộ bí mật công nghệ, bí mật kinh doanh) và người lao động không thuộc các trường hợp tạm hoãn xử lý kỷ luật theo Khoản 4 Điều 122 thì **đã hết thời hiệu 06 tháng**, công ty **không còn quyền xử lý kỷ luật sa thải**; "
+                        f"ngược lại, nếu hành vi vi phạm liên quan trực tiếp đến tài chính, tài sản, tiết lộ bí mật công nghệ, bí mật kinh doanh của người sử dụng lao động thì thời hiệu là **12 tháng**, nên sau {elapsed_months} tháng công ty **vẫn còn trong thời hiệu** xử lý kỷ luật."
+                        if elapsed_months is not None and 6 < elapsed_months <= 12
+                        else (
+                            f" Đối với hành vi vi phạm xảy ra từ **{elapsed_months} tháng trước** (đã quá 12 tháng), nếu không thuộc trường hợp được kéo dài thời hiệu sau thời gian tạm hoãn kỷ luật tại Khoản 4 Điều 122 và Khoản 2 Điều 123 thì **đã hết thời hiệu xử lý kỷ luật lao động** cho cả vi phạm thông thường lẫn vi phạm liên quan đến tài chính, tài sản, bí mật công nghệ, bí mật kinh doanh."
+                            if elapsed_months is not None and elapsed_months > 12
+                            else ""
+                        )
+                    )
+                    + (
+                        " Trường hợp người lao động có thời gian thuộc diện không được xử lý kỷ luật tại Khoản 4 Điều 122 (như nghỉ ốm đau, điều trị, nghỉ thai sản, nuôi con dưới 12 tháng tuổi...) thì khi hết thời gian đó, nếu hết thời hiệu hoặc còn thời hiệu nhưng không đủ 60 ngày thì được kéo dài thời hiệu xử lý kỷ luật nhưng không quá 60 ngày kể từ ngày hết thời gian nêu trên (Khoản 2 Điều 123)."
+                        if has_k2
+                        else ""
+                    )
+                    + (
+                        " Quyết định xử lý kỷ luật lao động bắt buộc phải được ban hành trong thời hạn nêu trên (Khoản 3 Điều 123)."
+                        if has_k3
+                        else ""
+                    )
+                    + (
+                        " Ngoài ra, hình thức kỷ luật **sa thải** chỉ được áp dụng khi hành vi vi phạm thuộc đúng các trường hợp luật định tại Điều 125 Bộ luật Lao động 2019, đồng thời người sử dụng lao động phải chứng minh được lỗi của người lao động và tuân thủ đúng nguyên tắc, trình tự, thủ tục xử lý kỷ luật tại Khoản 1 và Khoản 4 Điều 122 Bộ luật Lao động 2019."
+                        if (has_d125 or has_d122_k1a or has_d122_k4)
+                        else ""
+                    )
+                )
+                support = [
+                    "VBHN_18_2026#d123-k1",
+                    "VBHN_18_2026#d123-k2",
+                    "VBHN_18_2026#d123-k3",
+                    "VBHN_18_2026#d122-k1-a",
+                    "VBHN_18_2026#d122-k4",
+                    "VBHN_18_2026#d125-k1",
+                    "VBHN_18_2026#d125-k2",
+                    "VBHN_18_2026#d125-k3",
+                    "VBHN_18_2026#d125-k4",
+                ]
+                finding.supporting_chunk_ids = [cid for cid in support if cid in owned]
+                finding.grounding_status = "grounded"
+                finding.grounding_reason = None
+                corrected = True
+
+            if finding.grounding_status == "missing" and "VBHN_18_2026#d122-k1-a" in owned and "VBHN_18_2026#d123-k1" not in owned:
+                has_d125 = any(cid.startswith("VBHN_18_2026#d125") for cid in owned)
+                has_d122_k4 = "VBHN_18_2026#d122-k4" in owned
+                finding.finding = (
+                    "Căn cứ Điểm a Khoản 1 Điều 122 Bộ luật Lao động 2019, khi xử lý kỷ luật lao động, người sử dụng lao động **phải chứng minh được lỗi của người lao động** và tuân thủ đúng trình tự, thủ tục luật định."
+                    + (
+                        " Hình thức kỷ luật **sa thải** chỉ được áp dụng khi hành vi vi phạm thuộc đúng các trường hợp quy định tại Điều 125 Bộ luật Lao động 2019."
+                        if has_d125
+                        else ""
+                    )
+                    + (
+                        " Đồng thời, không được xử lý kỷ luật đối với người lao động đang trong các thời gian được bảo vệ theo Khoản 4 Điều 122 Bộ luật Lao động 2019."
+                        if has_d122_k4
+                        else ""
+                    )
+                )
+                support = [
+                    "VBHN_18_2026#d122-k1-a",
+                    "VBHN_18_2026#d125-k1",
+                    "VBHN_18_2026#d125-k2",
+                    "VBHN_18_2026#d125-k3",
+                    "VBHN_18_2026#d125-k4",
+                    "VBHN_18_2026#d122-k4",
+                ]
+                finding.supporting_chunk_ids = [cid for cid in support if cid in owned]
+                finding.grounding_status = "grounded"
+                finding.grounding_reason = None
                 corrected = True
 
             if ("MISASSIGNED_WORK_TERMINATION" in events or "MISASSIGNED_WORK_TERMINATION" in all_events) and ("VBHN_18_2026#d35-k2-a" in owned or "VBHN_18_2026#d35-k2-a" in all_owned):
@@ -409,12 +594,19 @@ class OutputValidator:
                 if is_comp_issue:
                     finding.finding = (
                         "**Người lao động KHÔNG phải bồi thường** bất kỳ khoản tiền nào cho người sử dụng lao động.\n\n"
-                        "Căn cứ Điều 40 Bộ luật Lao động 2019, nghĩa vụ bồi thường (nửa tháng tiền lương và khoản tiền tương ứng với tiền lương trong những ngày không báo trước) "
+                        + (
+                            "1. **Vi phạm của người sử dụng lao động về chuyển công việc:** Căn cứ Điều 29 Bộ luật Lao động 2019, người sử dụng lao động chỉ được tạm thời chuyển người lao động làm công việc khác so với hợp đồng lao động với thời hạn **tối đa không quá 60 ngày làm việc cộng dồn trong 01 năm**; trường hợp quá 60 ngày làm việc thì phải có sự đồng ý bằng văn bản của người lao động.\n\n"
+                            "2. **Quyền nghỉ việc không cần báo trước và không phải bồi thường:** "
+                            if has_d29
+                            else ""
+                        )
+                        + "Căn cứ Điều 40 Bộ luật Lao động 2019, nghĩa vụ bồi thường (nửa tháng tiền lương và khoản tiền tương ứng với tiền lương trong những ngày không báo trước) "
                         "chỉ áp dụng khi người lao động đơn phương chấm dứt hợp đồng lao động trái pháp luật.\n\n"
-                        "Khi người lao động nghỉ việc vì lý do không được bố trí đúng công việc đã thỏa thuận trong hợp đồng (theo Điểm a Khoản 2 Điều 35), "
+                        "Khi người lao động nghỉ việc vì lý do không được bố trí đúng công việc đã thỏa thuận trong hợp đồng (theo Điểm a Khoản 2 Điều 35 Bộ luật Lao động 2019), "
                         "hành vi chấm dứt hợp đồng này là hoàn toàn hợp pháp và không vi phạm thời hạn báo trước, do đó người lao động không phải bồi thường."
                     )
-                    finding.supporting_chunk_ids = [cid for cid in ["VBHN_18_2026#d35-k2-a", "VBHN_18_2026#d40-k1", "VBHN_18_2026#d40-k2"] if cid in owned or cid in all_owned]
+                    support_comp = ["VBHN_18_2026#d35-k2-a", "VBHN_18_2026#d29-k1", "VBHN_18_2026#d40-k1", "VBHN_18_2026#d40-k2"]
+                    finding.supporting_chunk_ids = [cid for cid in support_comp if cid in owned or cid in all_owned]
                     corrected = True
                 else:
                     finding.finding = (
@@ -1150,15 +1342,26 @@ class OutputValidator:
 
         # Phase 5H.3: CitationSanitizer - Enforce Backend-Owned Citations
         allowed_articles: Set[str] = set()
-        for cid in valid_cids:
+        citation_scope_ids: List[str] = []
+        if STRICT_CITATION_OWNERSHIP and locked_chunk_ids:
+            citation_scope_ids = list(dict.fromkeys(locked_chunk_ids))
+        elif locked_chunk_ids:
+            citation_scope_ids = list(dict.fromkeys(locked_chunk_ids))
+        else:
+            citation_scope_ids = list(valid_cids)
+        if not STRICT_CITATION_OWNERSHIP:
+            citation_scope_ids = list(
+                dict.fromkeys(list(citation_scope_ids) + list(available_chunk_ids))
+            )
+        for cid in citation_scope_ids:
             meta = chunk_registry.get(cid, {})
             art = meta.get("article_number")
             if art is not None:
                 allowed_articles.add(str(art).strip())
-        for cid in available_chunk_ids:
+        for cid in valid_cids:
             meta = chunk_registry.get(cid, {})
             art = meta.get("article_number")
-            if art is not None:
+            if art is not None and not STRICT_CITATION_OWNERSHIP:
                 allowed_articles.add(str(art).strip())
 
         sanitized_final, phantoms = CitationSanitizer.sanitize(
@@ -1168,6 +1371,7 @@ class OutputValidator:
         )
         final_answer = sanitized_final
         phantom_list = [p.raw_reference for p in phantoms]
+        had_phantom_articles = bool(phantom_list)
 
         for f in findings:
             if f.finding:
@@ -1188,6 +1392,9 @@ class OutputValidator:
         if formatted_citations:
             final_answer = final_answer.rstrip() + "\n\n" + formatted_citations.strip()
 
+        if had_phantom_articles:
+            final_answer = final_answer.rstrip() + _PHANTOM_CITATION_NOTICE
+
         return ValidatedResponse(
             raw_answer=raw_answer,
             final_answer=final_answer,
@@ -1202,6 +1409,7 @@ class OutputValidator:
             is_fully_grounded=(
                 len(rejected_cids) == 0
                 and not unsupported_set
+                and not had_phantom_articles
                 and all(f.grounding_status not in {"insufficient", "missing"} for f in findings)
                 and (len(valid_cids) > 0 or needs_clarification)
             ),
