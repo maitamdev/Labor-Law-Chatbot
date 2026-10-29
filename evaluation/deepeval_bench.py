@@ -10,17 +10,16 @@ from __future__ import annotations
 import argparse
 import json
 import logging
-import os
 import sys
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 if hasattr(sys.stdout, "reconfigure"):
-    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8")
 if hasattr(sys.stderr, "reconfigure"):
-    getattr(sys.stderr, "reconfigure")(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
@@ -55,10 +54,6 @@ class BenchmarkEvaluator:
     def evaluate_item(self, item: Dict[str, Any]) -> Dict[str, Any]:
         """Runs chain on a single evaluation item and assesses precision and faithfulness."""
         query = item.get("query") or item.get("question") or ""
-        req_evs = item.get("required_evidence", [])
-        expected_articles = [str(e.get("article")) for e in req_evs if e.get("article")]
-        expected_docs = [str(e.get("doc_id")) for e in req_evs if e.get("doc_id")]
-        expected_clauses = [str(e.get("clause")) for e in req_evs if e.get("clause")]
 
         retrieved_chunks = []
         ans = ""
@@ -89,6 +84,7 @@ class BenchmarkEvaluator:
                 ans = ""
 
         # 1. Retrieval Metrics
+        req_evs = item.get("required_evidence", [])
         hit_at_1 = False
         hit_at_5 = False
         reciprocal_rank = 0.0

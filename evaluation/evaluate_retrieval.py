@@ -12,10 +12,10 @@ import argparse
 import csv
 import json
 import logging
-from pathlib import Path
 import sys
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from pathlib import Path
+from typing import Any, List, Tuple
 
 # Ensure workspace root is in sys.path
 workspace_root = Path(__file__).resolve().parent.parent
@@ -200,7 +200,6 @@ def aggregate_metrics(query_results: List[dict[str, Any]]) -> dict[str, Any]:
 def diagnose_failure_reason(gold_q: dict[str, Any], query_res: dict[str, Any], method: str) -> str:
     """Categorizes the primary failure reason for error analysis."""
     qt = gold_q.get("query_type", "")
-    question = gold_q.get("question", "")
 
     if qt == "exact_reference":
         return "Exact reference syntax mismatch or missing cross-document link"

@@ -12,16 +12,15 @@ import json
 import statistics
 import sys
 import time
-from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 if hasattr(sys.stdout, "reconfigure"):
-    getattr(sys.stdout, "reconfigure")(encoding='utf-8')
+    sys.stdout.reconfigure(encoding='utf-8')
 sys.path.insert(0, ".")
 
-from rag.legal_issue_parser import LegalIssueParser
 from rag.evidence_selector import EvidenceSelector
 from rag.hybrid_retriever import HybridRetriever
+from rag.legal_issue_parser import LegalIssueParser
 from rag.query_expander import QueryExpander
 
 
@@ -78,7 +77,7 @@ def run_reranker_experiment(dataset_path: str = "data/evaluation/phase5c_eval_da
     a_top3_hits = 0
 
     t0 = time.perf_counter()
-    for item, eq, cands in query_cands:
+    for item, _expanded_query, cands in query_cands:
         q = item["question"]
         reqs = item["required_evidence"]
         issue = parser.parse(q)
@@ -107,7 +106,7 @@ def run_reranker_experiment(dataset_path: str = "data/evaluation/phase5c_eval_da
     b_top3_hits = 0
 
     t0_b = time.perf_counter()
-    for item, eq, cands in query_cands:
+    for item, _expanded_query, cands in query_cands:
         q = item["question"]
         reqs = item["required_evidence"]
         issue = parser.parse(q)
@@ -136,6 +135,7 @@ def run_reranker_experiment(dataset_path: str = "data/evaluation/phase5c_eval_da
 
     results = {
         "config_a": {
+            "total_seconds": a_dur,
             "name": "EvidenceSelector (Deterministic Multi-Signal)",
             "top1_accuracy": a_acc,
             "top3_recall": a_rec,
@@ -145,6 +145,7 @@ def run_reranker_experiment(dataset_path: str = "data/evaluation/phase5c_eval_da
             "vram_mb": 0.0,
         },
         "config_b": {
+            "total_seconds": b_dur,
             "name": "EvidenceSelector + Neural Cross-Encoder",
             "top1_accuracy": b_acc,
             "top3_recall": b_rec,
