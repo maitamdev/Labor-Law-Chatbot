@@ -5,8 +5,9 @@ Matches the approved mockup with outline blue pill buttons for clarification.
 """
 from __future__ import annotations
 
-import streamlit as st
 from typing import Callable, List, Optional
+
+import streamlit as st
 
 
 def render_clarification_chips(

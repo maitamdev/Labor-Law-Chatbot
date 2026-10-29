@@ -4,6 +4,7 @@ Quick Prompt suggestions for common Vietnamese labor law questions.
 from dataclasses import dataclass
 from typing import List
 
+
 @dataclass(frozen=True)
 class QuickPrompt:
     id: str
@@ -38,7 +39,7 @@ DEFAULT_QUICK_PROMPTS: List[QuickPrompt] = [
     ),
 ]
 
-def render_quick_prompts_html(prompts: List[QuickPrompt] = None) -> str:
+def render_quick_prompts_html(prompts: List[QuickPrompt] | None = None) -> str:
     """Generate HTML chips for UI."""
     if prompts is None:
         prompts = DEFAULT_QUICK_PROMPTS

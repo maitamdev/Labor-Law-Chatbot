@@ -5,8 +5,9 @@ Renders sticky bottom input field with paper plane send button matching the mock
 """
 from __future__ import annotations
 
-import streamlit as st
 from typing import Optional
+
+import streamlit as st
 
 
 def render_composer() -> Optional[str]:
