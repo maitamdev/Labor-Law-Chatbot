@@ -18,26 +18,41 @@ STRICTLY DETERMINISTIC WORKFLOW. ZERO AGENTS / ZERO MULTI-AGENT / ZERO LANGGRAPH
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import logging
 import re
 import time
+from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 
+from config.settings import (
+    CAN_THO_OFFICIAL_GROUNDING,
+    LLM_FOLLOWUP_REWRITE,
+    RAG_MAX_CONTEXT_CHARS,
+    RAG_MAX_CONTEXT_CHUNKS,
+)
 from models.local_llm import LocalLLMManager
-from config.settings import LLM_FOLLOWUP_REWRITE, RAG_MAX_CONTEXT_CHARS, RAG_MAX_CONTEXT_CHUNKS
+from rag.answer_quality import (
+    OVERVIEW_EXPLANATION_INSTRUCTION,
+    grounded_overview,
+    needs_overview_expansion,
+    overview_evidence_is_complete,
+)
 from rag.bm25_retriever import BM25Retriever
+from rag.cantho_official_grounding import try_cantho_official_grounding
 from rag.case_analyzer import CaseAnalysisResult, CaseAnalyzer
 from rag.context_builder import ContextBuilder, FormattedContext
-from rag.evidence_completeness import EvidenceCompletenessGate, EvidenceCompletenessResult
-from rag.evidence_selector import EvidenceSelector, EvidenceSelectionResult
 from rag.conversational import SmalltalkReply, detect_smalltalk
+from rag.evidence_completeness import EvidenceCompletenessGate, EvidenceCompletenessResult
+from rag.evidence_mapper import EvidenceMapper
+from rag.evidence_selector import EvidenceSelectionResult, EvidenceSelector
 from rag.followup_rewriter import FollowupRewriter, looks_like_followup
+from rag.foreign_worker_multisite import MULTISITE_EVIDENCE_IDS, is_multisite_filing_question
+from rag.foreign_worker_multisite import grounded_answer as grounded_multisite_answer
 from rag.hybrid_graph_retriever import HybridGraphRetriever
 from rag.hybrid_retriever import HybridRetriever
-from rag.streaming import extract_partial_json_string
 from rag.issue_decomposer import IssueDecomposer
 from rag.legal_calculator import BenefitCalculator, CalculationResult
 from rag.legal_issue_parser import LegalIssue, LegalIssueParser
@@ -46,19 +61,26 @@ from rag.output_validator import LegalAnswer, LegalFinding, OutputValidator, Val
 from rag.prompts import SYSTEM_PROMPT, build_user_prompt
 from rag.qa_anchor import QuestionLawAnchorIndex
 from rag.query_expander import QueryExpander
-from rag.query_processor import normalize_query, normalize_colloquial_vietnamese
+from rag.query_processor import normalize_colloquial_vietnamese, normalize_query
 from rag.query_rewriter import AdaptiveQueryRewriter, RelevanceGrader
 from rag.query_router import QueryRouter, RouteDecision
-from rag.retirement_age import AGE_EVIDENCE_IDS, grounded_answer as grounded_retirement_age_answer, request_details as retirement_age_request
-from rag.voluntary_insurance_support import SUPPORT_EVIDENCE_IDS, grounded_answer as grounded_support_answer, is_support_question
-from rag.foreign_worker_multisite import MULTISITE_EVIDENCE_IDS, grounded_answer as grounded_multisite_answer, is_multisite_filing_question
-from rag.workplace_lockout import LOCKOUT_EVIDENCE_IDS, grounded_workplace_lockout_answer, standalone_lockout_rule_request
+from rag.retirement_age import AGE_EVIDENCE_IDS
+from rag.retirement_age import grounded_answer as grounded_retirement_age_answer
+from rag.retirement_age import request_details as retirement_age_request
 from rag.service_contract_vs_labor_contract import (
     SERVICE_CONTRACT_EVIDENCE_IDS,
-    grounded_service_contract_answer,
-    is_service_contract_vs_labor_contract_query,
+    grounded_de_facto_labor_contract_answer,
+    is_de_facto_labor_contract_evidence_query,
 )
 from rag.statutory_constraints import ConstraintPlan, StatutoryConstraintEngine, verbatim_note
+from rag.streaming import extract_partial_json_string
+from rag.voluntary_insurance_support import SUPPORT_EVIDENCE_IDS, is_support_question
+from rag.voluntary_insurance_support import grounded_answer as grounded_support_answer
+from rag.workplace_lockout import (
+    LOCKOUT_EVIDENCE_IDS,
+    grounded_workplace_lockout_answer,
+    standalone_lockout_rule_request,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -184,6 +206,10 @@ class ConversationMemory:
         """Resolves follow-up queries by appending active conversational facts if needed."""
         norm_q = current_query.strip()
         if not self.history:
+            return norm_q
+
+        from rag.query_router import is_out_of_scope_query
+        if is_out_of_scope_query(norm_q, has_history=True):
             return norm_q
 
         supplements = []
@@ -342,15 +368,9 @@ class VietLaborRAGChain:
         self.case_analyzer = CaseAnalyzer()
         self.evidence_gate = EvidenceCompletenessGate()
         self.expander = QueryExpander()
-        self.context_builder = ContextBuilder(
-            max_context_chars=max_context_chars,
-            max_chunks=max_chunks,
-            max_per_issue_blocks=max_per_issue_blocks,
-        )
         self.validator = OutputValidator()
         self.memory = ConversationMemory(max_turns=3)
         self.premise_gate = MaterialPremiseGate()
-        self.qa_anchor_index = QuestionLawAnchorIndex()
         # Generic statutory constraints (protections, preconditions, exclusive regimes).
         self.constraint_engine = StatutoryConstraintEngine()
 
@@ -370,6 +390,15 @@ class VietLaborRAGChain:
         else:
             self.hybrid_retriever = HybridGraphRetriever(index_version=index_version)
             self.bm25_retriever = self.hybrid_retriever.bm25_retriever
+
+        corpus_path = getattr(self.bm25_retriever, "corpus_path", None)
+        self.context_builder = ContextBuilder(
+            max_context_chars=max_context_chars,
+            max_chunks=max_chunks,
+            max_per_issue_blocks=max_per_issue_blocks,
+            corpus_path=str(corpus_path) if corpus_path is not None else None,
+        )
+        self.qa_anchor_index = QuestionLawAnchorIndex(corpus_path=Path(self.context_builder.corpus_path))
 
         # Local LLM manager
         self.llm_manager = llm_manager or LocalLLMManager()
@@ -562,6 +591,67 @@ class VietLaborRAGChain:
             total_latency_ms=0.0,
         )
 
+    def _handle_cantho_official(
+        self,
+        question: str,
+        norm_q: str,
+        resolved_q: str,
+        route_decision: RouteDecision,
+        official: tuple[str, list[dict[str, Any]], str, float],
+        update_memory: bool,
+        t0: float,
+    ) -> ChainExecutionResult:
+        """Official PBGDPL Can Tho scenario answer with corpus citations (no LLM)."""
+        official_answer, official_chunks, official_label, _seq = official
+        registry: dict[str, Any] = {}
+        cited_ids: List[str] = []
+        for ch in official_chunks:
+            cid = ch["chunk_id"]
+            meta = ch.get("metadata") or ch
+            registry[cid] = meta if isinstance(meta, dict) and meta.get("chunk_id") else ch
+            cited_ids.append(cid)
+        citations = EvidenceMapper().format_citations_from_metadata(
+            [registry[cid] for cid in cited_ids if cid in registry]
+        )
+        body = format_answer_markdown(official_answer)
+        note = (
+            "\n\n---\n*Căn cứ trả lời theo tình huống minh họa PBGDPL TP. Cần Thơ; "
+            "điều khoản pháp luật đính kèm từ văn bản trong kho dữ liệu.*"
+        )
+        validated = ValidatedResponse(
+            raw_answer=official_answer,
+            final_answer=body + note + "\n\n" + citations,
+            legal_findings=[
+                LegalFinding(
+                    issue_id="issue_1",
+                    issue=official_label,
+                    finding=official_answer[:2000],
+                    supporting_chunk_ids=cited_ids,
+                )
+            ],
+            cited_chunk_ids=cited_ids,
+            rejected_chunk_ids=[],
+            formatted_citations=citations,
+            is_fully_grounded=True,
+        )
+        if update_memory:
+            self.memory.add_turn(user_query=norm_q, assistant_response=validated.final_answer)
+        t_end = time.perf_counter()
+        return ChainExecutionResult(
+            query=question,
+            normalized_query=norm_q,
+            resolved_query=resolved_q,
+            route_decision=route_decision,
+            retrieval_method="Can Tho PBGDPL official grounding",
+            retrieved_chunks=official_chunks,
+            formatted_context=self.context_builder.build_context(official_chunks),
+            raw_llm_output="[cantho_official_pbgdpl_grounding]",
+            validated_response=validated,
+            retrieval_latency_ms=0.0,
+            llm_latency_ms=0.0,
+            total_latency_ms=(t_end - t0) * 1000,
+        )
+
     def _handle_premise_gate(
         self,
         question: str,
@@ -693,8 +783,18 @@ class VietLaborRAGChain:
                     issue_pri_docs = DOMAIN_PRIMARY_DOCS.get(issue_dom, DOMAIN_PRIMARY_DOCS.get(route_decision.domain, {"VBHN_18_2026"}))
                     if route_decision.legal_intent == "SUBSTANTIVE_RULE":
                         pri_cands = [c for c in issue_retrieved if c.get("metadata", {}).get("doc_id") in issue_pri_docs]
-                        other_cands = [c for c in issue_retrieved if c.get("metadata", {}).get("doc_id") not in issue_pri_docs and c.get("metadata", {}).get("doc_id") != "ND_12_2022"]
-                        sanction_cands = [c for c in issue_retrieved if c.get("metadata", {}).get("doc_id") == "ND_12_2022"]
+                        other_cands = [
+                            c for c in issue_retrieved
+                            if c.get("metadata", {}).get("doc_id") not in issue_pri_docs
+                            and c.get("metadata", {}).get("doc_id") not in ("ND_283_2026", "ND_12_2022")
+                        ]
+                        sanction_cands = [
+                            c for c in issue_retrieved
+                            if c.get("metadata", {}).get("doc_id") in ("ND_283_2026", "ND_12_2022")
+                        ]
+                        sanction_cands.sort(
+                            key=lambda c: 0 if c.get("metadata", {}).get("doc_id") == "ND_283_2026" else 1
+                        )
                         issue_retrieved = pri_cands + other_cands + sanction_cands
 
                     multi_issue_candidates[iss.issue_id] = issue_retrieved
@@ -724,7 +824,7 @@ class VietLaborRAGChain:
                         reason=grade_res.reason,
                     )
                     if rewritten_query != single_query:
-                        logger.info(f"Self-reflective query rewrite: '{single_query}' -> '{rewritten_query}' (Reason: {grade_res.reason})")
+                        logger.info("Self-reflective query rewrite completed; content omitted for privacy")
                         retry_retrieved = self.hybrid_retriever.retrieve(rewritten_query, top_k=50)
                         if retry_retrieved:
                             seen_cids = {c["chunk_id"] for c in retry_retrieved}
@@ -732,8 +832,18 @@ class VietLaborRAGChain:
 
                 if route_decision.legal_intent == "SUBSTANTIVE_RULE":
                     pri_cands = [c for c in raw_retrieved if c.get("metadata", {}).get("doc_id") in primary_docs]
-                    other_cands = [c for c in raw_retrieved if c.get("metadata", {}).get("doc_id") not in primary_docs and c.get("metadata", {}).get("doc_id") != "ND_12_2022"]
-                    sanction_cands = [c for c in raw_retrieved if c.get("metadata", {}).get("doc_id") == "ND_12_2022"]
+                    other_cands = [
+                        c for c in raw_retrieved
+                        if c.get("metadata", {}).get("doc_id") not in primary_docs
+                        and c.get("metadata", {}).get("doc_id") not in ("ND_283_2026", "ND_12_2022")
+                    ]
+                    sanction_cands = [
+                        c for c in raw_retrieved
+                        if c.get("metadata", {}).get("doc_id") in ("ND_283_2026", "ND_12_2022")
+                    ]
+                    sanction_cands.sort(
+                        key=lambda c: 0 if c.get("metadata", {}).get("doc_id") == "ND_283_2026" else 1
+                    )
                     raw_retrieved = pri_cands + other_cands + sanction_cands
 
                 # Actor-aware and statutory intent filtering (strictly for CORE_LABOR contract termination)
@@ -839,7 +949,7 @@ class VietLaborRAGChain:
             self.qa_anchor_index.lookup_chunk_ids(LOCKOUT_EVIDENCE_IDS)
             if lockout_query and len(decomposed_issues) <= 1 else []
         )
-        service_contract_query = is_service_contract_vs_labor_contract_query(resolved_q)
+        service_contract_query = is_de_facto_labor_contract_evidence_query(resolved_q)
         service_contract_chunks = (
             self.qa_anchor_index.lookup_chunk_ids(SERVICE_CONTRACT_EVIDENCE_IDS)
             if service_contract_query and len(decomposed_issues) <= 1 else []
@@ -873,7 +983,25 @@ class VietLaborRAGChain:
             combined_candidate_chunks = service_contract_chunks + [
                 c for c in combined_candidate_chunks if c.get("chunk_id") not in set(locked_chunk_ids)
             ]
-        elif route_decision.is_exact_reference() and len(combined_candidate_chunks) > 0:
+        elif len(decomposed_issues) <= 1:
+            anchor_lock_chunks = self.qa_anchor_index.chunks_for_confident_statutory_lock(
+                resolved_q,
+                retrieval_candidates=combined_candidate_chunks[:20],
+            )
+            if anchor_lock_chunks:
+                retrieval_method = "Verified Question-Statutory Anchor Lock"
+                locked_chunks = anchor_lock_chunks
+                locked_chunk_ids = [c["chunk_id"] for c in anchor_lock_chunks]
+                issue_id = decomposed_issues[0].issue_id if decomposed_issues else "issue_1"
+                multi_issue_locked[issue_id] = list(locked_chunks)
+                combined_candidate_chunks = anchor_lock_chunks + [
+                    c for c in combined_candidate_chunks if c.get("chunk_id") not in set(locked_chunk_ids)
+                ]
+        if (
+            not locked_chunks
+            and route_decision.is_exact_reference()
+            and len(combined_candidate_chunks) > 0
+        ):
             matched_anchor = self.qa_anchor_index.matching_question(resolved_q)
             reviewed_ids = set(matched_anchor.get("reviewed_chunk_ids", [])) if matched_anchor else set()
             reviewed_chunks = [c for c in combined_candidate_chunks if c["chunk_id"] in reviewed_ids]
@@ -881,7 +1009,7 @@ class VietLaborRAGChain:
             locked_chunk_ids = [c["chunk_id"] for c in locked_chunks]
             issue_id = decomposed_issues[0].issue_id if decomposed_issues else "issue_1"
             multi_issue_locked[issue_id] = list(locked_chunks)
-        elif len(decomposed_issues) > 1:
+        if len(decomposed_issues) > 1:
             for iss in decomposed_issues:
                 # Parse the focused question for its legal topic. Parse the
                 # enriched text separately and inherit only factual qualifiers;
@@ -931,7 +1059,7 @@ class VietLaborRAGChain:
                     if sc.chunk_id not in locked_chunk_ids:
                         locked_chunk_ids.append(sc.chunk_id)
                         locked_chunks.append(sc.raw_chunk)
-        else:
+        elif not locked_chunks:
             current_turn_facts = self.memory._extract_facts(norm_q)
             effective_facts = {**self.memory.accumulated_facts, **current_turn_facts}
             issue_id = decomposed_issues[0].issue_id if decomposed_issues else "issue_1"
@@ -988,6 +1116,7 @@ class VietLaborRAGChain:
         selection_results: Dict[str, EvidenceSelectionResult],
         calculation_result: Optional[CalculationResult] = None,
         on_token: Optional[TokenCallback] = None,
+        on_stage: Optional[StageCallback] = None,
     ) -> Dict[str, Any]:
         """Stage 4: Build context, invoke LLM, parse JSON, validate citations.
 
@@ -1036,11 +1165,76 @@ class VietLaborRAGChain:
             meta["chunk_id"] = block.chunk_id
             context_issue_map[owner].append(meta)
 
+        if multi_issue_locked:
+            for issue_id, locked_list in multi_issue_locked.items():
+                if issue_id not in context_issue_map:
+                    continue
+                existing_cids = {m.get("chunk_id") for m in context_issue_map[issue_id]}
+                locked_articles = {
+                    (
+                        str((it.get("metadata") or it).get("doc_id") or ""),
+                        str((it.get("metadata") or it).get("article_number") or ""),
+                    )
+                    for it in locked_list
+                    if (it.get("metadata") or it).get("doc_id") and (it.get("metadata") or it).get("article_number")
+                }
+                for item in locked_list:
+                    cid = str(item.get("chunk_id") or "")
+                    if cid and cid in context.available_chunk_ids and cid not in existing_cids:
+                        meta = dict(context.chunk_metadata_registry.get(cid, {}))
+                        meta["chunk_id"] = cid
+                        context_issue_map[issue_id].append(meta)
+                        existing_cids.add(cid)
+                for cid in context.available_chunk_ids:
+                    if cid in existing_cids:
+                        continue
+                    c_meta = context.chunk_metadata_registry.get(cid, {})
+                    art_pair = (str(c_meta.get("doc_id") or ""), str(c_meta.get("article_number") or ""))
+                    if art_pair in locked_articles:
+                        meta = dict(c_meta)
+                        meta["chunk_id"] = cid
+                        context_issue_map[issue_id].append(meta)
+                        existing_cids.add(cid)
+
         evidence_completeness = self.evidence_gate.evaluate(
             issues=decomposed_issues,
             issue_evidence_map=context_issue_map,
             selection_results=selection_results,
         )
+
+        if (
+            not locked_chunks
+            and not context.available_chunk_ids
+            and not premise_result.needs_clarification
+            and not route_decision.needs_clarification
+        ):
+            abstain_msg = (
+                "Chưa đủ căn cứ pháp luật trong cơ sở dữ liệu để trả lời an toàn câu hỏi này. "
+                "Bạn có thể diễn đạt lại theo hướng nêu rõ hành vi, thời gian, loại hợp đồng "
+                "hoặc tra cứu trực tiếp số điều/khoản cần hỏi."
+            )
+            validated = ValidatedResponse(
+                raw_answer=abstain_msg,
+                final_answer=format_answer_markdown(abstain_msg),
+                legal_findings=[],
+                cited_chunk_ids=[],
+                rejected_chunk_ids=[],
+                formatted_citations="",
+                needs_clarification=False,
+                abstain=True,
+                abstain_reason="Insufficient locked evidence",
+                is_fully_grounded=False,
+            )
+            validated.evidence_coverage = evidence_completeness.to_dict()
+            validated.case_analysis = case_analysis.to_dict()
+            return {
+                "context": context,
+                "raw_llm_output": "",
+                "validated_resp": validated,
+                "locked_chunk_ids": locked_chunk_ids,
+                "llm_latency_ms": 0.0,
+                "evidence_completeness": evidence_completeness,
+            }
 
         # Verified statutory schedules and arithmetic do not need a generative
         # model pass. This avoids both hallucinated numbers and Ollama latency.
@@ -1064,9 +1258,11 @@ class VietLaborRAGChain:
             deterministic_ids = LOCKOUT_EVIDENCE_IDS if deterministic_answer else ()
             deterministic_issue = "Đóng cửa tạm thời nơi làm việc khi đình công"
         if single_issue and not deterministic_answer:
-            deterministic_answer = grounded_service_contract_answer(resolved_q, context.available_chunk_ids)
+            deterministic_answer = grounded_de_facto_labor_contract_answer(
+                resolved_q, context.available_chunk_ids
+            )
             deterministic_ids = SERVICE_CONTRACT_EVIDENCE_IDS if deterministic_answer else ()
-            deterministic_issue = "Phân biệt Hợp đồng dịch vụ và Hợp đồng lao động"
+            deterministic_issue = "Hợp đồng lao động thực chất (Điều 13 BLLĐ 2019)"
         if deterministic_answer:
             registry = context.chunk_metadata_registry
             self.qa_anchor_index._load()
@@ -1193,11 +1389,15 @@ class VietLaborRAGChain:
         validated_resp.evidence_coverage = evidence_completeness.to_dict()
         validated_resp.case_analysis = case_analysis.to_dict()
 
-        # Stage 4b: generic statutory audit. If the answer ignored a constraint
-        # triggered by the user's own facts, regenerate once with an explicit
-        # correction; if it still ignores it, append the verbatim statute text.
+        # Stage 4b: one bounded correction for statutory omissions or a broad
+        # question answered only with a signpost to the sources. The expanded
+        # answer must pass the same citation and issue-ownership checks.
+        expand_overview = validated_resp.is_fully_grounded and needs_overview_expansion(
+            resolved_q, self._answer_body(validated_resp.final_answer), len(context.evidence_blocks),
+            evidence_complete=overview_evidence_is_complete(context.evidence_blocks, parsed_answer.evidence_ids),
+        )
         if (
-            not constraint_plan.is_empty
+            (not constraint_plan.is_empty or expand_overview)
             and not parsed_answer.out_of_scope
             and not parsed_answer.needs_clarification
             and validated_resp.cited_chunk_ids
@@ -1205,14 +1405,19 @@ class VietLaborRAGChain:
             violations = self.constraint_engine.audit(
                 constraint_plan, self._answer_body(validated_resp.final_answer), chunk_to_evidence,
             )
-            if violations:
-                logger.info("Constraint audit failed: %s", [v.check.check_id for v in violations])
+            if violations or expand_overview:
+                logger.info("Answer correction: constraints=%s, expand_overview=%s",
+                            [v.check.check_id for v in violations], expand_overview)
                 try:
+                    correction = self.constraint_engine.correction_message(
+                        violations, chunk_to_evidence, self._answer_body(validated_resp.final_answer),
+                    ) if violations else "Câu trả lời trên quá sơ lược, chưa giải thích các quy định đã được cung cấp."
+                    if expand_overview:
+                        correction += "\n\n" + OVERVIEW_EXPLANATION_INSTRUCTION
+                        _safe_emit(on_stage, "generate", "Đang bổ sung giải thích từ các căn cứ đã đối chiếu…")
                     retry_messages = messages + [
                         AIMessage(content=raw_llm_output),
-                        HumanMessage(content=self.constraint_engine.correction_message(
-                            violations, chunk_to_evidence, self._answer_body(validated_resp.final_answer),
-                        )),
+                        HumanMessage(content=correction),
                     ]
                     t_retry = time.perf_counter()
                     retry_resp = llm.invoke(retry_messages)
@@ -1239,12 +1444,25 @@ class VietLaborRAGChain:
                     retry_violations = self.constraint_engine.audit(
                         constraint_plan, self._answer_body(retry_validated.final_answer), chunk_to_evidence,
                     )
-                    if retry_validated.cited_chunk_ids and len(retry_violations) < len(violations):
+                    improved_explanation = (
+                        expand_overview and retry_validated.is_fully_grounded
+                        and not needs_overview_expansion(
+                            resolved_q, self._answer_body(retry_validated.final_answer), len(context.evidence_blocks),
+                            evidence_complete=overview_evidence_is_complete(context.evidence_blocks, retry_parsed.evidence_ids),
+                        )
+                    )
+                    if retry_validated.cited_chunk_ids and (
+                        len(retry_violations) < len(violations)
+                        or (improved_explanation and len(retry_violations) <= len(violations))
+                    ):
                         retry_validated.evidence_coverage = evidence_completeness.to_dict()
                         retry_validated.case_analysis = case_analysis.to_dict()
                         validated_resp = retry_validated
                         raw_llm_output = retry_raw
+                        parsed_answer = retry_parsed
                         violations = retry_violations
+                        if improved_explanation:
+                            _safe_emit(on_token, self._answer_body(validated_resp.final_answer))
                 except Exception as exc:  # pragma: no cover - never lose the first answer
                     logger.warning("Constraint regeneration failed: %s", exc)
 
@@ -1267,6 +1485,50 @@ class VietLaborRAGChain:
                     )
                     validated_resp.cited_chunk_ids = cited
                     validated_resp.formatted_citations = citations
+
+        # If the single-issue overview is still merely a signpost, present the
+        # verified provisions as a readable outline. This uses source text only
+        # and passes the same validator; an unsafe retry is never promoted.
+        if (
+            len(decomposed_issues) == 1 and validated_resp.is_fully_grounded
+            and not validated_resp.abstain and not validated_resp.needs_clarification
+            and needs_overview_expansion(
+                resolved_q, self._answer_body(validated_resp.final_answer), len(context.evidence_blocks),
+                evidence_complete=overview_evidence_is_complete(context.evidence_blocks, parsed_answer.evidence_ids),
+            )
+        ):
+            # A terse model answer may itself cite only part of the required
+            # statute. Include the plan's provisions already in this context;
+            # the same validator below still checks their identity and ownership.
+            overview_chunk_ids = set(validated_resp.cited_chunk_ids)
+            overview_chunk_ids.update(cid for cid, _ in constraint_plan.priority_chunk_ids)
+            source_blocks = [b for b in context.evidence_blocks if b.chunk_id in overview_chunk_ids]
+            outline = grounded_overview(source_blocks)
+            issue_id = str(decomposed_issues[0].issue_id)
+            detailed = self.validator.validate_and_format(
+                legal_answer=LegalAnswer(answer=outline, findings=[LegalFinding(
+                    issue_id=issue_id, issue=str(decomposed_issues[0].raw_issue_text),
+                    finding=outline, evidence_ids=[b.evidence_id for b in source_blocks],
+                )]),
+                available_chunk_ids=context.available_chunk_ids,
+                chunk_registry=context.chunk_metadata_registry,
+                evidence_mapper=context.evidence_mapper,
+                locked_chunk_ids=locked_chunk_ids,
+                issue_evidence_map={
+                    owner: [str(item['chunk_id']) for item in chunks if item.get('chunk_id')]
+                    for owner, chunks in context_issue_map.items()
+                },
+                expected_issues=decomposed_issues,
+                unsupported_issue_ids=evidence_completeness.unsupported_issue_ids,
+                case_analysis=case_analysis,
+            )
+            if detailed.is_fully_grounded and not self.constraint_engine.audit(
+                constraint_plan, self._answer_body(detailed.final_answer), chunk_to_evidence,
+            ):
+                detailed.evidence_coverage = evidence_completeness.to_dict()
+                detailed.case_analysis = case_analysis.to_dict()
+                validated_resp = detailed
+                _safe_emit(on_token, self._answer_body(detailed.final_answer))
 
         return {
             "context": context,
@@ -1317,16 +1579,35 @@ class VietLaborRAGChain:
         # Stage 0b: Conversational fast-track. Checked on the raw turn BEFORE
         # memory resolution, which would otherwise append legal context to
         # "cảm ơn" and make it look like a legal question.
-        smalltalk = detect_smalltalk(question, has_history=bool(self.memory.history))
+        has_hist = bool(self.memory.history)
+        smalltalk = detect_smalltalk(question, has_history=has_hist)
         if smalltalk is not None:
             return self._handle_smalltalk(question, norm_q, smalltalk, t0)
 
-        _safe_emit(on_stage, "analyze", "Đang phân tích câu hỏi và ngữ cảnh hội thoại…")
         colloquial_q = normalize_colloquial_vietnamese(norm_q)
+
+        # Stage 0c: Instant Out-of-Scope fast-track BEFORE follow-up LLM rewrite or retrieval.
+        raw_route = self.router.route(colloquial_q, has_history=has_hist)
+        if raw_route.strategy == "out_of_scope":
+            if CAN_THO_OFFICIAL_GROUNDING:
+                official = try_cantho_official_grounding(colloquial_q, self.qa_anchor_index)
+                if official:
+                    return self._handle_cantho_official(
+                        question, norm_q, colloquial_q, raw_route, official, update_memory, t0,
+                    )
+            return self._handle_out_of_scope(question, norm_q, colloquial_q, raw_route)
+
+        _safe_emit(on_stage, "analyze", "Đang phân tích câu hỏi và ngữ cảnh hội thoại…")
         resolved_q, followup_standalone = self._resolve_followup(colloquial_q, on_stage)
 
         # Stage 1: Route
-        route_decision = self.router.route(resolved_q)
+        route_decision = self.router.route(resolved_q, has_history=has_hist)
+        if CAN_THO_OFFICIAL_GROUNDING:
+            official = try_cantho_official_grounding(resolved_q, self.qa_anchor_index)
+            if official:
+                return self._handle_cantho_official(
+                    question, norm_q, resolved_q, route_decision, official, update_memory, t0,
+                )
         if route_decision.strategy == "out_of_scope":
             return self._handle_out_of_scope(question, norm_q, resolved_q, route_decision)
 
@@ -1397,8 +1678,9 @@ class VietLaborRAGChain:
                 ]
 
         if len(ret_sel["decomposed_issues"]) <= 1 and is_support_question(resolved_q):
-            support_chunks = [self.context_builder._get_chunk_by_id(cid) for cid in SUPPORT_EVIDENCE_IDS]
-            if all(support_chunks):
+            support_chunks = [chunk for cid in SUPPORT_EVIDENCE_IDS
+                              if (chunk := self.context_builder._get_chunk_by_id(cid)) is not None]
+            if len(support_chunks) == len(SUPPORT_EVIDENCE_IDS):
                 support_ids = set(SUPPORT_EVIDENCE_IDS)
                 ret_sel["locked_chunks"] = support_chunks + [
                     chunk for chunk in ret_sel["locked_chunks"]
@@ -1409,8 +1691,9 @@ class VietLaborRAGChain:
                 ]
 
         if len(ret_sel["decomposed_issues"]) <= 1 and is_multisite_filing_question(resolved_q):
-            multisite_chunks = [self.context_builder._get_chunk_by_id(cid) for cid in MULTISITE_EVIDENCE_IDS]
-            if all(multisite_chunks):
+            multisite_chunks = [chunk for cid in MULTISITE_EVIDENCE_IDS
+                                if (chunk := self.context_builder._get_chunk_by_id(cid)) is not None]
+            if len(multisite_chunks) == len(MULTISITE_EVIDENCE_IDS):
                 multisite_ids = set(MULTISITE_EVIDENCE_IDS)
                 ret_sel["locked_chunks"] = multisite_chunks + [
                     chunk for chunk in ret_sel["locked_chunks"]
@@ -1429,6 +1712,7 @@ class VietLaborRAGChain:
             ret_sel["case_analysis"], ret_sel["selection_results"],
             calculation_result=calc_result,
             on_token=on_token,
+            on_stage=on_stage,
         )
         _safe_emit(on_stage, "validate", "Đã đối soát trích dẫn với căn cứ pháp lý.")
 
