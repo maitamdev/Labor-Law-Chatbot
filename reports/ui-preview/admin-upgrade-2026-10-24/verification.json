@@ -1,0 +1,24 @@
+{
+  "source": "Isolated Streamlit fixture; no production mutations or real emails",
+  "checks": [
+    "zero metrics and honest empty chart",
+    "all sidebar routes and repeated refresh",
+    "search without diacritics, filters, empty result",
+    "table filters survive navigation and refresh",
+    "invite configuration is explicit and modal closes",
+    "user detail cancel and save role/status",
+    "PDF form saves and approval creates a job",
+    "feedback saved and shared-only export works",
+    "health job and retries remain clickable",
+    "audit CSV, backup and restore actions",
+    "audit details, date filters, filtered CSV and table isolation",
+    "feedback status and sharing filters persist after save",
+    "settings persist across page navigation",
+    "profile update and password error/success",
+    "recovery renders two fields and sets password",
+    "mobile menu, navigation and no page overflow",
+    "audit dates and event details fit a phone",
+    "nonzero chart renders real bars and readable dates"
+  ],
+  "browserErrors": []
+}

@@ -1,0 +1,15 @@
+{
+  "chatbot": {
+    "red": "#a5121b",
+    "gold": "#d6a43b",
+    "canvas": "#faf7f0"
+  },
+  "admin": {
+    "red": "#a5121b",
+    "gold": "#d6a43b",
+    "canvas": "#faf7f0"
+  },
+  "match": true,
+  "mainApp": "renders without Streamlit errors",
+  "note": "Admin appearance checked in isolated fixture, no production data writes"
+}
