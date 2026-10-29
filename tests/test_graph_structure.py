@@ -6,12 +6,10 @@ and HybridGraphRetriever instantiation.
 """
 from __future__ import annotations
 
-import pytest
-from graph.schema import LegalNodeLabel, LegalRelationType, DEFAULT_STATUTORY_BRIDGES
 from graph.connector import Neo4jConnector
 from graph.cypher_templates import CypherTemplates
 from graph.retriever import LegalGraphRetriever
-from rag.hybrid_graph_retriever import HybridGraphRetriever
+from graph.schema import DEFAULT_STATUTORY_BRIDGES, LegalNodeLabel, LegalRelationType
 
 
 def test_legal_ontology_schema():

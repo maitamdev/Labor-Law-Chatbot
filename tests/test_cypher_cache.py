@@ -1,5 +1,6 @@
 from graph.cypher_cache import CypherQueryCache
 
+
 def test_cypher_cache_lru():
     c = CypherQueryCache(capacity=2)
     c.put("q1", [1, 2])
