@@ -6,8 +6,9 @@ Renders User bubbles and Assistant cards adhering to the approved mockup.
 from __future__ import annotations
 
 import html
-import streamlit as st
 from typing import Any, Callable, Dict, Optional
+
+import streamlit as st
 
 from ui.components.citation_card import render_citation_card
 from ui.components.clarification import render_clarification_chips

@@ -6,13 +6,12 @@ Matches the approved mockup layout with compact container and expandable statuto
 from __future__ import annotations
 
 import html
+from typing import Any, Dict
 from urllib.parse import urlparse
 
 import streamlit as st
-from typing import Any, Dict
 
 from ui.utils.formatting import format_provision_badge
-
 
 OFFICIAL_SOURCE_HOSTS = {
     "vanban.chinhphu.vn",
