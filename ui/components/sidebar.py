@@ -5,8 +5,9 @@ Matches the approved mockup with Brand Logo, New Chat button, Chat History, and 
 """
 from __future__ import annotations
 
+from typing import Callable, Optional
+
 import streamlit as st
-from typing import Any, Callable, Dict, List, Optional
 
 from ui.utils.branding import get_logo_base64
 from ui.utils.session import SessionManager

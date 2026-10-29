@@ -5,8 +5,10 @@ Renders centered welcome banner and 4 suggested topic cards when conversation is
 """
 from __future__ import annotations
 
-import streamlit as st
 from typing import Callable, Optional
+
+import streamlit as st
+
 from ui.utils.branding import get_logo_base64
 
 SUGGESTED_PROMPTS = [
