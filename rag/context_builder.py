@@ -7,13 +7,15 @@ Eliminates context omission, dilutive redundant text, and raw chunk-ID hallucina
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import json
 import logging
 import re
+from dataclasses import dataclass, field
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
+from config.settings import PRODUCTION_CORPUS_PATH, PROJECT_ROOT
 from rag.evidence_mapper import EvidenceBlock, EvidenceMapper
 
 logger = logging.getLogger(__name__)
@@ -28,7 +30,7 @@ class FormattedContext:
     total_chunks_in_context: int
     grouped_articles_count: int
     evidence_blocks: List[EvidenceBlock] = field(default_factory=list)
-    evidence_mapper: Optional[EvidenceMapper] = None
+    evidence_mapper: EvidenceMapper = field(default_factory=EvidenceMapper)
 
 
 class ContextBuilder:
@@ -46,29 +48,23 @@ class ContextBuilder:
         self.max_context_chars = max_context_chars
         self.max_chunks = max_chunks
         self.max_per_issue_blocks = max_per_issue_blocks
-        if corpus_path is None:
-            if Path("data/processed/legal_documents_v3.jsonl").exists():
-                corpus_path = "data/processed/legal_documents_v3.jsonl"
-            else:
-                corpus_path = "data/processed/legal_documents.jsonl"
-        self.corpus_path = corpus_path
+        path = Path(corpus_path) if corpus_path is not None else PRODUCTION_CORPUS_PATH
+        self.corpus_path = str((path if path.is_absolute() else PROJECT_ROOT / path).resolve())
         self._ensure_corpus_loaded()
 
     def _ensure_corpus_loaded(self) -> None:
         """Loads canonical legal documents corpus for hierarchy completion and statutory bridges."""
-        if ContextBuilder._corpus_cache is not None and len(ContextBuilder._corpus_cache.get("by_id", {})) >= 3500:
+        path = Path(self.corpus_path)
+        if not path.is_file():
+            self._corpus_cache = {"by_id": {}, "by_article": {}, "by_clause": {}, "clause_parent": {}}
             return
+        stat = path.stat()
+        self._corpus_cache = self._load_corpus(str(path), stat.st_mtime_ns, stat.st_size)
 
-        corpus_file = Path(self.corpus_path) if self.corpus_path else None
-        if not corpus_file or not corpus_file.exists():
-            ContextBuilder._corpus_cache = {
-                "by_id": {},
-                "by_article": {},
-                "by_clause": {},
-                "clause_parent": {},
-            }
-            return
-
+    @staticmethod
+    @lru_cache(maxsize=8)
+    def _load_corpus(corpus_path: str, mtime_ns: int, size: int) -> Dict[str, Any]:
+        corpus_file = Path(corpus_path)
         by_id: Dict[str, Dict[str, Any]] = {}
         by_article: Dict[Tuple[str, str], List[Dict[str, Any]]] = {}
         by_clause: Dict[Tuple[str, str, str], List[Dict[str, Any]]] = {}
@@ -103,7 +99,7 @@ class ContextBuilder:
                             if not pt:
                                 clause_parent[cl_key] = item
 
-            ContextBuilder._corpus_cache = {
+            return {
                 "by_id": by_id,
                 "by_article": by_article,
                 "by_clause": by_clause,
@@ -111,14 +107,14 @@ class ContextBuilder:
             }
         except Exception as e:
             logger.error(f"Error loading corpus in ContextBuilder: {e}")
-            ContextBuilder._corpus_cache = {"by_id": {}, "by_article": {}, "by_clause": {}, "clause_parent": {}}
+            return {"by_id": {}, "by_article": {}, "by_clause": {}, "clause_parent": {}}
 
     def _get_chunk_by_id(self, chunk_id: str) -> Optional[Dict[str, Any]]:
-        cache = ContextBuilder._corpus_cache or {}
+        cache = self._corpus_cache or {}
         return cache.get("by_id", {}).get(chunk_id)
 
     def _get_clause_parent(self, doc_id: str, art_num: str, cl_num: str) -> Optional[Dict[str, Any]]:
-        cache = ContextBuilder._corpus_cache or {}
+        cache = self._corpus_cache or {}
         return cache.get("clause_parent", {}).get((doc_id, str(art_num), str(cl_num)))
 
     def _create_compact_evidence_block(
@@ -153,6 +149,19 @@ class ContextBuilder:
                 # If parent lead-in ends with colon, attach
                 if parent_text and not raw_content.startswith(parent_text[:30]):
                     unified_content = f"{parent_text}\n{raw_content}"
+        elif cl_num and art_num and doc_id and raw_content.endswith(":"):
+            # A clause lead-in is incomplete without its enumerated points.
+            # Keep them under the cited clause, within the normal character
+            # budget, instead of making the model invent the missing list.
+            cache = self._corpus_cache or {}
+            children = cache.get("by_clause", {}).get((doc_id, str(art_num), str(cl_num)), [])
+            points = [
+                child for child in children
+                if (child.get("metadata") or child).get("point")
+            ]
+            points.sort(key=lambda child: str((child.get("metadata") or child).get("point")).replace("đ", "d~"))
+            texts = [str(child.get("content") or "").strip() for child in points]
+            unified_content = "\n".join(dict.fromkeys([raw_content] + [text for text in texts if text]))
 
         return EvidenceBlock(
             evidence_id=f"E{evidence_idx}",
@@ -222,7 +231,7 @@ class ContextBuilder:
                         pt = meta.get("point")
                         if doc_id and art_num and cl_num and pt:
                             cl_key = (doc_id, str(art_num), str(cl_num))
-                            cache = ContextBuilder._corpus_cache or {}
+                            cache = self._corpus_cache or {}
                             siblings = cache.get("by_clause", {}).get(cl_key, [])
                             for sib in siblings:
                                 if sib.get("chunk_id") != c.get("chunk_id"):
@@ -249,7 +258,7 @@ class ContextBuilder:
                     pt = meta.get("point")
                     if doc_id and art_num and cl_num and pt:
                         cl_key = (doc_id, str(art_num), str(cl_num))
-                        cache = ContextBuilder._corpus_cache or {}
+                        cache = self._corpus_cache or {}
                         siblings = cache.get("by_clause", {}).get(cl_key, [])
                         for sib in siblings:
                             if sib.get("chunk_id") != c.get("chunk_id"):
@@ -595,11 +604,27 @@ class ContextBuilder:
             # prohibition, immediate-exit right and administrative sanction.
             violence_owner: Optional[str] = None
             violence_raw_owner: Optional[str] = None
+            raw_input_cids: Set[str] = {
+                str(c.get("chunk_id") or "")
+                for c in (retrieved_chunks or [])
+            } | {
+                str(c.get("chunk_id") or "")
+                for cands in (multi_issue_candidates or {}).values()
+                for c in cands
+            }
+            query_has_violence = (not query_lc) or any(
+                k in query_lc
+                for k in ["đánh", "đấm", "tát", "đá", "hành hung", "ngược đãi", "đánh đập", "nhục mạ", "xúc phạm", "cưỡng bức", "bạo lực"]
+            )
             for c, i_id in selected_chunks:
+                if not query_has_violence:
+                    break
                 meta = c.get("metadata") or c
                 d_id = str(meta.get("doc_id", ""))
                 a_num = str(meta.get("article_number", ""))
                 cid_str = str(c.get("chunk_id") or "")
+                if cid_str not in raw_input_cids:
+                    continue
                 pt_str = str(meta.get("point") or "").lower()
                 c_text = str(c.get("content", "")).lower()
                 is_violence_rule = (
@@ -677,6 +702,13 @@ class ContextBuilder:
 
             if prohibited_id_iid:
                 target_pid_iid = prohibited_id_iid
+                has_deposit_chunk = any(
+                    i_id == target_pid_iid and (
+                        str(c.get("chunk_id") or "") in {"VBHN_18_2026#d17-k2", "ND_283_2026#d15-k2-b", "ND_283_2026#d15-k3-đ"}
+                        or "biện pháp bảo đảm bằng tiền" in str(c.get("content", "")).lower()
+                    )
+                    for c, i_id in selected_chunks
+                ) or any(k in query_lc for k in ["đặt cọc", "tiền cọc", "ký quỹ", "thế chấp", "biện pháp bảo đảm"])
                 selected_chunks = [(c, i_id) for c, i_id in selected_chunks if i_id != target_pid_iid]
                 d17_cids = [
                     "VBHN_18_2026#d17-k1",
@@ -684,10 +716,52 @@ class ContextBuilder:
                     "ND_283_2026#d15-k2-a",
                     "ND_283_2026#d15-k3-d",
                 ]
+                if has_deposit_chunk:
+                    d17_cids.extend([
+                        "VBHN_18_2026#d17-k2",
+                        "ND_283_2026#d15-k2-b",
+                        "ND_283_2026#d15-k3-đ",
+                    ])
                 for cid in d17_cids:
                     b_chk = self._get_chunk_by_id(cid)
                     if b_chk:
                         selected_chunks.append((b_chk, target_pid_iid))
+                        seen_cids.add(cid)
+
+            # 2l-bis. Discipline Statute of Limitations Bridge (Điều 123, 122, 125 BLLĐ 2019)
+            discipline_sol_iid = None
+            for c, i_id in selected_chunks:
+                c_text = str(c.get("content", "")).lower()
+                meta = c.get("metadata") or c
+                d_id = str(meta.get("doc_id", ""))
+                a_num = str(meta.get("article_number", ""))
+                if (
+                    i_id != prohibited_id_iid
+                    and (
+                        (d_id == "VBHN_18_2026" and a_num == "123")
+                        or "thời hiệu xử lý kỷ luật lao động" in c_text
+                    )
+                    and not discipline_sol_iid
+                ):
+                    discipline_sol_iid = i_id or "statutory_bridge"
+                    break
+
+            if discipline_sol_iid:
+                target_sol_iid = discipline_sol_iid
+                selected_chunks = [(c, i_id) for c, i_id in selected_chunks if i_id != target_sol_iid]
+                d123_cids = [
+                    "VBHN_18_2026#d123-k1",
+                    "VBHN_18_2026#d123-k2",
+                    "VBHN_18_2026#d123-k3",
+                    "VBHN_18_2026#d122-k1-a",
+                    "VBHN_18_2026#d122-k4",
+                    "VBHN_18_2026#d125-k1",
+                    "VBHN_18_2026#d125-k2",
+                ]
+                for cid in d123_cids:
+                    b_chk = self._get_chunk_by_id(cid)
+                    if b_chk:
+                        selected_chunks.append((b_chk, target_sol_iid))
                         seen_cids.add(cid)
 
             # 2m. Misassigned Work & Unlawful Termination Bridge (Điều 35k2a, Điều 29, Điều 40 BLLĐ 2019)
@@ -699,8 +773,9 @@ class ContextBuilder:
             # Employee-quit consequences (Điều 35k2a, Điều 40) are only relevant
             # when the employee is the one leaving; otherwise they mislead the model.
             employee_leaving = (not query_lc) or bool(re.search(
-                r"(muốn|xin|tự|định|sẽ) (nghỉ việc|thôi việc|nghỉ làm|bỏ việc|chấm dứt)|nghỉ ngang|đơn phương nghỉ|"
-                r"có được nghỉ|được quyền nghỉ|nghỉ (luôn|ngay)|không cần báo trước",
+                r"(muốn|xin|tự|định|sẽ|em|tôi|mình)\s*(?:đã\s*|tự ý\s*)?(nghỉ việc|thôi việc|nghỉ làm|bỏ việc|chấm dứt)|"
+                r"nghỉ\s*(?:việc\s*)?(luôn|ngay)|nghỉ ngang|đơn phương nghỉ|"
+                r"có được nghỉ|được quyền nghỉ|không\s*(?:cần\s*)?báo trước|bồi thường hợp đồng",
                 query_lc,
             ))
             misassigned_work_iid = None
@@ -720,16 +795,20 @@ class ContextBuilder:
 
             if misassigned_work_iid:
                 target_mw_iid = misassigned_work_iid
-                # Filter out noisy chunks for this issue (especially false 30-day notice d35-k1-b or employer exit d36/d41)
-                selected_chunks = [
-                    (c, i_id) for c, i_id in selected_chunks
-                    if not (i_id == target_mw_iid and (c.get("chunk_id") or "") in ["VBHN_18_2026#d35-k1-b", "VBHN_18_2026#d36-k1-b", "VBHN_18_2026#d41-k1"])
-                ]
                 mw_cids = [
                     "VBHN_18_2026#d35-k2-a",
                     "VBHN_18_2026#d29-k1",
                     "VBHN_18_2026#d40-k1",
                     "VBHN_18_2026#d40-k2",
+                ]
+                # Filter out noisy chunks for this issue (especially false 30-day notice d35-k1-b or employer exit d36/d41) and deduplicate mw_cids
+                selected_chunks = [
+                    (c, i_id) for c, i_id in selected_chunks
+                    if (c.get("chunk_id") or "") not in mw_cids
+                    and not (
+                        (i_id == target_mw_iid or (target_mw_iid == "statutory_bridge" and i_id is None))
+                        and (c.get("chunk_id") or "") in ["VBHN_18_2026#d35-k1-a", "VBHN_18_2026#d35-k1-b", "VBHN_18_2026#d35-k1-c", "VBHN_18_2026#d36-k1-b", "VBHN_18_2026#d41-k1"]
+                    )
                 ]
                 canonical_mw_chunks = []
                 for cid in mw_cids:
@@ -753,7 +832,7 @@ class ContextBuilder:
                 chk = next((c for c, _ in selected_chunks if c.get("chunk_id") == cid), None) or self._get_chunk_by_id(cid)
                 if not chk:
                     continue
-                if not owner and multi_issue_candidates and cid in existing_owner and existing_owner[cid] not in (None, "statutory_bridge"):
+                if multi_issue_candidates and cid in existing_owner and existing_owner[cid] not in (None, "statutory_bridge"):
                     owner = existing_owner[cid]
                 front.append((chk, owner))
                 front_ids.add(cid)
@@ -803,7 +882,7 @@ class ContextBuilder:
         )
         current_chars = len(preamble)
 
-        for idx, (chk, issue_id) in enumerate(selected_chunks, start=1):
+        for chk, issue_id in selected_chunks:
             block = self._create_compact_evidence_block(chk, len(evidence_blocks) + 1, issue_id)
             block_text = block.format_for_llm()
 
