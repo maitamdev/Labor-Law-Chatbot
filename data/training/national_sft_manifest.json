@@ -1,0 +1,13 @@
+{
+  "qa_bank": "D:\\chatbot-law\\data\\evaluation\\labor_qa_corrected.jsonl",
+  "total": 1000,
+  "train": 900,
+  "val": 100,
+  "seed": 42,
+  "files": {
+    "full": "D:\\chatbot-law\\data\\training\\vietlabor_sft_national_chatml.jsonl",
+    "train": "D:\\chatbot-law\\data\\training\\vietlabor_sft_national_train.jsonl",
+    "val": "D:\\chatbot-law\\data\\training\\vietlabor_sft_national_val.jsonl"
+  },
+  "note": "Do not add Can Tho 106 verbatim pairs to this mix for national deployment."
+}
