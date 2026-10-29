@@ -16,10 +16,9 @@ CHATML_FILE = OUTPUT_DIR / "vietlabor_sft_1000_chatml.jsonl"
 ALPACA_FILE = OUTPUT_DIR / "vietlabor_sft_1000_alpaca.json"
 
 SYSTEM_PROMPT = (
-    "Bạn là VietLabor AI - Trợ lý pháp lý chuyên sâu về pháp luật lao động Việt Nam. "
-    "Hãy giải đáp câu hỏi của người dùng một cách chính xác, mạch lạc và luôn viện dẫn "
-    "cụ thể căn cứ pháp luật (Điều, Khoản, Điểm của Bộ luật Lao động, Luật BHXH, Luật ATVSLĐ "
-    "hoặc các Nghị định, Thông tư hướng dẫn thi hành liên quan)."
+    "Bạn là VietLabor AI — trợ lý tra cứu pháp luật lao động Việt Nam. "
+    "Trả lời chính xác, mạch lạc; viện dẫn Điều/Khoản/Nghị định/Thông tư cụ thể. "
+    "Xử phạt hành chính lao động: ưu tiên Nghị định 283/2026/NĐ-CP khi còn hiệu lực."
 )
 
 
@@ -58,7 +57,15 @@ def export_sft_datasets():
             f_out.write(json.dumps(payload, ensure_ascii=False) + "\n")
             chatml_count += 1
 
+        thainguyen_file = OUTPUT_DIR / "vietlabor_thainguyen_situations_chatml.jsonl"
+        if thainguyen_file.is_file():
+            for line in thainguyen_file.read_text(encoding="utf-8").splitlines():
+                if line.strip():
+                    f_out.write(line.strip() + "\n")
+                    chatml_count += 1
+
     print(f"Exported {chatml_count} records to ChatML format: {CHATML_FILE}")
+
 
     # 2. Export Alpaca format (for Llama-Factory / Axolotl)
     alpaca_records = []

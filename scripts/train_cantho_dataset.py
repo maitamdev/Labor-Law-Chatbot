@@ -8,7 +8,6 @@ import json
 import logging
 import os
 import re
-from typing import Any, Dict, List
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("cantho_trainer")
@@ -29,6 +28,7 @@ DOC_MAPPING = {
     "Bộ luật Lao động 2019": "VBHN_18_2026",
     "BLLĐ": "VBHN_18_2026",
     "Nghị định 145/2020": "ND_145_2020",
+    "Nghị định 283/2026": "ND_283_2026",
     "Nghị định 12/2022": "ND_12_2022",
     "Luật Bảo hiểm xã hội": "VBHN_58_2025",
     "Luật BHXH": "VBHN_58_2025",
@@ -147,8 +147,8 @@ def build_chatml_and_anchors():
             added_count += 1
 
     with open(MASTER_CHATML, "w", encoding="utf-8") as f:
-        for l in existing_lines:
-            f.write(l + "\n")
+        for line in existing_lines:
+            f.write(line + "\n")
     logger.info("Master SFT dataset updated: added %d records, total now %d records.", added_count, len(existing_lines))
 
     # 3. Append to question anchors
@@ -179,7 +179,7 @@ def build_chatml_and_anchors():
             f.write(json.dumps(anc, ensure_ascii=False) + "\n")
     logger.info("Question anchors updated: added %d new anchors, total now %d anchors.", anchors_added, len(existing_anchors))
 
-    print(f"\nTraining pipeline completed successfully:")
+    print("\nTraining pipeline completed successfully:")
     print(f"- Can Tho ChatML: {len(chatml_records)} records -> {CANTHO_CHATML}")
     print(f"- Master SFT ChatML: {len(existing_lines)} total records -> {MASTER_CHATML}")
     print(f"- Question Anchors: {len(existing_anchors)} total anchors -> {QUESTION_ANCHORS}")
