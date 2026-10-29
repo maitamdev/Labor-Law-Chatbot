@@ -1,33 +1,181 @@
 export default function(component) {
-  const {parentElement, data, setTriggerValue} = component;
-  const mount = parentElement.querySelector('.vl-mount');
-  const oldInput = mount.querySelector('#vl-question');
-  const previousDraft = oldInput ? oldInput.value : '';
-  const oldConversation = mount.dataset.conversation;
-  // Markup is constructed and escaped by the server. User text is never
-  // concatenated into DOM markup here.
-  mount.innerHTML = data.markup;
-  mount.dataset.conversation = data.conversation_id;
-  const app = mount.querySelector('.vl-app');
-  const input = app.querySelector('#vl-question');
-  const busy = app.dataset.busy === 'true';
-  let sent = false;
-  let toastTimer;
-  const emit = action => {
-    if (action.type === 'query') {
-      if (sent || busy) return;
-      sent = true;
-      setTimeout(() => { sent = false; }, 2500);
+  try {
+    const {parentElement, data, setTriggerValue} = component || {};
+    if (!parentElement || !data || typeof data.markup !== 'string') {
+      return () => {};
     }
-    setTriggerValue('action', action);
-  };
-  const toast = text => {
-    const node = app.querySelector('.toast');
-    node.textContent = text;
-    node.classList.add('visible');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => node.classList.remove('visible'), 3200);
-  };
+    let mount = parentElement.querySelector('.vl-mount');
+    if (!mount) {
+      mount = document.createElement('div');
+      mount.className = 'vl-mount';
+      parentElement.appendChild(mount);
+    }
+    const oldInput = mount.querySelector('#vl-question');
+    const previousDraft = oldInput ? oldInput.value : '';
+    const oldConversation = mount.dataset ? mount.dataset.conversation : '';
+    const oldAuthDialog = mount.querySelector('.auth-dialog');
+    const oldAuthOpen = Boolean(oldAuthDialog?.open);
+    const oldAuthMode = oldAuthDialog?.dataset.mode || 'login';
+    const oldAuthUsername = oldAuthDialog?.querySelector('[name="username"]')?.value || '';
+    const oldAuthPending = Boolean(oldAuthDialog?.querySelector('.auth-submit')?.disabled);
+    // Markup is constructed and escaped by the server. User text is never
+    // concatenated into DOM markup here.
+    mount.innerHTML = data.markup;
+    mount.dataset.conversation = data.conversation_id || '';
+    const app = mount.querySelector('.vl-app');
+    if (!app) {
+      return () => {};
+    }
+    const showView = view => {
+      app.dataset.view = view;
+      app.querySelectorAll('.nav-item').forEach(button => {
+        const active = button.dataset.view === view;
+        button.classList.toggle('active', active);
+        if (active) button.setAttribute('aria-current', 'page');
+        else button.removeAttribute('aria-current');
+      });
+    };
+    const clearPendingNavigation = () => {
+      delete mount.dataset.pendingNavigationId;
+      delete mount.dataset.pendingNavigationView;
+      delete mount.dataset.navigationRetriedFor;
+    };
+    if (mount.dataset.pendingNavigationId) {
+      if (data.navigation_ack === mount.dataset.pendingNavigationId
+          || oldConversation !== (data.conversation_id || '')) {
+        clearPendingNavigation();
+      } else {
+        // A server render may still belong to an earlier click. Keep the
+        // latest choice until its exact action is acknowledged, even if a
+        // response arrives while another query is consuming server time.
+        showView(mount.dataset.pendingNavigationView);
+        const staleAck = data.navigation_ack || 'initial';
+        if (mount.dataset.navigationRetriedFor !== staleAck) {
+          mount.dataset.navigationRetriedFor = staleAck;
+          setTriggerValue('action', {type:'navigate', view:mount.dataset.pendingNavigationView,
+            action_id:mount.dataset.pendingNavigationId});
+        }
+      }
+    }
+    const input = app.querySelector('#vl-question');
+    const busy = app.dataset ? (app.dataset.busy === 'true') : false;
+    let sent = false;
+    let toastTimer;
+    let actionSeq = 0;
+    const emit = action => {
+      if (!action || typeof action !== 'object') return;
+      if (action.type === 'query') {
+        if (sent || busy) return;
+        sent = true;
+        setTimeout(() => { sent = false; }, 2500);
+      }
+      action.action_id = String(Date.now()) + '_' + (++actionSeq) + '_' + Math.random().toString(36).slice(2, 7);
+      if (action.type === 'navigate') {
+        mount.dataset.pendingNavigationId = action.action_id;
+        mount.dataset.pendingNavigationView = action.view;
+        delete mount.dataset.navigationRetriedFor;
+      } else if (['query','new_chat','switch','portal_route','logout'].includes(action.type)) {
+        clearPendingNavigation();
+      }
+      setTriggerValue('action', action);
+    };
+    const toast = text => {
+      const node = app.querySelector('.toast');
+      if (!node) return;
+      node.textContent = text;
+      node.classList.add('visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => node.classList.remove('visible'), 3200);
+    };
+    const authDialog = app.querySelector('.auth-dialog');
+    const authForm = authDialog?.querySelector('.auth-form');
+    let authPending = false;
+    const setAuthMode = mode => {
+      if (!authDialog) return;
+      if(!['login','register','forgot','reset-sent','verify-sent'].includes(mode)) mode='login';
+      const register = mode === 'register';
+      const sentMode = mode === 'reset-sent' || mode === 'verify-sent';
+      authPending = false;
+      authDialog.dataset.mode = mode;
+      const titles={login:'Chào mừng trở lại',register:'Tạo tài khoản của bạn',forgot:'Quên mật khẩu?','reset-sent':'Kiểm tra hộp thư của bạn','verify-sent':'Kiểm tra hộp thư của bạn'};
+      const descriptions={login:'Đăng nhập để lưu và tiếp tục cuộc trò chuyện.',register:'Lưu lịch sử riêng và tra cứu thuận tiện hơn.',forgot:'Nhập email đã đăng ký để nhận liên kết đặt lại.','reset-sent':'Mở email và chọn liên kết khôi phục mật khẩu.','verify-sent':'Mở email và nhấn liên kết xác minh để kích hoạt tài khoản.'};
+      authDialog.querySelector('#auth-title').textContent=titles[mode];
+      authDialog.querySelector('.auth-description').textContent=descriptions[mode];
+      authForm.querySelector('.auth-submit span').textContent={login:'Đăng nhập',register:'Tạo tài khoản',forgot:'Gửi liên kết khôi phục','reset-sent':'Đã gửi yêu cầu','verify-sent':'Đã gửi email'}[mode];
+      authForm.querySelector('.auth-submit').disabled=false;
+      const password = authDialog.querySelector('[name="password"]');
+      const confirm = authDialog.querySelector('[name="confirm_password"]');
+      password.autocomplete = register ? 'new-password' : 'current-password';
+      password.minLength = register ? 8 : 1;
+      password.required = ['login','register'].includes(mode);
+      password.disabled = !password.required;
+      authForm.elements.full_name.required=register;
+      authForm.elements.full_name.disabled=!register;
+      authForm.elements.username.required=!sentMode;
+      authForm.elements.username.disabled=sentMode;
+      confirm.required = register;
+      confirm.disabled = !register;
+      const sentMessage = authDialog.querySelector('.auth-sent-only > p');
+      if (sentMessage) sentMessage.textContent = mode === 'verify-sent'
+        ? `Nếu yêu cầu đăng ký được tiếp nhận, email xác minh đã được gửi tới ${authForm.elements.username.value.trim()}. Hãy kiểm tra Hộp thư đến và Thư rác, rồi quay lại đây để đăng nhập.`
+        : 'Nếu email khớp với tài khoản, liên kết khôi phục sẽ được gửi tới hộp thư. Hãy kiểm tra cả thư mục spam.';
+      const sentSwitch = authDialog.querySelector('.auth-switch.auth-sent-only button');
+      if (sentSwitch) {
+        sentSwitch.textContent = mode === 'verify-sent' ? 'Quay lại đăng nhập' : 'Nhập email khác';
+        sentSwitch.dataset.authMode = mode === 'verify-sent' ? 'login' : 'forgot';
+      }
+      authDialog.querySelector('.auth-error').hidden = true;
+    };
+    const showAuthError = message => {
+      const error = authDialog?.querySelector('.auth-error');
+      if (error) { error.textContent = message; error.hidden = false; }
+    };
+    const openAuth = mode => {
+      if (!authDialog) return;
+      if (busy) { toast('Bạn có thể đăng nhập sau khi trợ lý trả lời xong.'); return; }
+      setAuthMode(mode);
+      if (!authDialog.open) authDialog.showModal();
+      authDialog.querySelector('[name="username"]').focus();
+    };
+    const closeAuth = () => { if (authDialog?.open && !authPending) authDialog.close(); };
+    const onAuthSubmit = event => {
+      event.preventDefault();
+      if (authPending || busy) return;
+      const username = authForm.elements.username.value.trim();
+      const password = authForm.elements.password.value;
+      const confirm = authForm.elements.confirm_password.value;
+      const mode = authDialog.dataset.mode;
+      if (mode === 'register' && password !== confirm) {
+        showAuthError('Hai mật khẩu chưa khớp. Vui lòng kiểm tra lại.');
+        return;
+      }
+      if (!authForm.reportValidity()) return;
+      authPending = true;
+      authForm.querySelector('.auth-submit').disabled = true;
+      authForm.querySelectorAll('.auth-submit span').forEach(node => { node.textContent = 'Đang xử lý…'; });
+      emit({type:'auth_submit', mode, username, password, confirm_password:confirm,full_name:authForm.elements.full_name.value});
+      authForm.elements.password.value = '';
+      authForm.elements.confirm_password.value = '';
+    };
+    const onAuthBackdrop = event => {
+      if (event.target !== authDialog) return;
+      const box = authDialog.getBoundingClientRect();
+      if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) closeAuth();
+    };
+    if (authDialog && authForm) {
+      authForm.addEventListener('submit', onAuthSubmit);
+      authDialog.addEventListener('click', onAuthBackdrop);
+      authDialog.querySelector('[name="username"]').value = data.auth_username || oldAuthUsername;
+      if (data.auth_open || oldAuthOpen) {
+        openAuth(data.auth_open ? data.auth_mode : oldAuthMode);
+        if (data.auth_error) showAuthError(data.auth_error);
+        if (oldAuthPending && !data.auth_open) {
+          authPending = true;
+          authForm.querySelector('.auth-submit').disabled = true;
+          authForm.querySelectorAll('.auth-submit span').forEach(node => { node.textContent = 'Đang xử lý…'; });
+        }
+      }
+    }
   // Auto-scroll message-feed internally to latest message
   const scrollToLatest = (smooth = true) => {
     try {
@@ -49,74 +197,83 @@ export default function(component) {
 
   // Progressive Typewriter streaming reveal for newly generated assistant messages
   let typeTimer;
-  const typingTarget = app.querySelector('.assistant-message[data-typing="true"]');
-  if (typingTarget) {
-    const mdContainer = typingTarget.querySelector('.answer-markdown');
-    if (mdContainer) {
-      // Find all non-empty text nodes in the already-rendered DOM tree
-      const walker = document.createTreeWalker(mdContainer, NodeFilter.SHOW_TEXT, null, false);
-      const textNodes = [];
-      let textNode;
-      while ((textNode = walker.nextNode())) {
-        if (textNode.nodeValue && textNode.nodeValue.length > 0) {
-          textNodes.push({ node: textNode, fullText: textNode.nodeValue });
-          textNode.nodeValue = '';
-        }
-      }
-
-      if (textNodes.length > 0) {
-        typingTarget.classList.add('is-typing');
-        const cursor = document.createElement('span');
-        cursor.className = 'typing-cursor';
-
-        let nodeIdx = 0;
-        let charIdx = 0;
-        let finished = false;
-
-        const finishTyping = () => {
-          if (finished) return;
-          finished = true;
-          if (typeTimer) clearInterval(typeTimer);
-          for (let i = 0; i < textNodes.length; i++) {
-            textNodes[i].node.nodeValue = textNodes[i].fullText;
+  try {
+    const typingTarget = app.querySelector('.assistant-message[data-typing="true"]');
+    if (typingTarget) {
+      const mdContainer = typingTarget.querySelector('.answer-markdown');
+      if (mdContainer) {
+        // Find all non-empty text nodes in the already-rendered DOM tree
+        const whatToShow = (typeof NodeFilter !== 'undefined' && NodeFilter.SHOW_TEXT) ? NodeFilter.SHOW_TEXT : 4;
+        const walker = document.createTreeWalker(mdContainer, whatToShow, null, false);
+        const textNodes = [];
+        let textNode;
+        while ((textNode = walker.nextNode())) {
+          if (textNode.nodeValue && textNode.nodeValue.length > 0) {
+            textNodes.push({ node: textNode, fullText: textNode.nodeValue });
+            textNode.nodeValue = '';
           }
-          if (cursor.parentNode) cursor.remove();
+        }
+
+        if (textNodes.length > 0) {
+          typingTarget.classList.add('is-typing');
+          const cursor = document.createElement('span');
+          cursor.className = 'typing-cursor';
+
+          let nodeIdx = 0;
+          let charIdx = 0;
+          let finished = false;
+
+          const finishTyping = () => {
+            if (finished) return;
+            finished = true;
+            if (typeTimer) clearInterval(typeTimer);
+            for (let i = 0; i < textNodes.length; i++) {
+              try { textNodes[i].node.nodeValue = textNodes[i].fullText; } catch (_) {}
+            }
+            try { if (cursor.parentNode) cursor.remove(); } catch (_) {}
+            typingTarget.classList.remove('is-typing');
+            typingTarget.removeAttribute('data-typing');
+            scrollToLatest(true);
+          };
+
+          // Click anywhere on message to immediately reveal all text
+          typingTarget.addEventListener('click', finishTyping, { once: true });
+
+          typeTimer = setInterval(() => {
+            try {
+              if (nodeIdx >= textNodes.length) {
+                finishTyping();
+                return;
+              }
+
+              const cur = textNodes[nodeIdx];
+              if (cur && cur.node && cur.node.parentNode && cursor.parentNode !== cur.node.parentNode) {
+                cur.node.parentNode.insertBefore(cursor, cur.node.nextSibling);
+              }
+
+              // Progressive reveal: 3-5 chars per tick gives smooth natural typewriter speed (~200 chars/s)
+              const step = Math.min(4, cur.fullText.length - charIdx);
+              charIdx += step;
+              cur.node.nodeValue = cur.fullText.slice(0, charIdx);
+
+              scrollToLatest(false);
+
+              if (charIdx >= cur.fullText.length) {
+                nodeIdx++;
+                charIdx = 0;
+              }
+            } catch (_) {
+              finishTyping();
+            }
+          }, 16);
+        } else {
           typingTarget.classList.remove('is-typing');
           typingTarget.removeAttribute('data-typing');
-          scrollToLatest(true);
-        };
-
-        // Click anywhere on message to immediately reveal all text
-        typingTarget.addEventListener('click', finishTyping, { once: true });
-
-        typeTimer = setInterval(() => {
-          if (nodeIdx >= textNodes.length) {
-            finishTyping();
-            return;
-          }
-
-          const cur = textNodes[nodeIdx];
-          if (cur.node.parentNode && cursor.parentNode !== cur.node.parentNode) {
-            cur.node.parentNode.insertBefore(cursor, cur.node.nextSibling);
-          }
-
-          // Progressive reveal: 3-5 chars per tick gives smooth natural typewriter speed (~200 chars/s)
-          const step = Math.min(4, cur.fullText.length - charIdx);
-          charIdx += step;
-          cur.node.nodeValue = cur.fullText.slice(0, charIdx);
-
-          scrollToLatest(false);
-
-          if (charIdx >= cur.fullText.length) {
-            nodeIdx++;
-            charIdx = 0;
-          }
-        }, 16);
-      } else {
-        typingTarget.classList.remove('is-typing');
-        typingTarget.removeAttribute('data-typing');
+        }
       }
     }
+  } catch (err) {
+    console.warn('[VietLaborAI] Typewriter initialization error:', err);
   }
 
   // Dynamic progress cycling while assistant is busy
@@ -302,8 +459,10 @@ export default function(component) {
     const answerHtml = article.querySelector('.answer-markdown')?.innerHTML || '';
     const coverage = article.querySelector('.coverage')?.outerHTML || '';
     const citations = [...article.querySelectorAll('.citation')].map(card => {
-      const title = card.querySelector('summary strong')?.textContent || '';
-      const badge = card.querySelector('summary small')?.textContent || '';
+      const title = card.closest('.citation-group')?.querySelector('.citation-doc-title')?.textContent
+        || card.querySelector('summary strong')?.textContent || '';
+      const badge = card.querySelector('.citation-provision-label')?.textContent
+        || card.querySelector('summary small')?.textContent || '';
       const heading = card.querySelector('div > p')?.textContent || '';
       const excerpt = card.querySelector('blockquote')?.textContent || '';
       const link = card.querySelector('.citation-links a')?.getAttribute('href') || '';
@@ -360,15 +519,22 @@ ${citations ? `<h2>Căn cứ pháp lý</h2><ol class="citations">${citations}</o
   const onClick = async event => {
     const button = event.target.closest('button');
     if (!button || !app.contains(button)) return;
-    if (button.hasAttribute('data-view')) {
+    if (button.hasAttribute('data-portal')) emit({type:'portal_route',view:button.dataset.portal});
+    else if (button.hasAttribute('data-auth-open')) openAuth(button.dataset.authOpen);
+    else if (button.hasAttribute('data-auth-mode')) setAuthMode(button.dataset.authMode);
+    else if (button.hasAttribute('data-auth-close')) closeAuth();
+    else if (button.hasAttribute('data-auth-password')) {
+      const field = authDialog?.querySelector('[name="password"]');
+      if (field) {
+        const reveal = field.type === 'password';
+        field.type = reveal ? 'text' : 'password';
+        button.textContent = reveal ? 'Ẩn' : 'Hiện';
+        button.setAttribute('aria-label', reveal ? 'Ẩn mật khẩu' : 'Hiện mật khẩu');
+      }
+    }
+    else if (button.hasAttribute('data-view')) {
       const targetView = button.dataset.view;
-      app.dataset.view = targetView;
-      app.querySelectorAll('.nav-item').forEach(btn => {
-        const isActive = btn.dataset.view === targetView;
-        btn.classList.toggle('active', isActive);
-        if (isActive) btn.setAttribute('aria-current', 'page');
-        else btn.removeAttribute('aria-current');
-      });
+      showView(targetView);
       emit({type:'navigate', view:targetView});
     }
     else if (button.hasAttribute('data-query')) {
@@ -402,9 +568,26 @@ ${citations ? `<h2>Căn cứ pháp lý</h2><ol class="citations">${citations}</o
     else if (button.hasAttribute('data-delete')) {
       event.preventDefault();
       event.stopPropagation();
-      emit({type:'delete', id:button.dataset.delete});
+      const deleteId = button.dataset.delete;
+      if (deleteId === 'all') {
+        if (!window.confirm('Bạn có chắc chắn muốn xóa toàn bộ lịch sử trò chuyện không?')) {
+          return;
+        }
+      }
+      const row = button.closest('.sidebar-conv-row');
+      if (row) {
+        row.style.opacity = '0.35';
+        row.style.pointerEvents = 'none';
+      }
+      emit({type:'delete', id:deleteId});
     }
-    else if (button.hasAttribute('data-feedback')) emit({type:'feedback', rating:button.dataset.feedback, id:button.dataset.message});
+    else if (button.hasAttribute('data-feedback')) {
+      const id=button.dataset.message;
+      const index=data.messages.findIndex(m=>m.id===id);
+      const answer=index>=0?data.messages[index].content:'';
+      const question=index>0?[...data.messages.slice(0,index)].reverse().find(m=>m.role==='user')?.content||'':'';
+      showDialog('Gửi phản hồi',`<form class="feedback-form" data-message="${escapeHtml(id)}" data-rating="${escapeHtml(button.dataset.feedback)}"><label for="vl-feedback">Góp ý của bạn</label><textarea id="vl-feedback" maxlength="2000" placeholder="Mô tả điều cần cải thiện..."></textarea><details><summary>Xem trước đoạn có thể chia sẻ</summary><p><strong>Câu hỏi:</strong> ${escapeHtml(question.slice(0,4000))}</p><p><strong>Câu trả lời:</strong> ${escapeHtml(answer.slice(0,12000))}</p></details><label class="feedback-consent"><input type="checkbox" name="share_consent"> Tôi cho phép quản trị viên xem đoạn câu hỏi và câu trả lời trên để xử lý phản hồi.</label><p class="muted">Không chọn: chỉ gửi đánh giá và góp ý, không gửi nội dung chat.</p><button class="send" type="submit">Gửi phản hồi</button></form>`);
+    }
     else if (button.hasAttribute('data-mobile-menu')) app.classList.toggle('menu-open');
     else if (button.classList.contains('dialog-close')) {
       dialog.close();
@@ -495,19 +678,24 @@ ${citations ? `<h2>Căn cứ pháp lý</h2><ol class="citations">${citations}</o
       else if (dialogs[key]) showDialog(...dialogs[key]);
     }
   };
-  app.addEventListener('click', onClick);
-  dialog.addEventListener('click', event => {
-    if (event.target === dialog) {
+  if (app) app.addEventListener('click', onClick);
+  if (dialog) {
+    dialog.addEventListener('click', event => {
+      if (event.target === dialog) {
+        dialog.close();
+        dialog.classList.remove('template-dialog-view');
+      }
+    });
+    dialog.addEventListener('submit', event => {
+      if (!event.target.classList.contains('feedback-form')) return;
+      event.preventDefault();
+      const text = dialog.querySelector('#vl-feedback')?.value?.trim();
+      const form=event.target;
+      if(form.dataset.message) emit({type:'feedback',id:form.dataset.message,rating:form.dataset.rating,comment:text||'',share_consent:form.querySelector('[name=share_consent]').checked});
+      else if (text) emit({type:'general_feedback', text});
       dialog.close();
-      dialog.classList.remove('template-dialog-view');
-    }
-  });
-  dialog.addEventListener('submit', event => {
-    if (!event.target.classList.contains('feedback-form')) return;
-    event.preventDefault();
-    const text = dialog.querySelector('#vl-feedback').value.trim();
-    if (text) emit({type:'general_feedback', text});
-  });
+    });
+  }
   const search = app.querySelector('#document-search');
   if (search) search.addEventListener('input', () => {
     const query = search.value.toLocaleLowerCase('vi').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d');
@@ -517,13 +705,24 @@ ${citations ? `<h2>Căn cứ pháp lý</h2><ol class="citations">${citations}</o
       row.hidden = !title.includes(query);
       if (!row.hidden) visible++;
     });
-    app.querySelector('.no-results').hidden = visible > 0;
+    const noRes = app.querySelector('.no-results');
+    if (noRes) noRes.hidden = visible > 0;
   });
   if (data.notice) toast(data.notice);
-  return () => { 
-    app.removeEventListener('click', onClick); 
-    clearTimeout(toastTimer); 
-    if (thinkingTimer) clearInterval(thinkingTimer);
-    if (typeTimer) clearInterval(typeTimer);
+  return () => {
+    try {
+      if (app) app.removeEventListener('click', onClick);
+      if (toastTimer) clearTimeout(toastTimer);
+      if (thinkingTimer) clearInterval(thinkingTimer);
+      if (typeTimer) clearInterval(typeTimer);
+      if (authForm) authForm.removeEventListener('submit', onAuthSubmit);
+      if (authDialog) {
+        authDialog.removeEventListener('click', onAuthBackdrop);
+      }
+    } catch (_) {}
   };
+  } catch (err) {
+    console.error('[VietLaborAI] Component error caught in boundary:', err);
+    return () => {};
+  }
 }

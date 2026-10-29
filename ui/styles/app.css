@@ -27,3 +27,27 @@ header[data-testid="stHeader"], #MainMenu, .stDeployButton, [data-testid="stTool
 [data-testid="stElementContainer"]:has(> [data-testid="stMarkdown"] > div > style) {
   display: none!important;
 }
+.stException, [data-testid="stNotification"] {
+  max-width: 800px!important;
+  margin: 24px auto!important;
+  padding: 16px 20px!important;
+  background: #ffffff!important;
+  border-left: 5px solid #A5121B!important;
+  border-radius: 8px!important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08)!important;
+  color: #34302D!important;
+  display: block!important;
+}
+/* Never dim or fade the application surface to white during Streamlit reruns */
+[data-stale="true"],
+[data-stale="true"] *,
+[data-testid="stElementContainer"],
+[data-testid="stCustomComponentV1"],
+[data-testid="stCustomComponentV2"],
+.element-container,
+.stCustomComponentV1,
+.stCustomComponentV2 {
+  opacity: 1 !important;
+  filter: none !important;
+  transition: none !important;
+}
