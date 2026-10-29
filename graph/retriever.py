@@ -82,7 +82,7 @@ class LegalGraphRetriever:
             return ""
 
         lines = [
-            f"**Căn cứ Đồ thị Tri thức Pháp luật (Knowledge Graph Subgraph):**",
+            "**Căn cứ Đồ thị Tri thức Pháp luật (Knowledge Graph Subgraph):**",
             f"- **Điều luật gốc**: {chain_data.get('framework_doc_id')} Điều {chain_data.get('framework_article_number')}: {chain_data.get('framework_title')}",
         ]
 
