@@ -44,12 +44,29 @@ def start_background_warmup(
 
         def _run() -> None:
             try:
+                # 1. Warm up Ollama LLM
                 if manager_factory is not None:
                     manager = manager_factory()
+                    _state["ok"] = bool(manager.warm_up())
                 else:
                     from models.local_llm import LocalLLMManager
                     manager = LocalLLMManager()
-                _state["ok"] = bool(manager.warm_up())
+                    _state["ok"] = bool(manager.warm_up())
+
+                    # 2. Warm up local BGE-M3 embedding model to eliminate 10s cold-start on turn 1
+                    try:
+                        from rag.embeddings import LocalBGEEmbeddings
+                        LocalBGEEmbeddings()._ensure_model_loaded()
+                    except Exception as emb_exc:
+                        logger.debug("Embedding warm-up skipped/deferred: %s", emb_exc)
+
+                    # 3. Preload QA anchor index
+                    try:
+                        from rag.qa_anchor import QuestionLawAnchorIndex
+                        QuestionLawAnchorIndex()._load()
+                    except Exception as anchor_exc:
+                        logger.debug("Anchor index warm-up skipped/deferred: %s", anchor_exc)
+
             except Exception as exc:  # never crash the UI because of warm-up
                 logger.warning("Background warm-up failed: %s", exc)
                 _state["ok"] = False

@@ -42,16 +42,25 @@ def normalize_question(question: str) -> str:
     return text.rstrip(" ?.!…")
 
 
-def make_key(question: str) -> str:
-    return hashlib.sha256(normalize_question(question).encode("utf-8")).hexdigest()
+def make_key(question: str, namespace: str = "") -> str:
+    """Build a cache key, optionally scoped to a local account."""
+    normalized = normalize_question(question)
+    if namespace:
+        normalized = f"{namespace}\0{normalized}"
+    key = hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+    return hashlib.sha256(namespace.encode("utf-8")).hexdigest() + ":" + key if namespace else key
 
 
 def is_cacheable(payload: Dict[str, Any]) -> bool:
+    ans = str(payload.get("answer") or "")
     return bool(
-        payload.get("answer")
+        ans
         and not payload.get("is_smalltalk")
         and not payload.get("needs_clarification")
         and not payload.get("unresolved_issue_ids")
+        and not payload.get("phantom_citations")
+        and "Lưu ý đối chiếu bắt buộc" not in ans
+        and "Lưu ý hệ thống: Các viện dẫn điều/khoản không có" not in ans
         and payload.get("is_fully_grounded", False)
     )
 
@@ -78,15 +87,26 @@ def put(key: str, payload: Dict[str, Any]) -> None:
             _store.popitem(last=False)
 
 
-def evict_question(question: str) -> None:
+def evict_question(question: str, namespace: str = "") -> None:
     """Drops a cached answer (e.g. after a thumbs-down rating)."""
     with _lock:
-        _store.pop(make_key(question), None)
+        _store.pop(make_key(question, namespace=namespace), None)
 
 
 def clear() -> None:
     with _lock:
         _store.clear()
+
+
+def clear_namespace(namespace: str) -> None:
+    """Erase only this account's cached answers when they erase private chats."""
+    if not namespace:
+        return
+    prefix = hashlib.sha256(namespace.encode("utf-8")).hexdigest() + ":"
+    with _lock:
+        for key in list(_store):
+            if key.startswith(prefix):
+                del _store[key]
 
 
 def size() -> int:
