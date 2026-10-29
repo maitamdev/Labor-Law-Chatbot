@@ -21,6 +21,8 @@ def main() -> int:
         APP_HOST,
         "--server.port",
         str(APP_PORT),
+        "--server.fileWatcherType",
+        "none",
     ]
     try:
         return subprocess.call(command, cwd=PROJECT_ROOT)
