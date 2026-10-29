@@ -12,9 +12,9 @@ import unicodedata
 from typing import Any, Dict, List, Optional
 
 from app import answer_cache
+from app.smalltalk import answer_smalltalk
 from config.metadata_registry import get_verified_metadata
-from rag.chain import VietLaborRAGChain, ChainExecutionResult, StageCallback, TokenCallback
-from rag.conversational import detect_smalltalk
+from rag.chain import ChainExecutionResult, StageCallback, TokenCallback, VietLaborRAGChain
 from rag.evidence_mapper import CitationSanitizer
 from rag.output_validator import format_answer_markdown
 
@@ -75,43 +75,14 @@ FRIENDLY_DOC_TITLES = {
 }
 
 
-def answer_smalltalk(question: str, has_history: bool = False) -> Optional[Dict[str, Any]]:
-    """Instant UI response for greetings/thanks/identity, or None for real questions.
-
-    Needs no retriever, embedding model or Ollama, so the first "Xin chào" of a
-    session answers immediately instead of waiting for the RAG stack to load.
-    """
-    reply = detect_smalltalk(unicodedata.normalize("NFC", question or ""), has_history=has_history)
-    if reply is None:
-        return None
-    return {
-        "answer": reply.answer,
-        "raw_answer": reply.answer,
-        "final_answer": reply.answer,
-        "findings": [],
-        "citations": [],
-        "needs_clarification": False,
-        "clarification_question": None,
-        "clarification_options": [],
-        "out_of_scope": False,
-        "is_smalltalk": True,
-        "smalltalk_intent": reply.intent,
-        "suggested_followups": list(reply.suggestions),
-        "latency_ms": 0.0,
-        "locked_chunk_ids": [],
-        "graph_expanded_chunk_ids": [],
-        "retrieval_method": "None (Conversational fast-track)",
-        "evidence_coverage": {},
-        "unresolved_issue_ids": [],
-        "is_fully_grounded": True,
-    }
-
-
 class ChatService:
     """Thin adapter providing structured UI responses from the RAG backend."""
 
-    def __init__(self, chain: Optional[VietLaborRAGChain] = None):
+    cache_namespace: str = ""
+
+    def __init__(self, chain: Optional[VietLaborRAGChain] = None, cache_namespace: str = ""):
         self.chain = chain or VietLaborRAGChain()
+        self.cache_namespace = cache_namespace
 
     def reset_conversation(self) -> None:
         """Clears conversational working memory for a new session."""
@@ -160,7 +131,11 @@ class ChatService:
 
         # First-turn questions only: follow-ups depend on earlier facts.
         use_cache = answer_cache.enabled() and not self.chain.memory.history
-        cache_key = answer_cache.make_key(norm_q) if use_cache else ""
+        cache_key = answer_cache.make_key(norm_q, namespace=self.cache_namespace) if use_cache else ""
+        if use_cache and bypass_cache:
+            # Regeneration must retire the old answer even if the replacement
+            # fails grounding checks and therefore cannot itself be cached.
+            answer_cache.evict_question(norm_q, namespace=self.cache_namespace)
         if use_cache and not bypass_cache:
             cached = answer_cache.get(cache_key)
             if cached is not None:
@@ -217,10 +192,9 @@ class ChatService:
             pt = meta.get("point")
             art_title = meta.get("article_title", "")
 
-            # Excerpt from chunk text
-            excerpt = chunk_text_map.get(cid) or meta.get("text") or meta.get("content") or ""
-            if len(excerpt) > 400:
-                excerpt = excerpt[:400].strip() + "..."
+            # Show the same complete provision used for generation, including
+            # points assembled under a clause. It is collapsed in the UI.
+            excerpt = meta.get("content") or meta.get("text") or chunk_text_map.get(cid) or ""
 
             verified_meta = get_verified_metadata(doc_id)
             source_url = (
@@ -297,9 +271,13 @@ class ChatService:
 
         # Extract Clean Core Answer (strip redundant raw citation footers if already structured)
         clean_answer = val_resp.final_answer
-        parts = re.split(r"\n\s*(?:CĂN CỨ PHÁP LÝ|CAN CU PHAP LY)\s*:", clean_answer)
-        if len(parts) > 1:
-            clean_answer = parts[0].strip()
+        footer = (val_resp.formatted_citations or "").strip()
+        if footer:
+            # Remove only the backend-generated footer. A heading with the same
+            # name inside the model's explanation must not truncate the answer.
+            before, separator, after = clean_answer.rpartition(footer)
+            if separator:
+                clean_answer = (before.rstrip() + "\n\n" + after.lstrip()).strip()
 
         # Defensive safety net: if clean_answer still looks like raw JSON, synthesize from findings
         if clean_answer.strip().startswith("{") and (
