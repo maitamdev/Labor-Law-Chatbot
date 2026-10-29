@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import csv
 import logging
 import re
-from pathlib import Path
 from typing import Any, Optional
 
 from ingestion.schemas import LegalChunk, PageText
@@ -410,7 +408,7 @@ class LegalParser:
                         chunk_page_end = page_num
                         chunk_lines.append(line)
                         continue
-                    if page_num > chunk_page_end and sum(len(l) for l in chunk_lines) > 4000:
+                    if page_num > chunk_page_end and sum(len(line) for line in chunk_lines) > 4000:
                         commit_chunk()
                         chunk_page_start = page_num
                         chunk_page_end = page_num

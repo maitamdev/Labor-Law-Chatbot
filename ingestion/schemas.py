@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import Optional, Any
-from pydantic import BaseModel, Field, ConfigDict
+from typing import Any, Optional
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class PageText(BaseModel):
