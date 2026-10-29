@@ -7,8 +7,8 @@ and enforces clarification BEFORE retrieval when material legal premises are mis
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import logging
+from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 from rag.legal_issue_parser import LegalIssue
