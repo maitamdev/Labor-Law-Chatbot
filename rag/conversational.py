@@ -55,7 +55,9 @@ _INTENT_PHRASES = {
         "who are you",
     ],
     "capabilities": [
-        "ban co the lam duoc gi", "ban co the lam gi", "ban lam duoc gi", "ban giup duoc gi",
+        "ban co the giup gi cho toi", "ban co the giup duoc gi", "ban co the lam duoc gi",
+        "ban co the giup gi", "ban co the lam gi", "ban co the ho tro gi",
+        "ban lam duoc gi", "ban giup duoc gi", "ban giup gi cho toi", "giup gi cho toi",
         "ban giup gi duoc", "ban ho tro duoc gi", "ban ho tro gi", "ban biet lam gi",
         "huong dan su dung", "cach su dung", "su dung the nao", "toi nen hoi gi", "hoi duoc gi",
         "what can you do", "help",
@@ -76,10 +78,8 @@ _PRIORITY = ["corpus_scope", "identity", "capabilities", "thanks", "goodbye", "g
 
 # Words that carry no legal substance in a social message.
 _FILLERS = {
-    "ban", "bot", "ad", "admin", "vietlabor", "ai", "tro", "ly", "oi", "nhe", "nha", "nhe",
-    "a", "ah", "da", "vay", "the", "nhe", "nhieu", "rat", "lam", "qua", "minh", "toi", "em",
-    "anh", "chi", "moi", "nguoi", "voi", "nhe", "nhi", "ha", "hen", "nhe", "roi", "nhe",
-    "cho", "hoi", "co", "the", "khong", "ko", "k", "gi", "va", "nhe", "ne", "nghe",
+    "ban", "bot", "ad", "admin", "vietlabor", "ai", "tro", "ly", "oi", "nhe", "nha", "a", "ah", "da", "vay", "the", "nhieu", "rat", "lam", "qua", "minh", "toi", "em",
+    "anh", "chi", "moi", "nguoi", "voi", "nhi", "ha", "hen", "roi", "cho", "hoi", "co", "khong", "ko", "k", "gi", "va", "ne", "nghe",
 }
 
 # Any of these means the user is actually asking about labor law.
