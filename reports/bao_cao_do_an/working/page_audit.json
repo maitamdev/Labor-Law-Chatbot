@@ -1,0 +1,1421 @@
+{
+  "pages": 103,
+  "audit": [
+    {
+      "page": 1,
+      "chars": 358,
+      "outside": [],
+      "first": [
+        "THÀNH PHỐ HỒ CHÍ MINH, NĂM 2026 ",
+        "BỘ GIÁO DỤC VÀ ĐÀO TẠO ",
+        "TRƯỜNG ĐẠI HỌC HÙNG VƯƠNG TP. HỒ CHÍ MINH "
+      ]
+    },
+    {
+      "page": 2,
+      "chars": 358,
+      "outside": [],
+      "first": [
+        "THÀNH PHỐ HỒ CHÍ MINH, NĂM 2026 ",
+        "BỘ GIÁO DỤC VÀ ĐÀO TẠO ",
+        "TRƯỜNG ĐẠI HỌC HÙNG VƯƠNG TP. HỒ CHÍ MINH "
+      ]
+    },
+    {
+      "page": 3,
+      "chars": 1393,
+      "outside": [],
+      "first": [
+        "NHẬN XÉT CỦA GIẢNG VIÊN ",
+        "Học phần Ứng dụng AI ",
+        "Sinh viên Mai Trần Thiện Tâm    MSSV 2305CT2070 "
+      ]
+    },
+    {
+      "page": 4,
+      "chars": 817,
+      "outside": [],
+      "first": [
+        "LỜI CẢM ƠN ",
+        "Em xin cảm ơn quý thầy cô Trường Đại học Hùng Vương Thành phố Hồ ",
+        "Chí Minh đã giảng dạy các kiến thức nền tảng về lập trình, dữ liệu và trí tuệ "
+      ]
+    },
+    {
+      "page": 5,
+      "chars": 1054,
+      "outside": [],
+      "first": [
+        "LỜI CAM ĐOAN ",
+        "Em là Mai Trần Thiện Tâm, MSSV 2305CT2070, trình bày báo cáo học ",
+        "phần Ứng dụng AI với đề tài “Xây dựng chatbot hỗ trợ tra cứu quy định pháp "
+      ]
+    },
+    {
+      "page": 6,
+      "chars": 999,
+      "outside": [],
+      "first": [
+        "TÓM TẮT BÁO CÁO ",
+        "Báo cáo trình bày việc xây dựng VietLabor AI, một chatbot hỗ trợ tra ",
+        "cứu quy định pháp luật lao động Việt Nam. Hệ thống sử dụng Streamlit, mô "
+      ]
+    },
+    {
+      "page": 7,
+      "chars": 1124,
+      "outside": [],
+      "first": [
+        "ABSTRACT ",
+        "This report presents VietLabor AI, a chatbot for assisting users in ",
+        "looking up Vietnamese labour regulations. The system combines a Streamlit "
+      ]
+    },
+    {
+      "page": 8,
+      "chars": 2157,
+      "outside": [],
+      "first": [
+        "MỤC LỤC ",
+        "MỞ ĐẦU............................................................................................ 1 ",
+        "LÝ DO CHỌN ĐỀ TÀI ................................................................... 1 "
+      ]
+    },
+    {
+      "page": 9,
+      "chars": 2429,
+      "outside": [],
+      "first": [
+        "3.5 THIẾT KẾ LUỒNG HỎI ĐÁP ................................................. 23 ",
+        "3.6 PHÂN RÃ CÂU HỎI VÀ QUẢN LÝ CHỨNG CỨ THEO VẤN ",
+        "ĐỀ ........................................................................................................ 25 "
+      ]
+    },
+    {
+      "page": 10,
+      "chars": 2449,
+      "outside": [],
+      "first": [
+        "5.5 PHÂN TÍCH THEO LOẠI CÂU HỎI....................................... 51 ",
+        "5.6 KẾT QUẢ KIỂM THỬ HỒI QUY CHẠY MỚI ........................ 52 ",
+        "5.7 ĐỘ TRỄ CỦA BỘ 11 CÂU HỎI VÀNG .................................. 53 "
+      ]
+    },
+    {
+      "page": 11,
+      "chars": 1150,
+      "outside": [],
+      "first": [
+        "C.2 CÁCH CẬP NHẬT KHI DỰ ÁN THAY ĐỔI .......................... 79 ",
+        "PHỤ LỤC D TÁI LẬP VÀ MẪU HỒ SƠ ĐÁNH GIÁ....................... 80 ",
+        "D.1 LỆNH KIỂM THỬ ĐÃ THỰC HIỆN ...................................... 80 "
+      ]
+    },
+    {
+      "page": 12,
+      "chars": 892,
+      "outside": [],
+      "first": [
+        "DANH MỤC CÁC KÝ HIỆU VÀ TỪ VIẾT TẮT ",
+        "Viết tắt ",
+        "Tiếng Anh "
+      ]
+    },
+    {
+      "page": 13,
+      "chars": 1255,
+      "outside": [],
+      "first": [
+        "DANH MỤC CÁC HÌNH VẼ ",
+        "Hình 3.1 Sơ đồ ca sử dụng của người dùng và người vận hành ............ 19 ",
+        "Hình 3.2 Kiến trúc tổng thể của VietLabor AI .................................... 23 "
+      ]
+    },
+    {
+      "page": 14,
+      "chars": 1624,
+      "outside": [],
+      "first": [
+        "DANH MỤC CÁC BẢNG BIỂU ",
+        "Bảng 1.1 Mục tiêu và minh chứng tương ứng ....................................... 7 ",
+        "Bảng 3.1 Danh sách yêu cầu chức năng và vị trí cài đặt ...................... 20 "
+      ]
+    },
+    {
+      "page": 15,
+      "chars": 1680,
+      "outside": [],
+      "first": [
+        "1 ",
+        " ",
+        "MỞ ĐẦU "
+      ]
+    },
+    {
+      "page": 16,
+      "chars": 1647,
+      "outside": [],
+      "first": [
+        "2 ",
+        " ",
+        "Lewis và cộng sự là một tài liệu nền tảng cho cách tiếp cận này [4]. Đối với "
+      ]
+    },
+    {
+      "page": 17,
+      "chars": 1703,
+      "outside": [],
+      "first": [
+        "3 ",
+        " ",
+        "Ba câu hỏi nghiên cứu chi phối quá trình thiết kế. Thứ nhất, truy xuất lai "
+      ]
+    },
+    {
+      "page": 18,
+      "chars": 1561,
+      "outside": [],
+      "first": [
+        "4 ",
+        " ",
+        "Những kết quả kế thừa được ghi nguồn và phân biệt với kết quả kiểm thử vừa "
+      ]
+    },
+    {
+      "page": 19,
+      "chars": 1563,
+      "outside": [],
+      "first": [
+        "5 ",
+        " ",
+        "CHƯƠNG 1 TỔNG QUAN VÀ ĐẶT VẤN ĐỀ "
+      ]
+    },
+    {
+      "page": 20,
+      "chars": 1678,
+      "outside": [],
+      "first": [
+        "6 ",
+        " ",
+        "câu trả lời có nguồn tương ứng, hoặc thông báo cần làm rõ, hoặc thông báo "
+      ]
+    },
+    {
+      "page": 21,
+      "chars": 1302,
+      "outside": [],
+      "first": [
+        "7 ",
+        " ",
+        "Mục tiêu đánh giá là xác định được lợi ích của truy xuất lai trên cùng tập "
+      ]
+    },
+    {
+      "page": 22,
+      "chars": 1650,
+      "outside": [],
+      "first": [
+        "8 ",
+        " ",
+        "thống khó kiểm tra mô hình đã viện dẫn đúng văn bản hay mới chỉ tạo ra một "
+      ]
+    },
+    {
+      "page": 23,
+      "chars": 1357,
+      "outside": [],
+      "first": [
+        "9 ",
+        " ",
+        "Đề tài cũng chưa cung cấp một API phục vụ tích hợp HRM dưới dạng "
+      ]
+    },
+    {
+      "page": 24,
+      "chars": 1586,
+      "outside": [],
+      "first": [
+        "10 ",
+        " ",
+        "CHƯƠNG 2 CƠ SỞ LÝ THUYẾT VÀ CÔNG NGHỆ LIÊN "
+      ]
+    },
+    {
+      "page": 25,
+      "chars": 1825,
+      "outside": [],
+      "first": [
+        "11 ",
+        " ",
+        "Trong bài toán của đề tài, giới hạn ngữ cảnh là một ràng buộc thực dụng. "
+      ]
+    },
+    {
+      "page": 26,
+      "chars": 1726,
+      "outside": [],
+      "first": [
+        "12 ",
+        " ",
+        "2.4 TRUY XUẤT THƯA BẰNG BM25 "
+      ]
+    },
+    {
+      "page": 27,
+      "chars": 1589,
+      "outside": [],
+      "first": [
+        "13 ",
+        " ",
+        "có nhiều từ chung và cùng chủ đề, nhưng hệ thống phải giữ nguyên thời hạn "
+      ]
+    },
+    {
+      "page": 28,
+      "chars": 1627,
+      "outside": [],
+      "first": [
+        "14 ",
+        " ",
+        "2.7 ĐỒ THỊ TRI THỨC VÀ QUAN HỆ LIÊN VĂN BẢN "
+      ]
+    },
+    {
+      "page": 29,
+      "chars": 1809,
+      "outside": [],
+      "first": [
+        "15 ",
+        " ",
+        "Dự án có MaterialPremiseGate và EvidenceCompletenessGate. Lớp tiền "
+      ]
+    },
+    {
+      "page": 30,
+      "chars": 1587,
+      "outside": [],
+      "first": [
+        "16 ",
+        " ",
+        "có nguồn. Đây là quy trình đánh giá được đề xuất, chưa phải số liệu đã thu "
+      ]
+    },
+    {
+      "page": 31,
+      "chars": 404,
+      "outside": [],
+      "first": [
+        "17 ",
+        " ",
+        "giữ đúng phạm vi áp dụng trước khi mô hình tạo câu trả lời. Validator hỗ trợ "
+      ]
+    },
+    {
+      "page": 32,
+      "chars": 1158,
+      "outside": [],
+      "first": [
+        "18 ",
+        " ",
+        "CHƯƠNG 3 PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG "
+      ]
+    },
+    {
+      "page": 33,
+      "chars": 837,
+      "outside": [],
+      "first": [
+        "19 ",
+        " ",
+        " "
+      ]
+    },
+    {
+      "page": 34,
+      "chars": 1157,
+      "outside": [],
+      "first": [
+        "20 ",
+        " ",
+        "người dùng sửa thông tin. Một dữ kiện đã bị đính chính không nên tiếp tục chi "
+      ]
+    },
+    {
+      "page": 35,
+      "chars": 1472,
+      "outside": [],
+      "first": [
+        "21 ",
+        " ",
+        "Mã "
+      ]
+    },
+    {
+      "page": 36,
+      "chars": 1402,
+      "outside": [],
+      "first": [
+        "22 ",
+        " ",
+        "Bảng 3.2 Tiêu chí phi chức năng và cách đánh giá "
+      ]
+    },
+    {
+      "page": 37,
+      "chars": 692,
+      "outside": [],
+      "first": [
+        "23 ",
+        " ",
+        "Việc tách tầng giúp kiểm thử pipeline bằng retriever hoặc LLM giả lập. "
+      ]
+    },
+    {
+      "page": 38,
+      "chars": 873,
+      "outside": [],
+      "first": [
+        "24 ",
+        " ",
+        "kế hoạch truy xuất. Những câu hỏi được xác định là cần làm rõ có thể trả kết "
+      ]
+    },
+    {
+      "page": 39,
+      "chars": 798,
+      "outside": [],
+      "first": [
+        "25 ",
+        " ",
+        " "
+      ]
+    },
+    {
+      "page": 40,
+      "chars": 1674,
+      "outside": [],
+      "first": [
+        "26 ",
+        " ",
+        "Đây là các quy tắc xác định trong mã, không phải một nhóm agent tự thương "
+      ]
+    },
+    {
+      "page": 41,
+      "chars": 1435,
+      "outside": [],
+      "first": [
+        "27 ",
+        " ",
+        "3.8 THIẾT KẾ DỮ LIỆU VĂN BẢN PHÁP LUẬT "
+      ]
+    },
+    {
+      "page": 42,
+      "chars": 1132,
+      "outside": [],
+      "first": [
+        "28 ",
+        " ",
+        "Nhóm "
+      ]
+    },
+    {
+      "page": 43,
+      "chars": 849,
+      "outside": [],
+      "first": [
+        "29 ",
+        " ",
+        "Bước REFERENCES trích dẫn từ corpus đã được gọi trong builder hiện "
+      ]
+    },
+    {
+      "page": 44,
+      "chars": 691,
+      "outside": [],
+      "first": [
+        "30 ",
+        " ",
+        "Với câu hỏi đầu phiên đã có cache hợp lệ, ứng dụng có thể trả lại "
+      ]
+    },
+    {
+      "page": 45,
+      "chars": 1642,
+      "outside": [],
+      "first": [
+        "31 ",
+        " ",
+        "3.11 THIẾT KẾ CACHE VÀ TRẠNG THÁI HỘI THOẠI "
+      ]
+    },
+    {
+      "page": 46,
+      "chars": 972,
+      "outside": [],
+      "first": [
+        "32 ",
+        " ",
+        "quả khác nhau. Khi hệ thống cần dữ kiện, thông điệp nên nêu rõ dữ kiện cần "
+      ]
+    },
+    {
+      "page": 47,
+      "chars": 766,
+      "outside": [],
+      "first": [
+        "33 ",
+        " ",
+        "nghĩa graph luôn hoạt động. Người vận hành cần khởi động dịch vụ, nạp "
+      ]
+    },
+    {
+      "page": 48,
+      "chars": 137,
+      "outside": [],
+      "first": [
+        "34 ",
+        " ",
+        " "
+      ]
+    },
+    {
+      "page": 49,
+      "chars": 1303,
+      "outside": [],
+      "first": [
+        "35 ",
+        " ",
+        "CHƯƠNG 4 HIỆN THỰC VÀ CÀI ĐẶT HỆ THỐNG "
+      ]
+    },
+    {
+      "page": 50,
+      "chars": 996,
+      "outside": [],
+      "first": [
+        "36 ",
+        " ",
+        "Thành phần "
+      ]
+    },
+    {
+      "page": 51,
+      "chars": 1600,
+      "outside": [],
+      "first": [
+        "37 ",
+        " ",
+        "đánh giá và xử lý dữ liệu huấn luyện. Thư mục evaluation có code đánh giá và "
+      ]
+    },
+    {
+      "page": 52,
+      "chars": 711,
+      "outside": [],
+      "first": [
+        "38 ",
+        " ",
+        " "
+      ]
+    },
+    {
+      "page": 53,
+      "chars": 1152,
+      "outside": [],
+      "first": [
+        "39 ",
+        " ",
+        "lực hoặc đang có hiệu lực. Đây là khoảng trống metadata cần xử lý trước khi "
+      ]
+    },
+    {
+      "page": 54,
+      "chars": 1619,
+      "outside": [],
+      "first": [
+        "40 ",
+        " ",
+        "hình rõ ràng. Khi chạy thực nghiệm, cần ghi xem chỉ mục đã được xây dựng "
+      ]
+    },
+    {
+      "page": 55,
+      "chars": 1526,
+      "outside": [],
+      "first": [
+        "41 ",
+        " ",
+        "Mã builder cần quyền ghi để nạp dữ liệu, trong khi truy vấn tra cứu nên "
+      ]
+    },
+    {
+      "page": 56,
+      "chars": 1528,
+      "outside": [],
+      "first": [
+        "42 ",
+        " ",
+        "4.8 ĐÓNG GÓI NGỮ CẢNH VÀ XỬ LÝ ĐẦU RA "
+      ]
+    },
+    {
+      "page": 57,
+      "chars": 1624,
+      "outside": [],
+      "first": [
+        "43 ",
+        " ",
+        "chiếm quá nhiều thời gian xử lý. Giới hạn này cần được thông báo cho người "
+      ]
+    },
+    {
+      "page": 58,
+      "chars": 1628,
+      "outside": [],
+      "first": [
+        "44 ",
+        " ",
+        "4.11 QUY TRÌNH FINE TUNING ĐÃ CHUẨN BỊ "
+      ]
+    },
+    {
+      "page": 59,
+      "chars": 1612,
+      "outside": [],
+      "first": [
+        "45 ",
+        " ",
+        "vẫn có thể dùng hybrid, nhưng không được ghi nhận là một lần thử "
+      ]
+    },
+    {
+      "page": 60,
+      "chars": 1105,
+      "outside": [],
+      "first": [
+        "46 ",
+        " ",
+        "4.14 NHỮNG ĐIỂM CẦN ĐỒNG BỘ TRONG TÀI LIỆU KỸ THUẬT "
+      ]
+    },
+    {
+      "page": 61,
+      "chars": 1573,
+      "outside": [],
+      "first": [
+        "47 ",
+        " ",
+        "CHƯƠNG 5 THỬ NGHIỆM ĐÁNH GIÁ VÀ KẾT QUẢ "
+      ]
+    },
+    {
+      "page": 62,
+      "chars": 1270,
+      "outside": [],
+      "first": [
+        "48 ",
+        " ",
+        "Nguồn "
+      ]
+    },
+    {
+      "page": 63,
+      "chars": 1303,
+      "outside": [],
+      "first": [
+        "49 ",
+        " ",
+        "5.3 CÁC CHỈ SỐ TRUY XUẤT "
+      ]
+    },
+    {
+      "page": 64,
+      "chars": 1086,
+      "outside": [],
+      "first": [
+        "50 ",
+        " ",
+        "Cấu hình "
+      ]
+    },
+    {
+      "page": 65,
+      "chars": 868,
+      "outside": [],
+      "first": [
+        "51 ",
+        " ",
+        " "
+      ]
+    },
+    {
+      "page": 66,
+      "chars": 1256,
+      "outside": [],
+      "first": [
+        "52 ",
+        " ",
+        "Hybrid norm đạt 1,00 ở nhóm khẩu ngữ trong bảng nguồn, trong khi "
+      ]
+    },
+    {
+      "page": 67,
+      "chars": 1290,
+      "outside": [],
+      "first": [
+        "53 ",
+        " ",
+        "Bảng 5.3 Kết quả pytest mới "
+      ]
+    },
+    {
+      "page": 68,
+      "chars": 861,
+      "outside": [],
+      "first": [
+        "54 ",
+        " ",
+        "được đáp ứng bởi bảng này. Nếu muốn đặt mục tiêu phản hồi sớm, cần định "
+      ]
+    },
+    {
+      "page": 69,
+      "chars": 1401,
+      "outside": [],
+      "first": [
+        "55 ",
+        " ",
+        "rộng như “được” hoặc “có quyền” cùng chuỗi “35” trong trích dẫn. Vì vậy, "
+      ]
+    },
+    {
+      "page": 70,
+      "chars": 1685,
+      "outside": [],
+      "first": [
+        "56 ",
+        " ",
+        "5.9 TÌNH HUỐNG ĐIỂN HÌNH VỀ CHẤM DỨT HỢP ĐỒNG "
+      ]
+    },
+    {
+      "page": 71,
+      "chars": 1729,
+      "outside": [],
+      "first": [
+        "57 ",
+        " ",
+        "ca không xác nhận dữ kiện do người dùng cung cấp đã đủ hoặc đúng. Cần "
+      ]
+    },
+    {
+      "page": 72,
+      "chars": 1310,
+      "outside": [],
+      "first": [
+        "58 ",
+        " ",
+        "được nguồn đúng mà selector hoặc ngân sách context lại loại nó. Lỗi sinh "
+      ]
+    },
+    {
+      "page": 73,
+      "chars": 1499,
+      "outside": [],
+      "first": [
+        "59 ",
+        " ",
+        "Tầng "
+      ]
+    },
+    {
+      "page": 74,
+      "chars": 1665,
+      "outside": [],
+      "first": [
+        "60 ",
+        " ",
+        "Để đánh giá SFT, trước hết khử trùng lặp và tách train, validation, test "
+      ]
+    },
+    {
+      "page": 75,
+      "chars": 1755,
+      "outside": [],
+      "first": [
+        "61 ",
+        " ",
+        "chứng minh thêm. Cách kết luận này giữ đúng giới hạn dữ liệu và tạo ra kế "
+      ]
+    },
+    {
+      "page": 76,
+      "chars": 304,
+      "outside": [],
+      "first": [
+        "62 ",
+        " ",
+        "đề lao động. Ảnh, đầu vào và đầu ra quan sát của các ca được lưu ở Phụ lục F "
+      ]
+    },
+    {
+      "page": 77,
+      "chars": 1569,
+      "outside": [],
+      "first": [
+        "63 ",
+        " ",
+        "CHƯƠNG 6 KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN "
+      ]
+    },
+    {
+      "page": 78,
+      "chars": 1619,
+      "outside": [],
+      "first": [
+        "64 ",
+        " ",
+        "một phương thức mở rộng ứng viên. Cache được thiết kế thận trọng theo "
+      ]
+    },
+    {
+      "page": 79,
+      "chars": 1715,
+      "outside": [],
+      "first": [
+        "65 ",
+        " ",
+        "6.4 HƯỚNG HOÀN THIỆN THEO MỨC ƯU TIÊN "
+      ]
+    },
+    {
+      "page": 80,
+      "chars": 416,
+      "outside": [],
+      "first": [
+        "66 ",
+        " ",
+        "được người thực hiện đổi sang Ứng dụng AI. Nếu vẫn áp dụng nguyên mức "
+      ]
+    },
+    {
+      "page": 81,
+      "chars": 1308,
+      "outside": [],
+      "first": [
+        "67 ",
+        " ",
+        "TÀI LIỆU THAM KHẢO "
+      ]
+    },
+    {
+      "page": 82,
+      "chars": 1308,
+      "outside": [],
+      "first": [
+        "68 ",
+        " ",
+        "[6] "
+      ]
+    },
+    {
+      "page": 83,
+      "chars": 868,
+      "outside": [],
+      "first": [
+        "69 ",
+        " ",
+        "PHỤ LỤC A DANH MỤC CORPUS VÀ DỮ LIỆU HUẤN "
+      ]
+    },
+    {
+      "page": 84,
+      "chars": 727,
+      "outside": [],
+      "first": [
+        "70 ",
+        " ",
+        "TT Mã văn bản "
+      ]
+    },
+    {
+      "page": 85,
+      "chars": 963,
+      "outside": [],
+      "first": [
+        "71 ",
+        " ",
+        "TT Mã văn bản "
+      ]
+    },
+    {
+      "page": 86,
+      "chars": 639,
+      "outside": [],
+      "first": [
+        "72 ",
+        " ",
+        "Mỗi bản ghi cần có chuỗi messages hợp lệ theo vai trò. Số lượng bản ghi "
+      ]
+    },
+    {
+      "page": 87,
+      "chars": 1220,
+      "outside": [],
+      "first": [
+        "73 ",
+        " ",
+        "PHỤ LỤC B BỘ CA KIỂM THỬ VÀ KỊCH BẢN DEMO "
+      ]
+    },
+    {
+      "page": 88,
+      "chars": 1350,
+      "outside": [],
+      "first": [
+        "74 ",
+        " ",
+        "Mã ca "
+      ]
+    },
+    {
+      "page": 89,
+      "chars": 1396,
+      "outside": [],
+      "first": [
+        "75 ",
+        " ",
+        "Mã ca "
+      ]
+    },
+    {
+      "page": 90,
+      "chars": 1207,
+      "outside": [],
+      "first": [
+        "76 ",
+        " ",
+        "Bước thứ ba là nhập câu hỏi ngoài phạm vi corpus. Kiểm tra hệ thống "
+      ]
+    },
+    {
+      "page": 91,
+      "chars": 186,
+      "outside": [],
+      "first": [
+        "77 ",
+        " ",
+        "Mã "
+      ]
+    },
+    {
+      "page": 92,
+      "chars": 936,
+      "outside": [],
+      "first": [
+        "78 ",
+        " ",
+        "PHỤ LỤC C ÁNH XẠ MÃ NGUỒN VÀ NỘI DUNG BÁO CÁO "
+      ]
+    },
+    {
+      "page": 93,
+      "chars": 1179,
+      "outside": [],
+      "first": [
+        "79 ",
+        " ",
+        "Nội dung "
+      ]
+    },
+    {
+      "page": 94,
+      "chars": 1557,
+      "outside": [],
+      "first": [
+        "80 ",
+        " ",
+        "PHỤ LỤC D TÁI LẬP VÀ MẪU HỒ SƠ ĐÁNH GIÁ "
+      ]
+    },
+    {
+      "page": 95,
+      "chars": 1122,
+      "outside": [],
+      "first": [
+        "81 ",
+        " ",
+        "có loại lỗi và tầng nghi ngờ phát sinh, kèm đường dẫn hoặc trích đoạn đủ để "
+      ]
+    },
+    {
+      "page": 96,
+      "chars": 943,
+      "outside": [],
+      "first": [
+        "82 ",
+        " ",
+        "PHỤ LỤC E ĐỐI CHIẾU YÊU CẦU VÀ CÔNG VIỆC CÒN "
+      ]
+    },
+    {
+      "page": 97,
+      "chars": 982,
+      "outside": [],
+      "first": [
+        "83 ",
+        " ",
+        "Yêu cầu "
+      ]
+    },
+    {
+      "page": 98,
+      "chars": 1291,
+      "outside": [],
+      "first": [
+        "84 ",
+        " ",
+        "Khung ban "
+      ]
+    },
+    {
+      "page": 99,
+      "chars": 527,
+      "outside": [],
+      "first": [
+        "85 ",
+        " ",
+        "PHỤ LỤC F MINH CHỨNG CHẠY ỨNG DỤNG "
+      ]
+    },
+    {
+      "page": 100,
+      "chars": 517,
+      "outside": [],
+      "first": [
+        "86 ",
+        " ",
+        "F.2 HỎI ĐÁP CÓ CĂN CỨ "
+      ]
+    },
+    {
+      "page": 101,
+      "chars": 478,
+      "outside": [],
+      "first": [
+        "87 ",
+        " ",
+        "F.3 YÊU CẦU LÀM RÕ "
+      ]
+    },
+    {
+      "page": 102,
+      "chars": 528,
+      "outside": [],
+      "first": [
+        "88 ",
+        " ",
+        "F.4 LỖI QUAN SÁT Ở LƯỢT TIẾP THEO "
+      ]
+    },
+    {
+      "page": 103,
+      "chars": 466,
+      "outside": [],
+      "first": [
+        "89 ",
+        " ",
+        "F.5 CÂU HỎI NGOÀI PHẠM VI "
+      ]
+    }
+  ],
+  "landmarks": [
+    {
+      "page": 8,
+      "line": "MỞ ĐẦU............................................................................................ 1 "
+    },
+    {
+      "page": 8,
+      "line": "CHƯƠNG 1 TỔNG QUAN VÀ ĐẶT VẤN ĐỀ ................................... 5 "
+    },
+    {
+      "page": 8,
+      "line": "CHƯƠNG 2 CƠ SỞ LÝ THUYẾT VÀ CÔNG NGHỆ LIÊN QUAN.. 10 "
+    },
+    {
+      "page": 8,
+      "line": "CHƯƠNG 3 PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG ..................... 18 "
+    },
+    {
+      "page": 9,
+      "line": "CHƯƠNG 4 HIỆN THỰC VÀ CÀI ĐẶT HỆ THỐNG ...................... 35 "
+    },
+    {
+      "page": 9,
+      "line": "CHƯƠNG 5 THỬ NGHIỆM ĐÁNH GIÁ VÀ KẾT QUẢ .................. 47 "
+    },
+    {
+      "page": 10,
+      "line": "CHƯƠNG 6 KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN....................... 63 "
+    },
+    {
+      "page": 10,
+      "line": "TÀI LIỆU THAM KHẢO ................................................................. 67 "
+    },
+    {
+      "page": 10,
+      "line": "PHỤ LỤC A DANH MỤC CORPUS VÀ DỮ LIỆU HUẤN LUYỆN . 69 "
+    },
+    {
+      "page": 10,
+      "line": "PHỤ LỤC B BỘ CA KIỂM THỬ VÀ KỊCH BẢN DEMO................. 73 "
+    },
+    {
+      "page": 10,
+      "line": "PHỤ LỤC C ÁNH XẠ MÃ NGUỒN VÀ NỘI DUNG BÁO CÁO ..... 78 "
+    },
+    {
+      "page": 11,
+      "line": "PHỤ LỤC D TÁI LẬP VÀ MẪU HỒ SƠ ĐÁNH GIÁ....................... 80 "
+    },
+    {
+      "page": 11,
+      "line": "PHỤ LỤC E ĐỐI CHIẾU YÊU CẦU VÀ CÔNG VIỆC CÒN LẠI..... 82 "
+    },
+    {
+      "page": 11,
+      "line": "PHỤ LỤC F MINH CHỨNG CHẠY ỨNG DỤNG ............................ 85 "
+    },
+    {
+      "page": 13,
+      "line": "Hình 3.1 Sơ đồ ca sử dụng của người dùng và người vận hành ............ 19 "
+    },
+    {
+      "page": 13,
+      "line": "Hình 3.2 Kiến trúc tổng thể của VietLabor AI .................................... 23 "
+    },
+    {
+      "page": 13,
+      "line": "Hình 3.3 Luồng xử lý hỏi đáp và các điểm kiểm soát .......................... 25 "
+    },
+    {
+      "page": 13,
+      "line": "Hình 3.4 Lược đồ đồ thị theo builder hiện tại...................................... 29 "
+    },
+    {
+      "page": 13,
+      "line": "Hình 3.5 Trình tự một lượt hỏi đáp có căn cứ ..................................... 30 "
+    },
+    {
+      "page": 13,
+      "line": "Hình 3.6 Ảnh tham chiếu giao diện có sẵn trong kho mã ..................... 32 "
+    },
+    {
+      "page": 13,
+      "line": "Hình 3.7 Sơ đồ triển khai cục bộ và các kho dữ liệu............................ 34 "
+    },
+    {
+      "page": 13,
+      "line": "Hình 4.1 Chuỗi xử lý dữ liệu và lập các chỉ mục ................................. 38 "
+    },
+    {
+      "page": 13,
+      "line": "Hình 5.1 So sánh Hit và Recall trong ablation đã lưu .......................... 51 "
+    },
+    {
+      "page": 13,
+      "line": "Hình 5.2 Độ trễ được lưu của 11 câu hỏi vàng .................................... 54 "
+    },
+    {
+      "page": 13,
+      "line": "Hình F.1 Trang chủ ứng dụng trong lần demo thực tế ......................... 85 "
+    },
+    {
+      "page": 13,
+      "line": "Hình F.2 Câu hỏi, câu trả lời và căn cứ của ca hợp đồng 24 tháng ....... 86 "
+    },
+    {
+      "page": 13,
+      "line": "Hình F.3 Phản hồi yêu cầu người dùng bổ sung loại hợp đồng ............ 87 "
+    },
+    {
+      "page": 13,
+      "line": "Hình F.4 Thông báo lỗi sau khi chọn dữ kiện bổ sung ......................... 88 "
+    },
+    {
+      "page": 13,
+      "line": "Hình F.5 Phản hồi từ chối câu hỏi ngoài phạm vi lao động .................. 89 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng 1.1 Mục tiêu và minh chứng tương ứng ....................................... 7 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng 3.1 Danh sách yêu cầu chức năng và vị trí cài đặt ...................... 20 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng 3.2 Tiêu chí phi chức năng và cách đánh giá .............................. 22 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng 3.3 Nhóm trường của LegalChunk ............................................ 27 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng 4.1 Phiên bản môi trường tại thời điểm kiểm tra ........................ 35 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng 4.2 Phân bố trạng thái trong corpus ........................................... 39 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng 5.1 Phân loại bằng chứng thực nghiệm ...................................... 48 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng 5.2 Kết quả truy xuất kế thừa trên 145 câu hỏi có thể chấm ........ 49 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng 5.3 Kết quả pytest mới .............................................................. 53 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng 5.4 Những giới hạn quan sát được của rubric cũ......................... 55 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng 5.5 Ma trận lỗi và minh chứng cần lưu ...................................... 58 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng A.1 Danh mục văn bản trong corpus.......................................... 69 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng A.2 Số bản ghi trong các tệp ChatML........................................ 71 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng B.1 Danh sách câu hỏi rubric và mục tiêu chấm ......................... 73 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng B.2 Ảnh và nhật ký cần bổ sung cho bản nộp............................. 76 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng C.1 Ánh xạ nội dung sang mã nguồn ......................................... 78 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng D.1 Các tiêu chí đề xuất cho lần đánh giá pháp lý ...................... 81 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng E.1 Yêu cầu trình bày và cách áp dụng ...................................... 82 "
+    },
+    {
+      "page": 14,
+      "line": "Bảng E.2 Đối chiếu khung và bằng chứng .......................................... 83 "
+    },
+    {
+      "page": 15,
+      "line": "MỞ ĐẦU "
+    },
+    {
+      "page": 19,
+      "line": "CHƯƠNG 1 TỔNG QUAN VÀ ĐẶT VẤN ĐỀ "
+    },
+    {
+      "page": 21,
+      "line": "Bảng 1.1 Mục tiêu và minh chứng tương ứng "
+    },
+    {
+      "page": 24,
+      "line": "CHƯƠNG 2 CƠ SỞ LÝ THUYẾT VÀ CÔNG NGHỆ LIÊN "
+    },
+    {
+      "page": 32,
+      "line": "CHƯƠNG 3 PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG "
+    },
+    {
+      "page": 33,
+      "line": "Hình 3.1 Sơ đồ ca sử dụng của người dùng và người vận hành "
+    },
+    {
+      "page": 34,
+      "line": "Bảng 3.1 Danh sách yêu cầu chức năng và vị trí cài đặt "
+    },
+    {
+      "page": 36,
+      "line": "Bảng 3.2 Tiêu chí phi chức năng và cách đánh giá "
+    },
+    {
+      "page": 37,
+      "line": "Hình 3.2 Kiến trúc tổng thể của VietLabor AI "
+    },
+    {
+      "page": 39,
+      "line": "Hình 3.3 Luồng xử lý hỏi đáp và các điểm kiểm soát "
+    },
+    {
+      "page": 41,
+      "line": "Bảng 3.3 Nhóm trường của LegalChunk "
+    },
+    {
+      "page": 43,
+      "line": "Hình 3.4 Lược đồ đồ thị theo builder hiện tại "
+    },
+    {
+      "page": 44,
+      "line": "Hình 3.5 Trình tự một lượt hỏi đáp có căn cứ "
+    },
+    {
+      "page": 46,
+      "line": "Hình 3.6 Ảnh tham chiếu giao diện có sẵn trong kho mã "
+    },
+    {
+      "page": 48,
+      "line": "Hình 3.7 Sơ đồ triển khai cục bộ và các kho dữ liệu "
+    },
+    {
+      "page": 49,
+      "line": "CHƯƠNG 4 HIỆN THỰC VÀ CÀI ĐẶT HỆ THỐNG "
+    },
+    {
+      "page": 49,
+      "line": "Bảng 4.1 Phiên bản môi trường tại thời điểm kiểm tra "
+    },
+    {
+      "page": 52,
+      "line": "Hình 4.1 Chuỗi xử lý dữ liệu và lập các chỉ mục "
+    },
+    {
+      "page": 53,
+      "line": "Bảng 4.2 Phân bố trạng thái trong corpus "
+    },
+    {
+      "page": 61,
+      "line": "CHƯƠNG 5 THỬ NGHIỆM ĐÁNH GIÁ VÀ KẾT QUẢ "
+    },
+    {
+      "page": 62,
+      "line": "Bảng 5.1 Phân loại bằng chứng thực nghiệm "
+    },
+    {
+      "page": 63,
+      "line": "Bảng 5.2 Kết quả truy xuất kế thừa trên 145 câu hỏi có thể chấm "
+    },
+    {
+      "page": 65,
+      "line": "Hình 5.1 So sánh Hit và Recall trong ablation đã lưu "
+    },
+    {
+      "page": 67,
+      "line": "Bảng 5.3 Kết quả pytest mới "
+    },
+    {
+      "page": 68,
+      "line": "Hình 5.2 Độ trễ được lưu của 11 câu hỏi vàng "
+    },
+    {
+      "page": 69,
+      "line": "Bảng 5.4 Những giới hạn quan sát được của rubric cũ "
+    },
+    {
+      "page": 72,
+      "line": "Bảng 5.5 Ma trận lỗi và minh chứng cần lưu "
+    },
+    {
+      "page": 77,
+      "line": "CHƯƠNG 6 KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN "
+    },
+    {
+      "page": 81,
+      "line": "TÀI LIỆU THAM KHẢO "
+    },
+    {
+      "page": 83,
+      "line": "PHỤ LỤC A DANH MỤC CORPUS VÀ DỮ LIỆU HUẤN "
+    },
+    {
+      "page": 83,
+      "line": "Bảng A.1 Danh mục văn bản trong corpus "
+    },
+    {
+      "page": 85,
+      "line": "Bảng A.2 Số bản ghi trong các tệp ChatML "
+    },
+    {
+      "page": 87,
+      "line": "PHỤ LỤC B BỘ CA KIỂM THỬ VÀ KỊCH BẢN DEMO "
+    },
+    {
+      "page": 87,
+      "line": "Bảng B.1 Danh sách câu hỏi rubric và mục tiêu chấm "
+    },
+    {
+      "page": 90,
+      "line": "Bảng B.2 Ảnh và nhật ký cần bổ sung cho bản nộp "
+    },
+    {
+      "page": 92,
+      "line": "PHỤ LỤC C ÁNH XẠ MÃ NGUỒN VÀ NỘI DUNG BÁO CÁO "
+    },
+    {
+      "page": 92,
+      "line": "Bảng C.1 Ánh xạ nội dung sang mã nguồn "
+    },
+    {
+      "page": 94,
+      "line": "PHỤ LỤC D TÁI LẬP VÀ MẪU HỒ SƠ ĐÁNH GIÁ "
+    },
+    {
+      "page": 95,
+      "line": "Bảng D.1 Các tiêu chí đề xuất cho lần đánh giá pháp lý "
+    },
+    {
+      "page": 96,
+      "line": "PHỤ LỤC E ĐỐI CHIẾU YÊU CẦU VÀ CÔNG VIỆC CÒN "
+    },
+    {
+      "page": 96,
+      "line": "Bảng E.1 Yêu cầu trình bày và cách áp dụng "
+    },
+    {
+      "page": 97,
+      "line": "Bảng E.2 Đối chiếu khung và bằng chứng "
+    },
+    {
+      "page": 99,
+      "line": "PHỤ LỤC F MINH CHỨNG CHẠY ỨNG DỤNG "
+    },
+    {
+      "page": 99,
+      "line": "Hình F.1 Trang chủ ứng dụng trong lần demo thực tế "
+    },
+    {
+      "page": 100,
+      "line": "Hình F.2 Câu hỏi, câu trả lời và căn cứ của ca hợp đồng 24 tháng "
+    },
+    {
+      "page": 101,
+      "line": "Hình F.3 Phản hồi yêu cầu người dùng bổ sung loại hợp đồng "
+    },
+    {
+      "page": 102,
+      "line": "Hình F.4 Thông báo lỗi sau khi chọn dữ kiện bổ sung "
+    },
+    {
+      "page": 103,
+      "line": "Hình F.5 Phản hồi từ chối câu hỏi ngoài phạm vi lao động "
+    }
+  ]
+}

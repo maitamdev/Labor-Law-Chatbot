@@ -1,0 +1,38 @@
+BỘ GIÁO DỤC VÀ ĐÀO TẠO
+TRƯỜNG ĐẠI HỌC HÙNG VƯƠNG TP. HỒ CHÍ MINH
+----------o0o----------
+
+BÁO CÁO ĐỒ ÁN CƠ SỞ
+POS BÁN HÀNG TÍCH HỢP QUẢN LÝ KHO HÀNG VÀ CẢNH BÁO TỒN KHO THẤP
+
+BỘ GIÁO DỤC VÀ ĐÀO TẠO
+TRƯỜNG ĐẠI HỌC HÙNG VƯƠNG TP. HỒ CHÍ MINH
+----------o0o----------
+
+BÁO CÁO ĐỒ ÁN CƠ SỞ
+POS BÁN HÀNG TÍCH HỢP QUẢN LÝ KHO HÀNG VÀ CẢNH BÁO TỒN KHO THẤP
+
+LỜI CẢM ƠN
+Trong thời gian thực hiện đồ án, em nhận được sự hướng dẫn và góp ý của Ths.Nguyễn Thanh Tiến. Những trao đổi về phạm vi đề tài giúp em xác định rõ phần cần tập trung là quy trình bán hàng, cập nhật kho sau giao dịch và cảnh báo khi lượng hàng chạm ngưỡng tối thiểu.
+Em xin cảm ơn quý thầy cô khoa Kỹ Thuật Công Nghệ và Trường Đại Học Hùng Vương Tp. Hồ Chí Minh đã trang bị kiến thức về lập trình, cơ sở dữ liệu, phân tích thiết kế hệ thống và kiểm thử phần mềm. Đây là nền tảng để em đọc lại mã nguồn, đối chiếu các luồng nghiệp vụ và hoàn thiện báo cáo này.
+Do kinh nghiệm và thời gian thực hiện còn hạn chế, báo cáo khó tránh khỏi thiếu sót. Em mong nhận được nhận xét của giảng viên để tiếp tục chỉnh sửa hệ thống theo hướng ổn định, dễ kiểm tra và phù hợp hơn với quy trình vận hành thực tế.
+
+LỜI CAM ĐOAN
+Em xin cam đoan báo cáo Đồ án cơ sở với đề tài “Pos Bán Hàng Tích Hợp Quản Lý Kho Hàng Và Cảnh Báo Tồn Kho Thấp” là kết quả do em thực hiện dưới sự hướng dẫn của Ths. Nguyễn Thanh Tiến. Nội dung báo cáo được xây dựng từ việc đọc và đối chiếu mã nguồn dự án Sora POS, kết quả kiểm tra trên môi trường phát triển và các tài liệu được ghi tại phần Tài liệu tham khảo.
+Các số liệu về tệp mã nguồn, bảng dữ liệu, tuyến API và kiểm thử được ghi nhận tại thời điểm kiểm tra dự án. Những chức năng chưa có điều kiện chạy trên môi trường tích hợp thực tế được nêu là hạng mục cần kiểm chứng, không trình bày như kết quả đã nghiệm thu.
+Em chịu trách nhiệm về tính trung thực của báo cáo, cách sử dụng mã nguồn và việc trích dẫn tài liệu. Nếu có sai sót hoặc vi phạm quy định học thuật, em xin hoàn toàn chịu trách nhiệm trước Khoa và Nhà trường.
+TP. Hồ Chí Minh, ngày [NGÀY] tháng [THÁNG] năm 2026
+Người cam đoan
+
+
+
+[HỌ VÀ TÊN]
+
+Người hướng dẫn: [GIẢNG VIÊN HƯỚNG DẪN]
+Người thực hiện: [HỌ VÀ TÊN]
+Lớp: [TÊN LỚP]
+Khóa: [KHÓA]
+Người hướng dẫn: [GIẢNG VIÊN HƯỚNG DẪN]
+Người thực hiện: [HỌ VÀ TÊN]
+Lớp: [TÊN LỚP]
+Khóa: [KHÓA]

@@ -1,0 +1,497 @@
+{
+  "template": {
+    "sha256": "2774ec957bfc3b69d7fa9dd4ee3b7d1f9062173b5e37563961298d60a1ea84f2",
+    "sections": [
+      {
+        "width_cm": 21.00086111111111,
+        "height_cm": 29.70036111111111,
+        "left_cm": 3.000375,
+        "right_cm": 2.00025,
+        "top_cm": 2.00025,
+        "bottom_cm": 2.00025
+      },
+      {
+        "width_cm": 21.00086111111111,
+        "height_cm": 29.70036111111111,
+        "left_cm": 3.000375,
+        "right_cm": 2.00025,
+        "top_cm": 2.00025,
+        "bottom_cm": 2.00025
+      }
+    ],
+    "paragraphs": 238,
+    "tables": 3,
+    "images": 0,
+    "headings": [],
+    "pages": 12
+  },
+  "pos": {
+    "sha256": "e406a521de43ffb29d4b44485171c348be09de12388c085399b19d891cbd935f",
+    "sections": [
+      {
+        "width_cm": 21.00086111111111,
+        "height_cm": 29.70036111111111,
+        "left_cm": 3.000375,
+        "right_cm": 2.00025,
+        "top_cm": 2.00025,
+        "bottom_cm": 2.00025
+      },
+      {
+        "width_cm": 21.00086111111111,
+        "height_cm": 29.70036111111111,
+        "left_cm": 3.000375,
+        "right_cm": 2.00025,
+        "top_cm": 2.00025,
+        "bottom_cm": 2.00025
+      }
+    ],
+    "paragraphs": 25,
+    "tables": 2,
+    "images": 2,
+    "headings": [],
+    "pages": 4
+  },
+  "corpus": {
+    "chunks": 9312,
+    "documents": 36,
+    "unique_ids": 9312,
+    "sha256": "c8f9a77a3b86b930a0103e1b495cacb7886ad9a2371c3e18f6e291940df14ddc",
+    "statuses": {
+      "null": 2393,
+      "REPEALED": 912,
+      "PARTIALLY_EFFECTIVE": 949,
+      "CURRENT": 5058
+    },
+    "domains": {
+      "null": 3305,
+      "CORE_LABOR": 1107,
+      "LABOR_DISPUTE": 12,
+      "MATERNITY": 275,
+      "COLLECTIVE_LABOR": 245,
+      "EMPLOYMENT_SERVICE": 389,
+      "OCCUPATIONAL_SAFETY": 984,
+      "CHILD_LABOR": 73,
+      "FOREIGN_WORKER": 220,
+      "SOCIAL_INSURANCE": 1500,
+      "UNEMPLOYMENT_INSURANCE": 694,
+      "OVERSEAS_WORKER": 500,
+      "OCCUPATIONAL_ACCIDENT_DISEASE": 8
+    },
+    "docs": [
+      {
+        "doc_id": "VBHN_18_2026",
+        "title": "Văn bản hợp nhất 18/VBHN-VPQH - Bộ luật Lao động",
+        "number": "18/VBHN-VPQH",
+        "status": null,
+        "effective_from": null,
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-18-vbhn-vpqh-468971.htm",
+        "count": 985
+      },
+      {
+        "doc_id": "ND_145_2020",
+        "title": "Nghị định 145/2020/NĐ-CP - Hướng dẫn Bộ luật Lao động về điều kiện lao động và quan hệ lao động",
+        "number": "145/2020/NĐ-CP",
+        "status": null,
+        "effective_from": null,
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-145-2020-nd-cp-32732.htm",
+        "count": 847
+      },
+      {
+        "doc_id": "TT_10_2020",
+        "title": "Thông tư 10/2020/TT-BLĐTBXH - Hướng dẫn nội dung HĐLĐ, Hội đồng thương lượng tập thể và nghề ảnh hưởng sinh sản",
+        "number": "10/2020/TT-BLĐTBXH",
+        "status": null,
+        "effective_from": null,
+        "effective_to": null,
+        "source": "https://vbpl.vn/TW/Pages/vbpq-van-ban-goc.aspx?ItemID=146696",
+        "count": 105
+      },
+      {
+        "doc_id": "ND_293_2025",
+        "title": "Nghị định 293/2025/NĐ-CP - Quy định mức lương tối thiểu đối với người lao động làm việc theo HĐLĐ",
+        "number": "293/2025/NĐ-CP",
+        "status": null,
+        "effective_from": null,
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-293-2025-nd-cp-46568.htm",
+        "count": 30
+      },
+      {
+        "doc_id": "ND_12_2022",
+        "title": "Nghị định 12/2022/NĐ-CP - Quy định xử phạt vi phạm hành chính trong lĩnh vực lao động, bảo hiểm xã hội",
+        "number": "12/2022/NĐ-CP",
+        "status": "REPEALED",
+        "effective_from": null,
+        "effective_to": "2026-09-09",
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-12-2022-nd-cp-36716.htm",
+        "count": 912
+      },
+      {
+        "doc_id": "ND_337_2025",
+        "title": "Nghị định 337/2025/NĐ-CP - Quy định về hợp đồng lao động điện tử",
+        "number": "337/2025/NĐ-CP",
+        "status": null,
+        "effective_from": null,
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-337-2025-nd-cp-467931.htm",
+        "count": 170
+      },
+      {
+        "doc_id": "TT_08_2026",
+        "title": "Thông tư 08/2026/TT-BNV - Hướng dẫn Nghị định 337/2025/NĐ-CP về hợp đồng lao động điện tử",
+        "number": "08/2026/TT-BNV",
+        "status": null,
+        "effective_from": null,
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/thong-tu-so-08-2026-tt-bnv-469695.htm",
+        "count": 157
+      },
+      {
+        "doc_id": "ND_135_2020",
+        "title": "Nghị định 135/2020/NĐ-CP - Quy định về tuổi nghỉ hưu",
+        "number": "135/2020/NĐ-CP",
+        "status": null,
+        "effective_from": null,
+        "effective_to": null,
+        "source": "https://vanban.chinhphu.vn/default.aspx?docid=201886&pageid=27160",
+        "count": 25
+      },
+      {
+        "doc_id": "ND_176_2025",
+        "title": "Nghị định 176/2025/NĐ-CP - Quy định chi tiết về trợ cấp hưu trí xã hội",
+        "number": "176/2025/NĐ-CP",
+        "status": null,
+        "effective_from": null,
+        "effective_to": null,
+        "source": "https://vanban.chinhphu.vn/?classid=0&docid=216976&pageid=27160",
+        "count": 12
+      },
+      {
+        "doc_id": "ND_39_2016",
+        "title": "Nghị định 39/2016/NĐ-CP - Hướng dẫn thi hành Luật An toàn, vệ sinh lao động",
+        "number": "39/2016/NĐ-CP",
+        "status": null,
+        "effective_from": null,
+        "effective_to": null,
+        "source": "https://vanban.chinhphu.vn/?classid=0&docid=184939&pageid=27160",
+        "count": 17
+      },
+      {
+        "doc_id": "VBHN_04_BNV_2026",
+        "title": "Văn bản hợp nhất 04/VBHN-BNV - Bảo hiểm tai nạn lao động, bệnh nghề nghiệp bắt buộc",
+        "number": "04/VBHN-BNV",
+        "status": null,
+        "effective_from": null,
+        "effective_to": null,
+        "source": "https://moha.gov.vn/van-ban/04-2026-vbhn-bnv.html",
+        "count": 14
+      },
+      {
+        "doc_id": "VBHN_05_BNV_2026",
+        "title": "Văn bản hợp nhất 05/VBHN-BNV - Quy định mức đóng quỹ bảo hiểm tai nạn lao động, bệnh nghề nghiệp",
+        "number": "05/VBHN-BNV",
+        "status": null,
+        "effective_from": null,
+        "effective_to": null,
+        "source": "https://moha.gov.vn/van-ban/05-2026-vbhn-bnv.html",
+        "count": 13
+      },
+      {
+        "doc_id": "VBHN_06_BNV_2026",
+        "title": "Văn bản hợp nhất 06/VBHN-BNV - Chế độ đối với người lao động bị tai nạn lao động, bệnh nghề nghiệp",
+        "number": "06/VBHN-BNV",
+        "status": null,
+        "effective_from": null,
+        "effective_to": null,
+        "source": "https://moha.gov.vn/van-ban/06-2026-vbhn-bnv.html",
+        "count": 18
+      },
+      {
+        "doc_id": "ND_24_2018",
+        "title": "Nghị định 24/2018/NĐ-CP - Giải quyết khiếu nại, tố cáo trong lĩnh vực lao động",
+        "number": "24/2018/NĐ-CP",
+        "status": "PARTIALLY_EFFECTIVE",
+        "effective_from": "2018-04-15",
+        "effective_to": null,
+        "source": "https://vanban.chinhphu.vn/default.aspx?docid=193093&pageid=27160",
+        "count": 4
+      },
+      {
+        "doc_id": "VBHN_99_2025",
+        "title": "Văn bản hợp nhất 99/VBHN-VPQH - Bộ luật Tố tụng dân sự",
+        "number": "99/VBHN-VPQH",
+        "status": "CURRENT",
+        "effective_from": "2025-07-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-99-vbhn-vpqh-46013.htm",
+        "count": 12
+      },
+      {
+        "doc_id": "LUAT_113_2025",
+        "title": "Luật Dân số 113/2025/QH15",
+        "number": "113/2025/QH15",
+        "status": "CURRENT",
+        "effective_from": "2026-07-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/luat-so-113-2025-qh15-468675.htm",
+        "count": 187
+      },
+      {
+        "doc_id": "ND_168_2026",
+        "title": "Nghị định 168/2026/NĐ-CP hướng dẫn Luật Dân số",
+        "number": "168/2026/NĐ-CP",
+        "status": "CURRENT",
+        "effective_from": "2026-07-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-168-2026-nd-cp-469560/65154.htm",
+        "count": 88
+      },
+      {
+        "doc_id": "VBHN_90_2025",
+        "title": "Văn bản hợp nhất 90/VBHN-VPQH - Luật Công đoàn",
+        "number": "90/VBHN-VPQH",
+        "status": "CURRENT",
+        "effective_from": "2025-07-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-90-vbhn-vpqh-45984.htm",
+        "count": 243
+      },
+      {
+        "doc_id": "ND_318_2025",
+        "title": "Nghị định 318/2025/NĐ-CP về đăng ký lao động và thông tin thị trường lao động",
+        "number": "318/2025/NĐ-CP",
+        "status": "CURRENT",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-318-2025-nd-cp-46804.htm",
+        "count": 173
+      },
+      {
+        "doc_id": "ND_352_2025",
+        "title": "Nghị định 352/2025/NĐ-CP về dịch vụ việc làm",
+        "number": "352/2025/NĐ-CP",
+        "status": "CURRENT",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-352-2025-nd-cp-468351.htm",
+        "count": 215
+      },
+      {
+        "doc_id": "TT_24_2022",
+        "title": "Thông tư 24/2022/TT-BLĐTBXH về bồi dưỡng bằng hiện vật",
+        "number": "24/2022/TT-BLĐTBXH",
+        "status": "CURRENT",
+        "effective_from": "2023-03-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/thong-tu-so-24-2022-tt-bldtbxh-38574.htm",
+        "count": 39
+      },
+      {
+        "doc_id": "TT_09_2020",
+        "title": "Thông tư 09/2020/TT-BLĐTBXH về lao động chưa thành niên",
+        "number": "09/2020/TT-BLĐTBXH",
+        "status": "CURRENT",
+        "effective_from": "2021-03-15",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/thong-tu-so-09-2020-tt-bldtbxh-33378.htm",
+        "count": 73
+      },
+      {
+        "doc_id": "ND_219_2025",
+        "title": "Nghị định 219/2025/NĐ-CP về người lao động nước ngoài làm việc tại Việt Nam",
+        "number": "219/2025/NĐ-CP",
+        "status": "CURRENT",
+        "effective_from": "2025-08-07",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-219-2025-nd-cp-45798.htm",
+        "count": 220
+      },
+      {
+        "doc_id": "ND_158_2025",
+        "title": "Nghị định 158/2025/NĐ-CP về bảo hiểm xã hội bắt buộc",
+        "number": "158/2025/NĐ-CP",
+        "status": "CURRENT",
+        "effective_from": "2025-07-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-158-2025-nd-cp-45240.htm",
+        "count": 335
+      },
+      {
+        "doc_id": "ND_159_2025",
+        "title": "Nghị định 159/2025/NĐ-CP về bảo hiểm xã hội tự nguyện",
+        "number": "159/2025/NĐ-CP",
+        "status": "CURRENT",
+        "effective_from": "2025-07-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-159-2025-nd-cp-45253.htm",
+        "count": 111
+      },
+      {
+        "doc_id": "L_84_2015",
+        "title": "Luật An toàn, vệ sinh lao động 84/2015/QH13",
+        "number": "84/2015/QH13",
+        "status": "PARTIALLY_EFFECTIVE",
+        "effective_from": "2016-07-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/luat-so-84-2015-qh13-15356.htm",
+        "count": 574
+      },
+      {
+        "doc_id": "LVL_74_2025",
+        "title": "Luật Việc làm số 74/2025/QH15",
+        "number": "74/2025/QH15",
+        "status": "CURRENT",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/luat-so-74-2025-qh15-45562.htm",
+        "count": 347
+      },
+      {
+        "doc_id": "ND_374_2025",
+        "title": "Nghị định 374/2025/NĐ-CP về bảo hiểm thất nghiệp",
+        "number": "374/2025/NĐ-CP",
+        "status": "CURRENT",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-374-2025-nd-cp-468724.htm",
+        "count": 347
+      },
+      {
+        "doc_id": "ND_283_2026",
+        "title": "Nghị định 283/2026/NĐ-CP về xử phạt lĩnh vực lao động, BHXH",
+        "number": "283/2026/NĐ-CP",
+        "status": "CURRENT",
+        "effective_from": "2026-09-10",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-283-2026-nd-cp-470103.htm",
+        "count": 1103
+      },
+      {
+        "doc_id": "LUAT_69_2020",
+        "title": "Luật Người lao động Việt Nam đi làm việc ở nước ngoài theo hợp đồng",
+        "number": "69/2020/QH14",
+        "status": "CURRENT",
+        "effective_from": "2022-01-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/luat-so-69-2020-qh14-32699.htm",
+        "count": 500
+      },
+      {
+        "doc_id": "ND_44_2016",
+        "title": "Nghị định 44/2016/NĐ-CP về huấn luyện an toàn, vệ sinh lao động",
+        "number": "44/2016/NĐ-CP",
+        "status": "PARTIALLY_EFFECTIVE",
+        "effective_from": "2016-07-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-44-2016-nd-cp-19916.htm",
+        "count": 371
+      },
+      {
+        "doc_id": "TT_12_2025",
+        "title": "Thông tư 12/2025/TT-BNV - Quy định chi tiết một số điều của Luật Bảo hiểm xã hội về bảo hiểm xã hội bắt buộc",
+        "number": "12/2025/TT-BNV",
+        "status": "CURRENT",
+        "effective_from": "2025-07-01",
+        "effective_to": null,
+        "source": "https://xaydungchinhsach.chinhphu.vn/toan-van-thong-tu-12-2025-tt-bnv-quy-dinh-chi-tiet-mot-so-dieu-cua-luat-bhxh-ve-bhxh-bat-buoc-11925070415595016.htm",
+        "count": 127
+      },
+      {
+        "doc_id": "ND_141_2026",
+        "title": "Nghị định 141/2026/NĐ-CP sửa đổi chính sách thuế đối với hộ kinh doanh",
+        "number": "141/2026/NĐ-CP",
+        "status": "CURRENT",
+        "effective_from": "2026-01-01",
+        "effective_to": null,
+        "source": "https://vanban.chinhphu.vn/?classid=1&docid=217960&pageid=27160&typegroupid=4",
+        "count": 2
+      },
+      {
+        "doc_id": "VBHN_58_2025",
+        "title": "Văn bản hợp nhất 19/VBHN-VPQH - Luật Bảo hiểm xã hội",
+        "number": "19/VBHN-VPQH",
+        "status": "CURRENT",
+        "effective_from": "2025-07-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-19-vbhn-vpqh-468972.htm",
+        "count": 925
+      },
+      {
+        "doc_id": "ND_129_2025",
+        "title": "Nghị định 129/2025/NĐ-CP quy định về phân định thẩm quyền của chính quyền địa phương 02 cấp trong lĩnh vực quản lý nhà nước của Bộ Nội vụ",
+        "number": "129/2025/NĐ-CP",
+        "status": "CURRENT",
+        "effective_from": "2025-07-01",
+        "effective_to": null,
+        "source": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-129-2025-nd-cp-45076.htm",
+        "count": 10
+      },
+      {
+        "doc_id": "NQ_66_18_2026",
+        "title": "Nghị quyết 66.18/2026/NQ-CP về cắt giảm thủ tục hành chính và điều kiện kinh doanh",
+        "number": "66.18/2026/NQ-CP",
+        "status": "CURRENT",
+        "effective_from": "2026-07-01",
+        "effective_to": "2027-02-28",
+        "source": "https://vanban.chinhphu.vn/?classid=509&docid=218181&pageid=27160",
+        "count": 1
+      }
+    ]
+  },
+  "training": {
+    "vietlabor_cantho_qa_chatml.jsonl": {
+      "count": 106,
+      "keys": [
+        "id",
+        "source",
+        "messages",
+        "metadata"
+      ],
+      "roles": [
+        "system",
+        "assistant",
+        "user"
+      ]
+    },
+    "vietlabor_sft_1000_chatml.jsonl": {
+      "count": 1118,
+      "keys": [
+        "messages"
+      ],
+      "roles": [
+        "system",
+        "assistant",
+        "user"
+      ]
+    },
+    "vietlabor_thainguyen_situations_chatml.jsonl": {
+      "count": 12,
+      "keys": [
+        "messages"
+      ],
+      "roles": [
+        "system",
+        "assistant",
+        "user"
+      ]
+    }
+  },
+  "notebook": {
+    "code_cells": 8,
+    "executed_cells": 0,
+    "output_blocks": 0
+  },
+  "bridges_defined": 8,
+  "source_files": {
+    "app": 7,
+    "rag": 39,
+    "graph": 9,
+    "ingestion": 7,
+    "models": 2,
+    "ui": 18,
+    "evaluation": 11,
+    "tests": 59
+  }
+}
