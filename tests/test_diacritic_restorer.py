@@ -5,6 +5,7 @@ Validates legal accuracy, preservation of numbers, currency, acronyms, and termi
 """
 
 import pytest
+
 from ingestion.diacritic_restorer import LegalDiacriticRestorer
 
 

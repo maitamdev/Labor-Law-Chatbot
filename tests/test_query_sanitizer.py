@@ -1,5 +1,6 @@
 from graph.query_sanitizer import sanitize_cypher_param, validate_readonly_cypher
 
+
 def test_validate_readonly_cypher():
     assert validate_readonly_cypher("MATCH (n:Article) RETURN n LIMIT 10") is True
     assert validate_readonly_cypher("MATCH (n) DELETE n") is False

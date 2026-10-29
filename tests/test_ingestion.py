@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import unicodedata
-import pytest
 from pathlib import Path
+
+import pytest
 
 from ingestion.cleaner import TextCleaner
 from ingestion.loader import PDFLoader
@@ -15,8 +16,7 @@ from ingestion.parser import (
     SECTION_PATTERN,
     LegalParser,
 )
-from ingestion.schemas import LegalChunk, PageText
-
+from ingestion.schemas import PageText
 
 # ==============================================================================
 # 1. UNICODE & CLEANER TESTS
@@ -53,7 +53,7 @@ def test_cleaner_removes_standalone_page_numbers():
     cleaner = TextCleaner()
     raw = "Nội dung trang trước.\n2\nNội dung trang sau."
     cleaned = cleaner.clean_text(raw, page_number=2)
-    lines = [l.strip() for l in cleaned.split("\n") if l.strip()]
+    lines = [line.strip() for line in cleaned.split("\n") if line.strip()]
     assert "2" not in lines
     assert "Nội dung trang trước." in cleaned
     assert "Nội dung trang sau." in cleaned

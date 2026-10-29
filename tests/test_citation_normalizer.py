@@ -1,4 +1,5 @@
-from rag.citation_normalizer import normalize_statute_name, extract_article_and_law
+from rag.citation_normalizer import extract_article_and_law, normalize_statute_name
+
 
 def test_normalize_statute_name():
     assert "Bộ luật Lao động 2019" in normalize_statute_name("theo bllđ 2019 quy định")
