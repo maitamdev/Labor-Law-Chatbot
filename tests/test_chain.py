@@ -12,14 +12,15 @@ Tests:
 from __future__ import annotations
 
 import json
+
 import pytest
 
+from models.local_llm import check_ollama_health
+from rag.chain import ConversationMemory
+from rag.context_builder import ContextBuilder
+from rag.output_validator import LegalAnswer, OutputValidator
 from rag.query_processor import normalize_query
-from rag.query_router import QueryRouter, RouteDecision
-from rag.context_builder import ContextBuilder, FormattedContext
-from rag.output_validator import LegalAnswer, OutputValidator, ValidatedResponse
-from rag.chain import ConversationMemory, VietLaborRAGChain
-from models.local_llm import check_ollama_health, LocalLLMManager
+from rag.query_router import QueryRouter
 
 
 # ---------------------------------------------------------------------------

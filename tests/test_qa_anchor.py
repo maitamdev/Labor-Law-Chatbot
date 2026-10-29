@@ -1,8 +1,8 @@
 """Question bank may guide retrieval, but never supply answer prose."""
 import json
 
-from rag.qa_anchor import QuestionLawAnchorIndex
 from rag.bm25_retriever import BM25Retriever
+from rag.qa_anchor import QuestionLawAnchorIndex
 from rag.query_router import QueryRouter
 from scripts.qa_source_normalizations import normalize_source
 

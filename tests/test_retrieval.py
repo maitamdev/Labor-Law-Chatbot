@@ -15,8 +15,8 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-import pytest
 
+from rag.bm25_retriever import BM25Retriever, tokenize_legal_vietnamese
 from rag.embeddings import (
     DEFAULT_EMBEDDING_DIM,
     DEFAULT_MODEL_NAME,
@@ -24,7 +24,6 @@ from rag.embeddings import (
     compute_corpus_fingerprint,
     format_retrieval_text,
 )
-from rag.bm25_retriever import BM25Retriever, tokenize_legal_vietnamese
 from rag.hybrid_retriever import HybridRetriever
 from rag.vectorstore import clean_metadata_for_chroma
 
@@ -267,3 +266,12 @@ def test_gold_dataset_integrity():
     assert topic_counts.get("leave", 0) >= 10
     assert topic_counts.get("discipline", 0) >= 10
     assert topic_counts.get("out_of_scope", 0) >= 5
+
+
+def test_prepare_retrieval_query_enriches_colloquial():
+    from rag.retrieval_query import prepare_retrieval_query
+
+    q = "Công ty ép nhân viên tăng ca dù không đồng ý có được không?"
+    out = prepare_retrieval_query(q)
+    assert len(out) > len(q)
+    assert "107" in out or "đồng ý" in out

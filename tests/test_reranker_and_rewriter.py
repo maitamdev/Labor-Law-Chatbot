@@ -9,11 +9,9 @@ Tests:
 """
 from __future__ import annotations
 
-import pytest
-
 from law_crawler.config import BASE_URL, TOANVAN_URL_TEMPLATE
 from law_crawler.vbpl_crawler import build_resilient_session
-from rag.query_rewriter import AdaptiveQueryRewriter, RelevanceGrader, COLLOQUIAL_LEGAL_MAP
+from rag.query_rewriter import AdaptiveQueryRewriter, RelevanceGrader
 from rag.reranker import CrossEncoderReranker
 
 
