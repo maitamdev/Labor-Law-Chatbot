@@ -10,20 +10,19 @@ from __future__ import annotations
 
 import json
 import logging
-from pathlib import Path
 import statistics
 import sys
 import time
-from typing import Any, Dict, List, Optional, Set, Tuple
+from pathlib import Path
+from typing import Any, Dict, Tuple
 
 if hasattr(sys.stdout, "reconfigure"):
-    getattr(sys.stdout, "reconfigure")(encoding="utf-8", line_buffering=True)
+    sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
 sys.path.insert(0, ".")
 
 from rag.hybrid_retriever import HybridRetriever
 from rag.issue_decomposer import IssueDecomposer
 from rag.query_expander import QueryExpander
-from rag.query_processor import normalize_query
 from rag.query_router import QueryRouter
 
 logging.basicConfig(level=logging.WARNING)
@@ -128,7 +127,7 @@ def run_benchmark():
     }
 
     t0 = time.time()
-    for idx, q in enumerate(queries, start=1):
+    for q in queries:
         decision = router.route(q["question"])
 
         # Production retrieval strategy: Cross-domain decomposition vs single-domain expansion
@@ -208,7 +207,7 @@ def run_benchmark():
     rec5 = statistics.mean(recalls5) * 100 if recalls5 else 0.0
 
     print(f"\nCompleted {n} queries in {elapsed:.2f}s ({elapsed/n*1000:.1f}ms/query)")
-    print(f"Overall Retrieval Metrics:")
+    print("Overall Retrieval Metrics:")
     print(f"  Hit@1 : {hits1}/{n} ({h1:.2f}%)")
     print(f"  Hit@3 : {hits3}/{n} ({h3:.2f}%)")
     print(f"  Hit@5 : {hits5}/{n} ({h5:.2f}%)")

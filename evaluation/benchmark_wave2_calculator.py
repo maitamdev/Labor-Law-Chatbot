@@ -14,8 +14,8 @@ Metrics:
 from __future__ import annotations
 
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 # Ensure workspace root in sys.path
@@ -24,9 +24,9 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
-    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8")
 
-from rag.legal_calculator import BenefitCalculator, CalculationResult, FORMULA_REGISTRY
+from rag.legal_calculator import BenefitCalculator, CalculationResult
 
 BENCHMARK_PATH = PROJECT_ROOT / "data" / "evaluation" / "wave2_calculator_benchmark_45.json"
 RESULTS_OUTPUT = PROJECT_ROOT / "evaluation" / "results" / "phase5h_1_calculator_results.json"

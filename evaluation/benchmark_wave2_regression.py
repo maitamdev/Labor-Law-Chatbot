@@ -10,20 +10,18 @@ from __future__ import annotations
 
 import json
 import logging
-from pathlib import Path
 import statistics
 import sys
-import time
-from typing import Any, Dict, List, Set
+from pathlib import Path
+from typing import Any, Dict
 
 if hasattr(sys.stdout, "reconfigure"):
-    getattr(sys.stdout, "reconfigure")(encoding="utf-8", line_buffering=True)
+    sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
 sys.path.insert(0, ".")
 
 from rag.evidence_selector import EvidenceSelector
 from rag.hybrid_retriever import HybridRetriever
 from rag.legal_issue_parser import LegalIssueParser
-from rag.query_router import QueryRouter
 
 logging.basicConfig(level=logging.WARNING)
 
@@ -53,7 +51,6 @@ def match_chunk_to_evidence(chunk_meta: Dict[str, Any], req: Dict[str, Any]) -> 
 
 def evaluate_core_on_index(index_version: str) -> Dict[str, float]:
     retriever = HybridRetriever(index_version=index_version)
-    router = QueryRouter()
     selector = EvidenceSelector()
     issue_parser = LegalIssueParser()
 
@@ -71,7 +68,6 @@ def evaluate_core_on_index(index_version: str) -> Dict[str, float]:
         if not req_evidence:
             continue
 
-        route_dec = router.route(q_text)
         candidates = retriever.retrieve(q_text, top_k=20)
         issue = issue_parser.parse(q_text)
         sel_result = selector.select_evidence(issue, candidates)
@@ -96,7 +92,6 @@ def evaluate_core_on_index(index_version: str) -> Dict[str, float]:
 
 def evaluate_wave1_on_index(index_version: str) -> Dict[str, float]:
     retriever = HybridRetriever(index_version=index_version)
-    router = QueryRouter()
 
     with open("data/evaluation/extended_gold_set.json", "r", encoding="utf-8") as f:
         queries = json.load(f)

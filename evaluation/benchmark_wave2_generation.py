@@ -23,15 +23,15 @@ from __future__ import annotations
 
 import json
 import logging
-from pathlib import Path
 import re
 import statistics
 import sys
 import time
-from typing import Any, Dict, List, Optional, Set
+from pathlib import Path
+from typing import Any, Dict, Set
 
 if hasattr(sys.stdout, "reconfigure"):
-    getattr(sys.stdout, "reconfigure")(encoding="utf-8", line_buffering=True)
+    sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
 sys.path.insert(0, ".")
 
 from rag.chain import VietLaborRAGChain
