@@ -9,9 +9,9 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Any, Dict, List, Optional
-import urllib.request
 import urllib.error
+import urllib.request
+from typing import Any, Dict, List, Optional
 
 from langchain_ollama import ChatOllama
 
@@ -22,6 +22,7 @@ from config.settings import (
     OLLAMA_NUM_CTX,
     OLLAMA_NUM_GPU,
     OLLAMA_NUM_PREDICT,
+    OLLAMA_USE_STRICT_SCHEMA,
 )
 
 logger = logging.getLogger(__name__)
@@ -164,6 +165,7 @@ class LocalLLMManager:
                 self.model_name = resolved
 
             logger.info(f"Initializing local ChatOllama model='{self.model_name}' at {self.base_url}")
+            format_spec = LEGAL_ANSWER_JSON_SCHEMA if OLLAMA_USE_STRICT_SCHEMA else "json"
             self._llm = ChatOllama(
                 model=self.model_name,
                 base_url=self.base_url,
@@ -172,7 +174,7 @@ class LocalLLMManager:
                 num_ctx=self.num_ctx,
                 num_gpu=self.num_gpu,
                 keep_alive=self.keep_alive,
-                format=LEGAL_ANSWER_JSON_SCHEMA,
+                format=format_spec,
                 seed=42,
                 top_p=0.9,
                 repeat_penalty=1.05,
