@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-13T20:28:26.355476+00:00",
+  "goals_version": 1,
+  "index": {
+    "corpus_chunks": 9390,
+    "chroma_chunks": 9390,
+    "chroma_ratio": 1.0
+  },
+  "steps": {
+    "pytest_fast": {
+      "exit_code": 0,
+      "tail": "...............                                                          [100%]\n15 passed in 16.43s\n"
+    },
+    "audit_corpus": {
+      "exit_code": 0,
+      "tail": "Corpus: 9390 chunks, 40 doc_ids\n\nextended_manifest.csv: 4 listed, in corpus 4, missing 0\n\nextended_wave2_manifest.csv: 11 listed, in corpus 11, missing 0\n\nnational_labor_wave3_manifest.csv: 5 listed, in corpus 5, missing 0\n\nretrieval_gold doc_ids: 0, missing from corpus: 0\n"
+    },
+    "ablation": {
+      "exit_code": 0,
+      "report": "D:\\chatbot-law\\reports\\improvement_cycle\\ablation_cycle_2026-10-14.md",
+      "tail": ".800 | 0.862 | 0.796 | 0.859 | 0.679 | 0.817 | 1 |\n| hybrid | 0.931 | 0.952 | 0.922 | 0.945 | 0.803 | 0.910 | 40 |\n| hybrid_norm | 0.931 | 0.959 | 0.922 | 0.952 | 0.804 | 0.917 | 12 |\n\n## Hit@10 by query type\n\n| Config | colloquial | cross_reference | exact_reference | long | numeric | paraphrase | semantic | short |\n|---|---|---|---|---|---|---|---|---|\n| bm25 | 0.50 (n=16) | 1.00 (n=4) | 0.96 (n=27) | 0.50 (n=8) | 0.92 (n=39) | 1.00 (n=7) | 0.94 (n=31) | 0.85 (n=13) |\n| hybrid | 0.88 (n=16) | 1.00 (n=4) | 0.93 (n=27) | 1.00 (n=8) | 0.97 (n=39) | 1.00 (n=7) | 0.94 (n=31) | 1.00 (n=13) |\n| hybrid_norm | 0.94 (n=16) | 1.00 (n=4) | 0.93 (n=27) | 1.00 (n=8) | 0.97 (n=39) | 1.00 (n=7) | 0.94 (n=31) | 1.00 (n=13) |\n\nReport written to D:\\chatbot-law\\reports\\improvement_cycle\\ablation_cycle_2026-10-14.md\nINFO rag.embeddings: Loading local embedding model: C:\\Users\\Asus/.cache/huggingface/hub\\models--BAAI--bge-m3\\snapshots\\5617a9f61b028005a4858fdac845db406aefb181 on cuda...\nINFO sentence_transformers.base.model: Loading SentenceTransformer model from C:\\Users\\Asus/.cache/huggingface/hub\\models--BAAI--bge-m3\\snapshots\\5617a9f61b028005a4858fdac845db406aefb181.\nINFO rag.embeddings: Local embedding model loaded successfully.\nINFO rag.bm25_retriever: Loading BM25 index from D:\\chatbot-law\\storage\\bm25_v3...\nINFO rag.bm25_retriever: BM25 index loaded (9390 chunks).\nINFO ablation: bm25 done (145 queries)\nINFO ablation: hybrid done (145 queries)\nINFO ablation: hybrid_norm done (145 queries)\n"
+    }
+  },
+  "recommendations": [],
+  "elapsed_sec": 44.9
+}
