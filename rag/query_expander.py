@@ -4,9 +4,8 @@ VietLabor AI - Query Expander
 Bridges colloquial user phrasing and formal legal statutory terminology
 to eliminate RETRIEVAL_MISS without modifying user-facing legal conclusions.
 """
-import re
 import unicodedata
-from typing import Dict, List, Tuple
+from typing import List, Tuple
 
 
 class QueryExpander:
@@ -125,6 +124,26 @@ class QueryExpander:
          "mức trợ cấp tuất hằng tháng đối với mỗi thân nhân bằng 50% mức tham chiếu Điều 67 Điều 69"),
         (["trợ cấp hưu trí xã hội", "hưu trí xã hội"],
          "trợ cấp hưu trí xã hội từ đủ 75 tuổi trở lên Nghị định 176/2025"),
+
+        # Collective labor relations (BLLĐ 2019 Điều 65–75, 197–206)
+        (["thương lượng tập thể", "thỏa ước lao động tập thể", "quy chế thương lượng", "đại diện thương lượng"],
+         "thương lượng tập thể thỏa ước lao động tập thể quy chế thương lượng tập thể Điều 65 Điều 66 Điều 67 Điều 68 Điều 69 Điều 70 Điều 71 Điều 72 Điều 73 Điều 74 Điều 75 Bộ luật Lao động"),
+        (["đình công", "tổ chức đình công", "quyết định đình công", "tiền lương thời gian đình công"],
+         "đình công tranh chấp lao động tập thể tiền lương thời gian đình công Điều 197 Điều 198 Điều 199 Điều 200 Điều 201 Điều 202 Điều 203 Điều 204 Điều 205 Điều 206 Bộ luật Lao động"),
+        (["hợp đồng lao động vô hiệu", "hđlđ vô hiệu", "vô hiệu toàn bộ", "vô hiệu một phần"],
+         "hợp đồng lao động vô hiệu toàn bộ một phần Điều 31 Bộ luật Lao động"),
+        (["đơn phương chấm dứt hợp đồng", "đơn phương chấm dứt hđlđ", "chấm dứt hợp đồng lao động của người lao động"],
+         "quyền đơn phương chấm dứt hợp đồng lao động của người lao động Điều 35 Điều 37 Bộ luật Lao động"),
+        (["người sử dụng lao động đơn phương chấm dứt", "công ty đơn phương chấm dứt", "sa thải trái pháp luật"],
+         "người sử dụng lao động đơn phương chấm dứt hợp đồng lao động Điều 36 thời hạn báo trước Điều 37 Bộ luật Lao động"),
+        (["lao động nước ngoài", "giấy phép lao động", "làm việc không có giấy phép lao động"],
+         "người lao động nước ngoài làm việc tại Việt Nam giấy phép lao động Điều 151 Điều 152 Điều 153 Bộ luật Lao động"),
+        (["chưa đến 15 tuổi", "dưới 15 tuổi", "sử dụng lao động dưới 15 tuổi"],
+         "thời giờ làm việc người chưa thành niên dưới 15 tuổi không làm thêm giờ Điều 146 Bộ luật Lao động"),
+        (["giúp việc gia đình", "lao động giúp việc gia đình", "người giúp việc gia đình"],
+         "hợp đồng lao động lao động giúp việc gia đình đơn phương chấm dứt báo trước 15 ngày Điều 162 Bộ luật Lao động"),
+        (["quy định mới về thưởng", "hình thức thưởng", "quy chế thưởng"],
+         "thưởng tiền tài sản hình thức khác quy chế thưởng Điều 104 Bộ luật Lao động"),
 
         # =========================================================================
         # Wave 2: Occupational Safety & Accident/Disease (Luật 84 & 04, 05, 06/VBHN)

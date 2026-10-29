@@ -13,7 +13,6 @@ from __future__ import annotations
 
 from typing import Dict, Set
 
-
 DOMAIN_PRIMARY_DOCS: Dict[str, Set[str]] = {
     "SOCIAL_INSURANCE": {"VBHN_58_2025", "ND_158_2025", "ND_159_2025", "TT_12_2025", "ND_176_2025"},
     "OCCUPATIONAL_SAFETY": {"L_84_2015", "VBHN_04_BNV_2026", "VBHN_05_BNV_2026", "VBHN_06_BNV_2026", "ND_39_2016", "ND_44_2016", "TT_24_2022", "ND_129_2025"},
@@ -52,7 +51,10 @@ EVIDENCE_ROLE_RETRIEVAL_HINTS: Dict[str, str] = {
     "FORMATION_FREEDOM_LIMITS": "Điều 15 Khoản 2 tự do giao kết nhưng không trái pháp luật thỏa ước lao động tập thể và đạo đức xã hội",
     "MULTIPLE_CONTRACTS_PERMISSION": "Điều 19 Khoản 1 Bộ luật Lao động người lao động có thể giao kết nhiều hợp đồng lao động với nhiều người sử dụng lao động",
     "TERMINATION_SEVERANCE_ALLOWANCE": "Điều 46 Bộ luật Lao động và Điều 8 Nghị định 145/2020 trợ cấp thôi việc người lao động làm việc thường xuyên từ đủ 12 tháng trở lên",
-    "PROHIBITED_ACTS_IDENTIFICATION": "Điều 17 Khoản 1 Bộ luật Lao động nghiêm cấm giữ bản chính giấy tờ tùy thân văn bằng chứng chỉ của người lao động Điều 15 Nghị định 283/2026",
+    "PROHIBITED_ACTS_IDENTIFICATION": "Điều 17 Khoản 1 Khoản 2 Bộ luật Lao động nghiêm cấm giữ bản chính giấy tờ tùy thân văn bằng chứng chỉ yêu cầu đặt cọc Điều 15 Nghị định 283/2026",
+    "PROHIBITED_ORIGINAL_DOCUMENT_RETENTION": "Điều 17 Khoản 1 Bộ luật Lao động nghiêm cấm giữ bản chính giấy tờ tùy thân văn bằng chứng chỉ của người lao động Điều 15 Nghị định 283/2026",
+    "PROHIBITED_SECURITY_DEPOSIT": "Điều 17 Khoản 2 Bộ luật Lao động nghiêm cấm yêu cầu người lao động thực hiện biện pháp bảo đảm bằng tiền hoặc tài sản khác đặt cọc cho việc thực hiện hợp đồng lao động Điều 15 Nghị định 283/2026",
+    "DISCIPLINE_LIMITATION_PERIOD": "Điều 123 Khoản 1 Khoản 2 Khoản 3 Bộ luật Lao động thời hiệu xử lý kỷ luật lao động 06 tháng 12 tháng Điều 122",
     "PREGNANCY_DISMISSAL_PROHIBITION": "Điều 37 Khoản 3 Điều 137 Khoản 3 Bộ luật Lao động người sử dụng lao động không được sa thải hoặc đơn phương chấm dứt hợp đồng lao động đối với lao động nữ mang thai nuôi con dưới 12 tháng tuổi",
     "UNINSURED_ACCIDENT_SUBSTITUTION": "Điều 39 Khoản 4 và Điều 38 Luật An toàn vệ sinh lao động người sử dụng lao động chưa đóng bảo hiểm tai nạn lao động phải bồi thường thanh toán chi phí y tế tiền lương",
     "EMPLOYER_MEDICAL_RESPONSIBILITY": "Điều 38 Khoản 1 Khoản 2 Luật An toàn vệ sinh lao động thanh toán chi phí y tế chi phí đồng chi trả cho người lao động bị tai nạn lao động",
