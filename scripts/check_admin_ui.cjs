@@ -1,0 +1,346 @@
+// Run the isolated fixture on port 8510 before this script. No production writes.
+const {chromium} = require('playwright');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const {execFileSync} = require('node:child_process');
+const OUTPUT = process.env.ADMIN_UI_OUTPUT || 'reports/ui-preview/admin-privacy-2026-10-24';
+const USER = '00000000-0000-0000-0000-000000000002';
+const SHARED = '00000000-0000-0000-0000-000000000005';
+
+(async () => {
+  const cache = path.join(process.env.LOCALAPPDATA, 'ms-playwright');
+  const candidates = fs.readdirSync(cache).filter(n=>/^chromium-\d+$/.test(n)).sort((a,b)=>Number(b.split('-')[1])-Number(a.split('-')[1]));
+  const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE || path.join(cache,candidates[0],'chrome-win64/chrome.exe');
+  const browser = await chromium.launch({headless:true, executablePath});
+  const context = await browser.newContext({viewport:{width:1440,height:1000}, deviceScaleFactor:1, acceptDownloads:true});
+  await context.route('**/app/static/approved-homepage.png', route=>route.fulfill({path:path.resolve('ui/static/approved-homepage.png'),contentType:'image/png'}));
+  const page = await context.newPage();
+  const errors=[];
+  const results=[];
+  page.on('pageerror', error=>errors.push(error.message));
+  page.on('console', m=>{if(m.type()==='error') errors.push(m.text());});
+  fs.mkdirSync(OUTPUT,{recursive:true});
+  for (const file of ['00-ai-reference.png','GENERATION.md']) {
+    const source=path.join('reports/ui-preview/admin-redesign-v5',file);
+    const target=path.join(OUTPUT,file);
+    if (path.resolve(source)!==path.resolve(target) && fs.existsSync(source)) fs.copyFileSync(source,target);
+  }
+  execFileSync(path.resolve('.venv/Scripts/python.exe'), ['-c', "import pymupdf; d=pymupdf.open(); p=d.new_page(); p.insert_text((72,72),'TEST DOCUMENT - Isolated browser verification only. This is not a legal document for publication.'); d.save('storage/admin-ui-test.pdf'); d.close()"]);
+  const shot = async name=>page.screenshot({path:`${OUTPUT}/${name}.png`,fullPage:true});
+  const waitReady = async ()=>page.locator('.portal-mount[aria-busy="true"]').waitFor({state:'detached',timeout:20000});
+  const heading = text=>page.locator('.page-heading h1').filter({hasText:text});
+  const navigate = async (view,title)=>{
+    await page.locator(`.admin-nav[data-route="${view}"]`).click();
+    await heading(title).waitFor({timeout:20000});
+    await waitReady();
+  };
+  const success = async text=>{
+    await page.locator('.notice[role="status"]').filter({hasText:text}).waitFor({timeout:20000});
+    await waitReady();
+  };
+  const confirm = async ()=>{
+    await page.locator('.portal-confirm[open]').waitFor();
+    await page.locator('[data-confirm-accept]').click();
+  };
+  const check = async (label, fn)=>{await fn();results.push(label);console.log('PASS',label);};
+  try {
+    await page.goto('http://127.0.0.1:8510', {waitUntil:'networkidle'});
+    await heading('Tổng quan').waitFor({timeout:30000});
+    console.log('FONT',await page.locator('.portal-mount').evaluate(el=>getComputedStyle(el).fontFamily));
+    await check('zero metrics and honest empty chart', async()=>{
+      assert.equal(await page.locator('.metric').count(),4);
+      assert.equal(await page.locator('.metric').nth(1).locator('strong').innerText(),'0');
+      assert.equal(await page.locator('.chart-column').count(),7);
+      assert.equal(await page.locator('.chart-empty').count(),1);
+      await shot('01-dashboard-desktop');
+      await page.setViewportSize({width:1874,height:908});
+      assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+      await shot('01b-dashboard-wide');
+      await page.setViewportSize({width:1440,height:1000});
+    });
+    await check('all sidebar routes and repeated refresh', async()=>{
+      for(const [view,title] of [['admin-users','Người dùng'],['admin-documents','Kho văn bản'],['admin-feedback','Phản hồi'],['admin-operations','Vận hành AI'],['admin-audit','Nhật ký'],['admin-settings','Cài đặt'],['admin-dashboard','Tổng quan']]) await navigate(view,title);
+      for(let i=0;i<3;i++) {await page.locator('.page-actions [data-action="portal_refresh"]').click();await success('Dữ liệu đã được cập nhật');}
+      await navigate('admin-users','Người dùng');
+    });
+    await check('search without diacritics, filters, empty result', async()=>{
+      await page.locator('[data-search]').fill('nguyen minh anh');
+      assert.equal(await page.locator('[data-result-count]').innerText(),'1–1 / 1 kết quả');
+      await page.locator('[data-search]').fill('khong-co-tai-khoan');
+      assert.equal(await page.locator('.empty-filter-row:not([hidden])').count(),1);
+      await page.locator('[data-search]').fill('');
+      await page.locator('[data-filter-column="role"]').selectOption('admin');
+      assert.equal(await page.locator('[data-result-count]').innerText(),'1–1 / 1 kết quả');
+      await page.locator('[data-filter-column="role"]').selectOption('');
+      await shot('02-users-desktop');
+    });
+    await check('table filters survive navigation and refresh', async()=>{
+      await page.locator('[data-search]').fill('nguyen minh anh');
+      await navigate('admin-dashboard','Tổng quan');
+      await navigate('admin-users','Người dùng');
+      assert.equal(await page.locator('[data-search]').inputValue(),'nguyen minh anh');
+      await page.locator('.page-actions [data-action="portal_refresh"]').click();await success('Dữ liệu đã được cập nhật');
+      assert.equal(await page.locator('[data-search]').inputValue(),'nguyen minh anh');
+      assert.equal(await page.locator('.data-table [data-search-row]:not([hidden])').count(),1);
+      await page.locator('[data-search]').fill('');
+    });
+    await check('invite configuration is explicit and modal closes', async()=>{
+      await page.locator('[data-open-dialog="invite-admin"]').click();
+      await page.locator('#invite-admin[open]').waitFor();
+      assert.match(await page.locator('#invite-admin').innerText(),/khóa máy chủ/);
+      await page.locator('[data-close-dialog]').click();
+    });
+    await check('user detail cancel and save role/status', async()=>{
+      await page.locator(`[data-route="admin-user-detail"][data-id="${USER}"]`).click();
+      await page.locator('.detail-drawer').waitFor();
+      await shot('03-user-detail-desktop');
+      const form = page.locator('form[data-form="admin_account_update"]');
+      await form.locator('[name="status"]').selectOption('blocked');
+      await form.locator('[name="role"]').selectOption('admin');
+      await form.locator('[type="submit"]').click();
+      await page.locator('[data-confirm-cancel]').click();
+      assert.equal(await page.locator('.detail-drawer .badge').filter({hasText:'Hoạt động'}).count(),1);
+      await form.locator('[name="reason"]').fill('Kiểm thử khóa tài khoản');
+      await form.locator('[type="submit"]').click();await confirm();await success('Đã cập nhật quyền');
+      assert.equal(await page.locator('.detail-drawer .badge').filter({hasText:'Tạm khóa'}).count(),1);
+      assert.equal(await form.locator('[name="role"]').inputValue(),'admin');
+      await page.locator('[data-action="admin_reset_user"]').click();await confirm();await success('Đã gửi liên kết khôi phục');
+      await page.locator('.drawer-heading [data-route="admin-users"]').click();await heading('Người dùng').waitFor();await waitReady();
+    });
+    await check('PDF form saves and approval creates a job', async()=>{
+      await navigate('admin-documents','Kho văn bản');await shot('04-documents-desktop');
+      await page.locator('.data-table [data-route="admin-document-add"]').first().click();
+      const form=page.locator('form[data-form="admin_document_save"]');
+      await form.locator('[name="review_note"]').fill('Đã kiểm tra bằng giao diện');
+      await form.locator('[name="source_url"]').fill('https://example.com/not-official');
+      await form.locator('[type="submit"]').click();
+      await page.locator('.warning-notice').filter({hasText:'nguồn chính thức'}).waitFor();await waitReady();
+      assert.equal(await form.locator('[name="review_note"]').inputValue(),'Đã kiểm tra bằng giao diện');
+      await form.locator('[name="source_url"]').fill('https://congbao.chinhphu.vn/test');
+      await form.locator('[type="submit"]').click();await success('Đã lưu văn bản');
+      assert.equal(await form.locator('[name="review_note"]').inputValue(),'Đã kiểm tra bằng giao diện');
+      await shot('05-document-edit-desktop');
+      const approve=page.locator('form[data-form="admin_document_approve"]');
+      await approve.locator('[name="confirmed"]').check();await approve.locator('[type="submit"]').click();await confirm();await heading('Vận hành AI').waitFor();await waitReady();
+      assert.match(await page.locator('.data-table').innerText(),/Cập nhật chỉ mục/);
+      await navigate('admin-documents','Kho văn bản');
+      await page.locator('.page-actions [data-route="admin-document-add"]').click();
+      await page.locator('input[type="file"]').setInputFiles(path.resolve('storage/admin-ui-test.pdf'));
+      const upload=page.locator('form[data-form="admin_document_save"]');
+      await upload.locator('[name="title"]').fill('Tài liệu PDF kiểm thử');
+      await upload.locator('[name="issuer"]').fill('Cơ quan kiểm thử');
+      await upload.locator('[name="source_url"]').fill('https://congbao.chinhphu.vn/test');
+      await upload.locator('[type="submit"]').click();await success('Đã lưu văn bản');
+      assert.match(await page.locator('.extracted-preview').innerText(),/TEST DOCUMENT/);
+    });
+    await check('feedback saved and shared-only export works', async()=>{
+      await navigate('admin-feedback','Phản hồi');
+      assert.equal(await page.locator('[data-action="admin_feedback_export"]').count(),0);
+      const form=page.locator('form[data-form="admin_feedback_save"]');
+      await form.locator('[name="status"]').selectOption('resolved');await form.locator('[name="admin_note"]').fill('Đã rà soát trích dẫn');
+      await form.locator('[type="submit"]').click();await success('Đã lưu kết quả');
+      assert.equal(await form.locator('[name="admin_note"]').inputValue(),'Đã rà soát trích dẫn');
+      await shot('06-feedback-desktop');
+      await page.locator(`.feedback-item[data-id="${SHARED}"]`).click();await page.locator('.reported-question').waitFor();await waitReady();
+      const download=page.waitForEvent('download');await page.locator('[data-action="admin_feedback_export"]').click();
+      const exported=await download;await exported.saveAs(`${OUTPUT}/feedback-case.json`);
+      const content=JSON.parse(fs.readFileSync(`${OUTPUT}/feedback-case.json`,'utf8'));
+      assert.equal(content.source,'user_shared_feedback');await waitReady();
+    });
+    await check('health job and retries remain clickable', async()=>{
+      await navigate('admin-operations','Vận hành AI');
+      await page.locator('[data-action="admin_health"]').click();await success('Đã tạo tác vụ');
+      assert.match(await page.locator('.health-grid').innerText(),/Sẵn sàng/);
+      await shot('07-operations-desktop');
+    });
+    await check('audit CSV, backup and restore actions', async()=>{
+      await navigate('admin-audit','Nhật ký');
+      const download=page.waitForEvent('download');await page.locator('[data-action="admin_audit_export"]').click();
+      const csv=await download;await csv.saveAs(`${OUTPUT}/audit-test.csv`);await waitReady();
+      assert.match(fs.readFileSync(`${OUTPUT}/audit-test.csv`,'utf8'),/administrator.bootstrap/);
+      await page.locator('[data-action="admin_backup"]').click();await success('Đã tạo tác vụ sao lưu');
+      const form=page.locator('form[data-form="admin_restore"]');
+      await form.locator('[name="confirmed"]').check();await form.locator('[type="submit"]').click();await confirm();await success('Đã tạo tác vụ khôi phục');
+      await shot('08-audit-desktop');
+    });
+    await check('audit details, date filters, filtered CSV and table isolation', async()=>{
+      const panel=page.locator('.audit-log-panel');
+      await panel.locator('[data-filter-column="action"]').selectOption('account.update');
+      await panel.locator('[data-date-from]').fill('2026-10-22');
+      await panel.locator('[data-date-to]').fill('2026-10-22');
+      await panel.locator('[data-search]').fill('cap nhat quyen');
+      assert.equal(await panel.locator('[data-search-row]:not([hidden])').count(),1);
+      assert(await page.locator('.panel').last().locator('[data-search-row]:not([hidden])').count()>0);
+      await panel.locator('[data-search-row]:not([hidden]) [data-open-dialog]').click();
+      const detail=page.locator('.audit-detail[open]');
+      assert.match(await detail.innerText(),/Kiểm thử khóa tài khoản/);
+      assert.match(await detail.innerText(),/Lý do thay đổi/);
+      await shot('17-audit-detail');
+      await detail.locator('[data-close-dialog]').click();
+      const download=page.waitForEvent('download');await panel.locator('[data-action="admin_audit_export"]').click();
+      const csv=await download;await csv.saveAs(`${OUTPUT}/audit-filtered-test.csv`);await waitReady();
+      const content=fs.readFileSync(`${OUTPUT}/audit-filtered-test.csv`,'utf8');
+      assert.match(content,/account.update/);assert.doesNotMatch(content,/administrator.bootstrap/);
+      assert.equal(await panel.locator('[data-search]').inputValue(),'cap nhat quyen');
+      await shot('18-audit-filtered');
+      await panel.locator('[data-date-to]').fill('2026-10-21');
+      assert.equal(await panel.locator('.audit-filter-error:not([hidden])').count(),1);
+      assert.equal(await panel.locator('[data-search-row]:not([hidden])').count(),0);
+      await panel.locator('[data-reset-filters]').click();
+      assert(await panel.locator('[data-search-row]:not([hidden])').count()>1);
+    });
+    await check('feedback status and sharing filters persist after save', async()=>{
+      await navigate('admin-feedback','Phản hồi');
+      await page.locator('[data-feedback-consent]').selectOption('false');
+      assert.equal(await page.locator('.feedback-item:not([hidden])').count(),1);
+      await page.locator('.feedback-item:not([hidden])').click();await waitReady();
+      assert.equal(await page.locator('[data-feedback-consent]').inputValue(),'false');
+      assert.equal(await page.locator('[data-action="admin_feedback_export"]').count(),0);
+      const form=page.locator('form[data-form="admin_feedback_save"]');
+      await form.locator('[name="status"]').selectOption('resolved');
+      await form.locator('[type="submit"]').click();await success('Đã lưu kết quả xử lý');
+      await page.locator('[data-feedback-status]').selectOption('resolved');
+      assert.equal(await page.locator('.feedback-item:not([hidden])').count(),1);
+      await page.locator('[data-feedback-status]').selectOption('pending');
+      assert.equal(await page.locator('.feedback-item:not([hidden])').count(),0);
+      assert.equal(await page.locator('.feedback-filter-empty:not([hidden])').count(),1);
+      assert.equal(await page.locator('[data-feedback-detail-empty]:not([hidden])').count(),1);
+      await page.locator('[data-feedback-status]').selectOption('resolved');
+      await shot('19-feedback-filters');
+      await page.locator('[data-feedback-status]').selectOption('');
+      await page.locator('[data-feedback-consent]').selectOption('');
+    });
+    await check('settings persist across page navigation', async()=>{
+      await navigate('admin-settings','Cài đặt');
+      const form=page.locator('form[data-form="admin_settings_save"]');
+      await form.locator('[name="workspace_name"]').fill('Quản trị VietLaborAI kiểm thử');
+      await form.locator('[type="submit"]').click();await success('Đã lưu cài đặt');
+      await navigate('admin-users','Người dùng');await navigate('admin-settings','Cài đặt');
+      assert.equal(await form.locator('[name="workspace_name"]').inputValue(),'Quản trị VietLaborAI kiểm thử');
+      await shot('09-settings-desktop');
+    });
+    await check('profile update and password error/success', async()=>{
+      await page.locator('.topbar-end [data-route="account-profile"]').click();
+      const profile=page.locator('form[data-form="account_update_profile"]');await profile.waitFor();
+      await profile.locator('[name="full_name"]').fill('Mai Trần Thiện Tâm');await profile.locator('[type="submit"]').click();await success('Đã cập nhật hồ sơ');
+      await shot('10-profile-desktop');
+      await page.locator('[data-route="account-password"]').click();
+      const form=page.locator('form[data-form="account_change_password"]');await form.waitFor();
+      await form.locator('[name="current_password"]').fill('wrong-password');await form.locator('[name="password"]').fill('new-fixture-password');await form.locator('[name="confirm_password"]').fill('new-fixture-password');
+      await form.locator('[type="submit"]').click();await page.locator('.warning-notice').filter({hasText:'Mật khẩu hiện tại'}).waitFor();await waitReady();
+      await shot('11-password-desktop');
+      await form.locator('[name="current_password"]').fill('fixture-password');await form.locator('[name="password"]').fill('new-fixture-password');await form.locator('[name="confirm_password"]').fill('new-fixture-password');await form.locator('[type="submit"]').click();
+      await page.locator('.account-success').waitFor();
+    });
+    await check('ordinary admin cannot edit roles, manage other admins, or bypass via forged request', async()=>{
+      await page.goto('http://127.0.0.1:8510/?scenario=ordinary-admin',{waitUntil:'networkidle'});await heading('Người dùng').waitFor();
+      assert.equal(await page.locator('[data-open-dialog="invite-admin"]').count(),0);
+      await page.locator('[data-route="admin-user-detail"][data-id="00000000-0000-0000-0000-000000000001"]').click();
+      await page.locator('.detail-drawer').waitFor();await waitReady();
+      assert.equal(await page.locator('.detail-drawer form').count(),0);
+      assert.equal(await page.locator('.detail-drawer [data-action="admin_reset_user"]').count(),0);
+      await shot('21-ordinary-admin-restrictions');
+      await page.locator('.drawer-heading [data-route="admin-users"]').click();await heading('Người dùng').waitFor();await waitReady();
+      await page.locator(`[data-route="admin-user-detail"][data-id="${USER}"]`).click();
+      await page.locator('.detail-drawer').waitFor();await waitReady();
+      assert.equal(await page.locator('.detail-drawer select[name="role"]').count(),0);
+      await page.locator('form[data-form="admin_account_update"] input[name="role"]').evaluate(el=>{el.value='admin';});
+      await page.locator('form[data-form="admin_account_update"] [name="reason"]').fill('Giả mạo nâng quyền');
+      await page.locator('form[data-form="admin_account_update"] [type="submit"]').click();await confirm();
+      await page.locator('.warning-notice').filter({hasText:'Chỉ quản trị viên chính'}).waitFor();await waitReady();
+    });
+    await check('withdrawn feedback removes shared excerpt and blocks stale admin note', async()=>{
+      await page.goto('http://127.0.0.1:8510/?scenario=stale-feedback-withdraw',{waitUntil:'networkidle'});await heading('Phản hồi').waitFor();
+      assert.equal(await page.locator('.reported-question').count(),1);
+      const form=page.locator('form[data-form="admin_feedback_save"]');
+      await form.locator('[name="status"]').selectOption('resolved');
+      await form.locator('[name="admin_note"]').fill('Ghi chú từ phiên admin cũ');
+      await form.locator('[type="submit"]').click();
+      await page.locator('.warning-notice').filter({hasText:'Phản hồi đã thay đổi quyền riêng tư'}).waitFor();await waitReady();
+      assert.equal(await page.locator('.reported-question').count(),0);
+      assert.equal(await page.locator('[data-action="admin_feedback_export"]').count(),0);
+      assert.match(await page.locator('.feedback-detail').innerText(),/không chia sẻ nội dung chat/);
+    });
+    await check('user exports only own history, withdraws or deletes own feedback, and blocks stale history resurrection', async()=>{
+      await page.goto('http://127.0.0.1:8510/?scenario=user-privacy',{waitUntil:'networkidle'});
+      await page.locator('[data-account-view="account-privacy"]').waitFor();
+      assert.equal(await page.locator('.admin-nav').count(),0);
+      const download=page.waitForEvent('download');await page.locator('[data-action="account_export_history"]').click();
+      const file=await download;await file.saveAs(`${OUTPUT}/own-history-test.json`);await waitReady();
+      const content=fs.readFileSync(`${OUTPUT}/own-history-test.json`,'utf8');
+      assert.match(content,/MY OWN PRIVATE HISTORY/);assert.doesNotMatch(content,/OTHER ACCOUNT PRIVATE HISTORY/);
+      await shot('22-user-privacy');
+      await page.setViewportSize({width:390,height:844});
+      assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+      await shot('23-user-privacy-mobile');
+      await page.setViewportSize({width:1440,height:1000});
+      await page.locator(`[data-action="account_feedback_delete"][data-id="${SHARED}"]`).evaluate(el=>{el.dataset.id='00000000-0000-0000-0000-000000000007';});
+      await page.locator('[data-action="account_feedback_delete"][data-id="00000000-0000-0000-0000-000000000007"]').click();await confirm();
+      await page.locator('.warning-notice').filter({hasText:'Không tìm thấy phản hồi của bạn'}).waitFor();await waitReady();
+      assert.equal(await page.locator('[data-action="account_feedback_delete"]').count(),2);
+      await page.locator('[data-action="account_feedback_withdraw"]').click();await confirm();await success('Đã thu hồi');
+      assert.equal(await page.locator('[data-action="account_feedback_withdraw"]').count(),0);
+      await page.locator(`[data-action="account_feedback_delete"][data-id="${SHARED}"]`).click();await confirm();await success('Đã xóa phản hồi');
+      assert.equal(await page.locator('[data-action="account_feedback_delete"]').count(),1);
+      const form=page.locator('form[data-form="account_delete_history"]');
+      await form.locator('[name="confirmed"]').check();await form.locator('[type="submit"]').click();
+      await page.locator('[data-confirm-cancel]').click();
+      await form.locator('[type="submit"]').click();await confirm();await success('Đã xóa lịch sử');
+      const erased=page.waitForEvent('download');await page.locator('[data-action="account_export_history"]').click();
+      const exported=await erased;await exported.saveAs(`${OUTPUT}/erased-history-test.json`);await waitReady();
+      assert.deepEqual(JSON.parse(fs.readFileSync(`${OUTPUT}/erased-history-test.json`,'utf8')).conversations,[]);
+    });
+    await check('recovery renders two fields and sets password', async()=>{
+      await page.goto('http://127.0.0.1:8510/?scenario=recovery',{waitUntil:'networkidle'});
+      const form=page.locator('form[data-form="account_reset_password"]');await form.waitFor();
+      assert.equal(await page.locator('[name="current_password"]').count(),0);
+      await form.locator('[name="password"]').fill('recovery-fixture-password');await form.locator('[name="confirm_password"]').fill('recovery-fixture-password');
+      await shot('12-recovery-desktop');await form.locator('[type="submit"]').click();await page.locator('.account-success').waitFor();
+    });
+    await check('mobile menu, navigation and no page overflow', async()=>{
+      await page.goto('http://127.0.0.1:8510',{waitUntil:'networkidle'});await heading('Tổng quan').waitFor();
+      await page.setViewportSize({width:390,height:844});
+      assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+      await shot('13-dashboard-mobile');
+      await page.locator('.menu-toggle').click();await page.locator('.admin-app.menu-open').waitFor();
+      await navigate('admin-users','Người dùng');
+      assert.equal(await page.locator('.admin-app.menu-open').count(),0);
+      assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+      await shot('14-users-mobile');
+    });
+    await check('audit dates and event details fit a phone', async()=>{
+      await page.locator('.menu-toggle').click();
+      await navigate('admin-audit','Nhật ký');
+      assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+      await page.locator('.audit-log-panel [data-date-from]').fill('2026-10-22');
+      await page.locator('.audit-log-panel [data-search-row]:not([hidden]) [data-open-dialog]').first().click();
+      await page.locator('.audit-detail[open]').waitFor();
+      const box=await page.locator('.audit-detail[open]').boundingBox();
+      assert(box.x>=0 && box.x+box.width<=390);
+      await shot('20-audit-detail-mobile');
+      await page.locator('.audit-detail[open] [data-close-dialog]').click();
+    });
+    await check('nonzero chart renders real bars and readable dates', async()=>{
+      await page.setViewportSize({width:1440,height:1000});
+      await page.goto('http://127.0.0.1:8510/?scenario=activity',{waitUntil:'networkidle'});await heading('Tổng quan').waitFor();
+      assert.equal(await page.locator('.chart-empty').count(),0);
+      assert.equal(await page.locator('.metric').nth(1).locator('strong').innerText(),'27');
+      assert(await page.locator('.chart-bar').nth(5).evaluate(el=>el.getBoundingClientRect().height>100));
+      await shot('15-dashboard-activity');
+      await page.setViewportSize({width:1505,height:1045});
+      await shot('16-dashboard-reference-size');
+    });
+    assert.deepEqual(errors,[]);
+    fs.writeFileSync(`${OUTPUT}/verification.json`,JSON.stringify({source:'Isolated Streamlit fixture; no production mutations or real emails',checks:results,browserErrors:errors},null,2));
+    const labels = {'01-dashboard-desktop':'Tổng quan','01b-dashboard-wide':'Tổng quan · màn hình rộng','02-users-desktop':'Người dùng','03-user-detail-desktop':'Chi tiết tài khoản','04-documents-desktop':'Kho văn bản','05-document-edit-desktop':'Kiểm tra và duyệt văn bản','06-feedback-desktop':'Xử lý phản hồi','07-operations-desktop':'Vận hành AI','08-audit-desktop':'Nhật ký và sao lưu','09-settings-desktop':'Cài đặt và phân quyền','10-profile-desktop':'Hồ sơ cá nhân','11-password-desktop':'Đổi mật khẩu','12-recovery-desktop':'Đặt mật khẩu mới','13-dashboard-mobile':'Tổng quan · điện thoại','14-users-mobile':'Người dùng · điện thoại','15-dashboard-activity':'Biểu đồ có dữ liệu','17-audit-detail':'Chi tiết sự kiện và lý do đổi quyền','18-audit-filtered':'Lọc nhật ký và xuất CSV','19-feedback-filters':'Lọc trạng thái và quyền chia sẻ phản hồi','20-audit-detail-mobile':'Chi tiết nhật ký trên điện thoại','21-ordinary-admin-restrictions':'Giới hạn quyền của admin nghiệp vụ','22-user-privacy':'Trang quyền riêng tư và dữ liệu của tôi','23-user-privacy-mobile':'Trang quyền riêng tư · điện thoại'};
+    const cards = Object.entries(labels).map(([file,label])=>`<article><h2>${label}</h2><a href="${file}.png" target="_blank"><img src="${file}.png" alt="${label}" loading="lazy"></a></article>`).join('');
+    const gallery = fs.readFileSync('scripts/templates/admin_gallery.html','utf8').replace('__SCREENSHOTS__',cards).replace('__CHECK_COUNT__',String(results.length));
+    fs.writeFileSync(`${OUTPUT}/index.html`,gallery);
+    console.log('ALL_PASSED',results.length);
+  } catch(error) {
+    await shot('failure');
+    console.error('BROWSER_ERRORS',errors);
+    throw error;
+  } finally {await browser.close();}
+})().catch(error=>{console.error(error);process.exitCode=1;});
