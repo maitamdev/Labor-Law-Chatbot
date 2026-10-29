@@ -8,13 +8,12 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 import re
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from urllib.parse import urljoin, quote
+from urllib.parse import quote, urljoin
 
 import requests
 from bs4 import BeautifulSoup
@@ -222,7 +221,9 @@ class VBPLCrawler:
 
         # Parse search results
         for a_tag in soup.find_all("a", href=True):
-            href = a_tag["href"]
+            href = a_tag.get("href")
+            if not isinstance(href, str):
+                continue
             if "ItemID=" in href:
                 match = re.search(r"ItemID=(\d+)", href, re.IGNORECASE)
                 if match:
