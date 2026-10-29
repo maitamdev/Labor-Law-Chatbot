@@ -6,10 +6,10 @@ and Graph-based retrieval for Vietnamese Labor Law.
 """
 from __future__ import annotations
 
-from graph.schema import LegalNodeLabel, LegalRelationType, LegalEntity
 from graph.connector import Neo4jConnector, get_neo4j_connector
 from graph.cypher_templates import CypherTemplates
 from graph.retriever import LegalGraphRetriever
+from graph.schema import LegalEntity, LegalNodeLabel, LegalRelationType
 
 __all__ = [
     "LegalNodeLabel",
