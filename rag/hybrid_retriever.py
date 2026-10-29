@@ -11,8 +11,10 @@ from typing import Any, Dict, List, Optional
 
 from config.settings import BM25_INDEX_DIR, CHROMA_INDEX_DIR, PRODUCTION_CORPUS_PATH, STORAGE_DIR
 from rag.bm25_retriever import BM25Retriever
+from rag.corpus_effective_status import demote_repealed_candidates
 from rag.dense_retriever import DenseRetriever
 from rag.reranker import CrossEncoderReranker
+from rag.retrieval_query import prepare_retrieval_query
 from rag.vectorstore import LegalVectorStore
 
 logger = logging.getLogger(__name__)
@@ -117,8 +119,8 @@ class HybridRetriever:
         Returns:
             List of ranked chunk dicts with fused score and provenance metadata.
         """
-        clean_query = query.strip() if query else ""
-        if not clean_query:
+        clean_query = prepare_retrieval_query(query)
+        if not clean_query or top_k <= 0:
             return []
 
         n_candidates = max(top_k * candidate_multiplier, 20)
@@ -190,6 +192,7 @@ class HybridRetriever:
         # 4. Sort by RRF score descending
         fused_results = list(fused_pool.values())
         fused_results.sort(key=lambda x: x["rrf_score"], reverse=True)
+        fused_results = demote_repealed_candidates(fused_results, clean_query)
 
         # 5. Optional Cross-Encoder reranking for precision enhancement
         if self.use_reranker and self.reranker is not None:

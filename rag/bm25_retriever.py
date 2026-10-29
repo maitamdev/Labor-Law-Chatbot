@@ -12,10 +12,11 @@ import datetime
 import hashlib
 import json
 import logging
-from pathlib import Path
 import re
-from typing import Any, Dict, List, Optional, Union
+import threading
 import unicodedata
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
 
 import bm25s
 from pyvi import ViTokenizer
@@ -112,6 +113,7 @@ class BM25Retriever:
 
         self.retriever: Optional[bm25s.BM25] = None
         self.chunks_data: List[dict[str, Any]] = []
+        self._index_lock = threading.RLock()
 
     def compute_fingerprint(self) -> str:
         """Computes deterministic SHA256 fingerprint for the BM25 index."""
@@ -148,6 +150,10 @@ class BM25Retriever:
             return False
 
     def build_index(self, force: bool = False) -> dict[str, Any]:
+        with self._index_lock:
+            return self._build_index(force)
+
+    def _build_index(self, force: bool = False) -> dict[str, Any]:
         """Builds or reuses the BM25 index from the production corpus."""
         if not self.corpus_path.exists():
             raise FileNotFoundError(f"Corpus file not found: {self.corpus_path}")
@@ -174,7 +180,7 @@ class BM25Retriever:
         simplified_chunks: List[dict[str, Any]] = []
 
         for c in chunks:
-            retrieval_text = format_retrieval_text(c)
+            retrieval_text = format_retrieval_text(c, corpus_path=self.corpus_path)
             tokens = tokenize_legal_vietnamese(retrieval_text, mode=self.tokenizer_mode)
             tokenized_corpus.append(tokens)
             simplified_chunks.append({
@@ -217,10 +223,15 @@ class BM25Retriever:
 
         self.retriever = retriever
         self.chunks_data = simplified_chunks
+        self._id_index = None
         logger.info(f"BM25 index successfully built for {total_chunks} chunks.")
         return meta
 
     def load_index(self) -> None:
+        with self._index_lock:
+            self._load_index()
+
+    def _load_index(self) -> None:
         """Loads existing BM25 index and chunk metadata from disk."""
         if self.retriever is not None and self.chunks_data:
             return
@@ -233,12 +244,17 @@ class BM25Retriever:
         self.retriever = bm25s.BM25.load(str(self.persist_dir), load_corpus=False)
         with open(self.chunks_file, "r", encoding="utf-8") as f:
             self.chunks_data = json.load(f)
+        self._id_index = None
         logger.info(f"BM25 index loaded ({len(self.chunks_data)} chunks).")
 
     def retrieve(self, query: str, top_k: int = 5) -> List[dict[str, Any]]:
+        with self._index_lock:
+            return self._retrieve(query, top_k)
+
+    def _retrieve(self, query: str, top_k: int = 5) -> List[dict[str, Any]]:
         """Retrieves top-k relevant chunks using BM25 scoring."""
         clean_query = query.strip() if query else ""
-        if not clean_query:
+        if not clean_query or top_k <= 0:
             return []
 
         if self.retriever is None or not self.chunks_data:
@@ -260,7 +276,7 @@ class BM25Retriever:
         doc_indices = docs[0]
         score_values = scores[0]
 
-        for doc_idx, score in zip(doc_indices, score_values):
+        for doc_idx, score in zip(doc_indices, score_values, strict=True):
             idx = int(doc_idx)
             results.append(self._format_chunk(self.chunks_data[idx], float(score)))
 
@@ -288,6 +304,10 @@ class BM25Retriever:
         }
 
     def get_chunk(self, chunk_id: str, score: float = 0.0) -> Optional[dict[str, Any]]:
+        with self._index_lock:
+            return self._get_chunk(chunk_id, score)
+
+    def _get_chunk(self, chunk_id: str, score: float = 0.0) -> Optional[dict[str, Any]]:
         """Returns a canonical chunk (same shape as retrieve() items) by chunk_id."""
         if self.retriever is None or not self.chunks_data:
             self.load_index()
