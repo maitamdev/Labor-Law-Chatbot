@@ -7,9 +7,9 @@ stages can distinguish facts supplied by the user from assumptions.
 """
 from __future__ import annotations
 
+import re
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
-import re
 from typing import Any, Dict, Iterable, List
 
 
@@ -172,7 +172,7 @@ class CaseAnalyzer:
         # 20/09 -> 01/10 into an invented 30-day notice period.
         for sentence in [s for s in re.split(r"[.!?\n]+", narrative) if s.strip()]:
             date_matches = list(re.finditer(r"\b\d{1,2}[/-]\d{1,2}[/-]\d{4}\b", sentence))
-            for left, right in zip(date_matches, date_matches[1:]):
+            for left, right in zip(date_matches, date_matches[1:], strict=False):
                 try:
                     start = datetime.strptime(left.group(0).replace("-", "/"), "%d/%m/%Y").date()
                     end = datetime.strptime(right.group(0).replace("-", "/"), "%d/%m/%Y").date()
