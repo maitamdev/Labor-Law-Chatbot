@@ -8,9 +8,9 @@ Converts them into ChatML training dataset, QA question anchors, and UI situatio
 import json
 import re
 import ssl
-import sys
 import urllib.request
 from pathlib import Path
+
 from bs4 import BeautifulSoup
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -216,11 +216,11 @@ def main():
     # 3. Append to main dataset if not already present
     main_training_file = PROJECT_ROOT / "data" / "training" / "vietlabor_sft_1000_chatml.jsonl"
     if main_training_file.exists():
-        existing_lines = [l for l in main_training_file.read_text(encoding="utf-8").splitlines() if l.strip()]
+        existing_lines = [line for line in main_training_file.read_text(encoding="utf-8").splitlines() if line.strip()]
         existing_count = len(existing_lines)
 
         # Check if already appended
-        is_already_appended = any("Lò Văn Dũng" in l for l in existing_lines)
+        is_already_appended = any("Lò Văn Dũng" in line for line in existing_lines)
         if not is_already_appended:
             with open(main_training_file, "a", encoding="utf-8") as f:
                 for rec in chatml_records:
@@ -232,7 +232,7 @@ def main():
     # 4. Integrate into qa_question_anchors.jsonl
     anchor_file = PROJECT_ROOT / "data" / "processed" / "qa_question_anchors.jsonl"
     if anchor_file.exists():
-        existing_anchors = [json.loads(l) for l in anchor_file.read_text(encoding="utf-8").splitlines() if l.strip()]
+        existing_anchors = [json.loads(line) for line in anchor_file.read_text(encoding="utf-8").splitlines() if line.strip()]
         # Cleanly re-populate Thai Nguyen anchors (sheet_row >= 9000)
         existing_anchors = [a for a in existing_anchors if a.get("sheet_row", 0) < 9000]
         anchors_added = 0

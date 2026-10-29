@@ -3,13 +3,12 @@
 Script to parse, evaluate and train 106 legal situations from Can Tho PBGDPL:
 https://pbgdpl.cantho.gov.vn/bo-cau-hoi-tinh-huong-va-giai-dap-phap-luat-ve-bo-luat-lao-dong-nam-2019
 """
-import io
 import json
 import logging
 import os
 import re
-import sys
 from typing import Any, Dict, List, Optional
+
 from bs4 import BeautifulSoup
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")

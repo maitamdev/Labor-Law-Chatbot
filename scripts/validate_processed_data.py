@@ -8,7 +8,7 @@ from pathlib import Path
 
 # Ensure UTF-8 output in Windows console
 if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
-    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8")
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:

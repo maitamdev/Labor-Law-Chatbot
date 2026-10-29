@@ -5,6 +5,7 @@ import json
 import sys
 from pathlib import Path
 
+
 def validate_chatml_file(file_path: Path) -> dict:
     """Validate a ChatML JSONL file."""
     valid_count = 0
