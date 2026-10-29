@@ -19,11 +19,9 @@ Deterministic calculation engine derived strictly from canonical legal provision
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-import math
 import re
+from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
-
 
 # Current statutory reference base salary (mức tham chiếu / mức lương cơ sở hiện hành)
 CURRENT_REFERENCE_SALARY = 2_340_000  # VND
@@ -512,7 +510,7 @@ class BenefitCalculator:
             total = round(daily_rate * paternity_days, 2)
 
             breakdown = [
-                f"1. Chế độ thai sản của lao động nam khi vợ sinh con (Khoản 2 Điều 34)",
+                "1. Chế độ thai sản của lao động nam khi vợ sinh con (Khoản 2 Điều 34)",
                 f"2. Số ngày nghỉ được hưởng theo quy định: {paternity_days} ngày làm việc (trường hợp: {paternity_case})",
                 f"3. Mức hưởng 01 ngày làm việc: {avg_salary_6m:,.0f} / 24 = {daily_rate:,.0f} VNĐ/ngày",
                 f"-> Tổng mức hưởng trợ cấp thai sản của chồng: {daily_rate:,.0f} x {paternity_days} = {total:,.0f} VNĐ",
@@ -646,7 +644,7 @@ class BenefitCalculator:
             formula_id = "LUMP_SUM_BHXH_STANDARD"
             breakdown = [
                 f"1. Thời gian đóng BHXH dưới 01 năm ({total_years * 12:.0f} tháng đóng): Điểm c Khoản 2 Điều 70 58/VBHN-VPQH",
-                f"2. Mức hưởng bằng số tiền đã đóng vào quỹ (22% x tổng tiền lương đóng), tối đa bằng 02 tháng mức bình quân",
+                "2. Mức hưởng bằng số tiền đã đóng vào quỹ (22% x tổng tiền lương đóng), tối đa bằng 02 tháng mức bình quân",
                 f"3. Hệ số hưởng áp dụng: {months_multiplier:.2f} tháng lương bình quân",
                 f"-> Tổng số tiền BHXH một lần nhận được: {total:,.0f} VNĐ",
             ]
@@ -1010,12 +1008,24 @@ class BenefitCalculator:
 
         # 0. Check if query or facts indicate calculation intent
         has_facts = bool(facts)
+        is_age_or_duration_lookup = any(k in t for k in [
+            "tuổi nghỉ hưu", "bao nhiêu tuổi", "mấy tuổi", "tính tuổi",
+            "tuổi thấp nhất", "nghỉ ở tuổi thấp hơn", "nghỉ hưu sớm",
+            "nghỉ tối đa bao nhiêu ngày", "được nghỉ bao nhiêu ngày", "nghỉ mấy ngày",
+            "được nghỉ bao nhiêu tháng", "nghỉ mấy tháng", "đóng bhxh bao nhiêu năm thì",
+        ]) and not any(m in t for m in [
+            "bao nhiêu tiền", "tính tiền", "tính lương hưu", "tính trợ cấp",
+            "mức lương hưu", "tiền thai sản", "tiền ốm đau",
+        ])
+        if is_age_or_duration_lookup and not bool(re.search(r"\d+\s*(?:triệu|tr|đồng|vnđ)", t)):
+            return None
+
         is_calc_query = any(k in t for k in [
             "bao nhiêu tiền", "được bao nhiêu tiền", "tính như thế nào", "tính sao", "tính tiền",
             "nhận được bao nhiêu tiền", "được nhận", "nhận bao nhiêu", "được bao nhiêu", "hưởng bao nhiêu",
             "bồi thường bao nhiêu", "trợ cấp bao nhiêu", "cách tính", "công thức tính",
             "tính lương hưu", "tính trợ cấp", "tính thai sản", "tính ốm đau", "tính bảo hiểm một lần",
-            "chi trả bao nhiêu", "tổng cộng bao nhiêu", "bao nhiêu", "rút được bao nhiêu", "rút bao nhiêu"
+            "chi trả bao nhiêu", "tổng cộng bao nhiêu", "rút được bao nhiêu", "rút bao nhiêu"
         ])
         has_numeric_salary = bool(re.search(r"\d+\s*(?:triệu|tr|đồng|vnđ)", t))
         has_numeric_days = bool(re.search(r"\d+\s*ngày", t)) and any(k in t for k in ["ốm", "thai sản", "nghỉ", "vợ sinh", "bệnh"])

@@ -17,7 +17,17 @@ AGE_EVIDENCE_IDS = (
 
 def request_details(query: str) -> tuple[int, str, str] | None:
     text = query.lower()
-    if "nghỉ hưu" not in text or not any(word in text for word in ("tuổi thấp hơn", "tuổi nghỉ hưu thấp nhất", "nghỉ hưu sớm", "nghỉ ở tuổi thấp hơn")):
+    if "nghỉ hưu" not in text:
+        return None
+    is_early = any(
+        word in text
+        for word in ("tuổi thấp hơn", "tuổi nghỉ hưu thấp nhất", "nghỉ hưu sớm", "nghỉ ở tuổi thấp hơn", "trước tuổi")
+    )
+    is_normal_age = any(
+        word in text
+        for word in ("tuổi nghỉ hưu", "bao nhiêu tuổi", "mấy tuổi", "tính tuổi")
+    )
+    if not is_early and not is_normal_age:
         return None
     year_match = re.search(r"\bnăm\s+(20\d{2})\b", text)
     if not year_match:
@@ -25,7 +35,13 @@ def request_details(query: str) -> tuple[int, str, str] | None:
     year = int(year_match.group(1))
     if not 2021 <= year <= 2035:
         return None
-    gender = "nữ" if re.search(r"\b(?:lao động nữ|người lao động nữ|phụ nữ)\b", text) else "nam" if re.search(r"\b(?:lao động nam|người lao động nam)\b", text) else ""
+    has_female = bool(re.search(r"\b(?:lao động nữ|người lao động nữ|phụ nữ|nữ giới)\b", text))
+    has_male = bool(re.search(r"\b(?:lao động nam|người lao động nam|nam giới)\b", text))
+    if not is_early:
+        if (has_male and has_female) or (not has_male and not has_female):
+            return year, "nam_va_nu", "normal"
+        return year, ("nữ" if has_female else "nam"), "normal"
+    gender = "nữ" if has_female else "nam" if has_male else ""
     if not gender:
         return None
     special_ten = any(phrase in text for phrase in ("hầm lò", "khai thác than", "81%", "81 %"))
@@ -44,6 +60,27 @@ def grounded_answer(query: str, available_chunk_ids: set[str]) -> str | None:
     if details is None or not set(AGE_EVIDENCE_IDS).issubset(available_chunk_ids):
         return None
     year, gender, category = details
+    if category == "normal":
+        male_months = min(62 * 12, 60 * 12 + 3 + (year - 2021) * 3)
+        female_months = min(60 * 12, 55 * 12 + 4 + (year - 2021) * 4)
+        male_text = _age_text(male_months)
+        female_text = _age_text(female_months)
+        if gender == "nam":
+            return (
+                f"Năm {year}, tuổi nghỉ hưu của lao động nam trong điều kiện lao động bình thường "
+                f"là **{male_text}** theo Điều 169 Bộ luật Lao động 2019 và khoản 2 Điều 4 Nghị định 135/2020/NĐ-CP."
+            )
+        if gender == "nữ":
+            return (
+                f"Năm {year}, tuổi nghỉ hưu của lao động nữ trong điều kiện lao động bình thường "
+                f"là **{female_text}** theo Điều 169 Bộ luật Lao động 2019 và khoản 2 Điều 4 Nghị định 135/2020/NĐ-CP."
+            )
+        return (
+            f"Năm {year}, tuổi nghỉ hưu của người lao động trong điều kiện lao động bình thường "
+            f"theo Điều 169 Bộ luật Lao động 2019 và khoản 2 Điều 4 Nghị định 135/2020/NĐ-CP là:\n"
+            f"- **Lao động nam**: **{male_text}**.\n"
+            f"- **Lao động nữ**: **{female_text}**."
+        )
     normal_months = min(62 * 12, 60 * 12 + 3 + (year - 2021) * 3) if gender == "nam" else min(60 * 12, 55 * 12 + 4 + (year - 2021) * 4)
     normal, five, ten = (_age_text(normal_months - offset) for offset in (0, 5 * 12, 10 * 12))
     lead = f"Năm {year}, tuổi nghỉ hưu trong điều kiện lao động bình thường của lao động {gender} là {normal} (khoản 2 Điều 4 Nghị định 135/2020/NĐ-CP). "
