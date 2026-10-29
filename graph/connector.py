@@ -7,7 +7,7 @@ Features automated health-checks, graceful offline fallbacks, and connection poo
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, LiteralString, Optional, cast
 
 from config.settings import (
     NEO4J_DATABASE,
@@ -95,7 +95,8 @@ class Neo4jConnector:
 
         try:
             with self._driver.session(database=self.database) as session:
-                result = session.run(cypher, parameters or {})
+                # Callers assemble fixed Cypher templates; user values stay in parameters.
+                result = session.run(cast(LiteralString, cypher), parameters or {})
                 return [record.data() for record in result]
         except Exception as e:
             logger.error("Error executing Cypher query: %s. Query: %s", e, cypher)
@@ -117,7 +118,7 @@ class Neo4jConnector:
 
         try:
             with self._driver.session(database=self.database) as session:
-                session.run(cypher, {"batch": batch})
+                session.run(cast(LiteralString, cypher), {"batch": batch})
                 return len(batch)
         except Exception as e:
             logger.error("Error executing batch write query: %s", e)

@@ -4,6 +4,7 @@ In-memory LRU Cache for Neo4j Cypher query results.
 import collections
 from typing import Any, Optional
 
+
 class CypherQueryCache:
     def __init__(self, capacity: int = 256):
         self.capacity = capacity
