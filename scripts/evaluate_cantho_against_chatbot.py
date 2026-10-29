@@ -3,6 +3,7 @@
 Evaluation script to benchmark VietLabor Chatbot's current responses
 against official answers from Can Tho PBGDPL (106 situations).
 """
+import argparse
 import io
 import json
 import logging
@@ -10,7 +11,7 @@ import os
 import re
 import sys
 import time
-from typing import Any, Dict, List
+from typing import List, Optional
 
 # Ensure UTF-8 output on Windows terminal
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
@@ -25,8 +26,9 @@ from app.chat_service import ChatService
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("evaluate_cantho")
 
-CANTHO_JSON = r"d:\chatbot-law\data\processed\cantho_legal_situations.json"
-REPORT_OUTPUT = r"d:\chatbot-law\reports\cantho_pre_training_benchmark_report.md"
+CANTHO_JSON = os.path.join(PROJECT_ROOT, "data", "processed", "cantho_legal_situations.json")
+REPORT_OUTPUT = os.path.join(PROJECT_ROOT, "reports", "cantho_chatbot_benchmark_report.md")
+JSON_OUTPUT = os.path.join(PROJECT_ROOT, "reports", "cantho_chatbot_benchmark.json")
 
 
 def normalize_articles(art_list: List[str]) -> set:
@@ -50,17 +52,27 @@ def extract_articles_from_text(text: str) -> List[str]:
     return res
 
 
-def evaluate_benchmark(sample_indices: List[int] = None):
+def evaluate_benchmark(
+    sample_indices: Optional[List[int]] = None,
+    min_question_len: int = 0,
+    max_items: Optional[int] = None,
+):
     with open(CANTHO_JSON, "r", encoding="utf-8") as f:
         situations = json.load(f)
 
     sit_map = {s["number"]: s for s in situations}
 
-    # Selected representative questions covering key topics across BLLĐ 2019
-    if sample_indices is None:
+    if sample_indices is not None:
+        selected_sits = [sit_map[i] for i in sample_indices if i in sit_map]
+    elif min_question_len > 0 or max_items is not None:
+        selected_sits = [s for s in situations if len(s.get("question", "")) >= min_question_len]
+        selected_sits.sort(key=lambda s: s["number"])
+        if max_items is not None:
+            selected_sits = selected_sits[:max_items]
+    else:
+        # Representative sample (legacy default)
         sample_indices = [1, 2, 3, 4, 5, 6, 10, 20, 31, 42, 55, 80, 90, 103]
-
-    selected_sits = [sit_map[i] for i in sample_indices if i in sit_map]
+        selected_sits = [sit_map[i] for i in sample_indices if i in sit_map]
     logger.info(f"Evaluating {len(selected_sits)} benchmark situations...")
 
     chat_service = ChatService()
@@ -104,7 +116,6 @@ def evaluate_benchmark(sample_indices: List[int] = None):
         # Assess semantic / conclusion match
         # Check if bot provided a substantive grounded legal response
         has_substance = len(chatbot_ans.strip()) > 150
-        is_grounded = response.get("is_fully_grounded", True)
         needs_clarification = response.get("needs_clarification", False)
 
         conclusion_match = is_art_hit and has_substance and not needs_clarification
@@ -167,9 +178,48 @@ def evaluate_benchmark(sample_indices: List[int] = None):
             f.write(f"{r['full_chatbot_ans']}\n\n")
             f.write("---\n\n")
 
+    os.makedirs(os.path.dirname(JSON_OUTPUT), exist_ok=True)
+    with open(JSON_OUTPUT, "w", encoding="utf-8") as jf:
+        json.dump(
+            {
+                "total": total_evaluated,
+                "article_recall_pct": article_recall,
+                "substantive_grounded_pct": conclusion_rate,
+                "results": results,
+            },
+            jf,
+            ensure_ascii=False,
+            indent=2,
+        )
+    logger.info(f"JSON metrics saved to {JSON_OUTPUT}")
     logger.info(f"Report successfully saved to {REPORT_OUTPUT}")
     return results
 
 
 if __name__ == "__main__":
-    evaluate_benchmark()
+    parser = argparse.ArgumentParser(description="Benchmark VietLabor against Can Tho PBGDPL situations")
+    parser.add_argument("--all", action="store_true", help="Run all 106 official situations")
+    parser.add_argument(
+        "--min-length",
+        type=int,
+        default=0,
+        help="Only questions with at least this many characters (use with --all for long scenarios)",
+    )
+    parser.add_argument("--max", type=int, default=None, help="Cap number of questions after filtering")
+    parser.add_argument("--numbers", type=str, default=None, help="Comma-separated situation numbers, e.g. 1,4,30")
+    args = parser.parse_args()
+
+    if args.numbers:
+        nums = [int(x.strip()) for x in args.numbers.split(",") if x.strip()]
+        evaluate_benchmark(sample_indices=nums)
+    elif args.all:
+        with open(CANTHO_JSON, "r", encoding="utf-8") as f:
+            all_sits = json.load(f)
+        if args.min_length:
+            all_sits = [s for s in all_sits if len(s.get("question", "")) >= args.min_length]
+        all_sits.sort(key=lambda s: s["number"])
+        if args.max is not None:
+            all_sits = all_sits[: args.max]
+        evaluate_benchmark(sample_indices=[s["number"] for s in all_sits])
+    else:
+        evaluate_benchmark()

@@ -13,8 +13,6 @@ Exports reports/rubric_15_test_cases.md.
 """
 from __future__ import annotations
 
-import json
-import os
 import sys
 import time
 from pathlib import Path
@@ -26,9 +24,9 @@ if str(PROJECT_ROOT) not in sys.path:
 
 if sys.platform == "win32":
     if hasattr(sys.stdout, "reconfigure"):
-        getattr(sys.stdout, "reconfigure")(encoding="utf-8")
+        sys.stdout.reconfigure(encoding="utf-8")
     if hasattr(sys.stderr, "reconfigure"):
-        getattr(sys.stderr, "reconfigure")(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
 
 from rag.chain import VietLaborRAGChain
 

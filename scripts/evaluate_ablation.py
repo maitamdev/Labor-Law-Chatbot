@@ -128,7 +128,7 @@ def build_retrievers(configs: Sequence[str]) -> Tuple[Dict[str, Callable[[str, i
 
     dense = None
     dense_ok = False
-    if any(c in configs for c in ("dense", "hybrid", "hybrid_graph")):
+    if any(c in configs for c in ("dense", "hybrid", "hybrid_graph", "hybrid_norm")):
         try:
             from rag.dense_retriever import DenseRetriever
             from rag.vectorstore import LegalVectorStore
@@ -148,8 +148,8 @@ def build_retrievers(configs: Sequence[str]) -> Tuple[Dict[str, Callable[[str, i
     fns: Dict[str, Callable[[str, int], List[Dict[str, Any]]]] = {}
     if "bm25" in configs:
         fns["bm25"] = lambda q, k: bm25.retrieve(q, top_k=k)
-    if "dense" in configs and dense_ok:
-        fns["dense"] = lambda q, k: dense.retrieve(q, top_k=k)
+    if "dense" in configs and dense_ok and dense is not None:
+        fns["dense"] = lambda q, k, retriever=dense: retriever.retrieve(q, top_k=k)
     if "hybrid" in configs:
         from rag.hybrid_retriever import HybridRetriever
 
