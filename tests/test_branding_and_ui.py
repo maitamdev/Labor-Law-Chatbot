@@ -5,10 +5,10 @@ Tests for UI branding, logo loading, base64 encoding, and component integration.
 from __future__ import annotations
 
 import base64
-from pathlib import Path
+
 from PIL import Image
 
-from ui.utils.branding import PRIMARY_LOGO_PATH, STATIC_LOGO_THUMB, get_logo_base64, get_logo_path
+from ui.utils.branding import STATIC_LOGO_THUMB, get_logo_base64, get_logo_path
 
 
 def test_primary_logo_exists():
@@ -43,7 +43,6 @@ def test_ui_components_import_cleanly():
     import ui.components.chat_message as chat_message
     import ui.components.sidebar as sidebar
     import ui.components.welcome as welcome
-    import ui.streamlit_app as app
 
     assert hasattr(chat_message, "render_assistant_message")
     assert hasattr(sidebar, "render_sidebar")

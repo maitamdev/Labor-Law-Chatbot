@@ -1,5 +1,5 @@
 """Ensure the new UI does not execute message markup or weaken source links."""
-from ui.components.approved_layout import layout_markup, render_messages, render_citations
+from ui.components.approved_layout import layout_markup, render_citations, render_messages
 
 
 def test_message_markup_and_history_titles_cannot_inject_html():
@@ -34,6 +34,26 @@ def test_citations_keep_official_url_restrictions_and_deduplication():
     assert render_citations({'citations': citations, 'needs_clarification': True}) == ''
 
 
+def test_citations_group_same_document_without_losing_provisions():
+    citations = [
+        {'chunk_id': f'LABOR#d125-k{i}', 'document_title': 'Bộ luật Lao động',
+         'document_number': '45/2019/QH14', 'article': '125', 'clause': str(i),
+         'excerpt': f'Nội dung khoản {i}.', 'source_url': 'https://congbao.chinhphu.vn/source'}
+        for i in range(1, 5)
+    ]
+    citations.append({'chunk_id': 'DECREE#d70', 'document_title': 'Nghị định hướng dẫn',
+                      'document_number': '145/2020/NĐ-CP', 'article': '70'})
+    rendered = render_citations({'citations': citations + [citations[0]]})
+    assert rendered.count('class="citation-group"') == 2
+    assert rendered.count('class="citation"') == 5
+    assert rendered.count('Bộ luật Lao động') == 1
+    assert '4 trích dẫn' in rendered
+    assert '<details class="citation-group" open' not in rendered
+    for i in range(1, 5):
+        assert f'Điều 125 · Khoản {i}' in rendered
+        assert f'Nội dung khoản {i}.' in rendered
+
+
 def test_busy_chat_disables_submissions_and_preserves_grounding_notice():
     message = {'id': 'a', 'role': 'assistant', 'content': 'Answer', 'structured_data': {'evidence_coverage': {'total_issue_count': 2, 'complete_issue_count': 1}, 'unresolved_issue_ids': ['missing'], 'suggested_followups': ['Clarify?']}}
     markup = layout_markup('chat', [message], [], True, 'test')
@@ -47,6 +67,7 @@ def test_busy_chat_disables_submissions_and_preserves_grounding_notice():
 
 def test_responsive_breakpoints_remain_valid_after_desktop_scaling(monkeypatch):
     from typing import Any, cast
+
     from ui.components import approved_layout
     approved_layout.get_surface.cache_clear()
     monkeypatch.setattr(approved_layout, 'component', lambda name, **kwargs: kwargs)
@@ -63,6 +84,7 @@ def test_responsive_breakpoints_remain_valid_after_desktop_scaling(monkeypatch):
 def test_templates_view_renders_all_eight_full_templates():
     import html
     import json
+
     from ui.utils.legal_templates import LEGAL_TEMPLATES
 
     assert len(LEGAL_TEMPLATES) == 8
@@ -95,10 +117,11 @@ def test_answers_offer_pdf_export_but_smalltalk_does_not():
     assert 'data-export="a2"' not in rendered
 
 
-def test_header_has_no_fake_login_and_upload_excludes_legacy_doc():
+def test_header_opens_real_email_login_and_upload_excludes_legacy_doc():
     markup = layout_markup('home', [], [], False, '')
     assert 'data-dialog="login"' not in markup
-    assert 'Đăng nhập' not in markup
+    assert 'data-auth-open="login"' in markup
+    assert 'name="username" type="email"' in markup
     assert 'accept=".txt,.pdf,.docx"' in markup
 
 
