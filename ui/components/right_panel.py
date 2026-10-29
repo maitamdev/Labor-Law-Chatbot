@@ -5,8 +5,9 @@ Matches the approved mockup with Popular Topics, Main Legal Documents, and Discl
 """
 from __future__ import annotations
 
-import streamlit as st
 from typing import Callable, Optional
+
+import streamlit as st
 
 POPULAR_TOPICS = [
     ("Thử việc", "Thời gian thử việc tối đa theo trình độ?", ":material/badge:"),
@@ -37,7 +38,7 @@ def render_right_panel(on_topic_click: Optional[Callable[[str], None]] = None) -
                 st.rerun()
 
     st.markdown('<div class="sidebar-section-title" style="margin-top: 24px;">VĂN BẢN CHÍNH</div>', unsafe_allow_html=True)
-    for idx, (title, url) in enumerate(MAIN_DOCS):
+    for title, url in MAIN_DOCS:
         st.markdown(f"""
         <a href="{url}" target="_blank" style="text-decoration: none;">
             <div class="right-card-item">

@@ -12,7 +12,6 @@ import re
 from functools import lru_cache
 from pathlib import Path
 
-import streamlit as st
 from markdown_it import MarkdownIt
 from streamlit.components.v2 import component
 
@@ -45,7 +44,7 @@ NAVIGATION = [
 DOCUMENTS = [
     ('Bộ luật Lao động 2019 (VBHN 18/VBHN-VPQH)', 'Văn bản gốc quy định toàn diện quan hệ lao động, hợp đồng, tiền lương, thời giờ làm việc và kỷ luật', 'https://congbao.chinhphu.vn/van-ban/van-ban-hop-nhat-so-18-vbhn-vpqh-468971.htm'),
     ('Nghị định 145/2020/NĐ-CP', 'Quy định chi tiết và hướng dẫn thi hành Bộ luật Lao động về điều kiện lao động và quan hệ lao động', 'https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-145-2020-nd-cp-32732.htm'),
-    ('Nghị định 12/2022/NĐ-CP', 'Quy định xử phạt vi phạm hành chính trong lĩnh vực lao động, bảo hiểm xã hội và đưa NLĐ đi nước ngoài', 'https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-12-2022-nd-cp-35116.htm'),
+    ('Nghị định 283/2026/NĐ-CP', 'Xử phạt vi phạm hành chính lĩnh vực lao động, BHXH và NLĐ đi làm việc ở nước ngoài (thay thế NĐ 12/2022)', 'https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-283-2026-nd-cp-470103.htm'),
     ('Thông tư 10/2020/TT-BLĐTBXH', 'Hướng dẫn thi hành nội dung hợp đồng lao động, phụ cấp lương, tiền thưởng và hội đồng thương lượng', 'https://congbao.chinhphu.vn/van-ban/thong-tu-so-10-2020-tt-bldtbxh-32709.htm'),
     ('Nghị định 38/2022/NĐ-CP (Lương tối thiểu vùng)', 'Quy định mức lương tối thiểu vùng theo tháng và theo giờ áp dụng đối với người lao động', 'https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-38-2022-nd-cp-35805.htm'),
     ('Nghị định 337/2025/NĐ-CP (HĐLĐ điện tử)', 'Quy định chi tiết về giao kết, sửa đổi và thực hiện hợp đồng lao động điện tử theo chuẩn pháp lý', 'https://congbao.chinhphu.vn'),
@@ -55,14 +54,14 @@ DOCUMENTS = [
 
 
 def esc(value) -> str:
-    return html.escape(str(value or ''), quote=True)
+    return html.escape(str(value if value is not None else ''), quote=True)
 
 
 @lru_cache(maxsize=32)
 def icon(name: str) -> str:
     # Vendored Tabler icons; no runtime requests or third-party scripts.
     svg = (STATIC / 'icons' / f'{name}.svg').read_text(encoding='utf-8')
-    return svg.replace('<svg ', '<svg aria-hidden="true" focusable="false" ')
+    return re.sub(r'<svg\s+', '<svg aria-hidden="true" focusable="false" ', svg, count=1)
 
 
 def sprite(x: int, y: int, width: int, height: int, cls: str, label: str) -> str:
@@ -192,20 +191,43 @@ def graph_explorer(bridges: list[dict] | None = None) -> str:
 def render_citations(data: dict) -> str:
     if data.get('needs_clarification'):
         return ''
-    cards, seen = [], set()
+    groups, seen = {}, set()
     for citation in data.get('citations', []) or []:
         cid = citation.get('chunk_id')
         if cid and cid in seen:
             continue
         seen.add(cid)
-        label = format_provision_badge(citation.get('article', ''), citation.get('clause', ''), citation.get('point', ''))
-        links = []
-        for field, title in [('deep_link_url', 'Mở điều khoản'), ('source_url', 'Mở nguồn văn bản')]:
-            url = _safe_official_url(citation.get(field))
-            if url:
-                links.append(f'<a href="{esc(url)}" target="_blank" rel="noopener noreferrer">{title}{icon("external-link")}</a>')
-        cards.append(f'<details class="citation"><summary>{icon("file-description")}<span><strong>{esc(citation.get("document_title"))}</strong><small>{esc(label)}</small></span></summary><div><p>{esc(citation.get("article_title"))}</p><blockquote>{esc(citation.get("excerpt"))}</blockquote><div class="citation-links">{"".join(links)}</div></div></details>')
+        document_key = str(citation.get('document_number') or citation.get('doc_id')
+                           or (str(cid).split('#')[0] if cid and '#' in str(cid) else '')
+                           or citation.get('source_url') or citation.get('document_title') or 'Văn bản pháp luật')
+        groups.setdefault(document_key, []).append(citation)
+
+    cards = []
+    for citations in groups.values():
+        title = citations[0].get('document_title') or 'Văn bản pháp luật'
+        provisions = []
+        articles = list(dict.fromkeys(str(c.get('article')) for c in citations if c.get('article')))
+        article_label = 'Điều ' + ', '.join(articles) if articles else 'Căn cứ luật định'
+        for citation in citations:
+            provisions.append(_render_citation_provision(citation))
+        cards.append(
+            f'<details class="citation-group"><summary>{icon("file-description")}'
+            f'<span><strong class="citation-doc-title">{esc(title)}</strong>'
+            f'<small>{esc(article_label)} · {len(citations)} trích dẫn</small></span>'
+            f'<span class="citation-chevron">{icon("chevron-right")}</span></summary>'
+            f'<div class="citation-provisions">{"".join(provisions)}</div></details>'
+        )
     return '<h3 class="citations-title">Căn cứ pháp lý</h3>' + ''.join(cards) if cards else ''
+
+
+def _render_citation_provision(citation: dict) -> str:
+    label = format_provision_badge(citation.get('article', ''), citation.get('clause', ''), citation.get('point', ''))
+    links = []
+    for field, title in [('deep_link_url', 'Mở điều khoản'), ('source_url', 'Mở nguồn văn bản')]:
+        url = _safe_official_url(citation.get(field))
+        if url:
+            links.append(f'<a href="{esc(url)}" target="_blank" rel="noopener noreferrer">{title}{icon("external-link")}</a>')
+    return f'<details class="citation"><summary><span class="citation-provision-label">{esc(label)}</span>{icon("chevron-right")}</summary><div><p>{esc(citation.get("article_title"))}</p><blockquote>{esc(citation.get("excerpt"))}</blockquote><div class="citation-links">{"".join(links)}</div></div></details>'
 
 
 def render_messages(messages: list[dict], busy: bool, typing_id: str = '') -> str:
@@ -598,7 +620,12 @@ def secondary_content(view: str) -> str:
     return f'<section class="resource-page">{back}<h1>{title}</h1>{content}</section>'
 
 
-def layout_markup(view: str, messages: list[dict], conversations: list[dict], busy: bool, active_id: str, typing_id: str = '') -> str:
+def auth_dialog_markup() -> str:
+    from ui.components.account_portal import auth_dialog_markup as account_dialog
+    return account_dialog()
+
+
+def layout_markup(view: str, messages: list[dict], conversations: list[dict], busy: bool, active_id: str, typing_id: str = '', username: str = '') -> str:
     brand = (sprite(56,8,86,61,'header-symbol','Biểu tượng VietLaborAI')
              + '<span class="brand-copy"><strong>VietLabor<span>AI</span></strong><small>Trợ lý pháp luật lao động</small></span>')
 
@@ -630,7 +657,10 @@ def layout_markup(view: str, messages: list[dict], conversations: list[dict], bu
     sidebar_history = f'''<div class="sidebar-history-section">
       <div class="sidebar-history-header">
         <span>Lịch sử trò chuyện</span>
-        <span class="sidebar-history-count">{len(conversations)}</span>
+        <div class="sidebar-history-meta">
+          <span class="sidebar-history-count">{len(conversations)}</span>
+          {f'<button class="sidebar-clear-all" data-delete="all" title="Xóa toàn bộ lịch sử" aria-label="Xóa toàn bộ lịch sử">{icon("trash")}</button>' if conversations else ''}
+        </div>
       </div>
       <div class="sidebar-conv-list">{sidebar_conv_rows}</div>
     </div>'''
@@ -638,6 +668,7 @@ def layout_markup(view: str, messages: list[dict], conversations: list[dict], bu
     # 4. Other navigation links (exclude about as it is already in header)
     other_nav = ''.join(nav_button(v, t, g, v == view) for v, t, g in NAVIGATION[2:-1])
 
+    guest_nudge = f'''<div class="guest-nudge"><span class="guest-nudge-icon">{icon('user')}</span><strong>Giữ lại những cuộc trò chuyện</strong><p>Đăng nhập để lưu và tiếp tục tra cứu bất cứ lúc nào.</p><button data-auth-open="login">Đăng nhập để lưu lịch sử {icon('chevron-right')}</button></div>''' if not username else ''
     left_nav = f'''<nav class="left-navigation" aria-label="Điều hướng chính">
       {new_chat_btn}
       <div class="nav-group">{main_nav}</div>
@@ -645,6 +676,7 @@ def layout_markup(view: str, messages: list[dict], conversations: list[dict], bu
       {sidebar_history}
       <div class="sidebar-divider"></div>
       <div class="nav-group nav-group-secondary">{other_nav}</div>
+      {guest_nudge}
     </nav>'''
 
     # Center Panel - render all views as view-panes for 0ms instant client-side switching
@@ -682,12 +714,18 @@ def layout_markup(view: str, messages: list[dict], conversations: list[dict], bu
     center = f'{home_pane}{chat_pane}{sec_panes}'
 
     history = ''.join(f'<div class="history-row"><button class="history-item" data-conversation="{esc(c["id"])}" {"aria-current=true" if c["id"] == active_id else ""}>{icon("message-circle")}<span>{esc(c.get("title"))}<small>{esc(c.get("display_time"))}</small></span></button><button class="history-delete" data-delete="{esc(c["id"])}" title="Xóa cuộc trò chuyện" aria-label="Xóa cuộc trò chuyện {esc(c.get("title"))}">{icon("trash")}</button></div>' for c in conversations)
+    account_controls = (
+        f'<span class="account-name" title="{esc(username)}">{icon("user")}{esc(username)}</span><button class="account-logout" data-event="logout" {"disabled" if busy else ""}>Đăng xuất</button>'
+        if username else
+        f'<button class="account-signup" data-auth-open="register" {"disabled" if busy else ""}>Tạo tài khoản</button><button class="account-login" data-auth-open="login" {"disabled" if busy else ""}>Đăng nhập</button>'
+    )
     css_block = f'<style>{get_surface_css()}</style>'
     return f'''{css_block}<div class="vl-app" data-view="{esc(view)}" data-busy="{str(busy).lower()}">
-      <header class="site-header"><button class="header-brand" data-view="home" aria-label="VietLaborAI, về trang chủ">{brand}</button><nav aria-label="Thông tin"><button data-view="about">Giới thiệu</button><button data-dialog="guide">Hướng dẫn sử dụng</button><button data-dialog="feedback">Phản hồi</button></nav><button class="mobile-menu" data-mobile-menu aria-label="Mở menu">{icon('menu')}</button></header>
+      <header class="site-header"><button class="header-brand" data-view="home" aria-label="VietLaborAI, về trang chủ">{brand}</button><nav aria-label="Thông tin"><button data-view="about">Giới thiệu</button><button data-dialog="guide">Hướng dẫn sử dụng</button><button data-dialog="feedback">Phản hồi</button></nav><div class="account-area">{account_controls}</div><button class="mobile-menu" data-mobile-menu aria-label="Mở menu">{icon('menu')}</button></header>
       <div class="app-body">{left_nav}<main class="center-panel">{center}</main>{right_panel()}</div>
       <footer class="app-disclaimer"><span>VietLaborAI có thể cung cấp thông tin chưa tuyệt đối chính xác. Luôn đối chiếu với văn bản pháp luật gốc.</span><span class="disclaimer-links"><button data-dialog="policy">Chính sách sử dụng</button><i>•</i><button data-dialog="terms">Điều khoản</button><i>•</i><button data-dialog="contact">Liên hệ</button></span></footer>
       <dialog class="info-dialog"><div class="dialog-heading"><h2></h2><button class="dialog-close" aria-label="Đóng">{icon('x')}</button></div><div class="dialog-body"></div></dialog>
+      {auth_dialog_markup() if not username else ''}
       <script type="application/json" id="vl-templates-data">{json.dumps(LEGAL_TEMPLATES)}</script>
       <template id="history-content">{history or '<p>Chưa có lịch sử trò chuyện.</p>'}</template><div class="toast" role="status" aria-live="polite"></div>
     </div>'''
@@ -695,21 +733,33 @@ def layout_markup(view: str, messages: list[dict], conversations: list[dict], bu
 
 def get_surface_css() -> str:
     css = (FRONTEND / 'approved.css').read_text(encoding='utf-8')
+    css += '\n' + (FRONTEND / 'auth.css').read_text(encoding='utf-8')
     return css.replace('__APPROVED_ART__', '/app/static/approved-homepage.png')
 
 
 @lru_cache(maxsize=1)
 def get_surface():
     css = get_surface_css()
-    return component('vietlaborai_approved_surface_v11', html='<div class="vl-mount"></div>', css=css, js=(FRONTEND / 'approved.js').read_text(encoding='utf-8'), isolate_styles=True)
+    return component('vietlaborai_approved_surface_v15', html='<div class="vl-mount"></div>', css=css, js=(FRONTEND / 'approved.js').read_text(encoding='utf-8'), isolate_styles=True)
 
 
-def render_approved_layout(*, view, messages, conversations, busy=False, active_id='', notice='', typing_id=''):
+def render_approved_layout(*, view, messages, conversations, busy=False, active_id='', notice='', typing_id='', username='', account_id='', auth_open=False, auth_mode='login', auth_error='', auth_username='', role='user', navigation_ack=''):
+    markup = layout_markup(view, messages, conversations, busy, active_id, typing_id, username)
+    if username:
+        markup = markup.replace('<span class="account-name"', '<button type="button" data-portal="account-profile" class="account-name"', 1)
+        markup = markup.replace(f'{esc(username)}</span><button class="account-logout"', f'{esc(username)}</button><button class="account-logout"', 1)
+        if role == 'admin':
+            markup = markup.replace('<div class="account-area">', '<div class="account-area"><button class="account-login" data-portal="admin-dashboard">Quản trị</button>', 1)
     payload = {
-        'markup': layout_markup(view, messages, conversations, busy, active_id, typing_id),
-        'conversation_id': active_id,
+        'markup': markup,
+        'conversation_id': f'{account_id}:{active_id}' if account_id else active_id,
+        'navigation_ack': navigation_ack,
         'notice': notice,
         'typing_id': typing_id,
+        'auth_open': auth_open,
+        'auth_mode': auth_mode,
+        'auth_error': auth_error,
+        'auth_username': auth_username,
         'messages': [{'id': m.get('id'), 'role': m.get('role'), 'content': str(m.get('content') or '')} for m in messages],
     }
-    return get_surface()(data=payload, key='approved_surface', on_action_change=lambda: None)
+    return get_surface()(data=payload, key=f'approved_surface::{account_id or "guest"}', on_action_change=lambda: None)
