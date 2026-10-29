@@ -5,9 +5,9 @@ Assigns temporary evidence IDs ([E1], [E2], ...) to context blocks and
 deterministically maps model evidence selections back to canonical chunk IDs
 and official citation metadata.
 """
+import re
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set, Tuple
-import re
 
 
 @dataclass

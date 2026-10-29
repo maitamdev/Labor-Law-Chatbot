@@ -15,15 +15,13 @@ Score magnitudes follow a documented scale (see config/evidence_scoring_rules.ya
 from __future__ import annotations
 
 import datetime
-from dataclasses import dataclass, field
 import logging
-import math
 import re
+from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set, Tuple
-import unicodedata
 
 from config.metadata_registry import get_verified_metadata
-from rag.legal_issue_parser import LegalIssue, LegalIssueParser
+from rag.legal_issue_parser import LegalIssue
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +34,9 @@ logger = logging.getLogger(__name__)
 
 # Nudge: minor preference, used for topic-level article range matching
 SCORE_NUDGE = 1.0         # (+/- 1.0 ~ 2.0)
+
+# Supporting: secondary/procedural companion provision for the primary rule
+SCORE_SUPPORTING = 2.5    # (+/- 2.0 ~ 2.5)
 
 # Strong: confidently disambiguate among 2-3 sibling clauses/points
 SCORE_STRONG = 3.0        # (+/- 3.0 ~ 4.0)
@@ -130,15 +131,15 @@ class EvidenceSelector:
 
     def _extract_meta(self, chunk: Dict[str, Any]) -> Dict[str, Any]:
         meta = chunk.get("metadata") or chunk
-        doc_id = meta.get("doc_id", "")
+        doc_id = str(meta.get("doc_id") or "")
         doc_meta = get_verified_metadata(doc_id)
         source_role = meta.get("source_role") or doc_meta.get("source_role", "FRAMEWORK_LAW")
-        cid = chunk.get("chunk_id", meta.get("chunk_id", ""))
-        art_title = meta.get("article_title", "")
-        content = chunk.get("content", meta.get("content", ""))
+        cid = str(chunk.get("chunk_id") or meta.get("chunk_id") or "")
+        art_title = str(meta.get("article_title") or "")
+        content = str(chunk.get("content") or meta.get("content") or "")
         rule_type = meta.get("rule_type") or self._classify_chunk_rule_type(cid, art_title, content)
-        art_num = int(meta["article_number"]) if meta.get("article_number") is not None and str(meta["article_number"]).isdigit() else None
-        cl_num = int(meta["clause_number"]) if meta.get("clause_number") is not None and str(meta["clause_number"]).isdigit() else None
+        art_num = int(str(meta["article_number"])) if str(meta.get("article_number")).isdecimal() else None
+        cl_num = int(str(meta["clause_number"])) if str(meta.get("clause_number")).isdecimal() else None
         point = str(meta.get("point") or "").strip().lower() or None
         legal_event = meta.get("legal_event") or self._classify_chunk_legal_event(doc_id, art_num, art_title, content)
         evidence_roles = meta.get("evidence_roles") or self._classify_chunk_evidence_roles(cid, doc_id, art_num, cl_num, point, art_title, content)
@@ -222,6 +223,10 @@ class EvidenceSelector:
                 return "DE_FACTO_LABOR_CONTRACT"
             if article_number == 17:
                 return "EMPLOYER_PROHIBITED_ACTS"
+            if article_number == 123:
+                return "DISCIPLINE_STATUTE_OF_LIMITATIONS"
+            if article_number in [122, 124, 125, 126, 127]:
+                return "DISCIPLINE_AND_BONUS"
             if article_number in [188, 190]:
                 return "LABOUR_DISPUTE_PROCEDURE"
             if article_number == 168:
@@ -237,6 +242,8 @@ class EvidenceSelector:
             if article_number in [105, 106, 107, 108]:
                 return "OVERTIME"
             return "CORE_LABOR"
+        if (doc_id, article_number) in {("ND_12_2022", 9), ("ND_283_2026", 15)}:
+            return "EMPLOYER_PROHIBITED_ACTS"
         if (doc_id, article_number) in {("ND_12_2022", 11), ("ND_283_2026", 17)} and any(
             k in c_all for k in ["ngược đãi", "cưỡng bức lao động"]
         ):
@@ -297,18 +304,34 @@ class EvidenceSelector:
         # Multiple Labor Contracts (Điều 19 BLLĐ 2019)
         if doc_id == "VBHN_18_2026" and article_number == 19:
             roles.append("MULTIPLE_CONTRACTS_PERMISSION")
+            if clause_number == 2:
+                roles.append("EMPLOYER_INSURANCE_OBLIGATION")
 
         if doc_id == "VBHN_18_2026" and article_number in [188, 190]:
             roles.append("INDIVIDUAL_LABOUR_DISPUTE_PROCEDURE")
 
         if doc_id == "ND_159_2025" and article_number == 5 and clause_number == 1:
-            support_role = {"a": "VOLUNTARY_SUPPORT_50", "b": "VOLUNTARY_SUPPORT_40", "c": "VOLUNTARY_SUPPORT_30", "d": "VOLUNTARY_SUPPORT_20"}.get(point)
+            support_role = {"a": "VOLUNTARY_SUPPORT_50", "b": "VOLUNTARY_SUPPORT_40", "c": "VOLUNTARY_SUPPORT_30", "d": "VOLUNTARY_SUPPORT_20"}.get(point or "")
             if support_role:
                 roles.append(support_role)
 
         # Employer Prohibited Acts (Điều 17 BLLĐ; Điều 15 NĐ 283/2026)
         if (doc_id == "VBHN_18_2026" and article_number == 17) or (doc_id, article_number) in {("ND_12_2022", 9), ("ND_283_2026", 15)}:
             roles.append("PROHIBITED_ACTS_IDENTIFICATION")
+            if (doc_id == "VBHN_18_2026" and article_number == 17 and clause_number == 1) or (
+                (doc_id, article_number) in {("ND_12_2022", 9), ("ND_283_2026", 15)}
+                and (point in ["a", "d"] or "giữ bản chính" in c_all)
+            ):
+                roles.append("PROHIBITED_ORIGINAL_DOCUMENT_RETENTION")
+            if (doc_id == "VBHN_18_2026" and article_number == 17 and clause_number == 2) or (
+                (doc_id, article_number) in {("ND_12_2022", 9), ("ND_283_2026", 15)}
+                and (point in ["b", "đ"] or "biện pháp bảo đảm" in c_all)
+            ):
+                roles.append("PROHIBITED_SECURITY_DEPOSIT")
+
+        # Discipline Statute of Limitations (Điều 123 BLLĐ 2019)
+        if doc_id == "VBHN_18_2026" and article_number == 123:
+            roles.append("DISCIPLINE_LIMITATION_PERIOD")
 
         # Employer Insurance Obligation
         if (doc_id == "VBHN_18_2026" and article_number == 168) or (doc_id == "VBHN_58_2025" and article_number in [2, 21]) or (doc_id == "LVL_74_2025" and article_number in [59, 75]):
@@ -476,42 +499,16 @@ class EvidenceSelector:
 
         return "GENERAL_RULE"
 
-    def score_candidate(
-        self,
-        issue: LegalIssue,
-        chunk: Dict[str, Any],
-        retrieval_rank: int = 0,
-        total_candidates: int = 20,
-    ) -> ScoredEvidence:
-        """Computes generic multi-signal scores for a candidate chunk against an issue."""
-        m = self._extract_meta(chunk)
+    @staticmethod
+    def _score_topic(issue: LegalIssue, m: Dict[str, Any], c_lower: str) -> float:
         cid = m["chunk_id"]
         doc_id = m["doc_id"]
         art_num = m["article_number"]
-        cl_num = m["clause_number"]
-        pt = m["point"]
-        content = m["content"]
         art_title = m["article_title"]
-        c_lower = (content + " " + art_title).lower()
-
-        # 1. Semantic score (from retrieval ranking or combined_score)
-        raw_combined = chunk.get("combined_score")
-        if raw_combined is not None and isinstance(raw_combined, (int, float)):
-            s_sem = min(1.0, float(raw_combined) * 15.0)  # scale RRF to ~0-1
-        else:
-            s_sem = max(0.0, 1.0 - (retrieval_rank / max(1, total_candidates)))
-
-        # 2. Lexical score (token overlap between query and chunk content)
-        q_tokens = set(re.findall(r"\w+", issue.raw_query.lower()))
-        c_tokens = set(re.findall(r"\w+", c_lower))
-        overlap = len(q_tokens.intersection(c_tokens))
-        s_lex = overlap / max(1, len(q_tokens))
-
         # 3. Topic & Domain score (Phase 5G & 5G.3)
         s_top = 0.0
         c_domain = m.get("domain", "CORE_LABOR")
         c_status = m.get("status", "CURRENT")
-        source_role = m.get("source_role", "FRAMEWORK_LAW")
         rule_type = m.get("rule_type", "GENERAL_RULE")
         q_spec = getattr(issue, "question_specificity", "GENERAL_PRINCIPLE")
         issue_domain = getattr(issue, "domain", "CORE_LABOR")
@@ -753,190 +750,15 @@ class EvidenceSelector:
             if chunk_event in ["OCCUPATIONAL_ACCIDENT", "WORKPLACE_INJURY"]:
                 s_top += SCORE_DOMINANT * -1.25  # -10.0 penalty
 
-        # 4. Unemployment vs Severance Allowance
-        if "UNEMPLOYMENT" in query_events and "TERMINATION" not in query_events:
-            if doc_id == "VBHN_18_2026" and art_num == 46:
-                s_top += -8.0
+        return s_top
 
-        # 5. De Facto Labor Contract vs Termination/Discipline
-        req_roles_set = set(getattr(issue, "required_evidence_roles", []))
-        if any(ev == "DE_FACTO_LABOR_CONTRACT" for ev in query_events) or "EMPLOYMENT_RELATIONSHIP_DEFINITION" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num == 13:
-                s_top += SCORE_DOMINANT  # +8.0
-            elif doc_id == "VBHN_18_2026" and art_num in [35, 36, 37, 41, 125]:
-                s_top += SCORE_HARD_SUPPRESS  # -15.0
-
-        # 6. Employer Prohibited Acts (Keeping original ID cards / documents)
-        if any(ev == "EMPLOYER_PROHIBITED_ACTS" for ev in query_events) or "PROHIBITED_ACTS_IDENTIFICATION" in req_roles_set:
-            if (doc_id == "VBHN_18_2026" and art_num == 17) or (doc_id, art_num) in {("ND_12_2022", 9), ("ND_283_2026", 15)}:
-                s_top += SCORE_DOMINANT  # +8.0
-
-        # 7. Workplace violence by an employer/manager. Điều 122–127 regulate
-        # discipline imposed on employees and are the reverse of this event.
-        if "WORKPLACE_VIOLENCE" in query_events:
-            if (
-                (doc_id == "VBHN_18_2026" and art_num in [8, 35])
-                or (doc_id, art_num) in {("ND_12_2022", 11), ("ND_283_2026", 17)}
-            ):
-                s_top += SCORE_DOMINANT
-            if doc_id == "VBHN_18_2026" and art_num in [122, 123, 124, 125, 126, 127]:
-                s_top += SCORE_HARD_SUPPRESS
-
-        # 8. Starting work before signing is governed by Articles 13–14, not
-        # the renewal rules for an expired fixed-term contract in Article 20.
-        if "CONTRACT_SIGNING_TIMING" in query_events:
-            if doc_id == "VBHN_18_2026" and art_num in [13, 14]:
-                s_top += SCORE_DOMINANT
-            if doc_id == "VBHN_18_2026" and art_num == 20:
-                s_top += SCORE_HARD_SUPPRESS
-
-        # 9. Contract-formation principles are Article 15. Article 16 governs
-        # information disclosure and must not answer a principles question.
-        if "CONTRACT_FORMATION_PRINCIPLES" in query_events:
-            if doc_id == "VBHN_18_2026" and art_num == 15:
-                s_top += SCORE_DOMINANT
-            if doc_id == "VBHN_18_2026" and art_num == 16:
-                s_top += SCORE_HARD_SUPPRESS
-
-        # 10. Multiple labor contracts (Điều 19 Bộ luật Lao động 2019)
-        if "MULTIPLE_CONTRACTS" in query_events or "MULTIPLE_CONTRACTS_PERMISSION" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num == 19:
-                s_top += SCORE_DOMINANT
-            if doc_id == "VBHN_18_2026" and art_num == 107:
-                s_top += SCORE_HARD_SUPPRESS
-
-        # 11. Employer Prohibited Acts (Keeping diploma/ID)
-        if any(ev == "EMPLOYER_PROHIBITED_ACTS" for ev in query_events) or "PROHIBITED_ACTS_IDENTIFICATION" in req_roles_set:
-            if (doc_id == "VBHN_18_2026" and art_num == 17) or (doc_id, art_num) in {("ND_12_2022", 9), ("ND_283_2026", 15)}:
-                s_top += SCORE_DOMINANT
-            if doc_id == "VBHN_18_2026" and art_num in [20, 125, 36]:
-                s_top += SCORE_HARD_SUPPRESS
-
-        # 12. Severance Allowance (Điều 46 BLLĐ & Điều 8 NĐ 145/2020)
-        if "TERMINATION_SEVERANCE_ALLOWANCE" in req_roles_set:
-            if (doc_id == "VBHN_18_2026" and art_num == 46) or (("145" in doc_id or "nd_145" in doc_id.lower()) and art_num == 8):
-                s_top += SCORE_DOMINANT
-            q_lower = str(getattr(issue, "raw_query", "") or "").lower()
-            if "TERMINATION_REDUNDANCY_ALLOWANCE" not in req_roles_set and not any(k in q_lower for k in ["mất việc", "mat viec"]):
-                if doc_id == "VBHN_18_2026" and art_num in [47]:
-                    s_top -= 3.0
-            else:
-                if doc_id == "VBHN_18_2026" and art_num in [47]:
-                    s_top += SCORE_DOMINANT
-
-        # 12b. Redundancy Allowance (Điều 47 BLLĐ & Điều 8 NĐ 145/2020)
-        if "TERMINATION_REDUNDANCY_ALLOWANCE" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num in [47]:
-                s_top += SCORE_DOMINANT
-            elif ("145" in doc_id or "nd_145" in doc_id.lower()) and art_num == 8:
-                s_top += SCORE_DOMINANT
-
-        # 12c. Work Reassignment Limits (Điều 29, 33 BLLĐ)
-        if "WORK_REASSIGNMENT_LIMITS" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num in [29, 33]:
-                s_top += SCORE_DOMINANT
-
-        # 13. Pregnancy dismissal prohibition (Điều 37k3, Điều 137k3 BLLĐ)
-        if "PREGNANCY_DISMISSAL_PROHIBITION" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num in [37, 137]:
-                s_top += SCORE_DOMINANT + 10.0
-            if doc_id == "VBHN_18_2026" and art_num == 36:
-                s_top -= 35.0  # Suppress Article 36 (unilateral termination rights & 45-day notice)
-
-        # 14. Unpaid wage resignation exception (Điều 35k2b BLLĐ)
-        if "EMPLOYEE_NO_NOTICE_EXCEPTION" in req_roles_set or "EMPLOYEE_NO_NOTICE_FOR_UNPAID_WAGE" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num == 35:
-                s_top += SCORE_DOMINANT
-            if doc_id == "VBHN_18_2026" and art_num == 97:
-                s_top += 2.0
-
-        # 15. Severance allowance (Điều 46 BLLĐ, NĐ 145/2020 Điều 8)
-        if "TERMINATION_SEVERANCE_ALLOWANCE" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num == 46:
-                s_top += SCORE_DOMINANT + 1.0
-            elif ("145" in doc_id or "nd_145" in doc_id.lower()) and art_num == 8:
-                s_top += SCORE_DOMINANT
-
-        # 16. Termination settlement & insurance book return (Điều 48 BLLĐ)
-        if "TERMINATION_SETTLEMENT_OBLIGATION" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num == 48:
-                s_top += SCORE_DOMINANT
-
-        # 17. Vocational Training & Internship (Điều 13, 61, 62 BLLĐ 2019)
-        if "EMPLOYER_TRAINING_OBLIGATION" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num in [61, 62]:
-                s_top += SCORE_DOMINANT
-        if "EMPLOYMENT_RELATIONSHIP_DEFINITION" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num == 13:
-                s_top += SCORE_DOMINANT
-            # Suppress internal contract clauses like Article 21 when determining if an employment contract is required
-            if doc_id == "VBHN_18_2026" and art_num == 21:
-                s_top -= 4.0
-
-        # 18. Wage underpayment, deduction & dispute resolution (Điều 90, 94, 102, 188 BLLĐ; NĐ 12/2022 Điều 17, NĐ 283/2026 Điều 23)
-        if "WAGE_PAYMENT_RULE" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num in [90, 94]:
-                s_top += SCORE_DOMINANT
-        if "WAGE_DEDUCTION_LIMIT" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num == 102:
-                s_top += SCORE_DOMINANT + 1.0
-        if "UNDERPAYMENT_SANCTION" in req_roles_set:
-            if (doc_id == "ND_12_2022" and art_num == 17) or (doc_id == "ND_283_2026" and art_num == 23):
-                s_top += SCORE_DOMINANT
-        if "DISPUTE_RESOLUTION_PROCEDURE" in req_roles_set:
-            if doc_id == "VBHN_18_2026" and art_num == 188:
-                s_top += SCORE_DOMINANT
-
-        # 4. Actor score (employer vs employee termination)
-        s_act = 0.0
-        if issue.actor == "EMPLOYER":
-            if doc_id == "VBHN_18_2026" and art_num == 36:
-                s_act += 1.5
-            elif doc_id == "VBHN_18_2026" and art_num == 35:
-                s_act -= 1.5
-        elif issue.actor == "EMPLOYEE":
-            if doc_id == "VBHN_18_2026" and art_num == 35:
-                s_act += 1.5
-            elif doc_id == "VBHN_18_2026" and art_num == 36:
-                s_act -= 1.5
-
-        # 5. Intent score (Substantive rule vs Sanction)
-        s_int = 0.0
-        if issue.intent == "SUBSTANTIVE_RULE":
-            if issue_domain == "SOCIAL_INSURANCE":
-                if doc_id in ["VBHN_58_2025", "ND_158_2025", "ND_159_2025"]:
-                    s_int += 1.5
-            elif issue_domain in ["OCCUPATIONAL_SAFETY", "OCCUPATIONAL_ACCIDENT_DISEASE"]:
-                if doc_id in ["L_84_2015", "VBHN_04_BNV_2026", "VBHN_06_BNV_2026"]:
-                    s_int += 1.5
-            elif issue_domain == "UNEMPLOYMENT_INSURANCE":
-                if doc_id in ["LUAT_74_2025", "ND_374_2025"]:
-                    s_int += 1.5
-            elif issue_domain == "FOREIGN_WORKER":
-                if doc_id in ["ND_219_2025"]:
-                    s_int += 1.5
-            else:
-                if doc_id == "VBHN_18_2026":
-                    s_int += 1.5
-                elif doc_id in ["ND_283_2026", "ND_12_2022"]:
-                    s_int -= 1.0
-        elif issue.intent == "SANCTION":
-            if doc_id in ["ND_283_2026", "ND_12_2022"]:
-                s_int += 2.0
-            elif doc_id in ["VBHN_18_2026", "VBHN_58_2025", "L_84_2015"]:
-                s_int -= 0.5
-
-        # 6. Numeric and temporal unit matching
-        s_num = 0.0
-        for num in issue.numbers:
-            num_str = str(num)
-            if num_str in c_lower:
-                s_num += 1.0
-                # Check conjunction with units
-                for u in issue.units:
-                    if f"{num_str} {u}" in c_lower or f"{num_str}{u}" in c_lower:
-                        s_num += 2.0
-
+    @staticmethod
+    def _score_qualifier(issue: LegalIssue, m: Dict[str, Any], c_lower: str) -> float:
+        cid = m["chunk_id"]
+        doc_id = m["doc_id"]
+        art_num = m["article_number"]
+        cl_num = m["clause_number"]
+        pt = m["point"]
         # 7. Fine-grained qualifier & category matching
         s_qual = 0.0
 
@@ -1189,6 +1011,26 @@ class EvidenceSelector:
         if "sanction_withholding_diploma" in issue.qualifiers:
             if (doc_id, art_num) in {("ND_12_2022", 9), ("ND_283_2026", 15)} and cl_num == 2 and pt == "a":
                 s_qual += 5.0
+        if "original_document_withholding" in issue.qualifiers:
+            if doc_id == "VBHN_18_2026" and art_num == 17 and cl_num == 1:
+                s_qual += 6.0
+            elif (doc_id, art_num) in {("ND_12_2022", 9), ("ND_283_2026", 15)} and pt in ["a", "d"]:
+                s_qual += 4.0
+        if "money_deposit_security" in issue.qualifiers:
+            if doc_id == "VBHN_18_2026" and art_num == 17 and cl_num == 2:
+                s_qual += 6.0
+            elif (doc_id, art_num) in {("ND_12_2022", 9), ("ND_283_2026", 15)} and pt in ["b", "đ"]:
+                s_qual += 4.0
+        if "discipline_statute_of_limitations" in issue.qualifiers:
+            if doc_id == "VBHN_18_2026" and art_num == 123:
+                if cl_num == 1:
+                    s_qual += 8.5
+                else:
+                    s_qual += 6.5
+            elif doc_id == "VBHN_18_2026" and art_num == 122 and cl_num in [1, 4]:
+                s_qual += 3.5
+            elif doc_id == "VBHN_18_2026" and art_num in [35, 36]:
+                s_qual -= 6.0
         if "sanction_probation_overtime" in issue.qualifiers:
             if ((doc_id, art_num, pt) in {("ND_12_2022", 10, "a"), ("ND_283_2026", 16, "b")}) and cl_num == 2:
                 s_qual += 5.0
@@ -1435,6 +1277,240 @@ class EvidenceSelector:
             if doc_id == "VBHN_18_2026" and art_num == 168 and cl_num == 3:
                 s_qual -= 25.0
 
+        return s_qual
+
+    def score_candidate(
+        self,
+        issue: LegalIssue,
+        chunk: Dict[str, Any],
+        retrieval_rank: int = 0,
+        total_candidates: int = 20,
+    ) -> ScoredEvidence:
+        """Computes generic multi-signal scores for a candidate chunk against an issue."""
+        m = self._extract_meta(chunk)
+        cid = m["chunk_id"]
+        doc_id = m["doc_id"]
+        art_num = m["article_number"]
+        cl_num = m["clause_number"]
+        pt = m["point"]
+        content = m["content"]
+        art_title = m["article_title"]
+        c_lower = (content + " " + art_title).lower()
+
+        # 1. Semantic score (from retrieval ranking or combined_score)
+        raw_combined = chunk.get("combined_score")
+        if raw_combined is not None and isinstance(raw_combined, (int, float)):
+            s_sem = min(1.0, float(raw_combined) * 15.0)  # scale RRF to ~0-1
+        else:
+            s_sem = max(0.0, 1.0 - (retrieval_rank / max(1, total_candidates)))
+
+        # 2. Lexical score (token overlap between query and chunk content)
+        q_tokens = set(re.findall(r"\w+", issue.raw_query.lower()))
+        c_tokens = set(re.findall(r"\w+", c_lower))
+        overlap = len(q_tokens.intersection(c_tokens))
+        s_lex = overlap / max(1, len(q_tokens))
+
+        s_top = self._score_topic(issue, m, c_lower)
+        query_events = getattr(issue, "legal_events", [getattr(issue, "legal_event", "UNKNOWN")])
+        issue_domain = getattr(issue, "domain", "CORE_LABOR")
+
+        # 4. Unemployment vs Severance Allowance
+        if "UNEMPLOYMENT" in query_events and "TERMINATION" not in query_events:
+            if doc_id == "VBHN_18_2026" and art_num == 46:
+                s_top += -8.0
+
+        # 5. De Facto Labor Contract vs Termination/Discipline
+        req_roles_set = set(getattr(issue, "required_evidence_roles", []))
+        if any(ev == "DE_FACTO_LABOR_CONTRACT" for ev in query_events) or "EMPLOYMENT_RELATIONSHIP_DEFINITION" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 13:
+                s_top += SCORE_DOMINANT  # +8.0
+            elif doc_id == "VBHN_18_2026" and art_num in [35, 36, 37, 41, 125]:
+                s_top += SCORE_HARD_SUPPRESS  # -15.0
+
+        # 6. Employer Prohibited Acts (Keeping original ID cards / documents)
+        if any(ev == "EMPLOYER_PROHIBITED_ACTS" for ev in query_events) or "PROHIBITED_ACTS_IDENTIFICATION" in req_roles_set:
+            if (doc_id == "VBHN_18_2026" and art_num == 17) or (doc_id, art_num) in {("ND_12_2022", 9), ("ND_283_2026", 15)}:
+                s_top += SCORE_DOMINANT  # +8.0
+
+        # 7. Workplace violence by an employer/manager. Điều 122–127 regulate
+        # discipline imposed on employees and are the reverse of this event.
+        if "WORKPLACE_VIOLENCE" in query_events:
+            if (
+                (doc_id == "VBHN_18_2026" and art_num in [8, 35])
+                or (doc_id, art_num) in {("ND_12_2022", 11), ("ND_283_2026", 17)}
+            ):
+                s_top += SCORE_DOMINANT
+            if doc_id == "VBHN_18_2026" and art_num in [122, 123, 124, 125, 126, 127]:
+                s_top += SCORE_HARD_SUPPRESS
+
+        # 8. Starting work before signing is governed by Articles 13–14, not
+        # the renewal rules for an expired fixed-term contract in Article 20.
+        if "CONTRACT_SIGNING_TIMING" in query_events:
+            if doc_id == "VBHN_18_2026" and art_num in [13, 14]:
+                s_top += SCORE_DOMINANT
+            if doc_id == "VBHN_18_2026" and art_num == 20:
+                s_top += SCORE_HARD_SUPPRESS
+
+        # 9. Contract-formation principles are Article 15. Article 16 governs
+        # information disclosure and must not answer a principles question.
+        if "CONTRACT_FORMATION_PRINCIPLES" in query_events:
+            if doc_id == "VBHN_18_2026" and art_num == 15:
+                s_top += SCORE_DOMINANT
+            if doc_id == "VBHN_18_2026" and art_num == 16:
+                s_top += SCORE_HARD_SUPPRESS
+
+        # 10. Multiple labor contracts (Điều 19 Bộ luật Lao động 2019)
+        if "MULTIPLE_CONTRACTS" in query_events or "MULTIPLE_CONTRACTS_PERMISSION" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 19:
+                s_top += SCORE_DOMINANT
+            if doc_id == "VBHN_18_2026" and art_num == 107:
+                s_top += SCORE_HARD_SUPPRESS
+
+        # 11. Employer Prohibited Acts (Keeping diploma/ID)
+        if any(ev == "EMPLOYER_PROHIBITED_ACTS" for ev in query_events) or "PROHIBITED_ACTS_IDENTIFICATION" in req_roles_set:
+            if (doc_id == "VBHN_18_2026" and art_num == 17) or (doc_id, art_num) in {("ND_12_2022", 9), ("ND_283_2026", 15)}:
+                s_top += SCORE_DOMINANT
+            if "DISCIPLINE_STATUTE_OF_LIMITATIONS" not in query_events and doc_id == "VBHN_18_2026" and art_num in [20, 125, 36]:
+                s_top += SCORE_HARD_SUPPRESS
+
+        # 11b. Discipline Statute of Limitations (Điều 123 BLLĐ 2019)
+        if "DISCIPLINE_STATUTE_OF_LIMITATIONS" in query_events or "discipline_statute_of_limitations" in issue.qualifiers:
+            if doc_id == "VBHN_18_2026" and art_num == 123:
+                s_top += SCORE_DOMINANT + 4.0
+            elif doc_id == "VBHN_18_2026" and art_num in [122, 125]:
+                s_top += SCORE_SUPPORTING
+
+        # 12. Severance Allowance (Điều 46 BLLĐ & Điều 8 NĐ 145/2020)
+        if "TERMINATION_SEVERANCE_ALLOWANCE" in req_roles_set:
+            if (doc_id == "VBHN_18_2026" and art_num == 46) or (("145" in doc_id or "nd_145" in doc_id.lower()) and art_num == 8):
+                s_top += SCORE_DOMINANT
+            q_lower = str(getattr(issue, "raw_query", "") or "").lower()
+            if "TERMINATION_REDUNDANCY_ALLOWANCE" not in req_roles_set and not any(k in q_lower for k in ["mất việc", "mat viec"]):
+                if doc_id == "VBHN_18_2026" and art_num in [47]:
+                    s_top -= 3.0
+            else:
+                if doc_id == "VBHN_18_2026" and art_num in [47]:
+                    s_top += SCORE_DOMINANT
+
+        # 12b. Redundancy Allowance (Điều 47 BLLĐ & Điều 8 NĐ 145/2020)
+        if "TERMINATION_REDUNDANCY_ALLOWANCE" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num in [47]:
+                s_top += SCORE_DOMINANT
+            elif ("145" in doc_id or "nd_145" in doc_id.lower()) and art_num == 8:
+                s_top += SCORE_DOMINANT
+
+        # 12c. Work Reassignment Limits (Điều 29, 33 BLLĐ)
+        if "WORK_REASSIGNMENT_LIMITS" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num in [29, 33]:
+                s_top += SCORE_DOMINANT
+
+        # 13. Pregnancy dismissal prohibition (Điều 37k3, Điều 137k3 BLLĐ)
+        if "PREGNANCY_DISMISSAL_PROHIBITION" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num in [37, 137]:
+                s_top += SCORE_DOMINANT + 10.0
+            if doc_id == "VBHN_18_2026" and art_num == 36:
+                s_top -= 35.0  # Suppress Article 36 (unilateral termination rights & 45-day notice)
+
+        # 14. Unpaid wage resignation exception (Điều 35k2b BLLĐ)
+        if "EMPLOYEE_NO_NOTICE_EXCEPTION" in req_roles_set or "EMPLOYEE_NO_NOTICE_FOR_UNPAID_WAGE" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 35:
+                s_top += SCORE_DOMINANT
+            if doc_id == "VBHN_18_2026" and art_num == 97:
+                s_top += 2.0
+
+        # 15. Severance allowance (Điều 46 BLLĐ, NĐ 145/2020 Điều 8)
+        if "TERMINATION_SEVERANCE_ALLOWANCE" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 46:
+                s_top += SCORE_DOMINANT + 1.0
+            elif ("145" in doc_id or "nd_145" in doc_id.lower()) and art_num == 8:
+                s_top += SCORE_DOMINANT
+
+        # 16. Termination settlement & insurance book return (Điều 48 BLLĐ)
+        if "TERMINATION_SETTLEMENT_OBLIGATION" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 48:
+                s_top += SCORE_DOMINANT
+
+        # 17. Vocational Training & Internship (Điều 13, 61, 62 BLLĐ 2019)
+        if "EMPLOYER_TRAINING_OBLIGATION" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num in [61, 62]:
+                s_top += SCORE_DOMINANT
+        if "EMPLOYMENT_RELATIONSHIP_DEFINITION" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 13:
+                s_top += SCORE_DOMINANT
+            # Suppress internal contract clauses like Article 21 when determining if an employment contract is required
+            if doc_id == "VBHN_18_2026" and art_num == 21:
+                s_top -= 4.0
+
+        # 18. Wage underpayment, deduction & dispute resolution (Điều 90, 94, 102, 188 BLLĐ; NĐ 12/2022 Điều 17, NĐ 283/2026 Điều 23)
+        if "WAGE_PAYMENT_RULE" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num in [90, 94]:
+                s_top += SCORE_DOMINANT
+        if "WAGE_DEDUCTION_LIMIT" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 102:
+                s_top += SCORE_DOMINANT + 1.0
+        if "UNDERPAYMENT_SANCTION" in req_roles_set:
+            if (doc_id == "ND_12_2022" and art_num == 17) or (doc_id == "ND_283_2026" and art_num == 23):
+                s_top += SCORE_DOMINANT
+        if "DISPUTE_RESOLUTION_PROCEDURE" in req_roles_set:
+            if doc_id == "VBHN_18_2026" and art_num == 188:
+                s_top += SCORE_DOMINANT
+
+        # 4. Actor score (employer vs employee termination)
+        s_act = 0.0
+        if issue.actor == "EMPLOYER":
+            if doc_id == "VBHN_18_2026" and art_num == 36:
+                s_act += 1.5
+            elif doc_id == "VBHN_18_2026" and art_num == 35:
+                s_act -= 1.5
+        elif issue.actor == "EMPLOYEE":
+            if doc_id == "VBHN_18_2026" and art_num == 35:
+                s_act += 1.5
+            elif doc_id == "VBHN_18_2026" and art_num == 36:
+                s_act -= 1.5
+
+        # 5. Intent score (Substantive rule vs Sanction)
+        s_int = 0.0
+        if issue.intent == "SUBSTANTIVE_RULE":
+            if issue_domain == "SOCIAL_INSURANCE":
+                if doc_id in ["VBHN_58_2025", "ND_158_2025", "ND_159_2025"]:
+                    s_int += 1.5
+            elif issue_domain in ["OCCUPATIONAL_SAFETY", "OCCUPATIONAL_ACCIDENT_DISEASE"]:
+                if doc_id in ["L_84_2015", "VBHN_04_BNV_2026", "VBHN_06_BNV_2026"]:
+                    s_int += 1.5
+            elif issue_domain == "UNEMPLOYMENT_INSURANCE":
+                if doc_id in ["LUAT_74_2025", "ND_374_2025"]:
+                    s_int += 1.5
+            elif issue_domain == "FOREIGN_WORKER":
+                if doc_id in ["ND_219_2025"]:
+                    s_int += 1.5
+            else:
+                if doc_id == "VBHN_18_2026":
+                    s_int += 1.5
+                elif doc_id in ["ND_283_2026", "ND_12_2022"]:
+                    s_int -= 1.0
+        elif issue.intent == "SANCTION":
+            if doc_id in ["ND_283_2026", "ND_12_2022"]:
+                s_int += 2.0
+            elif doc_id in ["VBHN_18_2026", "VBHN_58_2025", "L_84_2015"]:
+                s_int -= 0.5
+
+        # 6. Numeric and temporal unit matching
+        s_num = 0.0
+        for num in issue.numbers:
+            num_str = str(num)
+            if num_str in c_lower:
+                s_num += 1.0
+                # Check conjunction with units
+                for u in issue.units:
+                    if f"{num_str} {u}" in c_lower or f"{num_str}{u}" in c_lower:
+                        s_num += 2.0
+
+        s_qual = self._score_qualifier(issue, m, c_lower)
+
+        q_spec = getattr(issue, "question_specificity", "GENERAL_PRINCIPLE")
+        source_role = m.get("source_role", "FRAMEWORK_LAW")
+        rule_type = m.get("rule_type", "GENERAL_RULE")
+
         # 8. Statutory Specificity & Specificity Matching (Phase 5G.3)
         s_spec = 0.0
         if pt is not None:
@@ -1596,7 +1672,7 @@ class EvidenceSelector:
                 by_article[key] = []
             by_article[key].append(sc)
 
-        for key, siblings in by_article.items():
+        for siblings in by_article.values():
             if len(siblings) > 1:
                 siblings.sort(key=lambda x: x.total_score, reverse=True)
                 top_sib = siblings[0]
@@ -1829,6 +1905,56 @@ class EvidenceSelector:
             locked_blocks = [b for b in locked_blocks if not (b.doc_id == "VBHN_18_2026" and b.article_number in [151, 152, 153, 154, 155])]
             selected_cids = [b.chunk_id for b in locked_blocks]
 
+        # Employer Prohibited Acts Bridge (Điều 17 BLLĐ 2019 & Điều 15 NĐ 283/2026)
+        is_prohibited_acts = (
+            "EMPLOYER_PROHIBITED_ACTS" in query_events
+            or "PROHIBITED_ACTS_IDENTIFICATION" in req_roles_set
+            or "prohibited_deposit_or_withholding" in issue.qualifiers
+        )
+        if is_prohibited_acts:
+            wants_doc = "original_document_withholding" in issue.qualifiers or "PROHIBITED_ORIGINAL_DOCUMENT_RETENTION" in req_roles_set or "money_deposit_security" not in issue.qualifiers
+            wants_dep = "money_deposit_security" in issue.qualifiers or "PROHIBITED_SECURITY_DEPOSIT" in req_roles_set
+            target_d17_cids: List[str] = []
+            if wants_doc:
+                target_d17_cids.append("VBHN_18_2026#d17-k1")
+            if wants_dep:
+                target_d17_cids.append("VBHN_18_2026#d17-k2")
+            target_d17_cids.append("ND_283_2026#d15-k2")
+            if wants_doc:
+                target_d17_cids.extend(["ND_283_2026#d15-k2-a", "ND_283_2026#d15-k3-d"])
+            if wants_dep:
+                target_d17_cids.extend(["ND_283_2026#d15-k2-b", "ND_283_2026#d15-k3-đ"])
+            for target_cid in target_d17_cids:
+                cand = next((sc for sc in scored_list if sc.chunk_id == target_cid), None)
+                if cand and cand.chunk_id not in selected_cids:
+                    locked_blocks.append(cand)
+                    selected_cids.append(cand.chunk_id)
+
+        # Discipline Statute of Limitations Bridge (Điều 123, 122, 125 BLLĐ 2019)
+        is_discipline_sol = (
+            "DISCIPLINE_STATUTE_OF_LIMITATIONS" in query_events
+            or "DISCIPLINE_LIMITATION_PERIOD" in req_roles_set
+            or "discipline_statute_of_limitations" in issue.qualifiers
+        )
+        if is_discipline_sol:
+            for target_cid in [
+                "VBHN_18_2026#d123-k1",
+                "VBHN_18_2026#d123-k2",
+                "VBHN_18_2026#d123-k3",
+                "VBHN_18_2026#d122-k1-a",
+                "VBHN_18_2026#d122-k4",
+            ]:
+                cand = next((sc for sc in scored_list if sc.chunk_id == target_cid), None)
+                if cand and cand.chunk_id not in selected_cids:
+                    if target_cid == "VBHN_18_2026#d123-k1":
+                        locked_blocks.insert(0, cand)
+                        selected_cids.insert(0, cand.chunk_id)
+                    else:
+                        locked_blocks.append(cand)
+                        selected_cids.append(cand.chunk_id)
+            locked_blocks = [b for b in locked_blocks if not (b.doc_id == "VBHN_18_2026" and b.article_number in [35, 36])]
+            selected_cids = [b.chunk_id for b in locked_blocks]
+
         # Required Evidence Role Locking (Phase 5H.3)
         req_roles = getattr(issue, "required_evidence_roles", [])
         has_role_locks = False
@@ -1850,7 +1976,7 @@ class EvidenceSelector:
                         covered_roles.update(getattr(best_for_role, "evidence_roles", []))
                         has_role_locks = True
 
-        is_statutory_pair = is_flight_crew or is_training_resp or is_training_refund or is_safety_refusal or is_mand_ins or is_uninsured_acc or is_multiple_contracts or has_role_locks
+        is_statutory_pair = is_flight_crew or is_training_resp or is_training_refund or is_safety_refusal or is_mand_ins or is_uninsured_acc or is_multiple_contracts or is_prohibited_acts or is_discipline_sol or has_role_locks
         is_ambiguous = (best_score < self.min_confidence) or (
             margin < self.min_margin
             and len(scored_list) > 1
