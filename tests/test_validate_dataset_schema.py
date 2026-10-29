@@ -1,6 +1,8 @@
 import tempfile
 from pathlib import Path
+
 from scripts.validate_dataset_schema import validate_chatml_file
+
 
 def test_validate_chatml_file():
     with tempfile.NamedTemporaryFile("w", suffix=".jsonl", delete=False, encoding="utf-8") as tmp:

@@ -4,11 +4,12 @@ Tests for Vocational Training and Post-Training Work Commitment / Cost Refund
 Validates compliance with congbaochinhphu.vn benchmark.
 """
 import pytest
-from rag.query_expander import QueryExpander
-from rag.legal_issue_parser import LegalIssueParser
-from rag.evidence_selector import EvidenceSelector
+
 from rag.context_builder import ContextBuilder
+from rag.evidence_selector import EvidenceSelector
 from rag.issue_decomposer import IssueDecomposer
+from rag.legal_issue_parser import LegalIssueParser
+from rag.query_expander import QueryExpander
 
 
 @pytest.fixture

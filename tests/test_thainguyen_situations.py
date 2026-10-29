@@ -7,7 +7,7 @@ and QuestionLawAnchorIndex statutory nominations.
 from __future__ import annotations
 
 import json
-from pathlib import Path
+
 from config.settings import PROJECT_ROOT
 from rag.qa_anchor import QuestionLawAnchorIndex
 
@@ -40,7 +40,7 @@ def test_main_sft_dataset_contains_situations():
     assert len(lines) >= 1012, f"Expected at least 1012 training records, got {len(lines)}"
 
     # Check that situation 1 (Lò Văn Dũng) is present
-    has_dung = any("Lò Văn Dũng" in l["messages"][1]["content"] for l in lines)
+    has_dung = any("Lò Văn Dũng" in line["messages"][1]["content"] for line in lines)
     assert has_dung, "Tình huống Anh Lò Văn Dũng must be in the main training dataset."
 
 
