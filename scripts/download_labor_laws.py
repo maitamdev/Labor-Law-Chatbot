@@ -9,15 +9,14 @@ from pathlib import Path
 # Ensure UTF-8 output on Windows consoles
 if hasattr(sys.stdout, "reconfigure"):
     try:
-        getattr(sys.stdout, "reconfigure")(encoding="utf-8")
-        getattr(sys.stderr, "reconfigure")(encoding="utf-8")
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
     except Exception:
         pass
 
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-
 
 # ============================================================
 # VietLabor AI
@@ -194,12 +193,40 @@ DOCUMENTS = [
         "title": "Nghị định 129/2025/NĐ-CP",
         "filename": "129_2025_ND_CP.pdf",
         "category": "amendments",
-        "include_in_rag": False,
+        "include_in_rag": True,
         "source_page":
             "https://vanban.chinhphu.vn/?classid=1&docid=213920&pageid=27160&typegroupid=4",
         "pdf_url":
             "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/6/"
             "129nd.signed.pdf",
+    },
+
+    # --------------------------------------------------------
+    # NATIONAL WAVE 3 — VBPL (verified ItemIDs; nội quy/kỷ luật = BLLĐ + NĐ 145)
+    # --------------------------------------------------------
+    {
+        "id": "TT_06_2021",
+        "title": "Thông tư 06/2021/TT-BLĐTBXH - Sửa đổi TT 59/2015 (BHXH bắt buộc)",
+        "filename": "09_06_2021_TT_BLDTBXH_BHXH.pdf",
+        "category": "core",
+        "include_in_rag": True,
+        "source_page": "https://vbpl.vn/TW/Pages/vbpq-van-ban-goc.aspx?ItemID=151294",
+        "pdf_url": (
+            "https://vbpl-bientap-gateway.moj.gov.vn/api/qtdc/public/doc/minio/buckets/vbpl/"
+            "151294/VanBanGoc_TT%2006%202021%20L%C4%90TBXH.pdf/download"
+        ),
+    },
+    {
+        "id": "TT_11_2020",
+        "title": "Thông tư 11/2020/TT-BLĐTBXH - Danh mục nghề nặng nhọc, độc hại",
+        "filename": "10_11_2020_TT_BLDTBXH_Phan_Loai_Nghe.pdf",
+        "category": "core",
+        "include_in_rag": True,
+        "source_page": "https://vbpl.vn/bolaodong/Pages/vbpq-toanvan.aspx?ItemID=146697",
+        "pdf_url": (
+            "https://vbpl-bientap-gateway.moj.gov.vn/api/qtdc/public/doc/minio/buckets/vbpl/"
+            "146697/VanBanGoc_TT%2011%202020%20BL%C4%90TBXH.pdf/download"
+        ),
     },
 ]
 
