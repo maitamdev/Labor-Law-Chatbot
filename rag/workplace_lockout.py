@@ -10,7 +10,6 @@ import re
 import unicodedata
 from collections.abc import Collection
 
-
 LOCKOUT_EVIDENCE_IDS = (
     "VBHN_18_2026#d203-k3-b",
     "VBHN_18_2026#d205",
