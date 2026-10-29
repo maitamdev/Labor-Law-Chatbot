@@ -5,7 +5,7 @@ Cung cấp toàn văn nội dung 8 mẫu văn bản pháp lý lao động chuẩ
 """
 from __future__ import annotations
 
-from typing import Dict, List, TypedDict
+from typing import List, TypedDict
 
 
 class LegalTemplate(TypedDict):

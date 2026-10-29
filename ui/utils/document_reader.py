@@ -129,7 +129,7 @@ def extract_attachment_text(attachment: dict) -> Tuple[str, str, str]:
             pages = []
             ocr_pages = 0
             skipped_ocr = 0
-            for i, page in enumerate(pdf_doc):
+            for i, page in enumerate(pdf_doc.pages()):
                 page_text = page.get_text().strip()
                 if len(page_text) < MIN_TEXT_LAYER_CHARS:
                     if ocr_pages < MAX_OCR_PAGES:

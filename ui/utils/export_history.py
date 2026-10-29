@@ -2,7 +2,8 @@
 Export Chat History Utility for VietLabor AI.
 Formats multi-turn consultation sessions into Markdown or plain text.
 """
-from typing import List, Dict
+from typing import Dict, List
+
 
 def export_chat_to_markdown(messages: List[Dict[str, str]], title: str = "Biên bản Tư vấn Pháp luật Lao động") -> str:
     """Format chat turn list into structured Markdown document."""
